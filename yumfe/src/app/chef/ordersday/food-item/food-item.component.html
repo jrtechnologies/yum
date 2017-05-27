@@ -1,0 +1,112 @@
+<div class="containerX">
+
+  <div *ngIf="mainFoodOrders.length > 0">
+
+    <div fxLayout="row">
+      <div fxFlex="35">
+        <h3> Main dishes </h3>
+      </div>
+      <div fxFlex="27" class="align-center">
+        <h3> QTY. </h3>
+      </div>
+      <div fxFlex="20" class="align-center">
+        <h3> Price </h3>
+      </div>
+      <div fxFlex="18" class="align-right">
+        <h3> Total </h3>
+      </div>
+    </div>
+
+    <div *ngFor="let foodOrder of mainFoodOrders">
+      <div fxLayout="row" class="bgColor print-row-border">
+        <div fxFlex="35" class="pad">{{foodOrder.food.foodName}}</div>
+        <div fxFlex="27" class="align-center">
+          <div fxLayout="row" class="quantity ">
+            <div fxFlex="100">
+              {{foodOrder.quantity}}
+            </div>
+          </div>
+        </div>
+        <div fxFlex="20" class="pad align-center">{{foodOrder.food.price | number : '1.2-2'}}<span [innerHTML]="currency | async"></span> </div>
+        <div fxFlex="18" class="pad align-right">{{foodOrder.quantity * foodOrder.food.price | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="saladFoodOrders.length > 0">
+
+    <div fxLayout="row">
+      <div fxFlex="35">
+        <h3> Salads </h3>
+      </div>
+      <div fxFlex="27" class="align-center">
+        <h3> QTY. </h3>
+      </div>
+      <div fxFlex="20" class="align-center">
+        <h3> Price </h3>
+      </div>
+      <div fxFlex="18" class="align-right">
+        <h3> Total </h3>
+      </div>
+    </div>
+
+    <div *ngFor="let foodOrder of saladFoodOrders">
+      <div fxLayout="row" class="bgColor is-flex print-row-border">
+        <div fxFlex="35" class="pad">{{foodOrder.food.foodName}}</div>
+        <div fxFlex="27" class="align-center">
+          <div fxLayout="row" class="quantity ">
+            <div fxFlex="100">
+              {{foodOrder.quantity}}
+            </div>
+          </div>
+        </div>
+        <div fxFlex="20" class="pad align-center">{{foodOrder.food.price | number : '1.2-2'}}<span [innerHTML]="currency | async"></span> </div>
+        <div fxFlex="18" class="pad align-right">{{foodOrder.quantity * foodOrder.food.price | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="drinkFoodOrders.length > 0">
+
+    <div fxLayout="row">
+      <div fxFlex="100">
+        <h3> Drinks </h3>
+      </div>
+      <div fxFlex="27" class="align-center">
+        <h3> QTY. </h3>
+      </div>
+      <div fxFlex="20" class="align-center">
+        <h3> Price </h3>
+      </div>
+      <div fxFlex="18" class="align-right">
+        <h3> Total </h3>
+      </div>
+    </div>
+
+    <div *ngFor="let foodOrder of drinkFoodOrders">
+      <div fxLayout="row" class="bgColor print-row-border">
+        <div fxFlex="35" class="pad"> {{foodOrder.food.foodName}} </div>
+        <div fxFlex="27" class="align-center">
+          <div fxLayout="row" class="quantity ">
+            <div fxFlex="100">
+              {{foodOrder.quantity}}
+            </div>
+          </div>
+        </div>
+        <div fxFlex="20" class="pad align-center">{{foodOrder.food.price | number : '1.2-2'}}<span [innerHTML]="currency | async"></span> </div>
+        <div fxFlex="18" class="pad align-right">{{foodOrder.quantity * foodOrder.food.price| number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row">
+    <div fxFlex="85" class="print-row-border-total">
+    </div>
+    <div fxFlex="15" class="total print-row-border-total">
+      <h3 class="align-right">Total: {{total| number : '1.2-2'}}<span [innerHTML]="currency | async"></span></h3>
+    </div>
+  </div>
+
+</div>

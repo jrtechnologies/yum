@@ -1,0 +1,92 @@
+<md-grid-list cols="8" rowHeight="4:1">
+
+  <div fxLayout="row">
+    <div fxFlex="25">
+      <div fxLayout="column">
+        <div>
+          <img src="../../../assets/img/chef-hat.png" class="img-size">
+        </div>
+        <div>
+          <h1 class="title-style">
+            Welcome Chef!
+          </h1>
+          <h3>Start preparing your menu...</h3>
+        </div>
+
+      </div>
+    </div>
+
+    <div fxFlex="25" fxFlexOffset="50" class="buttons-style">
+      <app-chef-nav></app-chef-nav>
+    </div>
+
+  </div>
+
+
+  <md-grid-list cols="1" rowHeight="6:1">
+    <!--The Form for the new Food Items-->
+    <app-food-edit novalidate (foodCreated)="handleFoodRefresh()"></app-food-edit>
+  </md-grid-list>
+
+  <!--The area of sorting-->
+  <div fxLayout="row" class="margin-bar">
+
+    <div fxFlex="15">
+      <md-select [ngModel]="nbrOfItem" (ngModelChange)="changePageSize($event)" placeholder="Number Of Items">
+        <md-option *ngFor="let nbrOfItem of this.numberOfItems" [value]='nbrOfItem'>
+          {{ nbrOfItem }}
+        </md-option>
+      </md-select>
+    </div>
+
+    <div fxFlex="15">
+      <md-select placeholder="Type of food" [(ngModel)]="foodType" (ngModelChange)="showByFoodType()">
+        <md-option *ngFor="let foodType of this.foodTypes" [value]='foodType'>
+          {{ foodType }}
+        </md-option>
+      </md-select>
+    </div>
+
+    <div fxFlex="15">
+      <md-select [ngModel]="sort" placeholder="Order by" (ngModelChange)="showByOrderType($event)">
+        <md-option *ngFor="let sort of this.sortBy" [value]='sort'>
+          {{ sort }}
+        </md-option>
+      </md-select>
+    </div>
+
+    <div fxFlex="15">
+      <md-checkbox color='accent' [(ngModel)]="checked" (ngModelChange)="viewArchived()">View archived items</md-checkbox>
+    </div>
+
+    <div fxFlex="40">
+      <app-pagination (changePage)="handleChangePage($event)" [totalItems]="totalFoods" [currentPage]="page" [pageSize]="pageSize"></app-pagination>
+    </div>
+
+  </div>
+  <!---->
+
+  <!--The list of all the existed Foods-->
+  <div *ngIf="foods">
+    <h1 *ngIf="foods.length <= 0" class="display-message">No food to display</h1>
+  </div>
+
+  <md-card class="food-card" *ngFor="let food of foods">
+    <app-food [food]='food' (foodRefresh)='handleFoodRefresh()'></app-food>
+  </md-card>
+
+  <!---->
+  <md-grid-list *ngIf="showLoadSpinner" cols="1" rowHeight="200px">
+    <md-grid-tile>
+      <md-spinner class="centered" color="accent"></md-spinner>
+    </md-grid-tile>
+  </md-grid-list>
+
+
+  <!--The area of sorting-->
+  <div fxLayout="row" class="margin-bar">
+    <div fxFlex="40" fxFlexOffset="60">
+      <app-pagination (changePage)="handleChangePage($event)" [totalItems]="totalFoods" [currentPage]="page" [pageSize]="pageSize"></app-pagination>
+    </div>
+  </div>
+  <!---->

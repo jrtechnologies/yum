@@ -1,0 +1,31 @@
+<div class="is-flex header">
+  <div>
+    <app-month-nav [(viewDate)]='viewdate' (monthViewDate)="onMonthNavChange($event)">
+    </app-month-nav>
+
+  </div>
+  <app-chef-nav></app-chef-nav>
+</div>
+
+<ng-container *ngIf='ordersMenusMap.size>=0'>
+
+  <h3>Your Orders</h3>
+
+  <div class="fullLayer" *ngIf="showSpinner">
+      <md-spinner class="centered" color="accent"></md-spinner>
+  </div>
+
+  <ng-template #dailyOrderTemplate let-day="day" let-locale="locale">
+
+    <ng-container *ngIf='foods.length>0'>
+      <app-order-total [foods]='foods' [day]=day.date [dailyMenuOrderChef]='ordersMenusMap.get(day.date|date:"yyyy-MM-dd")'></app-order-total>
+    </ng-container>
+
+  </ng-template>
+
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view [viewDate]="viewdate" [excludeDays]="excludeDays" [cellTemplate]="dailyOrderTemplate" [locale]="locale">
+    </mwl-calendar-month-view>
+  </div>
+
+</ng-container>

@@ -1,0 +1,25 @@
+.background{
+  background-image: url("/assets/img/empty-plate.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  position: relative;
+}
+.main-div{
+  font-family:'Roboto Slab', serif;
+  position:relative;
+  background:rgba(255,255,255,0.8);
+  top:28%;
+  left: 19%;
+  transform:translate(-80%,-80%);
+  padding:41px;
+  text-align:center;
+  width: 287px;
+}
+h3 p{
+  text-align:center;
+  width:200px;
+}
+.text-not-found{
+  margin-top: 35px;
+}

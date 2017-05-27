@@ -1,0 +1,33 @@
+<md-grid-list cols="8" rowHeight="70px" class="title">
+  <md-grid-tile colspan="4" class="heading left-no-pad">
+      User account settings
+  </md-grid-tile>
+  <md-grid-tile colspan="4" class="right-no-pad">
+    <app-admin-nav></app-admin-nav>
+  </md-grid-tile>
+</md-grid-list>
+<md-card>
+  <md-grid-list cols="8" rowHeight="100px" class="divider">
+    <md-grid-tile colspan="4" class="left">
+      <div class="heading">
+        <div>Profile details</div>
+      </div>
+    </md-grid-tile>
+    <md-grid-tile colspan="4" class="right">
+      <app-slide-toggle-component *ngIf="user" [user]="user" (updateVersion)="handleUpdateVersion($event)"></app-slide-toggle-component>
+    </md-grid-tile>
+  </md-grid-list>
+     <app-profile *ngIf="user" [(user)]="user" [change]="change" [admin]="true" (invalidProfileForm)="handleInvalidProfileForm($event)" (updateVersion)="handleUpdateVersion($event)">
+  </app-profile>
+  <md-grid-list cols="8" rowHeight="100px">
+    <md-grid-tile colspan="4" class="left">
+      <button [disabled]="user==null || !user.approved" md-raised-button color="accent" (click)="resetPwd()">Reset Password</button>
+    </md-grid-tile>
+    <md-grid-tile colspan="4" class="right">
+      <form (ngSubmit)="updateUser(profileGroup)" [formGroup]="profileGroup" autocomplete="off">
+        <button md-raised-button color="accent" type="submit" [disabled]="(profileGroup.invalid)||(!detectChanges())||showSpinner||invalid">Save changes</button>
+      </form>
+      <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
+    </md-grid-tile>
+  </md-grid-list>
+</md-card>

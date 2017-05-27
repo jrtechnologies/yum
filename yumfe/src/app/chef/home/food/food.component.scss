@@ -1,0 +1,91 @@
+.biggerSize {
+  font-size:3em !important;
+}
+
+.align-left {
+  text-align: left  !important;
+  margin-left: 20px;
+}
+
+.margin-bar {
+   margin: 30px 0;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.top-margin {
+    margin-top: 22px;
+}
+
+.arrow-up-color {
+  color: lightseagreen;
+  font-size:2em !important;
+  position: absolute;
+  top: -6px;
+  width: 16px;
+  height: 8px;
+  // margin-top: -22px !important;
+}
+
+.arrow-down-color {
+  color: #DC143C;
+  font-size:2em !important;
+  position: absolute;
+  top: -6px;
+  width: 16px;
+  height: 8px;
+}
+
+.food-name-style {
+  font-family: 'Roboto Slab Bold', 'Roboto Slab Regular', 'Roboto Slab';
+  font-weight: 700;
+  font-style: normal;
+  font-size: 16px;
+}
+
+.description-style {
+  font-family: 'Arial';
+  font-weight: 400;
+  font-style: normal;
+}
+
+.number-style {
+  font-family: 'Arial Bold', 'Arial';
+  font-weight: 700;
+}
+
+.footer-style {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    width: absolute !important;
+    padding: 5px 5px 5px 15px;
+    height: 14px;
+    background: inherit;
+    background-color: #f2f2f2;
+    border: none;
+    border-radius: 3px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+.is-flex-start{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+}
+.has-flex-columns{
+  align-items: stretch !important;
+  flex-wrap: nowrap !important;
+}
+
+.is-flex-centered{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+

@@ -1,0 +1,10 @@
+<h1 md-dialog-title class="centered"></h1>
+<md-dialog-content class="centered">
+  <div>Do you want to delete the profile picture? </div>
+</md-dialog-content>
+<md-dialog-actions>
+  <div class="is-flex width100">
+    <button md-button  md-raised-button color="accent" (click)="dialogRef.close('Yes')">Yes</button>
+    <button md-button  md-raised-button color="accent" (click)="dialogRef.close('No')">No</button>
+  </div>
+</md-dialog-actions>

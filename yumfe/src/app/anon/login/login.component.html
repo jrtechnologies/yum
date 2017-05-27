@@ -1,0 +1,41 @@
+<div class="background min-sizes">
+  <div class="login">
+    <form (ngSubmit)="login()" [formGroup]="loginForm" autocomplete="off">
+      <img src="/assets/img/Yum-logo-small.png">
+      <h2>Sign in</h2>
+        <md-input-container>
+          <input mdInput type="email" placeholder="user email" formControlName="email"/>
+          <md-error class="error" *ngIf="loginForm.get('email').touched && (loginForm.get('email').hasError('required'))">
+            Email is required.
+          </md-error>
+          <md-error class="error" *ngIf="loginForm.get('email').touched && loginForm.get('email').hasError('pattern')">
+            Wrong email address
+          </md-error>
+        </md-input-container>
+        <md-input-container>
+          <input mdInput type="password" placeholder="password" formControlName="password"/>
+          <md-error class="error" *ngIf="loginForm.get('password').touched && loginForm.get('password').hasError('required')">
+            Password is required.
+          </md-error>
+        </md-input-container>
+        <button md-raised-button type="submit" color="accent" [disabled]="disableBtn">Login</button>
+        <img class="spinner" *ngIf="showSpinner" src="../../assets/img/spinner.gif">
+      </form>
+    <div class="links">
+      <a routerLink="/forgotpwd" routerLinkActive="active">Forgot password?</a>
+    </div>
+    <div class="links">
+      <a routerLink="/register" routerLinkActive="active">Create account </a>
+    </div>
+  </div>
+  <div class="text">
+    <p>
+        What I've enjoyed most, though, is meeting people who have
+        a real interest in food and sharing ideas with them.
+        Good food is a global thing and I find that there is
+        always something new and amazing to learn - I love it!<br><br>
+        Jamie Oliver<br><br>
+        www.brainyquote.com
+    </p>
+  </div>
+</div>

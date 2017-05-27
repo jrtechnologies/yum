@@ -1,0 +1,64 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="header" >
+  <div >
+    <app-month-nav *ngIf="monthDate" [(viewDate)]="monthDate" (monthViewDate)="onMonthNavView($event)"></app-month-nav>
+    <app-hungry-nav></app-hungry-nav>
+  </div>
+  <div>
+    <button md-raised-button color="accent" (click)="previousWeek()">Previous Week</button>
+    <button md-raised-button  color="accent" (click)="currentWeek()" routerLink="/hungry" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive  #rlaCurrentHungry="routerLinkActive" [disabled]='rlaCurrentHungry.isActive' routerLinkActive="active">Current Week</button>
+    <button md-raised-button color="accent" (click)="nextWeek()">Next Week</button>
+  </div>
+</div>
+<md-grid-list *ngIf="showLoadSpinner" cols="1" rowHeight="200px">
+  <md-grid-tile>
+    <md-spinner class="centered" color="accent"></md-spinner>
+  </md-grid-tile>
+</md-grid-list>
+<div *ngFor="let day of weekDays">
+  <div class="date">{{day|date:"EEEE / d MMM"}}</div>
+  <md-card>
+    <div class="no-menu centered" *ngIf='dailyMenuExists(day|date:"yyyy-MM-dd") === false'>
+      <div><i class="material-icons medium-size">mood_bad</i></div>
+      <div>
+        <div> Today there is no menu prepared!</div>
+        <div>Some fasting will be good for you ;)</div>
+      </div>
+    </div>
+    <div *ngIf='dailyMenuExists(day|date:"yyyy-MM-dd") === true'>
+      <app-daily-menu (dailyTotalPrice)="handleUserUpdated($event, day)" [dailyMenu]='getDailyMenu(day|date:"yyyy-MM-dd")'></app-daily-menu>
+    </div>
+  </md-card>
+</div>
+
+<md-grid-list cols="1" rowHeight="70px">
+  <md-grid-tile colspan="1" class="right-no-pad">
+    <button md-raised-button color="accent" (click)="previousWeek()">Previous Week</button>
+    <button md-raised-button color="accent" (click)="nextWeek()">Next Week</button>
+  </md-grid-tile>
+</md-grid-list>
+<md-card>
+  <div fxLayout="column" fxLayoutAlign="space-between none" class="hungryFooter">
+    <div fxFlex="30">
+      <div fxLayout="row">
+        <div fxFlexOffset="2" fxFlex="91"><h2>Your weekly total</h2></div>
+        <div fxFlex="7"><h3>{{getTotalPrice() | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></h3></div>
+      </div>
+      <div fxLayout="row">
+        <span fxFlexOffset="2" fxFlex="97"><hr flex/></span>
+      </div>
+    </div>
+    <div fxFlex="10">
+      <div fxLayout="row">
+        <div fxFlexOffset="2"><p>Deadline for signing-up for the next day's meal is by <span class="bold" [innerHTML]="deadline | async | date:'H:mm'"></span> of the previous day.</p></div>
+      </div>
+      <div fxLayout="row">
+        <div fxFlexOffset="2"><h3>Notes</h3></div>
+      </div>
+    </div>
+    <div fxFlex="60">
+      <div fxLayout="row">
+        <div fxFlex="63" fxFlexOffset="2"><span [innerHTML]="notes | async"></span></div>
+      </div>
+    </div>
+  </div>
+</md-card>

@@ -1,0 +1,39 @@
+<div class="background min-sizes">
+  <div class="resetPass">
+    <form  (ngSubmit)="changePassword()" [formGroup]="resetForm" autocomplete="off">
+        <img src="/assets/img/Yum-logo-small.png">
+        <h2>Reset password</h2>
+        <p>
+        Please enter a new password<br>to continue.
+        </p>
+        <md-input-container>
+          <input mdInput type="password" placeholder="New Password" formControlName="password" (keyup)= "onPasswordChange()"/>
+          <md-error class="error" *ngIf="resetForm.get('password').touched && resetForm.get('password').hasError('required')">
+            Password is required.
+          </md-error>
+          <md-error class="error" *ngIf="resetForm.get('password').touched && resetForm.get('password').hasError('pattern')">
+            Password min 6 characters.
+          </md-error>
+        </md-input-container>
+        <md-input-container>
+          <input mdInput type="password" placeholder="Confirm Password" formControlName="confirm"/>
+          <md-error *ngIf="resetForm.get('confirm').hasError('required') && resetForm.get('confirm').touched">
+            Password Confirming is required.
+          </md-error>
+           <md-error *ngIf="resetForm.get('confirm').hasError('pattern') && resetForm.get('confirm').touched">
+            Password min 6 characters.
+          </md-error>
+          <md-error *ngIf="resetForm.get('confirm').hasError('confirmError') && resetForm.get('confirm').touched">
+            Password and confirm do not match.
+          </md-error>
+        </md-input-container>
+        <div>
+          <button md-raised-button type="submit" color="warn" [disabled]="resetForm.invalid || isDisable === true">Change Password</button>
+          <img class="spinner" *ngIf="showSpinner" src="../../assets/img/spinner.gif">
+        </div>
+    </form>
+    <div class="links">
+      <a routerLink="/login" routerLinkActive="active">Cancel </a>
+    </div>
+  </div>
+</div>

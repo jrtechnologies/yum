@@ -1,0 +1,11 @@
+export * from './AdminApi';
+import { AdminApi }  from './AdminApi';
+export * from './AuthApi';
+import { AuthApi }  from './AuthApi';
+export * from './ChefApi';
+import { ChefApi }  from './ChefApi';
+export * from './DefaultApi';
+import { DefaultApi }  from './DefaultApi';
+export * from './HungryApi';
+import { HungryApi }  from './HungryApi';
+export const APIS = [ AdminApi, AuthApi, ChefApi, DefaultApi, HungryApi, ];

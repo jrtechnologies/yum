@@ -1,0 +1,5 @@
+<div class="inline">
+  <button md-raised-button color="accent" routerLink="/admin"  [routerLinkActiveOptions]="{ exact: true }" routerLinkActive  #rlaAdmin="routerLinkActive" [disabled]='rlaAdmin.isActive' routerLinkActive="active">Users</button>
+
+  <button md-raised-button color="accent" routerLink="/admin/globalSettings"  routerLinkActive  #rlaAdminGS="routerLinkActive" [disabled]='rlaAdminGS.isActive' routerLinkActive="active">Global Settings</button>
+</div>

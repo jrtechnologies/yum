@@ -1,0 +1,37 @@
+<div class="smallSidePad calendarDate is-flex-column">
+  <div class="cal-cell-top">
+    <span class="cal-day-number">{{ day | date:"d" }}</span>
+  </div>
+
+  <div class=" flexGrow is-flex-column clickable" *ngIf="dailyMenu!==undefined" (click)='viewDailyMenu()'>
+
+    <!--<md-card-title>{{dailyMenu.date}}</md-card-title>-->
+    <div *ngIf="dailyMenu.foods!==undefined">
+      <ng-container *ngIf="dailyMenu.foods.length>0">
+        <div class="foodsList">
+          <div *ngFor="let food of dailyMenu.foods" class="is-flex foodsListItem">
+
+            <div> {{food.food.foodName}} </div>
+            <div class="foodListItemQty"> {{food.quantity}}</div>
+          </div>
+        </div>
+        <!--<small style="margin: 5px"></small>-->
+      </ng-container>
+    </div>
+
+  </div>
+
+  <div *ngIf="dailyMenu!==undefined && dailyMenu.foods.length>0" class="calendarBottom borderTop is-flex">
+    <ng-container *ngIf="getTotal()!=0">
+      <div>Total: </div>
+      <div> {{getTotal() | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
+    </ng-container>
+  </div>
+
+  <div *ngIf="dailyMenu!==undefined && dailyMenu.foods.length==0" class="calendarBottom smallPad flexEnd">
+    <!--<ng-container *ngIf="dailyMenu.foods.length==0">-->
+    <button md-raised-button color="accent" (click)='viewDailyMenu()'>order</button>
+    <!--</ng-container>-->
+  </div>
+
+</div>

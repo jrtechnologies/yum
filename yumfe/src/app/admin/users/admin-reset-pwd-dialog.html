@@ -1,0 +1,11 @@
+<h1 md-dialog-title class="centered">Reset password</h1>
+<md-dialog-content  class="centered">
+  <div>Do you want to reset the user's password? </div>
+</md-dialog-content>
+<md-grid-list cols="4" rowHeight="20px">
+</md-grid-list>
+<div fxLayout="row" fxLayoutAlign="space-around center">
+  <button md-raised-button color="accent" (click)="dialogRef.close('Yes')">Yes</button>
+
+    <button md-raised-button color="accent" (click)="dialogRef.close('No')">No</button>
+</div>

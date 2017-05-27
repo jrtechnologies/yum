@@ -1,0 +1,82 @@
+<div *ngIf="userOrders.length > 0">
+  <div fxLayout="row">
+    <div fxFlex="15">
+      <h3> Full Name </h3>
+    </div>
+    <div fxFlex="5">
+      <h3 class="align-left"> Qty. </h3>
+    </div>
+    <div fxFlex="20">
+      <h3> Meal </h3>
+    </div>
+    <div fxFlex="5">
+      <h3 class="align-left"> Qty. </h3>
+    </div>
+    <div fxFlex="20">
+      <h3> Salad </h3>
+    </div>
+    <div fxFlex="5">
+      <h3 class="align-left"> Qty. </h3>
+    </div>
+    <div fxFlex="20">
+      <h3> Drink </h3>
+    </div>
+    <div fxFlex="10" class="align-right">
+      <h3> Total </h3>
+    </div>
+  </div>
+</div>
+
+<div *ngFor="let user of userOrders" class="user">
+
+  <div fxLayout="row">
+
+    <div fxFlex="15">
+      <div fxLayout="column">
+        <div class="bold-chars">{{user.lastName}}</div>
+        <div class="bold-chars">{{user.firstName}}</div>
+      </div>
+    </div>
+
+    <div fxFlex="25">
+      <div fxLayout="column">
+        <div *ngFor="let foodOrder of mainFoodOrders">
+          <div fxLayout="row">
+            <div fxFlex="20" class="align-left bold-chars">{{foodOrder.quantity}}</div>
+            <div fxFlex="80">{{foodOrder.food.foodName}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div fxFlex="25">
+      <div fxLayout="column">
+        <div *ngFor="let foodOrder of saladFoodOrders">
+          <div fxLayout="row">
+            <div fxFlex="20" class="align-left bold-chars">{{foodOrder.quantity}}</div>
+            <div fxFlex="80">{{foodOrder.food.foodName}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div fxFlex="25">
+      <div fxLayout="column">
+        <div *ngFor="let foodOrder of drinkFoodOrders">
+          <div fxLayout="row">
+            <div fxFlex="20" class="align-left bold-chars">{{foodOrder.quantity}}</div>
+            <div fxFlex="80">{{foodOrder.food.foodName}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div fxLayout="row" class="align-right print-row-border-total">
+    <div fxFlex="10" fxFlexOffset="90" class="totalPrice">
+      {{user.total | number : '1.2-2'}} <span [innerHTML]="currency | async"></span>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,249 @@
+/* You can add global styles to this file, and also import other style files */
+
+// Import theming functions
+@import '~@angular/material/theming';
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~angular-calendar/dist/css/angular-calendar.css';
+@import './assets/style.css';
+
+.min-sizes{
+  min-width: 900px;
+  min-height: 700px;
+}
+.navMonth{
+  font-family: 'Roboto Slab Bold', 'Roboto Slab Regular', 'Roboto Slab';
+  font-weight: 700;
+  font-style: normal;
+  font-size: 28px;
+  color: #1B1B1B;
+}
+.fixedWidth{     min-width: 145px; display: inline-block; }
+
+ /* Rules for sizing the icon. */
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+
+.material-icons.md-48 {
+    left: -4px;
+    top: 11px;
+    position: absolute;
+}
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
+.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+
+.material-icons.md-dark.md-invert { color: rgba(255, 255, 255, 1); background-color: #000;}
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light { color: rgba(255, 255, 255, 1); }
+.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+
+.is-flex {display: flex; align-items: center; justify-content: space-between; }
+.is-flex-space {display: flex; align-items: center; justify-content:space-around;}
+.is-flex-column { display: flex; flex-direction: column;}
+.alignBottom .mat-figure{display: flex; align-items: flex-end !important;   }
+.alignBottom{ padding-top: 15px; }
+
+.inline { display: inline-block; vertical-align: middle;}
+.smallPad{ padding:5px;}
+.smallSidePad{ padding: 0 10px;}
+.width100 { width:100%; }
+.noResize{
+  resize: none;
+}
+
+.noMarginInput  .mat-input-wrapper { margin: 20px 0 20px 0 !important; }
+
+html, body{margin:0; padding:0;  font-family:'Roboto Slab', serif;}
+
+.success-snack-bar {
+  background-color: #4CAF50 !important;
+}
+
+.warning-snack-bar {
+  background-color: #ff9800 !important;
+}
+
+.error-snack-bar {
+  background-color: #F44336 !important;
+}
+
+.dialog-content-size {
+  height: '300px';
+  width: '500px';
+}
+.centered {
+   text-align: center;
+}
+
+.left > figure {
+    justify-content: flex-start !important;
+    padding-left: 30px !important;
+}
+
+.right > figure {
+    justify-content: flex-end !important;
+    padding-right: 30px !important;
+}
+
+.left-no-pad > figure {
+    justify-content: flex-start !important;
+}
+
+.right-no-pad > figure {
+    justify-content: flex-end !important;
+}
+
+.bold{ font-weight: 600;}
+
+//calendar
+.cal-month-view .cal-day-number {
+  float:left !important;
+  margin-right: auto!important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+.cal-month-view .cal-cell-top {  min-height: 35px !important; }
+.mat-card-footer{ position: relative !important;}
+
+.calendarDate{ position: relative; height:250px; width:auto;  background-color: #fff; }
+
+.foodsList {overflow-y: auto; max-height: 160px;  margin-top: 5px;}
+.foodsListItem{
+    background-color: #f2f2f2;
+    padding: 0 0 0 4px;
+    border-radius: 3px;
+    color: rgb(51, 51, 51);
+}
+.foodsListItem:not(:first-child){
+  margin: 2px 0 0 0;
+}
+.foodListItemQty{ background-color: #ff5b57; color: #fff; padding: 5px 10px;      border-radius: 0 4px 4px 0;}
+
+.flexItemLeft { margin-right: auto!important;}
+.calendarBottom {     flex: 0;
+    padding: 12px 0;
+    margin-bottom: 5px;
+}
+.flexGrow{flex: 1;}
+.flexEnd{  align-self: flex-end;}
+.borderTop { border-top: 2px solid #ff5b57;}
+.smallInputContainer{ width:100%;}
+
+.smallInputContainer > .mat-input-wrapper {
+    /* margin: 1em 0; */
+    padding-bottom: 6px;
+    margin: 10px 0 0 0 !important;
+}
+//ICOMOON
+[class^="icon-"], [class*=" icon-"] {
+    font-size: 26px;
+}
+.content {
+  background-color: #f3f3f3;
+}
+
+.main {
+  font-family:'Roboto Slab', serif;
+  padding: 0 200px;
+  min-width: 890px;
+}
+
+@media screen and (max-width: 1400px) {
+  .main {
+     padding: 0 100px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .main {
+     padding: 0 30px;
+  }
+}
+
+.fullLayer{
+  position: absolute; width:100%; height:100%; background: rgba(247, 247, 247, 0.61);
+  left: 0; top:0;
+display:flex; align-items: center; justify-content: center; z-index: 100;
+}
+
+button.mat-raised-button.active {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+.img-circle {
+    border-radius: 50%;
+}
+
+.smallImage{ max-height:70px!important; width:auto;   border: 4px solid #ff5b57;}
+.red { color: #ff5b57;}
+
+.mat-menu-content { padding:10 30px !important; }
+
+.hidden{visibility:hidden !important;}
+.relative{ position:relative; }
+.absolute{ position:absolute; }
+.menuDrawerButton{ position: absolute;     top: 78px;
+    right: -32px;}
+.menuDrawer{ max-width: 320px!important;}
+
+.material-icons{ transition: 0.6s ease-in-out all; transform: rotate(0deg) rotate(1deg);}
+.isOpen .material-icons{ transform:   rotate(180deg);  }
+
+.bigger-button {
+  font-size: 33px !important;
+}
+.bold {
+  font-weight: 700;
+}
+.cdk-overlay-dark-backdrop {
+    background: rgba(255, 0, 0, 0.6) !important;
+}
+
+
+.largerSelect .mat-select-trigger { min-width: 150px; }
+
+//terms & policy css
+.tabContent{ padding:10px;     max-height: 430px;}
+
+.termsHeader{ /*height:70px;*/}
+.termsContent{ height: 460px;}
+.termsContent .tabGroup {max-height: 420px; overflow: auto;}
+.termsDialog{
+  height: 500px;
+  width: 600px;
+  min-width: 600px;
+}
+
+.input-extra-width {
+  width: 90%;
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 60%;
+  border-top: 16px solid #F44336;
+  width: 140px;
+  height: 140px;
+  margin: 20% auto;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 1.2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.input-med-width {
+  width: 80%;
+}

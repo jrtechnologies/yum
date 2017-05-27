@@ -1,0 +1,72 @@
+<div class="background min-sizes">
+  <div class="register">
+    <form [formGroup]="registerForm" autocomplete="off">
+      <img src="/assets/img/Yum-logo-small.png">
+      <h2>Register</h2>
+      <md-input-container>
+        <input mdInput type="text" placeholder="First name" formControlName="firstName">
+        <md-error class="error" *ngIf="registerForm.get('firstName').touched && registerForm.get('firstName').hasError('required')">
+            First name is required.
+        </md-error>
+        <md-error *ngIf="registerForm.get('firstName').touched && registerForm.get('firstName').hasError('minlength')">
+            Minimum of 2 characters
+        </md-error>
+      </md-input-container>
+      <md-input-container>
+        <input mdInput type="text" placeholder="Last name" formControlName="lastName">
+        <md-error class="error" *ngIf="registerForm.get('lastName').touched && registerForm.get('lastName').hasError('required')">
+            Last name is required.
+        </md-error>
+        <md-error *ngIf="registerForm.get('lastName').touched && registerForm.get('lastName').hasError('minlength')">
+            Minimum of 2 characters
+        </md-error>
+      </md-input-container>
+      <md-input-container>
+        <input mdInput  type="email" placeholder="email" formControlName="email">
+        <md-error class="error" *ngIf="registerForm.get('email').touched && registerForm.get('email').hasError('required')">
+          Email is required.
+        </md-error>
+        <md-error class="error" *ngIf="registerForm.get('email').touched && registerForm.get('email').hasError('pattern')">
+          Wrong email address
+        </md-error>
+      </md-input-container>
+      <md-input-container>
+        <input mdInput autocomplete="off" nofill type="password" placeholder="password" formControlName="password" (keyup)= "onPasswordChange()">
+        <md-error class="error" *ngIf="registerForm.get('password').touched && registerForm.get('password').hasError('required')">
+          Password is required.
+        </md-error>
+        <md-error class="error" *ngIf="registerForm.get('password').touched && registerForm.get('password').hasError('pattern')">
+          Password min 6 characters.
+        </md-error>
+      </md-input-container>
+      <md-input-container>
+        <input mdInput autocomplete="off" nofill type="password" placeholder="password verification" formControlName="confirm">
+        <md-error *ngIf="registerForm.get('confirm').hasError('required') && registerForm.get('confirm').touched">
+          Password Confirming is required.
+        </md-error>
+        <md-error *ngIf="registerForm.get('confirm').hasError('pattern') && registerForm.get('confirm').touched">
+          Password min 6 characters.
+        </md-error>
+        <md-error *ngIf="registerForm.get('confirm').hasError('confirmError') && registerForm.get('confirm').touched">
+          Password and confirm do not match.
+        </md-error>
+      </md-input-container>
+      <button class="submitBtn" md-raised-button type="button" (click)="register()" [disabled]="registerForm.invalid || disableBtn === true" color="accent">Create account</button>
+      <img *ngIf="showSpinner" class="spinner" src="../../assets/img/spinner.gif">
+    </form>
+    <div class="signIn">
+      <h4>Already have an account?</h4>
+      <div class="links">
+        <a routerLink="/login" routerLinkActive="active">Sign in</a>
+      </div>
+    </div>
+  </div>
+  <div class="text">
+    <p>
+      Part of the secret of a success in life is to eat
+      what you like and let the food fight it out inside.<br><br>
+      Mark Twain<br><br>
+      www.brainyquote.com
+    </p>
+  </div>
+</div>
