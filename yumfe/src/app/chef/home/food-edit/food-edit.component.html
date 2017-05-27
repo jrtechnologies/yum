@@ -1,0 +1,73 @@
+<!--The form where chef can create new Food items-->
+<md-card>
+  <form createNewFoodItemForm [formGroup]="food" autocomplete="off">
+    <md-grid-list cols="4" rowHeight="100px">
+      <md-grid-tile [colspan]="3" [rowspan]="1">
+        <md-input-container class="full-width">
+          <input mdInput placeholder="Food Name" type="text" formControlName="foodName" (blur)="uniqueName($event.target.value)">
+          <md-error *ngIf="food.get('foodName').touched && food.get('foodName').hasError('required')">
+            Food Name is required
+          </md-error>
+          <md-error *ngIf="food.get('foodName').touched && food.get('foodName').hasError('minlength')">
+            Minimum of 2 characters
+          </md-error>
+          <md-error *ngIf="food.get('foodName').touched && food.get('foodName').hasError('maxlength')">
+            Maximum of 100 characters
+          </md-error>
+          <md-error *ngIf="food.get('foodName').touched && food.get('foodName').hasError('pattern')">
+            Invalid food name
+          </md-error>
+          <div *ngIf="!isNameUnique">
+            <md-error>
+              This name already exists
+            </md-error>
+          </div>
+        </md-input-container>
+      </md-grid-tile>
+      <md-grid-tile [colspan]="1" [rowspan]="1">
+      </md-grid-tile>
+      <md-grid-tile [colspan]="1" [rowspan]="1" class="alignBottom">
+        <md-select placeholder="Food Type" formControlName="foodType" class="left-position margin-bottom">
+          <md-option *ngFor="let foodType of this.foodTypesForm" [value]='foodType'>
+            {{ foodType }}
+          </md-option>
+        </md-select>
+      </md-grid-tile>
+
+      <md-grid-tile [colspan]="2" [rowspan]="1" class="smallPaddingBottom">
+        <md-input-container class="full-width">
+          <textarea mdInput placeholder="Description" type="text" formControlName="description" cols="50" rows="4" class="noResize" (keyup)="count(tweetmsg)"  [(ngModel)]="tweetmsg"></textarea>
+          <md-hint>{{characterleft}} charcter(s) left</md-hint>
+          <md-error *ngIf="food.get('description').touched && food.get('description').hasError('maxlength')">
+            Maximum of 250 characters
+          </md-error>
+        </md-input-container>
+      </md-grid-tile>
+      <md-grid-tile [colspan]="1" [rowspan]="1" class="alignBottom">
+        <md-input-container class="noMarginInput">
+          <input mdInput placeholder='Price' formControlName="price" />
+          <md-error *ngIf="food.get('price').touched && food.get('price').hasError('required')">
+            Price is required
+          </md-error>
+          <md-error *ngIf="food.get('price').touched && food.get('price').hasError('maxlength')">
+            Invalid price
+          </md-error>
+          <md-error *ngIf="food.get('price').touched && food.get('price').hasError('pattern')">
+            Invalid price
+          </md-error>
+        </md-input-container>
+      </md-grid-tile>
+      <md-grid-tile [colspan]="3" [rowspan]="1">
+      </md-grid-tile>
+      <md-grid-tile [colspan]="1" [rowspan]="1">
+        <!--The create food button-->
+        <md-card-actions>
+          <button md-raised-button type="button" (click)="createFood()" color='accent' [disabled]="!(!food.invalid && (isNameUnique && (food.get('foodName').value !== '')))">Create food</button>
+          <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
+        </md-card-actions>
+        <!---->
+      </md-grid-tile>
+    </md-grid-list>
+  </form>
+</md-card>
+<!---->

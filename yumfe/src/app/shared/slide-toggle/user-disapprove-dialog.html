@@ -1,0 +1,18 @@
+<h1 class="centered" md-dialog-title>Disapprove user</h1>
+<div class="dialog-content-size centered" md-dialog-content>
+  <div>User has non final orders. </div>
+  <div>Do you want to delete the non final orders and disapprove the user?</div>
+</div>
+
+<md-grid-list cols="4" rowHeight="50px">
+  <md-grid-tile>
+  </md-grid-tile>
+  <md-grid-tile>
+    <button md-raised-button color="accent" (click)="dialogRef.close('Yes')">Yes</button>
+  </md-grid-tile>
+  <md-grid-tile>
+    <button md-raised-button color="accent" (click)="dialogRef.close('No')">No</button>
+  </md-grid-tile>
+  <md-grid-tile>
+  </md-grid-tile>
+</md-grid-list>

@@ -1,0 +1,14 @@
+<h1 md-dialog-title class="centered">Delete User</h1>
+<md-dialog-content  class="centered">
+  <div>Do you want to delete the user? </div>
+</md-dialog-content>
+<md-grid-list cols="4" rowHeight="20px">
+</md-grid-list>
+<div fxLayout="row" fxLayoutAlign="space-around center" >
+  <div>
+    <button md-raised-button color="accent" (click)="dialogRef.close('Yes')">Yes</button>
+  </div>
+  <div>
+    <button md-raised-button color="accent" (click)="dialogRef.close('No')">No</button>
+  </div>
+</div>

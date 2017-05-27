@@ -1,0 +1,42 @@
+.dialog{
+  height: 550px;
+  width: 420px;
+}
+.order{
+  width: 370px;
+  margin: 0 auto;
+  font-family:'Roboto Slab', serif;
+}
+img{
+  width: 182px;
+  height: 71px;
+}
+.miniBtnX{
+  min-width: 5px !important;
+  font-weight: bold;
+  font-size: 1.3em;
+}
+.food{
+  padding: 15px 0 15px 0;
+  border-bottom: 1px solid red;
+}
+.total{
+  padding: 15px 0 15px 0;
+  border-top: 1px solid red;
+}
+.email{
+  margin: 25px 0 30px 0;
+}
+.buttons{
+  height: 48px;
+  margin: 0 2px 15px 0;
+}
+.cancel{
+  background-color: #D7D7D7;
+}
+.cancel:hover{
+  background-color: #F44336;
+}
+.right-align{
+  text-align: right !important;
+}

@@ -1,0 +1,33 @@
+
+<div class="smallSidePad calendarDate is-flex-column">
+  <div class="cal-cell-top is-flex">
+    <span class="cal-day-number  flexItemLeft">{{ day | date:"d" }}</span>
+    <ng-container *ngIf="dailyMenuOrderChef!==undefined">
+      <button md-icon-button color="accent" routerLink='/chef/orders/daily/{{dailyMenuOrderChef.dailyMenuDate | date:"yyyy-MM-dd"}}'
+        routerLinkActive="" title="View order summary"><i class="material-icons">remove_red_eye</i></button>
+    </ng-container>
+
+  </div>
+
+
+  <div *ngIf="dailyMenuOrderChef!==undefined" class="flexGrow">
+
+    <div *ngIf="dailyMenuOrderChef.orderItems.length>0" class="foodsList">
+
+      <div *ngFor="let orderItem of dailyMenuOrderChef.orderItems" class="is-flex foodsListItem">
+        <span [ngClass]="{'icon-Meal': getFood(orderItem.foodId).foodType==='Main', 'icon-Salad': getFood(orderItem.foodId).foodType==='Salad', 'icon-Drink': getFood(orderItem.foodId).foodType==='Drink'}"> </span>
+        <div> {{getFood(orderItem.foodId).foodName}} </div>
+        <div class="foodListItemQty"> {{orderItem.quantity}}</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="calendarBottom smallPad  borderTop is-flex" *ngIf="dailyMenuOrderChef!==undefined">
+    <div>Total: </div>
+    <div>{{(calcTotal()).toFixed(2)}}<span [innerHTML]="currency | async"></span></div>
+  </div>
+
+
+</div>

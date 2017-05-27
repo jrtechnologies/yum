@@ -1,0 +1,56 @@
+<div fxLayout="row" class="right-align">
+    <div fxFlex="100">
+      <button class="miniBtnX" md-button (click)="dialogRef.close('No')">x</button>
+    </div>
+  </div>
+<div class="dialog">
+  <div class="order">
+    <div class="centered" fxLayout="row">
+      <div fxFlex="100">
+        <img src="./../../../assets/img/Yum-logo-small.png">
+      </div>
+    </div>
+    <div class="centered">
+      <!--<p>Congrats,</p>-->
+      <p><b>Ms/Mr {{fullName}},</b></p>
+      <p>You are about to order for<br> <b>{{date|date:"EEEE d MMM y"}}</b>.</p>
+    </div>
+    <div>
+      <div *ngFor="let food of orderedFoods">
+        <div class="food" fxLayout="row">
+          <div fxFlex="70">
+            {{food.food.foodName}}
+          </div>
+          <div fxFlex="30">
+            <div fxLayout="row">
+              <div fxFlex="40">
+                {{food.quantity}}
+              </div>
+              <div fxFlex="60" class="right-align">
+                <b>x {{food.food.price | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></b>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="total" fxLayout="row">
+        <div fxFlex="56">
+          <b>Total</b>
+        </div>
+        <div fxFlex="24">
+          &nbsp;<!--Items: {{items}}-->
+        </div>
+        <div fxFlex="20" class="right-align">
+          <b>{{total | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></b>
+        </div>
+      </div>
+    </div>
+    <div class="centered email" fxLayout="row">
+      <md-checkbox fxFlex="100" [checked]="isChecked" (change)="toggle()">Email me this</md-checkbox>
+    </div>
+    <div class="centered" fxLayout="row">
+      <button class="buttons cancel" fxFlex="50" md-raised-button (click)="dialogRef.close('No')" color="accent">Cancel</button>
+      <button class="buttons" fxFlex="50" md-raised-button (click)="dialogRef.close(getEmailCheck())" color="accent">Bon appetit!</button>
+    </div>
+  </div>
+</div>

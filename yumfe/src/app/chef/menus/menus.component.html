@@ -1,0 +1,29 @@
+<div class="is-flex header">
+  <div>
+    <app-month-nav [(viewDate)]='viewdate' (monthViewDate)="onMonthNavChange($event)">
+    </app-month-nav>
+
+  </div>
+  <app-chef-nav></app-chef-nav>
+</div>
+<h3>Assign foods to dates...</h3>
+
+  <div class="fullLayer" *ngIf="showSpinner">
+      <md-spinner class="centered" color="accent"></md-spinner>
+  </div>
+
+  <ng-container *ngIf=' foods.length>0'>
+    <mwl-calendar-month-view [viewDate]="viewdate" [excludeDays]="excludeDays" [cellTemplate]="dailyMenuTemplate" [locale]="locale">
+    </mwl-calendar-month-view>
+
+    <ng-template #dailyMenuTemplate let-day="day" let-locale="locale">
+      <app-daily-menu [foods]='foods' [day]=day.date [viewdate]="viewdate" [menu]='menusMap.get(day.date|date:"yyyy-MM-dd")' (snackMessage)="dailyMenuError($event) "></app-daily-menu>
+      <!--{{menusMap.get(day.date|date:"yyyy-MM-dd")}}-->
+      <small style="margin: 5px"></small>
+    </ng-template>
+  </ng-container>
+
+
+ <ng-container *ngIf=' foods.length==0'>
+   You should add some food, before creating a new menu.
+ </ng-container>

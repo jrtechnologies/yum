@@ -1,0 +1,7 @@
+<h1 md-dialog-title>The food can't be modified</h1>
+<md-dialog-content>Do you want to edit only its description or make a clone of it?</md-dialog-content>
+<md-dialog-actions class="is-flex-space">
+  <button md-raised-button color="accent" (click)="dialogRef.close(1)">Edit description</button>
+  <button md-raised-button color="accent" (click)="dialogRef.close(2)">Clone</button>
+  <button md-raised-button color="accent" (click)="dialogRef.close(3)">Cancel</button>
+</md-dialog-actions>

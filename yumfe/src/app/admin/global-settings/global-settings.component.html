@@ -1,0 +1,61 @@
+<md-grid-list cols="8" rowHeight="100px">
+  <md-grid-tile class="left-no-pad" colspan="4" rowspan="1">
+    <h2>Global Settings</h2>
+  </md-grid-tile>
+  <md-grid-tile class="right-no-pad" colspan="4" rowspan="1">
+    <app-admin-nav></app-admin-nav>
+  </md-grid-tile>
+</md-grid-list>
+<md-grid-list *ngIf="showLoadSpinner" cols="1" rowHeight="200px">
+  <md-grid-tile>
+    <md-spinner class="centered" color="accent"></md-spinner>
+  </md-grid-tile>
+</md-grid-list>
+<div *ngIf='gss' class="globalSettings">
+  <form #gssForm="ngForm" (ngSubmit)="save(gssForm)" class="form" autocomplete="off">
+    <h3>Set global settings</h3>
+    <span layout="row"><hr flex/></span>
+    <md-grid-list cols="1" rowHeight="50">
+      <md-grid-tile class="right" colspan="1" rowspan="1">
+        <button md-raised-button type="submit" color='accent'>Save Changes</button>
+        <button md-raised-button class="cancel" (click)="cancel()" color='accent'>Cancel</button>
+      </md-grid-tile>
+    </md-grid-list>
+    <div class="textareas">
+      <md-grid-list cols="8" rowHeight="4:1">
+        <md-grid-tile class="left-no-pad" colspan="4" rowspan="1">
+          <label for="deadline">Time of last order</label>
+        </md-grid-tile>
+        <md-grid-tile class="right-no-pad" colspan="4" rowspan="1">
+          <label for="currency">Active currency</label>
+        </md-grid-tile>
+        <md-grid-tile class="left-no-pad" colspan="4" rowspan="2">
+          <input class="deadlineCurrency" type="time" name="deadline" [(ngModel)]="gss.deadline">
+        </md-grid-tile>
+        <md-grid-tile class="right-no-pad" colspan="4" rowspan="2">
+          <md-select class="deadlineCurrency" [(ngModel)]="gss.currency" name="currency">
+            <md-option *ngFor="let currency of currencyList" [value]='currency.symbol' [innerHtml]="currency.name"> </md-option>
+          </md-select>
+        </md-grid-tile>
+      </md-grid-list>
+      <div class="area">
+        <label for="notes">Notes</label>
+        <textarea htmlEditor [(ngModel)]="gss.notes" rows="20" cols="100" name="notes"></textarea>
+      </div>
+      <div class="area">
+        <label for="tos">Terms of service</label>
+        <textarea htmlEditor [(ngModel)]="gss.tos" rows="20" cols="100" name="tos"></textarea>
+      </div>
+      <div class="area">
+        <label for="policy">Privacy Policy</label>
+        <textarea htmlEditor [(ngModel)]="gss.policy" rows="20" cols="100" name="policy"></textarea>
+      </div>
+    </div>
+    <md-grid-list cols="1" rowHeight="50">
+      <md-grid-tile class="right" colspan="1" rowspan="1">
+        <button md-raised-button type="submit" color='accent'>Save Changes</button>
+        <button md-raised-button class="cancel" (click)="cancel()" color='accent'>Cancel</button>
+      </md-grid-tile>
+    </md-grid-list>
+  </form>
+</div>

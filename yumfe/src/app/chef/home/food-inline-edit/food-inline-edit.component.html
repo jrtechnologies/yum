@@ -1,0 +1,100 @@
+<!--The form where chef can edit Food items-->
+
+<form createNewFoodItemForm (ngSubmit)="editFood(foodEditForm)" [formGroup]="foodEditForm" autocomplete="off">
+
+  <div fxLayout="row" fxLayoutAlign="space-around start" class="margin-bar">
+
+
+    <div fxFlex="20" class="align-left">
+      <div fxLayout="column">
+        <div>
+          <md-input-container>
+            <input mdInput placeholder="Food Name" type="text" formControlName="foodName" (keyup)="nameChangesAndUnique($event.target.value)">
+            <md-error *ngIf="foodEditForm.get('foodName').touched && foodEditForm.get('foodName').hasError('required')">
+              Food Name is required
+            </md-error>
+            <md-error *ngIf="foodEditForm.get('foodName').touched && foodEditForm.get('foodName').hasError('minlength')">
+              Minimum of 2 characters
+            </md-error>
+            <md-error *ngIf="foodEditForm.get('foodName').touched && foodEditForm.get('foodName').hasError('pattern')">
+              Invalid food name
+            </md-error>
+            <md-error *ngIf="foodEditForm.get('foodName').touched && foodEditForm.get('foodName').hasError('maxlength')">
+              Maximum of 100 characters
+            </md-error>
+            <div *ngIf="!isNameUnique">
+              <md-error>
+                This name already exists
+              </md-error>
+            </div>
+          </md-input-container>
+        </div>
+
+        <div class="top-margin">
+          <md-select placeholder="Food Type" formControlName="foodType" (ngModelChange)="foodTypeChanges($event)">
+            <md-option *ngFor="let foodType of this.foodTypesForm" [value]='foodType'>
+              {{ foodType }}
+            </md-option>
+          </md-select>
+          <md-error *ngIf="foodEditForm.get('foodType').touched && foodEditForm.get('foodType').hasError('required')">
+            Food Type is required
+          </md-error>
+        </div>
+      </div>
+    </div>
+
+    <div fxFlex="20">
+      <md-input-container class="example-full-width" (keyup)="descriptionChanges($event.target.value)">
+        <textarea mdInput placeholder="Description" type="text" formControlName="description" cols="40" rows="3" (keyup)="count(tweetmsg)" [(ngModel)]="tweetmsg" class="noResize"></textarea>
+        <md-hint>{{characterleft}} charcter(s) left</md-hint>
+        <md-error *ngIf="foodEditForm.get('description').touched && foodEditForm.get('description').hasError('maxlength')">
+          Maximum of 250 characters
+        </md-error>
+      </md-input-container>
+    </div>
+
+    <div fxFlex="20" class="smallLeftPad">
+      <md-input-container>
+        <input mdInput placeholder="Price" formControlName="price" (keyup)="priceChanges($event.target.value)">
+        <md-error *ngIf="foodEditForm.get('price').touched && foodEditForm.get('price').hasError('required')">
+          Price is required
+        </md-error>
+        <md-error *ngIf="foodEditForm.get('price').touched && foodEditForm.get('price').hasError('maxlength')">
+          Invalid price
+        </md-error>
+        <md-error *ngIf="foodEditForm.get('price').touched && foodEditForm.get('price').hasError('pattern')">
+          Invalid price
+        </md-error>
+      </md-input-container>
+    </div>
+
+    <div fxFlex="20">
+      <div class="align-center">
+        <!--The check button-->
+        <button md-fab color='accent' [disabled]="(foodEditForm.invalid || !(isNameUnique && (foodNameChange || foodTypeChange || descriptionChange || priceChange)))"
+          title="Save">
+        <i class="material-icons">check</i>
+      </button>
+        <img *ngIf="showSpinner" src="../../../../assets/img/spinner.gif">
+        <!---->
+      </div>
+    </div>
+
+    <div fxFlex="20">
+      <div class="align-center">
+        <!--The cancel button-->
+        <button type='button' md-mini-fab color='accent' (click)='close()' title="Close">
+          <i class="material-icons">close</i>
+        </button>
+        <!---->
+      </div>
+    </div>
+
+  </div>
+  <md-card-footer>
+    <md-grid-tile-footer>
+    </md-grid-tile-footer>
+  </md-card-footer>
+
+</form>
+<!---->

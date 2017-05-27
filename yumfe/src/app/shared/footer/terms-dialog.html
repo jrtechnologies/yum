@@ -1,0 +1,14 @@
+<div class="termsDialog">
+  <div fxLayout="row" class="termsHeader">
+    <div fxFlex="95" class="right-no-pad">
+      <!--<h1 md-dialog-title style="text-align:center;">Terms and  Conditions / Privacy Policy</h1>-->
+     &nbsp;
+    </div>
+    <div fxFlex="5">
+      <button md-raised-button (click)="dialogRef.close('No')" color="accent" style="min-width: 40px;">X</button>
+    </div>
+  </div>
+  <div md-dialog-content class="termsContent">
+    <app-tabs [selectedTab]="tabNumber"></app-tabs>
+  </div>
+</div>

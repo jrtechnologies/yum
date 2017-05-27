@@ -1,0 +1,68 @@
+<div *ngIf="!editing">
+  <div fxLayout="row" fxLayoutAlign="space-around start" class="margin-bar has-flex-columns">
+
+    <!--Icon for food type-->
+    <div fxFlex="20" class="align-left is-flex-start">
+      <span [ngClass]="{'icon-Meal': food.foodItem.foodType==='Main', 'icon-Salad': food.foodItem.foodType==='Salad', 'icon-Drink': food.foodItem.foodType==='Drink'}"
+        class='biggerSize'></span>
+
+      <span class="food-name-style">{{food.foodItem.foodName}}</span>
+      <!--Name - Description - price-->
+    </div>
+
+    <div fxFlex="20" class="align-center is-flex-centered  description-style">
+      <span>{{food.foodItem.description}}</span>
+    </div>
+
+    <div fxFlex="20" class="align-center is-flex-centered  ">
+      <div>
+        {{food.foodItem.price | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
+    </div>
+
+    <!--Edit icon-->
+    <div fxFlex="20">
+      <div class="align-center">
+        <button md-fab color='accent' (click)="edit()" title="Edit food!">
+      <i class="material-icons">edit</i>
+    </button>
+      </div>
+    </div>
+
+    <!--Delete icon-->
+    <div fxFlex="20">
+      <div *ngIf="!food.foodItem.archived" class="align-center">
+        <button md-icon-button type='butoon' color='accent' (click)='delete()' title="Delete food!">
+      <i class="material-icons bigger-button">delete_forever</i>
+      </button>
+      </div>
+    </div>
+  </div>
+
+  <!--Statistic about foods-->
+  <span *ngIf="food.stats['currentWeek'].quantity !== null || lastWeek !== 0 || secondLastWeek !== 0">
+    <div class="footer-style">
+      <md-card-footer>
+        <md-grid-tile-footer>
+          <span *ngIf="food.stats['currentWeek'].quantity === null"> 0 </span>
+  <span *ngIf="food.stats['currentWeek'].quantity !== null" class="number-style">
+            {{food.stats['currentWeek'].quantity}} </span> / this week | prev. week:
+  <span class="number-style">{{lastWeek}}</span> | 2 weeks ago:
+  <span class="number-style">{{secondLastWeek}}</span>
+  <span *ngIf="percentage !== -1 && (lastWeek !== 0 || secondLastWeek !== 0)" class="number-style">
+          ({{percentage | number : '2.0-2'}}%)
+          </span>
+  <span *ngIf="percentage > 0">
+            <i class="material-icons arrow-up-color">arrow_drop_up</i>
+          </span>
+  <span *ngIf="percentage < 0">
+            <i class="material-icons arrow-down-color">arrow_drop_down</i>
+          </span>
+  </md-grid-tile-footer>
+  </md-card-footer>
+</div>
+</span>
+</div>
+<div *ngIf="editing && ready">
+  <app-food-inline-edit [food]='food' [foodEditable]='foodEditable' [clone]='clone' (closeEditFood)="handleCloseEditFoodEvent()"
+    (updateFood)='handleUpdateFood($event)'></app-food-inline-edit>
+</div>

@@ -1,0 +1,90 @@
+.isOrdered{
+  background-color: green;
+}
+.quant-buttons .mat-raised-button {
+  min-width: 20px;
+  padding: 5px;
+  line-height: 5px;
+  border-radius: 2px;
+  font-weight: 800;
+}
+
+.food-line {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px dashed #F44336;
+  margin-right: 15px;
+}
+
+.food-type {
+  border-right: 1px solid #F44336;
+  padding-left: 15px;
+  height:100%;
+}
+
+.drink-type {
+  padding-left: 15px;
+}
+
+.total {
+  padding-left: 15px;
+  border-left: 1px solid #F44336;
+}
+
+.type-title {
+  font-family: 'Roboto Slab', Arial;
+  font-weight: bold;
+}
+
+.total-title {
+  font-family: 'Roboto Slab', Arial;
+  font-weight: bold;
+  border-bottom: 1px solid #F44336;
+  padding-bottom: 15px;
+}
+
+.total-price {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-weight: bold;
+}
+
+.placed {
+  background-color: #00CC99;
+  color: white;
+  padding: 5px 15px 5px 15px;
+  font-size: 14px;
+  max-width: 210px;
+  width: 85%;
+  margin-bottom: 2px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.total {
+  text-align: center;
+  margin:0 auto;
+  padding-left: 20px;
+}
+
+.space-btn button {
+  margin-bottom: 2px;
+}
+.price{
+  text-align: right;
+}
+.cancel{
+  background-color: #D7D7D7;
+}
+.cancel:hover{
+  background-color: #F44336;
+}
+// .order-btn button{
+//   margin-bottom: 2px;
+// }
+.saveBtn{
+  min-width:83px;
+}
+.food-name:hover{
+  cursor: pointer;
+}

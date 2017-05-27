@@ -1,0 +1,46 @@
+  <div class="fullLayer" *ngIf="!orderItems || foods.length==0">
+      <md-spinner class="centered" color="accent"></md-spinner>
+  </div>
+
+<div id="container-to-print">
+
+  <div fxLayout="row">
+    <div fxFlex="50" class="left-no-pad">
+      <h1>{{date | date:"EEEE d MMMM y" }}</h1>
+      <h3>Order Summary</h3>
+    </div>
+    <div fxFlex="50" fxFlexOffset="25" class="up-buttons no-print style-page-buttons">
+      <div class="inline">
+        <button md-raised-button color="accent" routerLink="/chef/orders" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive
+          #rla1="routerLinkActive" [disabled]='rla1.isActive' routerLinkActive="active">Back to orders</button>
+        <button md-raised-button color="accent" (click)="print()">Print page</button>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row">
+    <div fxFlex>
+      <div *ngIf="orderItems && foods.length>0">
+        <md-card class="ordersday-card">
+          <app-food-item [orderItems]='orderItems'></app-food-item>
+        </md-card>
+        <md-card class="ordersday-card">
+          <app-user-order [userOrders]='userOrders'></app-user-order>
+        </md-card>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row">
+    <div fxFlex="50" class="left-no-pad">
+    </div>
+    <div fxFlex="25" fxFlexOffset="75" class="down-buttons no-print style-page-buttons">
+      <div class="inline">
+        <button md-raised-button color="accent" routerLink="/chef/orders" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive
+          #rla1="routerLinkActive" [disabled]='rla1.isActive' routerLinkActive="active">Back to orders</button>
+        <button md-raised-button color="accent" (click)="print()">Print page</button>
+      </div>
+    </div>
+  </div>
+
+</div>

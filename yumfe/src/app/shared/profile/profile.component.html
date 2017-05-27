@@ -1,0 +1,69 @@
+<form *ngIf="showForm && user" novalidate [formGroup]="profileGroup">
+  <md-grid-list cols="7" rowHeight="100px">
+    <md-grid-tile colspan="2" rowspan="3">
+      <i *ngIf="!user.hasPicture" class="material-icons face">face</i>
+      <img class="profile-image" *ngIf="user.hasPicture" src="{{userPicture}}" />
+    </md-grid-tile>
+    <md-grid-tile colspan="1" rowspan="1" class="left-no-pad">
+      <div>Change picture</div>
+      <button md-icon-button color="accent" (click)="fileInput.click()"><i class="material-icons">add_circle</i></button>
+      <input #fileInput type="file" ng2FileSelect [uploader]="uploader" hidden=true/>
+    </md-grid-tile>
+    <md-grid-tile colspan="4" rowspan="3">
+      <md-progress-bar *ngIf="progress" role="progressbar" mode="indeterminate"></md-progress-bar>
+    </md-grid-tile>
+    <md-grid-tile class="image-rules" colspan="{{admin?'1':'1'}}" rowspan="1">
+      You have to upload an image at least 180px by 180px, jpg, .gif, or .png. Max file size 700K.
+    </md-grid-tile>
+     <md-grid-tile *ngIf="user.hasPicture" colspan="1" rowspan="1" class="left-no-pad">
+      Delete picture
+      <button md-icon-button color="accent" (click)="deletePicture()"><i class="material-icons">delete_forever</i></button>
+    </md-grid-tile>
+  </md-grid-list>
+  <md-grid-list cols="{{admin?'9':'7'}}" rowHeight="100px">
+    <md-grid-tile *ngIf="admin && user.id !==1" [colspan]="2" class="left">
+      <md-select placeholder="User role" formControlName="role">
+        <md-option *ngFor="let role of roles" [value]="role.value">
+          {{ role.viewValue }}
+        </md-option>
+      </md-select>
+    </md-grid-tile>
+
+
+    <md-grid-tile [colspan]="2" class="left-no-pad">
+      <md-input-container class="input-extra-width">
+        <input mdInput type="text" placeholder="First name" formControlName="firstName">
+
+
+        <md-error *ngIf="profileGroup.get('firstName').touched && profileGroup.get('firstName').hasError('required')">
+          First Name is required
+        </md-error>
+        <md-error *ngIf="profileGroup.get('firstName').touched && profileGroup.get('firstName').hasError('minlength')">
+          Minimum of 2 characters
+        </md-error>
+      </md-input-container>
+    </md-grid-tile>
+    <md-grid-tile [colspan]="2">
+      <md-input-container class="input-extra-width">
+        <input mdInput type="text" placeholder="Last name" formControlName="lastName">
+
+        <md-error *ngIf="profileGroup.get('lastName').touched && profileGroup.get('lastName').hasError('required')">
+          Last Name is required
+        </md-error>
+        <md-error *ngIf="profileGroup.get('lastName').touched && profileGroup.get('lastName').hasError('minlength')">
+          Minimum of 2 characters
+        </md-error>
+      </md-input-container>
+    </md-grid-tile>
+    <md-grid-tile [colspan]="3" class="right">
+      <md-input-container class="input-extra-width">
+        <input mdInput type="email" placeholder="User email address" formControlName="email">
+
+        <md-error *ngIf="profileGroup.get('email').hasError('required') && profileGroup.get('email').touched">
+          Email is required
+        </md-error>
+      </md-input-container>
+    </md-grid-tile>
+
+  </md-grid-list>
+</form>
