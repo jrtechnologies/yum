@@ -15,7 +15,7 @@ See the GNU General Public License for more details.
 
 ## Credits
 
-This software was developed suring the Training Bootcamp 2017 at JR Technologies.
+This software was developed suring the Training Bootcamp 2017 at [JR Technologies](http://www.jrtechnologies.com).
 
 Team members:
 * Lazos Christos
