@@ -23,7 +23,8 @@ Team members:
 * Manatakis Ioannis
 * Piperidi Sofia Anna
 
-Also contributed to this project: 
+Also contributed to this project: Vasilis Antonakis, Alex Ntousakis, Angie Spyrou, Thymios Floros, Dimitris Ntilis, George Filippakis, 
+Stavros Apostolakis, Stefanos Markakis, Andreas Kolokotronis, Isidoros Kefakis, Kostas Asargiotakis, Dimitris Marmatakis, Stelios Iliadis
 
 ## Requirements
 
