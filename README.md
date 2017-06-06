@@ -15,7 +15,7 @@ See the GNU General Public License for more details.
 
 ## Credits
 
-This software was developed suring the Training Bootcamp 2017 at [JR Technologies](http://www.jrtechnologies.com).
+This software was developed during the Training Bootcamp 2017 at [JR Technologies](http://www.jrtechnologies.com).
 
 Team members:
 * Lazos Christos
@@ -36,7 +36,7 @@ Stavros Apostolakis, Stefanos Markakis, Andreas Kolokotronis, Isidoros Kefakis, 
 
 **Build:**
 
-* npm (on windows, dont forget to add AppData/Roaming/npm to your PATH env variable)
+* npm (on windows, dont forget to add ~/AppData/Roaming/npm to your PATH env variable)
 ```
 npm install npm@latest -g
 ```
