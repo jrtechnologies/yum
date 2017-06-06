@@ -92,6 +92,8 @@ npm install npm@latest -g
 
 #### Front-end and Back-end on same server ( for deploy )
 
+* in the file `yumfe/src/app/app.module.ts` change the line 39 to become `{provide: BASE_PATH, useValue: "/api"},`
+
 * in the `yumfe` folder, run `ng build --prod`
 
 * copy the whole content of the subfolder `dist` inside the folder `Yum/src/main/resources/static` so that the `index.html` and all other files now reside in the static folder.
@@ -102,4 +104,4 @@ npm install npm@latest -g
 
 * Build the project.
 
-* You should now have a file called `target/yum-1.0.x.jar`
+* You should now have a file called `target/yum-1.0.x.jar` that you can move to your installation folder.
