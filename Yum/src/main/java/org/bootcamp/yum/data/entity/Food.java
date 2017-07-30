@@ -11,6 +11,8 @@
  * 
  * You should have received a copy of the GNU General Public License along with Yum. 
  * If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * POST BOOTCAMP REV 1.0
  */
 
 package org.bootcamp.yum.data.entity;
