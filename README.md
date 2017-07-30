@@ -15,7 +15,7 @@ See the GNU General Public License for more details.
 
 ## Credits
 
-This software was developed suring the Training Bootcamp 2017 at JR Technologies.
+This software was developed during the Training Bootcamp 2017 at [JR Technologies](http://www.jrtechnologies.com).
 
 Team members:
 * Lazos Christos
@@ -23,7 +23,8 @@ Team members:
 * Manatakis Ioannis
 * Piperidi Sofia Anna
 
-Also contributed to this project: 
+Also contributed to this project: Vasilis Antonakis, Alex Ntousakis, Angie Spyrou, Thymios Floros, Dimitris Ntilis, George Filippakis, 
+Stavros Apostolakis, Stefanos Markakis, Andreas Kolokotronis, Isidoros Kefakis, Kostas Asargiotakis, Dimitris Marmatakis, Stelios Iliadis
 
 ## Requirements
 
@@ -35,7 +36,7 @@ Also contributed to this project:
 
 **Build:**
 
-* npm (on windows, dont forget to add AppData/Roaming/npm to your PATH env variable)
+* npm (on windows, dont forget to add ~/AppData/Roaming/npm to your PATH env variable)
 ```
 npm install npm@latest -g
 ```
@@ -91,6 +92,8 @@ npm install npm@latest -g
 
 #### Front-end and Back-end on same server ( for deploy )
 
+* in the file `yumfe/src/app/app.module.ts` change the line 39 to become `{provide: BASE_PATH, useValue: "/api"},`
+
 * in the `yumfe` folder, run `ng build --prod`
 
 * copy the whole content of the subfolder `dist` inside the folder `Yum/src/main/resources/static` so that the `index.html` and all other files now reside in the static folder.
@@ -101,4 +104,4 @@ npm install npm@latest -g
 
 * Build the project.
 
-* You should now have a file called `target/yum-1.0.x.jar`
+* You should now have a file called `target/yum-1.0.x.jar` that you can move to your installation folder.
