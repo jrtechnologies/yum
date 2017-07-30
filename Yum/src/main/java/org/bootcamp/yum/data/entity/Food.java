@@ -77,7 +77,7 @@ public class Food {
     private int version;
     
     //if (haveTime) { refactor as of http://www.jroller.com/eyallupu/entry/hibernate_derived_properties_performance_and }
-    @Formula("(select ifNull(sum(b.quantity),0) FROM Order_item b where 1=1 and b.food_id = food_id)")
+    @Formula("(select ifNull(sum(b.quantity),0) FROM order_item b where 1=1 and b.food_id = food_id)")
     private int orderedQuantity;
  
  // This constructor is needed for mock data, when the database is not here to autogenerate the id
