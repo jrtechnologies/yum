@@ -212,7 +212,7 @@ public class FoodsService {
             throw new ApiException(400, "No valid Food name");
         }else if (foodDetails.getDescription().length() > 249) { 
             throw new ApiException(400, "No valid Description.(length < 250)");
-        }else if (foodDetails.getPrice() <= 0 || foodDetails.getPrice() > 1.7976931348623157E+308) { System.out.println("**************************mpika edw");
+        }else if (foodDetails.getPrice() <= 0 || foodDetails.getPrice() > 1.7976931348623157E+308) { //System.out.println("**************************mpika edw");
             throw new ApiException(400, "No valid Price.(Price > 0)");
         }else if (!foodDetails.getFoodType().equals("Main") && !foodDetails.getFoodType().equals("Salad") && !foodDetails.getFoodType().equals("Drink")) { 
            throw new ApiException(400, "No valid Food type.(Main,Salad,Drink)");
@@ -323,11 +323,11 @@ public class FoodsService {
                     foodEntity.setDescription(foodDescription);
                }
                else{
-                   System.out.println("---");
-                   System.out.println(foodEntity);
-                   System.out.println(food);
-                   System.out.println(new BigDecimal(food.getPrice(), MathContext.DECIMAL64));
-                   System.out.println(foodEntity.getPrice());
+//                   System.out.println("---");
+//                   System.out.println(foodEntity);
+//                   System.out.println(food);
+//                   System.out.println(new BigDecimal(food.getPrice(), MathContext.DECIMAL64));
+//                   System.out.println(foodEntity.getPrice());
                    throw new ApiException(400, "Food is archived and cannot be changed");
                }
             }
@@ -481,18 +481,18 @@ public class FoodsService {
                 break;
         }
         
-        System.out.println(pr);
+//        System.out.println(pr);
         
         Page<org.bootcamp.yum.data.entity.Food> foodEntities = null;
         if(foodTypeStr.equals("All")){                
             if(archivedStr==null || archivedStr.equals("")){
                 foodEntities =  foodrepo.findAll(pr);
-                System.out.println("@1");
+//                System.out.println("@1");
                 
             }
             else {
                 foodEntities =  foodrepo.findByArchived(pr,archived );
-                System.out.println("@2");
+//                System.out.println("@2");
             }
 
         }
@@ -500,11 +500,11 @@ public class FoodsService {
              FoodType foodType = foodTypeConverter.convertToEntityAttribute(foodTypeStr);
              if(archivedStr==null || archivedStr.equals("")){
                 foodEntities =  foodrepo.findByFoodType(pr, foodType);
-                System.out.println("@3");
+//                System.out.println("@3");
              }
              else{
                 foodEntities =  foodrepo.findByFoodTypeAndArchived(pr, foodType, archived);
-                System.out.println("@4");
+//                System.out.println("@4");
              }
              
         }
@@ -559,9 +559,9 @@ public class FoodsService {
                 Statistic statAllTime = new Statistic();
                 statAllTime.setQuantity(foodrepo.findFoodOrderedQuantities( f.getId()));
                         
-                System.out.println("cur:"+firstDayOfWeek+" "+lastDayOfWeek);
-                System.out.println("last:"+firstDayOfLastWeek+" "+lastDayOfLastWeek);
-                System.out.println("2ndLast:"+firstDayOf2ndLastWeek+" "+lastDayOf2ndLastWeek);
+//                System.out.println("cur:"+firstDayOfWeek+" "+lastDayOfWeek);
+//                System.out.println("last:"+firstDayOfLastWeek+" "+lastDayOfLastWeek);
+//                System.out.println("2ndLast:"+firstDayOf2ndLastWeek+" "+lastDayOf2ndLastWeek);
                 
                 Map<String, Statistic> statistics = new HashMap<String, Statistic>();
                 
@@ -591,7 +591,7 @@ public class FoodsService {
         foodsPage.setFoods(foods);
         foodsPage.setFoods_version(dbFoodsVersion);
         
-        System.out.println(foodsPage);
+//        System.out.println(foodsPage);
         
         return  foodsPage;
 
