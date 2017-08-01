@@ -36,7 +36,7 @@ import {SettingsRouteGuard}  from './shared/settings/settings-route.guard';
   ],
   providers: [
     AuthApi,
-    {provide: BASE_PATH, useValue: "http://185.92.223.164:8080/api"},
+    {provide: BASE_PATH, useValue: "http://localhost:8080/api"},
     AppRouteGuard,
     SettingsRouteGuard
     ],
