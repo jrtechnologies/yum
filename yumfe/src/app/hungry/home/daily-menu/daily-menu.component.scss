@@ -19,7 +19,7 @@
 .food-type {
   border-right: 1px solid #F44336;
   padding-left: 15px;
-  height:100%;
+/*  height:100%;*/
 }
 
 .drink-type {
@@ -88,3 +88,5 @@
 .food-name:hover{
   cursor: pointer;
 }
+
+.mainDivs{ align-items: stretch!important; }
