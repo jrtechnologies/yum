@@ -197,7 +197,7 @@ public class DailyMenuService
             throw new ApiException(400, "The list of Daily Menu Foods is empty");
         }
         
-        System.out.println(newDailyMenu.getDate());
+//        System.out.println(newDailyMenu.getDate());
         
         if (dailyMenuRep.findByDate(newDailyMenu.getDate()) != null){ //if in the same date already exists a Daily Menu
             //throw new ConcurrentCreationException(409, "A menu was already created for that day", getNewDailyMenu(dailyMenuRep.findByDate(newDailyMenu.getDate())));

@@ -36,8 +36,8 @@
 
       <md-grid-tile [colspan]="2" [rowspan]="1" class="smallPaddingBottom">
         <md-input-container class="full-width">
-          <textarea mdInput placeholder="Description" type="text" formControlName="description" cols="50" rows="4" class="noResize" (keyup)="count(tweetmsg)"  [(ngModel)]="tweetmsg"></textarea>
-          <md-hint>{{characterleft}} charcter(s) left</md-hint>
+          <textarea mdInput placeholder="Description" type="text" formControlName="description" cols="50" rows="3" class="noResize" (keyup)="count(tweetmsg)"  [(ngModel)]="tweetmsg"></textarea>
+          <md-hint>{{characterleft}} character(s) left</md-hint>
           <md-error *ngIf="food.get('description').touched && food.get('description').hasError('maxlength')">
             Maximum of 250 characters
           </md-error>

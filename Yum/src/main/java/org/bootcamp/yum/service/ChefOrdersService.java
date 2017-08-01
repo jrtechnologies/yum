@@ -122,7 +122,7 @@ public class ChefOrdersService {
  
          
         dailyOrderSummary.setUserOrders(userOrderList);
-        System.out.println(dailyOrderSummary);
+//        System.out.println(dailyOrderSummary);
         return dailyOrderSummary;
     }
     
