@@ -196,7 +196,10 @@ public class FoodsService {
        
         FoodTypeConverter foodType = new FoodTypeConverter();                   //for Food type(Enum).
         org.bootcamp.yum.data.entity.Food food = new org.bootcamp.yum.data.entity.Food();
-                
+        
+        if(foodDetails.getFoodName()==null ) foodDetails.setFoodName("");
+        if(foodDetails.getDescription()==null ) foodDetails.setDescription("");
+        
         foodDetails.setFoodName(foodDetails.getFoodName().trim());
         foodDetails.setDescription(foodDetails.getDescription().trim());
        
