@@ -122,6 +122,8 @@ export class DailyMenuComponent implements OnInit, OnChanges {
                if(food && typeof food === 'object'){
                     this.addMenuFood(food);
                     this.selectCtrl.setValue("");
+
+
                     //this.mdAutoCompleteTrigger.closePanel();
                     //this.mdAutoCompleteTrigger.openPanel();
                }
@@ -163,10 +165,14 @@ export class DailyMenuComponent implements OnInit, OnChanges {
   removeFromAvailable(foodRemove: remote.Food){
       this.foodsAvailable = this.foodsAvailable.filter(food => food.id !== foodRemove.id);
   }
+
   addToAvailable(food: remote.Food){
        this.foodsAvailable.push(food);
        this.foodsAvailable = this.foodsService.sortArrayOfFoods(this.foodsAvailable );
        this.selectCtrl.setValue(""); //reset foodsAvailable
+
+       //this.selectCtrl = undefined;
+       //this.selectCtrl.reset();
   }
 
 

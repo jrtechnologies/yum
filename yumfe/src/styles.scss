@@ -8,6 +8,16 @@
 @import '~angular-calendar/dist/css/angular-calendar.css';
 @import './assets/style.css';
 
+
+
+// Colors:
+
+$semiBlack : #1B1B1B;
+$black: #000;
+$white: #fff;
+
+$primary: #ff5b57;
+
 .min-sizes{
   min-width: 900px;
   min-height: 700px;
@@ -17,7 +27,7 @@
   font-weight: 700;
   font-style: normal;
   font-size: 28px;
-  color: #1B1B1B;
+  color: $semiBlack;
 }
 .fixedWidth{     min-width: 145px; display: inline-block; }
 
@@ -37,10 +47,10 @@
 .material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
 .material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
 
-.material-icons.md-dark.md-invert { color: rgba(255, 255, 255, 1); background-color: #000;}
+.material-icons.md-dark.md-invert { color: $white; background-color: $black;}
 
 /* Rules for using icons as white on a dark background. */
-.material-icons.md-light { color: rgba(255, 255, 255, 1); }
+.material-icons.md-light { color: $white; }
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
 
 .is-flex {display: flex; align-items: center; justify-content: space-between; }
@@ -111,7 +121,7 @@ html, body{margin:0; padding:0;  font-family:'Roboto Slab', serif;}
 .cal-month-view .cal-cell-top {  min-height: 35px !important; }
 .mat-card-footer{ position: relative !important;}
 
-.calendarDate{ position: relative; height:250px; width:auto;  background-color: #fff; }
+.calendarDate{ position: relative; height:250px; width:auto;  background-color: $white; }
 
 .foodsList {overflow-y: auto; max-height: 160px;  margin-top: 5px;}
 .foodsListItem{
@@ -123,7 +133,7 @@ html, body{margin:0; padding:0;  font-family:'Roboto Slab', serif;}
 .foodsListItem:not(:first-child){
   margin: 2px 0 0 0;
 }
-.foodListItemQty{ background-color: #ff5b57; color: #fff; padding: 5px 10px;      border-radius: 0 4px 4px 0;}
+.foodListItemQty{ background-color: $primary; color: $white; padding: 5px 10px;      border-radius: 0 4px 4px 0;}
 
 .flexItemLeft { margin-right: auto!important;}
 .calendarBottom {     flex: 0;
@@ -132,14 +142,13 @@ html, body{margin:0; padding:0;  font-family:'Roboto Slab', serif;}
 }
 .flexGrow{flex: 1;}
 .flexEnd{  align-self: flex-end;}
-.borderTop { border-top: 2px solid #ff5b57;}
+.borderTop { border-top: 2px solid $primary;}
 .smallInputContainer{ width:100%;}
 
-.smallInputContainer > .mat-input-wrapper {
-    /* margin: 1em 0; */
-/*    padding-bottom: 6px;*/
+.smallInputContainer > .mat-input-wrapper { 
     margin: 10px 0 0 0 !important;
 }
+
 //ICOMOON
 [class^="icon-"], [class*=" icon-"] {
     font-size: 26px;
@@ -173,15 +182,15 @@ display:flex; align-items: center; justify-content: center; z-index: 100;
 }
 
 button.mat-raised-button.active {
-    background-color: #000 !important;
-    color: #fff !important;
+    background-color: $black !important;
+    color: $white !important;
 }
 .img-circle {
     border-radius: 50%;
 }
 
-.smallImage{ max-height:70px!important; width:auto;   border: 4px solid #ff5b57;}
-.red { color: #ff5b57;}
+.smallImage{ max-height:70px!important; width:auto;   border: 4px solid $primary;}
+.red { color: $primary;}
 
 .mat-menu-content { padding:10 30px !important; }
 
@@ -220,6 +229,10 @@ button.mat-raised-button.active {
   min-width: 600px;
 }
 
+.input-med-width {
+  width: 80%;
+}
+
 .input-extra-width {
   width: 90%;
 }
@@ -227,7 +240,7 @@ button.mat-raised-button.active {
 .loader {
   border: 16px solid #f3f3f3;
   border-radius: 60%;
-  border-top: 16px solid #F44336;
+  border-top: 16px solid $primary;
   width: 140px;
   height: 140px;
   margin: 20% auto;
@@ -243,7 +256,4 @@ button.mat-raised-button.active {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
-.input-med-width {
-  width: 80%;
 }
