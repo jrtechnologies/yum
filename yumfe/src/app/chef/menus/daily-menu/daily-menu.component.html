@@ -10,7 +10,7 @@
 
 
   <md-input-container *ngIf="menuCanBeEdited" class="smallInputContainer">
-   <input type="text" mdInput ngControl="tradeSource" [formControl]="selectCtrl" [mdAutocomplete]="auto" placeholder="select food">
+   <input type="text" mdInput ngControl="selectControlInput" [formControl]="selectCtrl" [mdAutocomplete]="auto" placeholder="select food">
 </md-input-container>
 
 <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn">
