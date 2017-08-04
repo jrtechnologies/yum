@@ -189,7 +189,10 @@ export class DailyMenuComponent implements OnInit {
         // Is Modify.
         if (this.modifyChecked) {
           const updateOrderItem: remote.UpdateOrderItems = {};
-          const updateOrderItems: Array<remote.UpdateOrderItems> = [];
+          //const updateOrderItems: Array<remote.UpdateOrderItems> = [];
+          // kostas
+          const updateOrderItems: Array<remote.OrderItem> = [];
+
           updateOrderItem.dailyMenuId = this.dailyMenu.id;
           updateOrderItem.dailyMenuDate = this.dailyMenu.date;
           updateOrderItem.dailyMenuVersion = this.dailyMenu.lastEdit.version;
