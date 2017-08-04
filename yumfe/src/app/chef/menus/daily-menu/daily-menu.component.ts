@@ -133,9 +133,9 @@ export class DailyMenuComponent implements OnInit, OnChanges {
       this.filteredFoods = this.selectCtrl.valueChanges
              .startWith(null)
              .map(food => {
-               if(food && typeof food === 'object'){
+               if (food && typeof food === 'object'){
                     this.addMenuFood(food);
-                    this.selectCtrl.patchValue("");
+                    this.selectCtrl.patchValue('');
                     //window.blur();
                     //document.getElementById("focusMe").focus();
                     //this.el.nativeElement.blur();
@@ -147,16 +147,16 @@ export class DailyMenuComponent implements OnInit, OnChanges {
                     //console.log(allDivs);
                     //allDivs.blur();
                }
-               else{
+               else {
                  return food;
                }
               })
-             .map(name => name && name!="" ? this.filter(name) : this.foodsAvailable.slice());
+             .map(name => name && name !== '' ? this.filter(name) : this.foodsAvailable.slice());
 
       this.selectCtrl.valueChanges.subscribe(status => {
           console.log(status);
-         if(this.el && this.focusMe && status.length==0){
-            console.log("blur enter");
+         if ( this.el && this.focusMe && status.length == 0 ) {
+            console.log('blur enter');
             this.el.nativeElement.blur();
             this.focusMe.nativeElement.focus();
             setTimeout(() => {
