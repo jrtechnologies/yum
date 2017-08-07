@@ -58,7 +58,8 @@ public class AuthService {
     public void authRegisterPost(UserReg body) throws ApiException {
         try {
             // if Role not in enum UserRole throws exception 
-            UserRole userRole = convertToUserRole(body.getRole());
+            //UserRole userRole = convertToUserRole(body.getRole());
+            UserRole userRole = convertToUserRole("hungry");
             String email = body.getEmail();
             if (userRep.findByEmail(email) != null) {
                 //    return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED); 
