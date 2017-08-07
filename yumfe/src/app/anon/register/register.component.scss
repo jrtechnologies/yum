@@ -3,17 +3,16 @@
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 .register{
-  position: absolute;
   background-color: white;
   width: 404px;
-  height: 630px;
   padding: 15px 10px 10px 10px;
-  margin-left: 4%;
-  margin-top: 4%;
   text-align: center;
+
 }
 .submitBtn{
   width: 340px;
@@ -33,11 +32,7 @@ input{
   margin-top: 10%;
 }
 .text{
-  position:absolute;
   background:rgba(255,255,255,0.7);
-  top:40%;
-  left:89%;
-  transform:translate(-80%,-80%);
   padding:35px;
   text-align:center;
   width: 175px;
