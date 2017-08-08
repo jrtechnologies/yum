@@ -6,14 +6,15 @@ import { SettingsComponent } from './shared/settings/settings.component';
 import { ResetpwdComponent } from './anon/resetpwd/resetpwd.component';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import {AppRouteGuard} from './app-route.guard';
+import {AppLdapRouteGuard} from './app-ldap-route.guard';
 import {SettingsRouteGuard} from './shared/settings/settings-route.guard';
 
 const appRoutes: Routes = [
  // { path: '', canActivate: [AppRouteGuard], redirectTo: 'login', pathMatch: 'full' },
   { path: '', canActivate: [AppRouteGuard], component: LoginComponent , pathMatch: 'full'},
   { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'forgotpwd', component: ForgotpwdComponent },
+  { path: 'register', canActivate: [AppLdapRouteGuard], component: RegisterComponent },
+  { path: 'forgotpwd', canActivate: [AppLdapRouteGuard], component: ForgotpwdComponent },
   { path: 'settings', canActivate: [SettingsRouteGuard], component: SettingsComponent },
   { path: 'resetpwd/:token', component: ResetpwdComponent },
  // { path: 'hungry', loadChildren: './hungry/hungry.module' },
