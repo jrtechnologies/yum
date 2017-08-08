@@ -297,7 +297,7 @@ public class OrdersService {
                 throw new ApiException(412, "Deadline for orders passed");
             } else {
                 List<OrderItem> orderItemsList = updateOrderItems.getOrderItems();
-                if (orderItemsList.size() ==0){
+                if (orderItemsList.isEmpty()){
                     throw new ApiException(400, "Order couldn't be modified.");
                 }
                 List<org.bootcamp.yum.data.entity.OrderItem> orderItemsEntity = dailyOrderEntity.getOrderItems();
