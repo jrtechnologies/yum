@@ -12,9 +12,9 @@ export class AppComponent {
 
     constructor(
         private authService: AuthenticationService
-    ){}
+    ) { }
 
-    ngOnInit(): void {
+    ngOnInit( ): void {
         this.authService.bootstrapUser();
     }
 
