@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import * as remote from '../../remote';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class GlobalSettingsService {
@@ -69,4 +70,10 @@ export class GlobalSettingsService {
       } );
     });
   }
+
+  public isLDAPenabled(): Boolean {
+      return environment.use_ldap;
+
+  }
+
 }

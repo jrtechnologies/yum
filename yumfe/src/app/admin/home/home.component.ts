@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import * as remote from '../../remote';
 import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
 import { AdminNavComponent } from './../shared/admin-nav/admin-nav.component';
+import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 
 @Component({
   templateUrl: './home.component.html',
@@ -46,7 +47,8 @@ export class HomeComponent implements OnInit {
   pagedItems: any[];
 
   constructor(private adminService: remote.AdminApi, private fb: FormBuilder,
-    public snackBar: MdSnackBar, public dialog: MdDialog) {
+    public snackBar: MdSnackBar, public dialog: MdDialog,
+    private gss: GlobalSettingsService) {
     //this.someExpression = null;
   }
 
@@ -98,20 +100,21 @@ export class HomeComponent implements OnInit {
     // Create Form group, form controls, validators
     this.userGroup = this.buildForm();
     this.loadUsers(this.page);
+    console.log('LDAP:' + this.gss.isLDAPenabled());
   }
 
 
   // load users of specific page
   private loadUsers(page: number) {
-    this.showLoadSpinner=true;
+    this.showLoadSpinner = true;
     this.adminService.usersGet((page - 1).toString(), this.pageSize.toString(), this.orderBy, this.direction).subscribe(usersPage => {
       this.users = usersPage.users;
       this.totalUsers = usersPage.totalElements;
       this.totalpages = usersPage.totalPages;
       this.page = page;
-      this.showLoadSpinner=false;
+      this.showLoadSpinner = false;
     }, error => {
-      this.showLoadSpinner=false;
+      this.showLoadSpinner = false;
     });
 
   }
