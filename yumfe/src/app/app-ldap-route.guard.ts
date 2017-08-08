@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { AuthenticationService } from '../shared/authentication.service'
+import { environment } from '../environments/environment';
 import { Router } from '@angular/router';
 
 @Injectable()
-export class AdminRouteGuard implements CanActivate {
+export class AppLdapRouteGuard implements CanActivate {
 
-    constructor(private authenticationService: AuthenticationService, private router: Router) {}
+  constructor( private router: Router) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if ( this.authenticationService.getLoggedInRole() === 'admin' ) {
-      return true;
+    if ( environment.use_ldap) {
+       this.router.navigate(['/']);
     } else {
-      this.router.navigate(['/']);
+      return true;
     }
   }
 }
