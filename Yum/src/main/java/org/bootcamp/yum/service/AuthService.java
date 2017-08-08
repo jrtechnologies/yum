@@ -15,7 +15,12 @@
 package org.bootcamp.yum.service;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.UUID;
+import javax.naming.Context;
+import javax.naming.NamingException;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.InitialDirContext;
 import org.bootcamp.JwtCodec;
 import org.bootcamp.yum.api.ApiException;
 import org.bootcamp.yum.api.model.LastEdit;
@@ -128,57 +133,112 @@ public class AuthService {
     }
     @Transactional
     public Token authLoginPost(Login body) throws ApiException {
+        
+        
+        //roles is an array of string:          
+        ArrayList<String> roles = new ArrayList<>();        
+             
+        
+        boolean userAuthLDAP = false;
+        boolean userAuthDB = false;
+        
+        
+        
+        char[] userEmail =body.getEmail().toCharArray();
+        char[] userPassword = body.getPassword().toCharArray();
+                
+        // TODO check LDAP enabled from application.properties
+        if(false){
+            // Set up the environment for creating the initial context
+
+            Hashtable<String, String> env = new Hashtable<String, String>();
+            env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+            env.put(Context.PROVIDER_URL, "ldap://localhost:10389");
+            // 
+            env.put(Context.SECURITY_AUTHENTICATION, "simple");
+            //env.put(Context.SECURITY_PRINCIPAL, "domain\\user"); // ex. "domain\\user"
+
+
+            env.put(Context.SECURITY_PRINCIPAL, "cn="+String.valueOf(userEmail)+", ou=People, dc=example, dc=com");
+            env.put(Context.SECURITY_CREDENTIALS, String.valueOf(userPassword) );
+
+            // Create the initial context
+             DirContext ctx;
+            try{
+                ctx = new InitialDirContext(env);
+
+                userAuthLDAP = ctx != null;
+
+                if(ctx != null)
+                    ctx.close();
+            }
+            catch(NamingException e){
+                System.out.println(e.getMessage());
+            }
+            
+            System.out.println("userAuthLDAP:" + userAuthLDAP);        
+        }
+        
+        
         //fetch in the database the user and verify its password.. uses bcrypt for password hashing
-        User user = userRep.findByEmail(body.getEmail());
+        User user = userRep.findByEmail(String.valueOf(userEmail));
         // Check user credentials
-        if ((user == null) || (!BCrypt.checkpw(body.getPassword(), user.getPassword()))) {
+        if (((user == null) || (!BCrypt.checkpw(String.valueOf(userPassword), user.getPassword()))) && !userAuthLDAP) {
+      
             throw new ApiException(404, "User not found (bad credentials)");
         } else {
             if (!user.isApproved()) {
                 throw new ApiException(403, "User can not login (not approved)");
             }
-            //roles is an array of string:          
-            ArrayList<String> roles = new ArrayList<>();
-            //Add roles for the user
-            switch (user.getUserRole()) {
-                case HUNGRY:
-                    roles.add("hungry");
-                    break;
-                case CHEF:
-                    roles.add("hungry");
-                    roles.add("chef");
-                    break;
-                case ADMIN:
-                    roles.add("hungry");
-                    roles.add("chef");
-                    roles.add("admin");
-                    break;
-                default:
-                    throw new ApiException(404, "User not found (bad credentials)");
-            }
-            // the subject should be the ID of the user converted to string
-            String subject = Long.toString(user.getId());
-            // add subject and roles for token.
-            String compactJws  = JwtCodec.encode(subject, roles);
-            //Create the token object and set the string token.
-            Token token = new Token();
-            token.setToken(compactJws);
-            //Create user and set them on token.
-            UserRoleConverter userConverter = new UserRoleConverter();
-            org.bootcamp.yum.api.model.User userModel = new org.bootcamp.yum.api.model.User();
-            userModel.setId(user.getId());
-            userModel.setFirstName(user.getFirstName());
-            userModel.setLastName(user.getLastName());
-            userModel.setEmail(user.getEmail());
-            userModel.setRole(userConverter.convertToDatabaseColumn(user.getUserRole()));
-            userModel.setRegistrationDate(user.getRegistrationDate());
-            userModel.setApproved(user.isApproved());
-            userModel.setLastEdit(new LastEdit(user.getLastEdit(), user.getVersion()));
-            userModel.setHasPicture(user.hasPicture());
-            token.setUser(userModel);
+            else{
+                userAuthDB = true;        
+
+                //Add roles for the user
+                switch (user.getUserRole()) {
+                    case HUNGRY:
+                        roles.add("hungry");
+                        break;
+                    case CHEF:
+                        roles.add("hungry");
+                        roles.add("chef");
+                        break;
+                    case ADMIN:
+                        roles.add("hungry");
+                        roles.add("chef");
+                        roles.add("admin");
+                        break;
+                    default:
+                        throw new ApiException(404, "User not found (bad credentials)");
             
-            return token;
+                }
+            }
         }
-    }
+
+            
+        // the subject should be the ID of the user converted to string
+        String subject = Long.toString(user.getId());
+        // add subject and roles for token.
+        String compactJws  = JwtCodec.encode(subject, roles);
+        //Create the token object and set the string token.
+        Token token = new Token();
+        token.setToken(compactJws);
+        //Create user and set them on token.
+        UserRoleConverter userConverter = new UserRoleConverter();
+        org.bootcamp.yum.api.model.User userModel = new org.bootcamp.yum.api.model.User();
+        userModel.setId(user.getId());
+        userModel.setFirstName(user.getFirstName());
+        userModel.setLastName(user.getLastName());
+        userModel.setEmail(user.getEmail());
+        userModel.setRole(userConverter.convertToDatabaseColumn(user.getUserRole()));
+        userModel.setRegistrationDate(user.getRegistrationDate());
+        userModel.setApproved(user.isApproved());
+        userModel.setLastEdit(new LastEdit(user.getLastEdit(), user.getVersion()));
+        userModel.setHasPicture(user.hasPicture());
+        token.setUser(userModel);
+
+        return token;
+        
+        
+    }//authLoginPost
     
 }
