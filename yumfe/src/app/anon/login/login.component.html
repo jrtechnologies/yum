@@ -21,10 +21,10 @@
         <button md-raised-button type="submit" color="accent" [disabled]="disableBtn">Login</button>
         <img class="spinner" *ngIf="showSpinner" src="../../assets/img/spinner.gif">
       </form>
-    <div class="links">
+    <div class="links" *ngIf=!hideRegForgot>
       <a routerLink="/forgotpwd" routerLinkActive="active">Forgot password?</a>
     </div>
-    <div class="links">
+    <div class="links" *ngIf=!hideRegForgot>
       <a routerLink="/register" routerLinkActive="active">Create account </a>
     </div>
   </div>

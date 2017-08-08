@@ -84,7 +84,10 @@ public class MenusService {
                 year+=1;         
             }
             firstDayOfWeek = new LocalDate().withYear(year).withWeekOfWeekyear(weekNumber);
-            switch (firstDayOfWeek.dayOfWeek().getAsText()){
+            firstDayOfWeek = firstDayOfWeek.minusDays(firstDayOfWeek.getDayOfWeek() - 1);
+            
+            //refactor 28/5/17 k
+            /*switch (firstDayOfWeek.dayOfWeek().getAsText()){
                 case "Monday":
                     break;
                 case "Tuesday":
@@ -99,7 +102,14 @@ public class MenusService {
                 case "Friday":
                     firstDayOfWeek = firstDayOfWeek.minusDays(4);
                     break;
-            }
+                case "Saturday":
+                    firstDayOfWeek = firstDayOfWeek.minusDays(5);
+                    break;
+                case "Sunday":
+                    firstDayOfWeek = firstDayOfWeek.minusDays(6);
+                    break;
+            }*/            
+            
             List<org.bootcamp.yum.api.model.DailyMenu> weeklyMenu = new ArrayList<>(); 
             for (int i = 0; i < 5; i++) {
                 DailyMenu dailymenu = createWeekDailyMenu(firstDayOfWeek.plusDays(i));              

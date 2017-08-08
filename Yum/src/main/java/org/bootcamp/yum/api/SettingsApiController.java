@@ -100,7 +100,7 @@ public class SettingsApiController implements SettingsApi {
     @Override  
     public ResponseEntity<Object> settingsPictureTokenGet(@RequestParam(value = "token", required = false) String token) throws ApiException{ 
      
-        System.out.println("token:" + token);
+//        System.out.println("token:" + token);
         
         if(token==null || token.trim().length()==0){
             //throw new ApiException(403, "Invalid token");

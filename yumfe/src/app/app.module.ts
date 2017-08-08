@@ -16,7 +16,9 @@ import { CalendarModule } from 'angular-calendar';
 import { ProfileComponent } from './profile/profile.component';
 import { BASE_PATH } from './remote/variables';
 import { AppRouteGuard } from './app-route.guard';
-import {SettingsRouteGuard}  from './shared/settings/settings-route.guard';
+import { AppLdapRouteGuard } from './app-ldap-route.guard';
+import { SettingsRouteGuard } from './shared/settings/settings-route.guard';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -36,8 +38,9 @@ import {SettingsRouteGuard}  from './shared/settings/settings-route.guard';
   ],
   providers: [
     AuthApi,
-    {provide: BASE_PATH, useValue: "http://localhost:8082/api"},
+    {provide: BASE_PATH, useValue: environment.base_path},
     AppRouteGuard,
+    AppLdapRouteGuard,
     SettingsRouteGuard
     ],
   bootstrap: [AppComponent]

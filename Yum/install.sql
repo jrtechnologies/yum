@@ -6,7 +6,7 @@ CREATE TABLE user(
     id BIGINT NOT NULL AUTO_INCREMENT,
     last_name varchar(25),
 	first_name varchar(25),
-	email varchar(25) NOT NULL UNIQUE,
+	email varchar(150) NOT NULL UNIQUE,
     role enum('hungry','chef','admin'),
     password varchar(60),
     registration_date date,

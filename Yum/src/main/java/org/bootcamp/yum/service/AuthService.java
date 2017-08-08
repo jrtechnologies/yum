@@ -58,7 +58,8 @@ public class AuthService {
     public void authRegisterPost(UserReg body) throws ApiException {
         try {
             // if Role not in enum UserRole throws exception 
-            UserRole userRole = convertToUserRole(body.getRole());
+            //UserRole userRole = convertToUserRole(body.getRole());
+            UserRole userRole = convertToUserRole("hungry");
             String email = body.getEmail();
             if (userRep.findByEmail(email) != null) {
                 //    return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED); 
@@ -107,7 +108,7 @@ public class AuthService {
     public void authChangepwdPut(ResetPwd body) throws ApiException {
 
         String token = body.getToken();
-        System.out.println("token: " + token);
+//        System.out.println("token: " + token);
         if (body==null){
             throw new ApiException(400, "Bad reset password data");
         }

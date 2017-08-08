@@ -29,6 +29,9 @@
         <md-error class="error" *ngIf="registerForm.get('email').touched && registerForm.get('email').hasError('pattern')">
           Wrong email address
         </md-error>
+         <md-error class="error" *ngIf="registerForm.get('email').touched && registerForm.get('email').hasError('maxlength')">
+          Too long email address (150 characters max)
+        </md-error>
       </md-input-container>
       <md-input-container>
         <input mdInput autocomplete="off" nofill type="password" placeholder="password" formControlName="password" (keyup)= "onPasswordChange()">
@@ -61,6 +64,7 @@
       </div>
     </div>
   </div>
+  <div></div>
   <div class="text">
     <p>
       Part of the secret of a success in life is to eat
