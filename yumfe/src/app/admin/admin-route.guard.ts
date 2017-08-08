@@ -12,10 +12,9 @@ export class AdminRouteGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if(this.authenticationService.getLoggedInRole()==='admin'){
+    if ( this.authenticationService.getLoggedInRole() === 'admin' ) {
       return true;
-    }
-    else{
+    } else {
       this.router.navigate(['/']);
     }
   }

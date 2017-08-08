@@ -100,7 +100,7 @@ public class SettingsService {
             }
 
             String newPassword = upUser.getPassword().trim();
-            System.out.println("newPassword: " + newPassword);
+//            System.out.println("newPassword: " + newPassword);
             String newPasswordEncrypt = "";
             if (newPassword != null && !newPassword.equals("")){
                 newPasswordEncrypt = BCrypt.hashpw(newPassword, BCrypt.gensalt());
@@ -137,7 +137,7 @@ public class SettingsService {
         
         try {
                 byte[] bytes = file.getBytes();
-                System.out.println("img bytes:"+bytes.length);
+//                System.out.println("img bytes:"+bytes.length);
                 // crop it, resize it
                 // save them in the User DAO
                 

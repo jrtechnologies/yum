@@ -174,8 +174,8 @@ public class UsersApiController implements UsersApi {
     public ResponseEntity<Object> usersIdPictureGet(@RequestParam(value = "token", required = true) String token, @PathVariable("id") Integer id)throws ApiException {
         org.bootcamp.yum.data.entity.User user =  userRepo.findById(id);
         
-        System.out.println("token:"+token);
-        System.out.println("id:"+id);
+//        System.out.println("token:"+token);
+//        System.out.println("id:"+id);
         if(user==null){
             //throw new ApiException(404, "User not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -215,7 +215,7 @@ public class UsersApiController implements UsersApi {
         }
         try {
                 byte[] bytes = file.getBytes();
-                System.out.println("img bytes:"+bytes.length);
+//                System.out.println("img bytes:"+bytes.length);
                 // crop it, resize it
                 // save them in the User DAO
                 

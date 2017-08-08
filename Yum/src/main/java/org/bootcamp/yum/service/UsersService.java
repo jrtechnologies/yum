@@ -120,7 +120,7 @@ public class UsersService {
                 throw new ApiException(400, "Bad request");
             } else {
                 Boolean notFinalOrders = user.hasNonFinalOrders(settingsRepo.findOne(1).getDeadline());
-                System.out.println("notFinalOrders " + notFinalOrders);
+//                System.out.println("notFinalOrders " + notFinalOrders);
                 if (!notFinalOrders) {
                     user.setApproved(approve);
                 } else {
@@ -225,7 +225,7 @@ public class UsersService {
                 break;
         }
 
-        System.out.println(pr);
+//        System.out.println(pr);
         //Iterable<org.bootcamp.yum.data.entity.User> usersPageable = userRepo.findAll();
 
         Page<org.bootcamp.yum.data.entity.User> usersPageable = userRepo.findAll(pr);

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, SimpleChanges, OnChanges, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, SimpleChanges, OnChanges, EventEmitter, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { Validators, FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { MdInputContainer, MdAutocomplete, MdAutocompleteTrigger, MdProgressBar } from '@angular/material';
@@ -6,16 +6,20 @@ import { subDays,  isValid , getHours, getMinutes, getSeconds, addDays, getMonth
 import * as remote from '../../../remote';
 import * as models from './../../../shared/models';
 
-import {FoodsService} from '../../services/foods.service';
-import {GlobalSettingsService } from '../../../shared/services/global-settings-service.service';
+import { FoodsService } from '../../services/foods.service';
+import { GlobalSettingsService } from '../../../shared/services/global-settings-service.service';
 import { Observable } from 'rxjs/Rx';
+
 
 @Component({
   selector: 'app-daily-menu',
   templateUrl: './daily-menu.component.html',
   styleUrls: ['./daily-menu.component.scss']
 })
+
 export class DailyMenuComponent implements OnInit, OnChanges {
+
+
 
   @Input() foods: Array<remote.Food>;
   foodsAvailable: Array<remote.Food>;
@@ -26,11 +30,15 @@ export class DailyMenuComponent implements OnInit, OnChanges {
 
   @Output() snackMessage = new EventEmitter<models.SnackMessage>();
 
-  @ViewChild(MdAutocompleteTrigger) mdAutoCompleteTrigger: MdAutocompleteTrigger; //
+  @ViewChild( MdAutocompleteTrigger ) mdAutoCompleteTrigger: MdAutocompleteTrigger; //
+  @ViewChild('blurMe') el: ElementRef;
+  @ViewChild('focusMe') focusMe: ElementRef;
+
+  public myForm: FormGroup;
 
   initMenu:  remote.DailyMenuChef;
   food: remote.Food;
-  public showSpinner:boolean = true;
+  public showSpinner: boolean = true;
 
   selectCtrl: FormControl= new FormControl('', []);
 
@@ -47,9 +55,15 @@ export class DailyMenuComponent implements OnInit, OnChanges {
 
   private remote: any;
 
-  constructor(private foodsService: FoodsService, private chefService: remote.ChefApi, private datePipe: DatePipe, public globalSettingsService: GlobalSettingsService) { }
+  constructor(private foodsService: FoodsService, private chefService: remote.ChefApi, private datePipe: DatePipe, public globalSettingsService: GlobalSettingsService, private renderer: Renderer2) { }
 
   ngOnInit() {
+
+    this.myForm = new FormGroup({
+        dropList: this.selectCtrl
+    });
+
+
 
     if(getMonth(this.day)!==getMonth(this.viewdate)){
       this.showSpinner=false;
@@ -104,7 +118,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
 
         });
 
-       if (this.menu !== undefined) {
+      if (this.menu !== undefined) {
 
             for(let menuFood of this.menu.foods){
                 let food = this.foodsService.getFoodById(menuFood.foodId);
@@ -116,20 +130,45 @@ export class DailyMenuComponent implements OnInit, OnChanges {
         }
 
 
-       this.filteredFoods = this.selectCtrl.valueChanges
+      this.filteredFoods = this.selectCtrl.valueChanges
              .startWith(null)
              .map(food => {
-               if(food && typeof food === 'object'){
+               if (food && typeof food === 'object'){
                     this.addMenuFood(food);
-                    this.selectCtrl.setValue("");
+                    this.selectCtrl.patchValue('');
+                    //window.blur();
+                    //document.getElementById("focusMe").focus();
+                    //this.el.nativeElement.blur();
+
+
                     //this.mdAutoCompleteTrigger.closePanel();
                     //this.mdAutoCompleteTrigger.openPanel();
+
+                    //console.log(allDivs);
+                    //allDivs.blur();
                }
-               else{
+               else {
                  return food;
                }
               })
-             .map(name => name && name!="" ? this.filter(name) : this.foodsAvailable.slice());
+             .map(name => name && name !== '' ? this.filter(name) : this.foodsAvailable.slice());
+
+      this.selectCtrl.valueChanges.subscribe(status => {
+          console.log(status);
+         if ( this.el && this.focusMe && status.length == 0 ) {
+            console.log('blur enter');
+            this.el.nativeElement.blur();
+            this.focusMe.nativeElement.focus();
+            setTimeout(() => {
+              this.el.nativeElement.blur();
+              this.focusMe.nativeElement.focus();
+            }, 300);
+        }
+      });
+
+      this.filteredFoods.subscribe(a => {
+        //
+      });
 
       this.checkUserChanges = true;
       this.initfoodsSelected = this.foodsSelected;
@@ -163,10 +202,15 @@ export class DailyMenuComponent implements OnInit, OnChanges {
   removeFromAvailable(foodRemove: remote.Food){
       this.foodsAvailable = this.foodsAvailable.filter(food => food.id !== foodRemove.id);
   }
+
   addToAvailable(food: remote.Food){
        this.foodsAvailable.push(food);
        this.foodsAvailable = this.foodsService.sortArrayOfFoods(this.foodsAvailable );
-       this.selectCtrl.setValue(""); //reset foodsAvailable
+       //this.selectCtrl.setValue(""); //reset foodsAvailable
+
+
+       //this.selectCtrl = undefined;
+       //this.selectCtrl.reset();
   }
 
 

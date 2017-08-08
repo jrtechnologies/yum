@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../../shared/authentication.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MdSnackBar } from '@angular/material';
+import { environment } from '../../../environments/environment';
 
 @Component({
   moduleId: module.id,
@@ -14,6 +15,8 @@ export class LoginComponent implements OnInit {
   // create spinner
   public showSpinner = false;
   public disableBtn = false;
+
+  public hideRegForgot = environment.use_ldap;
 
   constructor(
         private fb: FormBuilder,

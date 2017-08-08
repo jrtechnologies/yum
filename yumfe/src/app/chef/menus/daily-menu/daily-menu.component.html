@@ -1,4 +1,6 @@
-<div class="smallSidePad calendarDate">
+<div class="hidden" #focusMe></div>
+
+<div cdk-focus-region-start class="form-group smallSidePad calendarDate" [formGroup]="myForm">
 
     <div class="cal-cell-top is-flex">
       <span class="cal-day-number flexItemLeft">{{ day | date:"d" }}</span>
@@ -10,16 +12,16 @@
 
 
   <md-input-container *ngIf="menuCanBeEdited" class="smallInputContainer">
-   <input type="text" mdInput [formControl]="selectCtrl" [mdAutocomplete]="auto" placeholder="select food">
-</md-input-container>
+   <input #blurMe class="dropList" type="text" mdInput  [formControl]="selectCtrl" [mdAutocomplete]="auto" placeholder="select food"  >
+   </md-input-container>
 
-<md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn">
-   <md-option *ngFor="let food of filteredFoods | async" [value]="food"  >
-     <div class="is-flex"><span [ngClass]="{'icon-Meal': food.foodType==='Main', 'icon-Salad': food.foodType==='Salad', 'icon-Drink': food.foodType==='Drink'}" > </span>
-      <span>{{ food.foodName }}</span>
-      </div>
-   </md-option>
-</md-autocomplete>
+  <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn" >
+    <md-option *ngFor="let food of filteredFoods | async" [value]="food"  >
+      <div class="is-flex"><span [ngClass]="{'icon-Meal': food.foodType==='Main', 'icon-Salad': food.foodType==='Salad', 'icon-Drink': food.foodType==='Drink'}" > </span>
+        <span>{{ food.foodName }}</span>
+        </div>
+    </md-option>
+  </md-autocomplete>
 
 
   <!--<md-select [(ngModel)]="food" #selectCtrl="ngModel" class="responsive"  *ngIf="menuCanBeEdited">
