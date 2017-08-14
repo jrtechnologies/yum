@@ -28,7 +28,6 @@ import org.bootcamp.yum.data.repository.UserRepository;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -52,16 +51,12 @@ public class EmailService {
         // Prepares the message
         SimpleMailMessage message = new SimpleMailMessage();
         //message.setFrom(senderEmailAddress);
-        message.setFrom(applicationProperties.getMailFrom());
+        message.setFrom(applicationProperties.getMail().getFrom());
         message.setTo(sendTo);
         message.setSubject(subject);
         message.setText(text);
         mailSender.send(message);
 
-    }
-
-    private String yumDomain () {
-        return applicationProperties.getDomain();
     }
     
     public void sendNewUserEmailToAllAdmins(User newUser) {
@@ -88,7 +83,7 @@ public class EmailService {
         text.append("\n");
         text.append("You have to approve this user so he/she can log in.\n");
         text.append("Click on this link to approve the user:\n");
-        text.append(yumDomain()).append("/admin/users/").append(newUser.getId());
+        text.append(applicationProperties.getMail().getDomain()).append("/admin/users/").append(newUser.getId());
 
         // Iterate over a list of admin users. For each admin:
         List<User> admins = userRep.findByUserRole(UserRole.ADMIN);
@@ -135,7 +130,7 @@ public class EmailService {
         text.append("\ttotal : ").append(total).append(" euro").append("\n");
         text.append("\n");
         text.append("You can modify this order until ").append(settingsRep.findOne(1).getDeadline().toString("HH:mm")).append(", on ").append(menuDate.minusDays(1).toString("EEEE dd MMMM YYYY")).append(" by going to the link:\n");
-        text.append(yumDomain()).append("/hungry/").append(menuDate.getYear()).append("/").append(menuDate.getWeekOfWeekyear()).append("\n");
+        text.append(applicationProperties.getMail().getDomain()).append("/hungry/").append(menuDate.getYear()).append("/").append(menuDate.getWeekOfWeekyear()).append("\n");
         text.append("\n");
         text.append("Thank you for your order!\n");
 
@@ -161,7 +156,7 @@ public class EmailService {
         text.append("You just requested your password to be reset. If that was not you, please discard this message.\n");
         text.append("\n");
         text.append("To enter your new password, please visit this link:\n");
-        text.append(yumDomain()).append("/resetpwd/token?token=").append(user.getSecret()).append("\n");
+        text.append(applicationProperties.getMail().getDomain()).append("/resetpwd/token?token=").append(user.getSecret()).append("\n");
         text.append("\n");
         DateTime creationTime = user.getSecretCreation().plusDays(1);
         text.append("The link will be active for 24 hours (until ").append(creationTime.toString("HH:mm:ss")).append(", on ").append(creationTime.toString("EEEE dd MMMM YYYY")).append(").\n");
@@ -189,7 +184,7 @@ public class EmailService {
         text.append("\n");
         text.append("Your account has been activated.\n");
         text.append("You can login by going to the link:\n");
-        text.append(yumDomain()).append("/\n");;
+        text.append(applicationProperties.getMail().getDomain()).append("/\n");;
         text.append("\n");
         text.append("Enjoy your meals on Yum!\n");
 

@@ -16,24 +16,44 @@ package org.bootcamp;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
-
-@Component
-@ConfigurationProperties
+@Configuration
+@ConfigurationProperties(prefix = "yum")
 public class ApplicationProperties {
-    @Value("${yum.mail.from}")
-    private String mailFrom;
-    //private String yumHostname;
-    @Value("${yum.mail.domain}")
-    private String domain;
+    
+    public static class Mail {
+        private String from;
+        private String domain;
 
-    public String getMailFrom() {
-        return mailFrom;
+        public String getFrom() {
+            return from;
+        }
+
+        public void setFrom(String from) {
+            this.from = from;
+        }
+
+        public String getDomain() {
+            return domain;
+        }
+
+        public void setDomain(String domain) {
+            this.domain = domain;
+        }
+ 
+    }
+    
+    private Mail mail;
+
+    public Mail getMail() {
+        return mail;
     }
 
-    public String getDomain() {
-        return domain;
-    }
+    public void setMail(Mail mail) {
+        this.mail = mail;
+    }  
         
 }
