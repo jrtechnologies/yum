@@ -148,6 +148,20 @@ paths:
             $ref: '#/definitions/Info'
         '500':
           $ref: '#/responses/Error'
+  /auth/method:
+    get:
+      tags:
+        - auth
+      description: get yum authentication method
+      produces:
+        - text/plain
+      responses:
+        '200':
+          description: ok
+          schema:
+            type: string
+        '500':
+          $ref: '#/responses/Error'
   /settings:
     get:
       security:
@@ -1088,7 +1102,7 @@ paths:
         '500':
           $ref: '#/responses/Error'
   '/users/{id}/picture/token':
-    get: 
+    get:
       tags:
         - admin
       description: Get profile picture.
@@ -1297,6 +1311,8 @@ definitions:
       email:
         type: string
       password:
+        type: string
+      username:
         type: string
   ResetPwd:
     type: object

@@ -106,5 +106,13 @@ public class AuthApiController implements AuthApi {
         return new ResponseEntity<PrivacyInfo>( info, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<String> authMethodGet() {
+        
+        return authService.authMethodGet();
+        
+    }
+
+    
     
 }
