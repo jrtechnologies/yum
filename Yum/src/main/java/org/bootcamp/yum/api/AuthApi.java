@@ -105,5 +105,6 @@ public interface AuthApi {
     @RequestMapping(value = "/auth/method",
         produces = { "text/plain" }, 
         method = RequestMethod.GET)
+    @CrossOrigin  
     ResponseEntity<String> authMethodGet();
 }
