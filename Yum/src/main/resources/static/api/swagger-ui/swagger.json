@@ -1936,6 +1936,9 @@
         "email": {
           "type": "string"
         },
+        "userName": {
+          "type": "string"
+        },
         "role": {
           "type": "string"
         },

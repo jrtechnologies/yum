@@ -35,6 +35,7 @@ import org.bootcamp.yum.data.repository.UserRepository;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -134,6 +135,9 @@ public class AuthService {
     @Transactional
     public Token authLoginPost(Login body) throws ApiException {
         
+        
+        
+        System.out.println(body);
         
         //roles is an array of string:          
         ArrayList<String> roles = new ArrayList<>();        
@@ -240,5 +244,9 @@ public class AuthService {
         
         
     }//authLoginPost
+
+    public String authMethodGet() {
+        return "ldap";
+    }
     
 }

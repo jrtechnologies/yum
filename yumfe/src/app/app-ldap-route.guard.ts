@@ -3,19 +3,31 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angul
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../environments/environment';
 import { Router } from '@angular/router';
+import { AuthenticationService } from './shared/authentication.service';
+
 
 @Injectable()
 export class AppLdapRouteGuard implements CanActivate {
 
-  constructor( private router: Router) {}
+  constructor(private router: Router, private authService: AuthenticationService) { }
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if ( environment.use_ldap) {
-       this.router.navigate(['/']);
-    } else {
-      return true;
-    }
+
+   /* return this.authService.getAuthMethod().map(
+      value => {
+        console.log("auth method:" + value);
+        if (value === 'ldap') {
+          this.router.navigate(['/']);
+        } else {
+          return true;
+        }
+      });*/
+      if(this.authService.hasExternalAuth()) {
+          this.router.navigate(['/']);
+        } else {
+          return true;
+        }
   }
 }
