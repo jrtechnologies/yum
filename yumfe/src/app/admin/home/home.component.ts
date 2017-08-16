@@ -101,8 +101,8 @@ export class HomeComponent implements OnInit {
     // Create Form group, form controls, validators
     this.userGroup = this.buildForm();
     this.loadUsers(this.page); 
-     this.authService.hasExternalAuth().subscribe(
-      value => { this.externalAuth = value});
+    this.externalAuth = this.authService.hasExternalAuth();
+     
   }
 
 

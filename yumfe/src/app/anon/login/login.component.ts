@@ -79,8 +79,8 @@ export class LoginComponent implements OnInit {
       .subscribe(result => { // login successful
         //this.openSnackBar('Successful login', 'ok', 1);
         if (result != null) {
-          console.log('Logged as:' + result);
-          switch (result) {
+          console.log('Logged as:' + result[1]);
+          switch (result[1]) {
             case 'admin':
               this.router.navigate(['admin']);
               break;

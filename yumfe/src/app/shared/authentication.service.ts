@@ -15,8 +15,8 @@ const localStorageItem = "currentUser4";
 export class AuthenticationService {
 
   private user: remote.User;
-  private token: string; 
-
+  private token: string;
+  private extAuth: string;
   private changes: Subject<string> = new Subject();
 
   constructor(private authService: remote.AuthApi, private conf: remote.Configuration, private lowerCase: LowerCasePipe) {
@@ -29,30 +29,37 @@ export class AuthenticationService {
     // - sets this.conf.apiKey
     // - persists the user details in localStorage
 
-    let creds: remote.Login = { email: email, password: password, username: username  };
+    let creds: remote.Login = { email: email, password: password, username: username };
 
-    if(username.length>0){ creds.email = creds.username; }
+    if (username.length > 0) { creds.email = creds.username; }
 
-    return this.authService.authLoginPost(creds).map(response => {
-      // login successful if there's a jwt token in the response
-      if (response.token) {
- 
-        this.user = response.user;
-        this.token = response.token;
-        this.conf.apiKey = "Bearer " + response.token;
+    //Parallel processing, login and get auth method:
+    return Observable.forkJoin(
 
-       // store username and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem(localStorageItem, JSON.stringify({ user: this.user, token: this.token }));
+      this.getRemoteAuthMethod(),
 
-        // return true to indicate successful login
-        return response.user.role;
-      } else {
-        // return false to indicate failed login
-        return false;
-      }
-    }).catch((error: any) => {
-      return Observable.throw(error);
-    });
+      this.authService.authLoginPost(creds).map(response => {
+        // login successful if there's a jwt token in the response
+        if (response.token) {
+
+          this.user = response.user;
+          this.token = response.token;
+          this.conf.apiKey = "Bearer " + response.token;
+
+          // store username and jwt token in local storage to keep user logged in between page refreshes
+          localStorage.setItem(localStorageItem, JSON.stringify({ user: this.user, token: this.token, extAuth: this.extAuth }));
+
+          // return true to indicate successful login
+          return response.user.role;
+        } else {
+          // return false to indicate failed login
+          return false;
+        }
+      }).catch((error: any) => {
+        return Observable.throw(error);
+      })
+
+    );
   }
 
 
@@ -66,7 +73,7 @@ export class AuthenticationService {
   }
 
   bootstrapUser(): void {
-    this.getRemoteAuthMethod();
+     
     //Get remote auth setting
     // - loads user details from localStorage
     // - sets this.conf.apiKey
@@ -76,6 +83,7 @@ export class AuthenticationService {
     //    - stores the new user details in the private object of the component
     var currentUser = JSON.parse(localStorage.getItem(localStorageItem));
     this.user = currentUser && currentUser.user;
+    this.extAuth = currentUser && currentUser.extAuth;
     var token = currentUser && currentUser.token;
     if (token !== "") {
       this.token = token;
@@ -100,7 +108,7 @@ export class AuthenticationService {
     this.user.hasPicture = hasPic;
     this.user.role.toLowerCase();
     this.changes.next(Math.random().toString(36).substring(7));
-    localStorage.setItem(localStorageItem, JSON.stringify({ user: this.user, token: this.token }));
+    localStorage.setItem(localStorageItem, JSON.stringify({ user: this.user, token: this.token, extAuth: this.extAuth }));
   }
 
   updateUserDetails(newUserDetails: remote.User) {
@@ -111,11 +119,10 @@ export class AuthenticationService {
     // - persists the user details in localStorage
     this.user = newUserDetails;
     this.user.role.toLowerCase();
-    var currentUser = JSON.parse(localStorage.getItem(localStorageItem));
-    currentUser.token.user = this.user;
+  
     this.changes.next(Math.random().toString(36).substring(7));
 
-    localStorage.setItem(localStorageItem, JSON.stringify({ user: this.user, token: this.token }));
+    localStorage.setItem(localStorageItem, JSON.stringify({ user: this.user, token: this.token, extAuth: this.extAuth }));
   }
 
   logout(): void {
@@ -131,29 +138,25 @@ export class AuthenticationService {
 
 
   public getRemoteAuthMethod(): Observable<String> {
-     
+    //Get authentication method from server
     return this.authService.authMethodGet().map(
-      value => {    
+      value => {
+        this.extAuth = value;
         return value;
       }).catch((error: any) => {
-      return Observable.throw(error);
-    });
+        return Observable.throw(error);
+      });
 
-     
+
   }
 
-   public hasExternalAuth(): Observable<Boolean> {
-        return this.authService.authMethodGet().map(
-      value => {     
-        if(value==='ldap'){            
-          return true;
-        }
-        else{
-          return false;
-        }
-      }).catch((error: any) => {
-      return Observable.throw(error);
-    });
+  public hasExternalAuth(): Boolean { 
+    if (this.extAuth === 'ldap') {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
 }
