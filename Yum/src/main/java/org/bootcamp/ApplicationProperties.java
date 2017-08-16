@@ -16,24 +16,96 @@ package org.bootcamp;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
-
-@Component
-@ConfigurationProperties
+@Configuration
+@PropertySource("classpath:application.properties")
+@ConfigurationProperties(prefix = "yum")
 public class ApplicationProperties {
-    @Value("${yum.mail.from}")
-    private String mailFrom;
-    //private String yumHostname;
-    @Value("${yum.mail.domain}")
-    private String domain;
 
-    public String getMailFrom() {
-        return mailFrom;
+    public static class Mail {
+
+        private String from;
+        private String domain;
+
+        public String getFrom() {
+            return from;
+        }
+
+        public void setFrom(String from) {
+            this.from = from;
+        }
+
+        public String getDomain() {
+            return domain;
+        }
+        
+        public void setDomain(String domain) {
+            this.domain = domain;
+        }
     }
 
-    public String getDomain() {
-        return domain;
+    public static class Ldap {
+        private boolean enabled;    
+        private String base;
+        private String url;
+        private String domain;
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public String getBase() {
+            return base;
+        }
+
+        public void setBase(String base) {
+            this.base = base;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public String getDomain() {
+            return domain;
+        }
+
+        public void setDomain(String domain) {
+            this.domain = domain;
+        }
+        
     }
+    
+    private Mail mail;
+    private Ldap ldap;
+
+
+    public Mail getMail() {
+        return mail;
+    }
+    
+    public void setMail(Mail mail) {
+        this.mail = mail;
+    }  
+
+    public Ldap getLdap() {
+        return ldap;
+    }
+
+    public void setLdap(Ldap ldap) {
+        this.ldap = ldap;
+    }
+
         
 }

@@ -18,9 +18,14 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.UUID;
 import javax.naming.Context;
+import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
+import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
+import javax.naming.directory.SearchControls;
+import javax.naming.directory.SearchResult;
+import org.bootcamp.ApplicationProperties;
 import org.bootcamp.JwtCodec;
 import org.bootcamp.yum.api.ApiException;
 import org.bootcamp.yum.api.model.LastEdit;
@@ -46,6 +51,8 @@ public class AuthService {
     private UserRepository userRep;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private ApplicationProperties applicationProperties;
 
     private UserRole convertToUserRole(String role) {
         switch (role) {
@@ -59,6 +66,7 @@ public class AuthService {
                 throw new IllegalArgumentException("Unknown value:" + role);
         }
     }
+
     @Transactional
     public void authRegisterPost(UserReg body) throws ApiException {
         try {
@@ -82,143 +90,245 @@ public class AuthService {
             user.setRegistrationDate(LocalDate.now());
             userRep.save(user);
             // The email service is injected and sends emails to all admins 
-            if (emailService!=null){
+            if (emailService != null) {
                 emailService.sendNewUserEmailToAllAdmins(user);
             }
-        // if Role not in enum UserRole catches this exception  
+            // if Role not in enum UserRole catches this exception  
         } catch (IllegalArgumentException e) {
-            throw new ApiException(400, "Bad registration data");       
+            throw new ApiException(400, "Bad registration data");
         }
     }
-    
-    @Transactional 
+
+    @Transactional
     public void authForgotpwdPost(String email) throws ApiException {
-        if (email==null){
+        if (email == null) {
             throw new ApiException(400, "No user found with this email");
         }
         User user = userRep.findByEmail(email);
-        if (user==null){
+        if (user == null) {
             throw new ApiException(400, "No user found with this email");
         }
         user.setSecret(UUID.randomUUID().toString());
         user.setSecretCreation(DateTime.now());
         // The email service is injected and sends email with link for password reset to user  
-        if (emailService!=null){
+        if (emailService != null) {
             emailService.sendResetPasswordLinkEmail(user);
         }
-        
+
     }
-    
-    @Transactional 
+
+    @Transactional
     public void authChangepwdPut(ResetPwd body) throws ApiException {
 
         String token = body.getToken();
 //        System.out.println("token: " + token);
-        if (body==null){
+        if (body == null) {
             throw new ApiException(400, "Bad reset password data");
         }
         // retrieve user with this secret
         User user = userRep.findBySecret(token);
-        if (user==null){
+        if (user == null) {
             throw new ApiException(400, "Bad reset password data");
         }
         // Check if token expired
-        if (user.getSecretCreation().plusDays(1).getMillis()< DateTime.now().getMillis()){
+        if (user.getSecretCreation().plusDays(1).getMillis() < DateTime.now().getMillis()) {
             throw new ApiException(400, "Bad reset password data");
-        } else {   
+        } else {
             user.setSecret(null);
             user.setSecretCreation(null);
             user.setPassword(BCrypt.hashpw(body.getPassword(), BCrypt.gensalt()));
         }
     }
+
+    public static String convertToDashedString(byte[] objectGUID) {
+        StringBuilder displayStr = new StringBuilder();
+
+        displayStr.append(prefixZeros((int) objectGUID[3] & 0xFF));
+        displayStr.append(prefixZeros((int) objectGUID[2] & 0xFF));
+        displayStr.append(prefixZeros((int) objectGUID[1] & 0xFF));
+        displayStr.append(prefixZeros((int) objectGUID[0] & 0xFF));
+        displayStr.append("-");
+        displayStr.append(prefixZeros((int) objectGUID[5] & 0xFF));
+        displayStr.append(prefixZeros((int) objectGUID[4] & 0xFF));
+        displayStr.append("-");
+        displayStr.append(prefixZeros((int) objectGUID[7] & 0xFF));
+        displayStr.append(prefixZeros((int) objectGUID[6] & 0xFF));
+        displayStr.append("-");
+        displayStr.append(prefixZeros((int) objectGUID[8] & 0xFF));
+        displayStr.append(prefixZeros((int) objectGUID[9] & 0xFF));
+        displayStr.append("-");
+        displayStr.append(prefixZeros((int) objectGUID[10] & 0xFF));
+        displayStr.append(prefixZeros((int) objectGUID[11] & 0xFF));
+        displayStr.append(prefixZeros((int) objectGUID[12] & 0xFF));
+        displayStr.append(prefixZeros((int) objectGUID[13] & 0xFF));
+        displayStr.append(prefixZeros((int) objectGUID[14] & 0xFF));
+        displayStr.append(prefixZeros((int) objectGUID[15] & 0xFF));
+
+        return displayStr.toString();
+    }
+
+    private static String prefixZeros(int value) {
+        if (value <= 0xF) {
+            StringBuilder sb = new StringBuilder("0");
+            sb.append(Integer.toHexString(value));
+
+            return sb.toString();
+
+        } else {
+            return Integer.toHexString(value);
+        }
+    }
+
     @Transactional
     public Token authLoginPost(Login body) throws ApiException {
-        
-        
+
         //roles is an array of string:          
-        ArrayList<String> roles = new ArrayList<>();        
-             
-        
-        boolean userAuthLDAP = false;
-        boolean userAuthDB = false;
-        
-        
-        
-        char[] userEmail =body.getEmail().toCharArray();
+        ArrayList<String> roles = new ArrayList<>();
+        User user = null;
+        boolean userAuthLDAP = applicationProperties.getLdap().isEnabled();
+//        boolean userAuthDB = false;
+
+        char[] userEmail = body.getEmail().toCharArray();
         char[] userPassword = body.getPassword().toCharArray();
-                
+//        char[] username = body.getUsername().toCharArray();
+
         // TODO check LDAP enabled from application.properties
-        if(false){
+        if (userAuthLDAP) {
+            //char[] username = body.getUsername().toCharArray();
+            String ldapBase = applicationProperties.getLdap().getBase();
             // Set up the environment for creating the initial context
 
-            Hashtable<String, String> env = new Hashtable<String, String>();
+            Hashtable<String, String> env = new Hashtable<>();
             env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-            env.put(Context.PROVIDER_URL, "ldap://localhost:10389");
-            // 
+            env.put(Context.PROVIDER_URL, applicationProperties.getLdap().getUrl());
             env.put(Context.SECURITY_AUTHENTICATION, "simple");
-            //env.put(Context.SECURITY_PRINCIPAL, "domain\\user"); // ex. "domain\\user"
+//            env.put(Context.SECURITY_PRINCIPAL, applicationProperties.getLdap().getDomain() + "\\" + String.valueOf(username));
+            //env.put(Context.SECURITY_PRINCIPAL, "test.user");
+            env.put("java.naming.ldap.attributes.binary", "title");
+            env.put(Context.SECURITY_PRINCIPAL, "uid=test.user, " + ldapBase);
+            System.out.println("password: " + String.valueOf(userPassword));
+            env.put(Context.SECURITY_CREDENTIALS, String.valueOf(userPassword));
+            env.put(Context.REFERRAL, "follow");
 
-
-            env.put(Context.SECURITY_PRINCIPAL, "cn="+String.valueOf(userEmail)+", ou=People, dc=example, dc=com");
-            env.put(Context.SECURITY_CREDENTIALS, String.valueOf(userPassword) );
+//            String[] returnAttribute = {"givenName", "sn", "mail", "objectGUID"};
+            String[] returnAttribute = {"givenName", "sn", "mail", "title"};
+            SearchControls srchControls = new SearchControls();
+            srchControls.setReturningAttributes(returnAttribute);
+            srchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+            //String searchFilter = "(uid=" + userName + ")";
+//            String searchFilter = "(sAMAccountName=" + String.valueOf(username) + ")";
+            String searchFilter = "(uid=" + String.valueOf("test.user") + ")";
 
             // Create the initial context
-             DirContext ctx;
-            try{
+            DirContext ctx;
+            try {
                 ctx = new InitialDirContext(env);
 
-                userAuthLDAP = ctx != null;
+                NamingEnumeration srchResponse = ctx
+                        .search(ldapBase, searchFilter, srchControls);
 
-                if(ctx != null)
-                    ctx.close();
-            }
-            catch(NamingException e){
+                //userAuthLDAP = (ctx != null);
+                // while (srchResponse.hasMoreElements()) {
+                SearchResult sr = (SearchResult) srchResponse.next();
+
+                System.out.println(">>>" + sr.getName());
+                Attributes attrs = sr.getAttributes();
+                //System.out.println(">>>>>>" + attrs.get("sAMAccountName"));
+                //System.out.println(">>>>>>" + attrs.get("cn"));
+                System.out.println(">>>>>>" + attrs.get("givenName").get());
+                System.out.println(">>>>>>" + attrs.get("sn"));
+                System.out.println(">>>>>>" + attrs.get("mail"));
+//                System.out.println(">>>>>>" + attrs.get("objectGUID"));
+//                byte[] guid = (byte[]) sr.getAttributes().get("objectGUID").get();
+                System.out.println(">>>>>>" + attrs.get("title"));
+                byte[] guid = (byte[]) sr.getAttributes().get("title").get();
+//                    System.out.println(">>>>>>" + attrs.get("distinguishedName"));  
+
+                // }
+                String objectGuid = convertToDashedString(guid);
+                user = userRep.findByObjectGuid(objectGuid);
+                if (user == null) {
+
+                    user = new User();
+                    user.setEmail(attrs.get("mail").get().toString());
+                    user.setFirstName(attrs.get("givenName").get().toString());
+                    user.setLastName(attrs.get("sn").get().toString());
+                    // Encrypt password and set it to User D.A.O.
+                    //user.setPassword(BCrypt.hashpw(body.getPassword(), BCrypt.gensalt()));
+                    user.setUserRole(convertToUserRole("hungry"));
+                    user.setApproved(true);
+                    user.setLastEdit(DateTime.now());
+                    user.setRegistrationDate(LocalDate.now());
+                    user.setObjectGuid(objectGuid);
+                    userRep.save(user);
+                }
+                // if (ctx != null) {
+                ctx.close();
+                // }
+            } catch (NamingException e) {
                 System.out.println(e.getMessage());
-            }
-            
-            System.out.println("userAuthLDAP:" + userAuthLDAP);        
-        }
-        
-        
-        //fetch in the database the user and verify its password.. uses bcrypt for password hashing
-        User user = userRep.findByEmail(String.valueOf(userEmail));
-        // Check user credentials
-        if (((user == null) || (!BCrypt.checkpw(String.valueOf(userPassword), user.getPassword()))) && !userAuthLDAP) {
-      
-            throw new ApiException(404, "User not found (bad credentials)");
-        } else {
-            if (!user.isApproved()) {
-                throw new ApiException(403, "User can not login (not approved)");
-            }
-            else{
-                userAuthDB = true;        
+                throw new ApiException(404, "User not found (bad credentials)");
+            } 
 
-                //Add roles for the user
-                switch (user.getUserRole()) {
-                    case HUNGRY:
-                        roles.add("hungry");
-                        break;
-                    case CHEF:
-                        roles.add("hungry");
-                        roles.add("chef");
-                        break;
-                    case ADMIN:
-                        roles.add("hungry");
-                        roles.add("chef");
-                        roles.add("admin");
-                        break;
-                    default:
-                        throw new ApiException(404, "User not found (bad credentials)");
-            
+            System.out.println("userAuthLDAP:" + userAuthLDAP);
+        } else {
+            //fetch in the database the user and verify its password.. uses bcrypt for password hashing
+            user = userRep.findByEmail(String.valueOf(userEmail));
+            // Check user credentials
+            if (((user == null) || (!BCrypt.checkpw(String.valueOf(userPassword), user.getPassword()))) && !userAuthLDAP) {
+
+                throw new ApiException(404, "User not found (bad credentials)");
+            } else {
+                if (!user.isApproved()) {
+                    throw new ApiException(403, "User can not login (not approved)");
+                } else {
+                    //userAuthDB = true;
+
+//                    //Add roles for the user
+//                    switch (user.getUserRole()) {
+//                        case HUNGRY:
+//                            roles.add("hungry");
+//                            break;
+//                        case CHEF:
+//                            roles.add("hungry");
+//                            roles.add("chef");
+//                            break;
+//                        case ADMIN:
+//                            roles.add("hungry");
+//                            roles.add("chef");
+//                            roles.add("admin");
+//                            break;
+//                        default:
+//                            throw new ApiException(404, "User not found (bad credentials)");
+//
+//                    }
                 }
             }
         }
 
-            
+        //Add roles for the user
+        switch (user.getUserRole()) {
+            case HUNGRY:
+                roles.add("hungry");
+                break;
+            case CHEF:
+                roles.add("hungry");
+                roles.add("chef");
+                break;
+            case ADMIN:
+                roles.add("hungry");
+                roles.add("chef");
+                roles.add("admin");
+                break;
+            default:
+                throw new ApiException(404, "User not found (bad credentials)");
+
+        }
+
         // the subject should be the ID of the user converted to string
         String subject = Long.toString(user.getId());
         // add subject and roles for token.
-        String compactJws  = JwtCodec.encode(subject, roles);
+        String compactJws = JwtCodec.encode(subject, roles);
         //Create the token object and set the string token.
         Token token = new Token();
         token.setToken(compactJws);
@@ -237,8 +347,15 @@ public class AuthService {
         token.setUser(userModel);
 
         return token;
-        
-        
+
     }//authLoginPost
-    
+
+    public String authMethodGet() {
+        if (applicationProperties.getLdap().isEnabled()) {
+            return "ldap";
+        } else {
+            return "email";
+        }
+    }
+
 }

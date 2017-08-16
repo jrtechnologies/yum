@@ -89,6 +89,9 @@ public class User {
     @Lob @Column(name="picture")
     private byte[] picture;
     
+    @Column(name = "object_guid")
+    private String objectGuid;
+    
     public User() {
     }
 
@@ -276,6 +279,15 @@ public class User {
     public int getPictureLength(){
         return this.picture.length;
     }
+
+    public String getObjectGuid() {
+        return objectGuid;
+    }
+
+    public void setObjectGuid(String objectGuid) {
+        this.objectGuid = objectGuid;
+    }
+    
     
     @Override
     public int hashCode() {

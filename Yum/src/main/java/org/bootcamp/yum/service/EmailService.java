@@ -52,7 +52,7 @@ public class EmailService {
         // Prepares the message
         SimpleMailMessage message = new SimpleMailMessage();
         //message.setFrom(senderEmailAddress);
-        message.setFrom(applicationProperties.getMailFrom());
+        message.setFrom(applicationProperties.getMail().getFrom());
         message.setTo(sendTo);
         message.setSubject(subject);
         message.setText(text);
@@ -61,7 +61,7 @@ public class EmailService {
     }
 
     private String yumDomain () {
-        return applicationProperties.getDomain();
+        return applicationProperties.getMail().getDomain();
     }
     
     public void sendNewUserEmailToAllAdmins(User newUser) {

@@ -109,7 +109,7 @@ public class AuthApiController implements AuthApi {
     @Override
     public ResponseEntity<String> authMethodGet() {
         
-        return authService.authMethodGet();
+        return new ResponseEntity<String> (authService.authMethodGet(),HttpStatus.OK);
         
     }
 
