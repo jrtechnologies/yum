@@ -7,7 +7,7 @@ import { AuthenticationService } from './shared/authentication.service';
 
 
 @Injectable()
-export class AppLdapRouteGuard implements CanActivate {
+export class AppExtAuthRouteGuard implements CanActivate {
 
   constructor(private router: Router, private authService: AuthenticationService) { }
 
