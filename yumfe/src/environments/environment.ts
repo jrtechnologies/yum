@@ -5,6 +5,5 @@
 
 export const environment = {
   production: false,
-  base_path: 'http://localhost:8080/api',
-  use_ldap: true
+  base_path: 'http://localhost:8080/api' 
 };

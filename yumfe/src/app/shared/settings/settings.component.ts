@@ -19,42 +19,54 @@ export class SettingsComponent implements OnInit {
   // copy initial input values fot enabling/disabling submit button
   private initialEmail: string;
   private initialFirstName: string;
-  private initialLastName='';//: string;
+  private initialLastName = '';//: string;
   // private initialRole: string;
   // Flag for refreshing inputs after 409 error
   public change = false;
   // spinner
   public showSpinner = false;
   public invalid = false;
+  public externalAuth: Boolean = false;
+
   constructor(private authService: AuthenticationService, private hungryService: remote.HungryApi, private fb: FormBuilder,
     public snackBar: MdSnackBar, private router: Router) { }
 
   ngOnInit() {
-    // load user
-    this.loadUser();
-    // Create formGroup
+    
+    //const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,20}$/;
+
+    this.externalAuth = this.authService.hasExternalAuth();
+    console.log("settings auth:" + this.externalAuth);
+
+    
     this.profileGroup = this.fb.group({
       // role: [''],
       firstName: ['', [Validators.required, Validators.minLength(1)]],
       lastName: ['', [Validators.required, Validators.minLength(1)]],
       email: ['', [
         Validators.required, Validators.minLength(2),
-        Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+        Validators.pattern(emailPattern)
       ]
       ],
-      password: ['', [
+      password: ['', [ //, disabled: this.externalAuth 
         //Validators.required,
         // tslint:disable-next-line:max-line-length
-        Validators.pattern(/^(?=.*[A-Za-z\d$@!%*#?&\^\-\_\=\+\<\>\(\)\{\}\[\]\\\\\/\.\,~`|])[A-Za-z\d$@!%*#?&\^\-\_\=\+\<\>\(\)\{\}\[\]\\\\\/\.\,~`|]{6,}$/)
+
+        Validators.pattern(emailPattern)
       ]],
-      confirm: ['', [
+      confirm: ['' , [
         //Validators.required,
         // tslint:disable-next-line:max-line-length
-        Validators.pattern(/^(?=.*[A-Za-z\d$@!%*#?&\^\-\_\=\+\<\>\(\)\{\}\[\]\\\\\/\.\,~`|])[A-Za-z\d$@!%*#?&\^\-\_\=\+\<\>\(\)\{\}\[\]\\\\\/\.\,~`|]{6,}$/),
+        Validators.pattern(emailPattern),
         this.validateEqual
       ],
       ],
     });
+
+    // load user
+    this.loadUser();
   }
 
   // Custom validator for password and confirm password
@@ -72,6 +84,14 @@ export class SettingsComponent implements OnInit {
     this.profileGroup.controls.confirm.updateValueAndValidity();
   }
 
+  private setupForm() {
+    // Check can change password 
+
+    if(this.externalAuth && this.user.id !== 1){
+      this.profileGroup.get('password').disable();
+      this.profileGroup.get('confirm').disable();
+    }
+  }
 
   private loadUser() {
     this.hungryService.settingsGet(this.userId).subscribe(user => {
@@ -84,8 +104,11 @@ export class SettingsComponent implements OnInit {
       this.profileGroup.controls.firstName.patchValue(user.firstName);
       this.profileGroup.controls.lastName.patchValue(user.lastName);
       this.profileGroup.controls.email.patchValue(user.email);
-      this.profileGroup.get('password')
-    }, error => {}); //console.log(error));
+      this.profileGroup.get('password');
+
+      this.setupForm();
+
+    }, error => { }); //console.log(error));
 
   }
 
@@ -139,7 +162,7 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-    public updateUser() {
+  public updateUser() {
     const userSettings: remote.Settings = {};
     userSettings.firstName = this.user.firstName;
     userSettings.lastName = this.user.lastName;
@@ -202,9 +225,9 @@ export class SettingsComponent implements OnInit {
     this.router.navigate(['/' + this.user.role.toLowerCase() + '/']);
   }
 
-   // Callball after invalid data in form from profile component
+  // Callball after invalid data in form from profile component
   handleInvalidProfileForm(validFlag: string) {
-    if (validFlag === "invalid"){
+    if (validFlag === "invalid") {
       this.invalid = true;
     } else {
       this.invalid = false;

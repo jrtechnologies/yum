@@ -109,7 +109,9 @@ public class AuthApiController implements AuthApi {
     @Override
     public ResponseEntity<String> authMethodGet() {
         
-        return new ResponseEntity<String> (authService.authMethodGet(),HttpStatus.OK);
+
+        return new ResponseEntity<>(authService.authMethodGet(), HttpStatus.OK);
+
         
     }
 

@@ -67,7 +67,7 @@ public class SettingsService {
     @PreAuthorize("hasAuthority('hungry')")
     public void settingsPut(Settings upUser) throws ApiException {
         org.bootcamp.yum.data.entity.User userDAO = userRepo.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
+        System.out.println(upUser);
         if (upUser == null) {
             throw new ApiException(400, "Bad Request");
         } else if (upUser.getLastEdit().getVersion() != userDAO.getVersion()) // checks the version. It must be the same
