@@ -30,7 +30,9 @@ export class LoginComponent implements OnInit {
     const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
+      username: [''
+      , Validators.required
+      ],
       email: ['', [
         Validators.required,
         Validators.minLength(2),
@@ -60,8 +62,8 @@ export class LoginComponent implements OnInit {
           
         }
 
-        this.loginForm.get('username').updateValueAndValidity();
-        this.loginForm.get('email').updateValueAndValidity();
+        this.loginForm.get('username').updateValueAndValidity( {onlySelf: true, emitEvent:false});
+        this.loginForm.get('email').updateValueAndValidity( {onlySelf:true, emitEvent:false});
       });
       
    

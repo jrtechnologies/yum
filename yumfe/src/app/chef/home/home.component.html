@@ -1,27 +1,19 @@
-<md-grid-list cols="8" rowHeight="4:1">
-
-  <div fxLayout="row">
-    <div fxFlex="25">
-      <div fxLayout="column">
-        <div>
-          <img src="../../../assets/img/chef-hat.png" class="img-size">
-        </div>
-        <div>
-          <h1 class="title-style">
-            Welcome Chef!
-          </h1>
-          <h3>Start preparing your menu...</h3>
-        </div>
-
+ 
+  <div class="is-flex header">
+    <div class="relative">
+      <div class="hat">
+        <img src="../../../assets/img/chef-hat.png" class="img-size">
       </div>
-    </div>
+      <div>
+        <h1 class="title-style">
+          Welcome Chef!
+        </h1> 
+      </div>
 
-    <div fxFlex="25" fxFlexOffset="50" class="buttons-style">
-      <app-chef-nav></app-chef-nav>
     </div>
-
+    <app-chef-nav></app-chef-nav>
   </div>
-
+  <h3>Start preparing your menu...</h3>
 
   <md-grid-list cols="1" rowHeight="6:1">
     <!--The Form for the new Food Items-->

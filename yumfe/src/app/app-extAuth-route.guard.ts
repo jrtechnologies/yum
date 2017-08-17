@@ -15,7 +15,7 @@ export class AppExtAuthRouteGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-   /* return this.authService.getAuthMethod().map(
+    return this.authService.getRemoteAuthMethod().map(
       value => {
         console.log("auth method:" + value);
         if (value === 'ldap') {
@@ -23,11 +23,7 @@ export class AppExtAuthRouteGuard implements CanActivate {
         } else {
           return true;
         }
-      });*/
-      if(this.authService.hasExternalAuth()) {
-          this.router.navigate(['/']);
-        } else {
-          return true;
-        }
+      });
+ 
   }
 }

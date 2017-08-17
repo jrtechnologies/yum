@@ -22,8 +22,10 @@
 }
 
 .title-style {
-  margin-top: -15px !important;
-  margin-left: 25px;
+  // margin-top: -15px !important;
+  // margin-left: 25px;
+  margin: 0;
+  transform: translate(25px, 0px);
 }
 
 .buttons-style {
@@ -37,3 +39,8 @@
   margin-bottom: 100px;
 }
 
+.header {
+  padding-top:35px;
+}
+.relative{ position: relative; }
+.hat{ position:absolute; left: 0; top:-25px; }
