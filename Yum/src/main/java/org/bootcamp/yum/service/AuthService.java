@@ -191,7 +191,7 @@ public class AuthService {
 
         char[] userEmail = body.getEmail().toCharArray();
         char[] userPassword = body.getPassword().toCharArray();
-//        char[] username = body.getUsername().toCharArray();
+        char[] username = body.getUsername().toCharArray();
 
         // TODO check LDAP enabled from application.properties
         if (userAuthLDAP) {
@@ -203,22 +203,24 @@ public class AuthService {
             env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
             env.put(Context.PROVIDER_URL, applicationProperties.getLdap().getUrl());
             env.put(Context.SECURITY_AUTHENTICATION, "simple");
-//            env.put(Context.SECURITY_PRINCIPAL, applicationProperties.getLdap().getDomain() + "\\" + String.valueOf(username));
+            env.put(Context.SECURITY_PRINCIPAL, applicationProperties.getLdap().getDomain() + "\\" + String.valueOf(username));
+            //env.put(Context.SECURITY_PRINCIPAL, "uid=test.user, " + ldapBase);
             //env.put(Context.SECURITY_PRINCIPAL, "test.user");
-            env.put("java.naming.ldap.attributes.binary", "title");
-            env.put(Context.SECURITY_PRINCIPAL, "uid=test.user, " + ldapBase);
+            // env.put("java.naming.ldap.attributes.binary", "title");
+            env.put("java.naming.ldap.attributes.binary", "objectGUID");
+            
             System.out.println("password: " + String.valueOf(userPassword));
             env.put(Context.SECURITY_CREDENTIALS, String.valueOf(userPassword));
             env.put(Context.REFERRAL, "follow");
 
-//            String[] returnAttribute = {"givenName", "sn", "mail", "objectGUID"};
-            String[] returnAttribute = {"givenName", "sn", "mail", "title"};
+            String[] returnAttribute = {"givenName", "sn", "mail", "objectGUID"};
+//            String[] returnAttribute = {"givenName", "sn", "mail", "title"};
             SearchControls srchControls = new SearchControls();
             srchControls.setReturningAttributes(returnAttribute);
             srchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-            //String searchFilter = "(uid=" + userName + ")";
-//            String searchFilter = "(sAMAccountName=" + String.valueOf(username) + ")";
-            String searchFilter = "(uid=" + String.valueOf("test.user") + ")";
+//            String searchFilter = "(uid=" + userName + ")";
+            String searchFilter = "(sAMAccountName=" + String.valueOf(username) + ")";
+//            String searchFilter = "(uid=" + String.valueOf("test.user") + ")";
 
             // Create the initial context
             DirContext ctx;
@@ -239,10 +241,10 @@ public class AuthService {
                 System.out.println(">>>>>>" + attrs.get("givenName").get());
                 System.out.println(">>>>>>" + attrs.get("sn"));
                 System.out.println(">>>>>>" + attrs.get("mail"));
-//                System.out.println(">>>>>>" + attrs.get("objectGUID"));
-//                byte[] guid = (byte[]) sr.getAttributes().get("objectGUID").get();
-                System.out.println(">>>>>>" + attrs.get("title"));
-                byte[] guid = (byte[]) sr.getAttributes().get("title").get();
+                System.out.println(">>>>>>" + attrs.get("objectGUID"));
+                byte[] guid = (byte[]) sr.getAttributes().get("objectGUID").get();
+//                System.out.println(">>>>>>" + attrs.get("title"));
+//                byte[] guid = (byte[]) sr.getAttributes().get("title").get();
 //                    System.out.println(">>>>>>" + attrs.get("distinguishedName"));  
 
                 // }
