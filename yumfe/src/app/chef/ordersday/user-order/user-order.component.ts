@@ -22,7 +22,7 @@ export class UserOrderComponent implements OnInit {
   public mainFoodOrders = new Array<customOrderItem>();
   public saladFoodOrders = new Array<customOrderItem>();
   public drinkFoodOrders = new Array<customOrderItem>();
-  public total = 0;
+  public total: number= 0;
   public currency: Observable<string>;
 
   constructor(
@@ -66,8 +66,10 @@ export class UserOrderComponent implements OnInit {
           this.userOrders[i].total += food.price * orderItems[j].quantity;
         }
       }
-      this.total = Number(this.decpipe.transform(this.total, '1.2-2'));
-      this.userOrders[i].total = Number(this.decpipe.transform(this.userOrders[i].total, '1.2-2'));
+
+      //this.total = Number(this.decpipe.transform(this.total, '1.2-2'));
+      //this.userOrders[i].total = Number(this.decpipe.transform(this.userOrders[i].total, '1.2-2'));
+        
     }
 
   } // ngOnInit

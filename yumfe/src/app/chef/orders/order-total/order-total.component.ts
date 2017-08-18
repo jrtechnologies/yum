@@ -15,7 +15,7 @@ import { GlobalSettingsService } from './../../../shared/services/global-setting
 })
 export class OrderTotalComponent implements OnInit {
 
-  public total = 0;
+  public total: number = 0;
 
   @Input() public foods: Array<remote.Food>;
   @Input() public dailyMenuOrderChef: remote.DailyMenuOrder;

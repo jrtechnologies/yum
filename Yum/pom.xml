@@ -102,7 +102,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <fork>true</fork>  
+                    <fork>true</fork>
                 </configuration>
             </plugin>
         </plugins>

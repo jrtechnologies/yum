@@ -88,9 +88,7 @@ public class FoodsService {
     }
     
     private Food foodFindByName(String name){
-         
-        System.out.println(name);
-         
+                  
         List<org.bootcamp.yum.data.entity.Food> foods = foodrepo.findByNameAndArchived(name, false);        
         
         if(foods!=null && foods.size() > 0){
