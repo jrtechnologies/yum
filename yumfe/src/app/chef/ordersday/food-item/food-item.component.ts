@@ -63,8 +63,8 @@ export class FoodItemComponent implements OnInit {
     }
 
     //Depricated, use pipe directly
-    //this.total = Number(this.decpipe.transform(this.total, '1.2-2'));
-
+    //this.total = Number(this.decpipe.transform(this.total, '1.2-2')); 
+    
   } // ngOnInit
 
 }
