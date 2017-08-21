@@ -13,18 +13,26 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 package org.bootcamp.yum.api.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Objects;
+import org.bootcamp.yum.api.model.LastEdit;
 import org.joda.time.LocalDate;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+
 /**
  * User DTO
  */
 @ApiModel(description = "User DTO")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-04-20T10:12:43.892+03:00")
+
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-08-14T16:19:46.865+03:00")
+
 
 public class User   {
   @JsonProperty("id")
@@ -39,6 +47,11 @@ public class User   {
   @JsonProperty("email")
   private String email = null;
 
+
+  @JsonProperty("userName")
+  private String userName = null;
+
+
   @JsonProperty("role")
   private String role = null;
 
@@ -50,10 +63,13 @@ public class User   {
 
   @JsonProperty("lastEdit")
   private LastEdit lastEdit = null;
-
- @JsonProperty("hasPicture")
- private boolean hasPicture;
  
+  @JsonProperty("hasPicture")
+  private Boolean hasPicture = null;
+
+
+
+
   public User id(Long id) {
     this.id = id;
     return this;
@@ -64,6 +80,7 @@ public class User   {
    * @return id
   **/
   @ApiModelProperty(value = "")
+
   public Long getId() {
     return id;
   }
@@ -82,6 +99,7 @@ public class User   {
    * @return lastName
   **/
   @ApiModelProperty(value = "")
+
   public String getLastName() {
     return lastName;
   }
@@ -100,6 +118,7 @@ public class User   {
    * @return firstName
   **/
   @ApiModelProperty(value = "")
+
   public String getFirstName() {
     return firstName;
   }
@@ -118,6 +137,7 @@ public class User   {
    * @return email
   **/
   @ApiModelProperty(value = "")
+
   public String getEmail() {
     return email;
   }
@@ -125,6 +145,28 @@ public class User   {
   public void setEmail(String email) {
     this.email = email;
   }
+
+
+  public User userName(String userName) {
+    this.userName = userName;
+    return this;
+  }
+
+   /**
+   * Get userName
+   * @return userName
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getUserName() {
+    return userName;
+  }
+
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
 
   public User role(String role) {
     this.role = role;
@@ -136,6 +178,7 @@ public class User   {
    * @return role
   **/
   @ApiModelProperty(value = "")
+
   public String getRole() {
     return role;
   }
@@ -154,6 +197,7 @@ public class User   {
    * @return registrationDate
   **/
   @ApiModelProperty(value = "")
+
   public LocalDate getRegistrationDate() {
     return registrationDate;
   }
@@ -172,6 +216,7 @@ public class User   {
    * @return approved
   **/
   @ApiModelProperty(value = "")
+
   public Boolean getApproved() {
     return approved;
   }
@@ -179,6 +224,18 @@ public class User   {
   public void setApproved(Boolean approved) {
     this.approved = approved;
   }
+
+
+  public User hasPicture(Boolean hasPicture) {
+    this.hasPicture = hasPicture;
+    return this;
+  }
+
+   /**
+   * Get hasPicture
+   * @return hasPicture
+  **/
+  @ApiModelProperty(value = "")
 
   public User lastEdit(LastEdit lastEdit) {
     this.lastEdit = lastEdit;
@@ -190,6 +247,7 @@ public class User   {
    * @return lastEdit
   **/
   @ApiModelProperty(value = "")
+
   public LastEdit getLastEdit() {
     return lastEdit;
   }
@@ -197,6 +255,7 @@ public class User   {
   public void setLastEdit(LastEdit lastEdit) {
     this.lastEdit = lastEdit;
   }
+
   
   @ApiModelProperty(value = "")
   public boolean getHasPicture() {
@@ -206,7 +265,7 @@ public class User   {
   public void setHasPicture(Boolean hasPicture) {
     this.hasPicture = hasPicture;
   }
- 
+
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -220,15 +279,19 @@ public class User   {
         Objects.equals(this.lastName, user.lastName) &&
         Objects.equals(this.firstName, user.firstName) &&
         Objects.equals(this.email, user.email) &&
+        Objects.equals(this.userName, user.userName) &&
         Objects.equals(this.role, user.role) &&
         Objects.equals(this.registrationDate, user.registrationDate) &&
         Objects.equals(this.approved, user.approved) &&
+        Objects.equals(this.hasPicture, user.hasPicture) &&
         Objects.equals(this.lastEdit, user.lastEdit);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, lastName, firstName, email, role, registrationDate, approved, lastEdit);
+
+    return Objects.hash(id, lastName, firstName, email, userName, role, registrationDate, approved, hasPicture, lastEdit);
+
   }
 
   @Override
@@ -240,9 +303,11 @@ public class User   {
     sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    userName: ").append(toIndentedString(userName)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");
     sb.append("    registrationDate: ").append(toIndentedString(registrationDate)).append("\n");
     sb.append("    approved: ").append(toIndentedString(approved)).append("\n");
+    sb.append("    hasPicture: ").append(toIndentedString(hasPicture)).append("\n");
     sb.append("    lastEdit: ").append(toIndentedString(lastEdit)).append("\n");
     sb.append("}");
     return sb.toString();

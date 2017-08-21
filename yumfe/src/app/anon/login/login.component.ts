@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../../shared/authentication.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MdSnackBar } from '@angular/material';
-import { environment } from '../../../environments/environment';
 
 @Component({
   moduleId: module.id,
@@ -16,32 +15,65 @@ export class LoginComponent implements OnInit {
   public showSpinner = false;
   public disableBtn = false;
 
-  public hideRegForgot = environment.use_ldap;
+  public externalAuth: Boolean = true;
 
   constructor(
-        private fb: FormBuilder,
-        private router: Router,
-        private snackBar: MdSnackBar,
-        private authenticationService: AuthenticationService
+    private fb: FormBuilder,
+    private router: Router,
+    private snackBar: MdSnackBar,
+    private authService: AuthenticationService
   ) { }
 
-   ngOnInit() {
-     // Create Form group, form controls, validators.
+  ngOnInit() {
+    // Create Form group, form controls, validators.
+
+    const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
     this.loginForm = this.fb.group({
+      username: [''
+      , Validators.required
+      ],
       email: ['', [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+        Validators.required,
+        Validators.minLength(2),
+        Validators.pattern(emailPattern)
       ]],
       password: ['', [
-          Validators.required
+        Validators.required
       ]]
     });
+
+    this.authService.getRemoteAuthMethod().subscribe(
+      value => { 
+
+        if (value === 'ldap') {
+          this.externalAuth = true;
+          this.loginForm.get('username').setValidators([Validators.required]);
+          this.loginForm.get('email').clearValidators();
+           
+        } else {
+          this.externalAuth = false;
+          this.loginForm.get('username').clearValidators();
+          this.loginForm.get('email').setValidators([
+            Validators.required,
+            Validators.minLength(2),
+            Validators.pattern(emailPattern)
+          ]);
+          
+        }
+
+        this.loginForm.get('username').updateValueAndValidity( {onlySelf: true, emitEvent:false});
+        this.loginForm.get('email').updateValueAndValidity( {onlySelf:true, emitEvent:false});
+      });
+      
+   
+
   }
-public login() {
-  this.showSpinner = true;
-  this.disableBtn = true;
-  this.authenticationService.login(this.loginForm.value.email, this.loginForm.value.password)
+
+  public login() {
+    this.showSpinner = true;
+    this.disableBtn = true;
+    this.authService.login(this.loginForm.value.email, this.loginForm.value.password, this.loginForm.value.username )
       .finally(() => {
         this.showSpinner = false;
         this.disableBtn = false;
@@ -49,8 +81,8 @@ public login() {
       .subscribe(result => { // login successful
         //this.openSnackBar('Successful login', 'ok', 1);
         if (result != null) {
-          console.log('Logged as:' + result);
-          switch (result) {
+          console.log('Logged as:' + result[1]);
+          switch (result[1]) {
             case 'admin':
               this.router.navigate(['admin']);
               break;
@@ -60,8 +92,8 @@ public login() {
             case 'chef':
               this.router.navigate(['chef']);
               break;
-           }
-         }
+          }
+        }
       },
       error => { // login failed
         console.log(error.body);

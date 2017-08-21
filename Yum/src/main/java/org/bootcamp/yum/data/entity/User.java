@@ -88,6 +88,9 @@ public class User {
     @Basic(fetch=LAZY)
     @Lob @Column(name="picture")
     private byte[] picture;
+
+    @Column(name = "ldap_id")
+    private byte[] ldapId;
     
     public User() {
     }
@@ -276,6 +279,17 @@ public class User {
     public int getPictureLength(){
         return this.picture.length;
     }
+
+    
+    public byte[] getLdapId() {
+        return ldapId;
+    }
+
+    public void setLdapId(byte[] ldapId) {
+        this.ldapId = ldapId;
+    }
+
+    
     
     @Override
     public int hashCode() {

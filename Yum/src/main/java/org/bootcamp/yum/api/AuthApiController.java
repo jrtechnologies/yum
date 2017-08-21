@@ -17,6 +17,7 @@ package org.bootcamp.yum.api;
 
 import io.swagger.annotations.*;
 import javax.validation.Valid;
+import org.bootcamp.ApplicationProperties;
 import org.bootcamp.yum.api.model.Error;
 import org.bootcamp.yum.api.model.GlobalSettings;
 import org.bootcamp.yum.api.model.Login;
@@ -27,7 +28,7 @@ import org.bootcamp.yum.api.model.UserReg;
 import org.bootcamp.yum.data.repository.UserRepository;
 import org.bootcamp.yum.service.AuthService;
 import org.bootcamp.yum.service.GlobalsettingsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -43,15 +44,19 @@ public class AuthApiController implements AuthApi {
     @Autowired
     UserRepository userRep;
 
-    private AuthService authService;
+
+    private AuthService authService; 
     
     @Autowired
     private GlobalsettingsService globalsettingsService;
-
+    
+    @Autowired
+    private ApplicationProperties applicationProperties;
+    
     @Autowired
     public AuthApiController(AuthService authService) {
-        this.authService = authService;
-          
+        this.authService = authService;           
+
     }
 
     @Override
@@ -60,14 +65,20 @@ public class AuthApiController implements AuthApi {
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
-    @Override
-    public ResponseEntity<Token> authLoginPost(@ApiParam(value = "The email/password", required = true) @RequestBody Login body) throws ApiException {
-        return new ResponseEntity<>(authService.authLoginPost(body), HttpStatus.OK);         
+    @Override 
+    public ResponseEntity<Token> authLoginPost(@ApiParam(value = "The email/password", required = true) @RequestBody Login body) throws ApiException {         
+        return new ResponseEntity<>(authService.authLoginPost(body), HttpStatus.OK);            
     }
 
     @Transactional
     @Override
     public ResponseEntity<Error> authRegisterPost(@ApiParam(value = "The email/password", required = true) @Valid @RequestBody UserReg body, Errors errors) throws ApiException {
+
+       
+        if(applicationProperties.getLdap().isEnabled()){ 
+            throw new ApiException(404, "Disabled");
+        }         
+             
 
         if (errors.hasErrors()) {
             Error error = new Error();
@@ -78,6 +89,7 @@ public class AuthApiController implements AuthApi {
         }
         authService.authRegisterPost(body);
         return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
     @Override
@@ -106,5 +118,15 @@ public class AuthApiController implements AuthApi {
         return new ResponseEntity<PrivacyInfo>( info, HttpStatus.OK);
     }
 
+
+    @Override
+    public ResponseEntity<String> authMethodGet() {
+        
+
+        return new ResponseEntity<>(authService.authMethodGet(), HttpStatus.OK);
+
+        
+    }
     
+
 }

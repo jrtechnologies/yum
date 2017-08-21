@@ -1,15 +1,21 @@
 <div class="background min-sizes">
   <div class="login">
-    <form (ngSubmit)="login()" [formGroup]="loginForm" autocomplete="off">
+    <form (ngSubmit)="login()" [formGroup]="loginForm"  autocomplete="off" >
       <img src="/assets/img/Yum-logo-small.png">
       <h2>Sign in</h2>
-        <md-input-container>
-          <input mdInput type="email" placeholder="user email" formControlName="email"/>
+        <md-input-container  *ngIf=!externalAuth>
+          <input mdInput type="email" placeholder="user email" formControlName="email"  />
           <md-error class="error" *ngIf="loginForm.get('email').touched && (loginForm.get('email').hasError('required'))">
             Email is required.
           </md-error>
           <md-error class="error" *ngIf="loginForm.get('email').touched && loginForm.get('email').hasError('pattern')">
             Wrong email address
+          </md-error>
+        </md-input-container>
+        <md-input-container *ngIf=externalAuth>
+          <input mdInput type="username" placeholder="user name" formControlName="username"  />
+          <md-error class="error" *ngIf="loginForm.get('username').touched && (loginForm.get('username').hasError('required'))">
+            User name is required.
           </md-error>
         </md-input-container>
         <md-input-container>
@@ -18,13 +24,13 @@
             Password is required.
           </md-error>
         </md-input-container>
-        <button md-raised-button type="submit" color="accent" [disabled]="disableBtn">Login</button>
+        <button md-raised-button type="submit" color="accent" [disabled]="disableBtn || loginForm.invalid">Login</button>
         <img class="spinner" *ngIf="showSpinner" src="../../assets/img/spinner.gif">
       </form>
-    <div class="links" *ngIf=!hideRegForgot>
+    <div class="links" *ngIf=!externalAuth>
       <a routerLink="/forgotpwd" routerLinkActive="active">Forgot password?</a>
     </div>
-    <div class="links" *ngIf=!hideRegForgot>
+    <div class="links" *ngIf=!externalAuth>
       <a routerLink="/register" routerLinkActive="active">Create account </a>
     </div>
   </div>

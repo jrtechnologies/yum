@@ -163,7 +163,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   public onMonthNavView(dt: Date) {
     this.monthDate = dt;
-    if (dt.getMonth() === new Date().getMonth()) {
+    if (dt.getMonth() === new Date().getMonth() && dt.getFullYear()=== new Date().getFullYear()) {
       this.router.navigate(['/hungry']);
     } else {
       this.router.navigate(['/hungry/', getYear(dt), this.pad(getISOWeek(dt), 2)]);

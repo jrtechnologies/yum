@@ -28,6 +28,8 @@ import org.bootcamp.yum.data.repository.UserRepository;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+
+
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -58,6 +60,7 @@ public class EmailService {
         mailSender.send(message);
 
     }
+
     
     public void sendNewUserEmailToAllAdmins(User newUser) {
 
@@ -83,6 +86,7 @@ public class EmailService {
         text.append("\n");
         text.append("You have to approve this user so he/she can log in.\n");
         text.append("Click on this link to approve the user:\n");
+
         text.append(applicationProperties.getMail().getDomain()).append("/admin/users/").append(newUser.getId());
 
         // Iterate over a list of admin users. For each admin:
@@ -130,7 +134,9 @@ public class EmailService {
         text.append("\ttotal : ").append(total).append(" euro").append("\n");
         text.append("\n");
         text.append("You can modify this order until ").append(settingsRep.findOne(1).getDeadline().toString("HH:mm")).append(", on ").append(menuDate.minusDays(1).toString("EEEE dd MMMM YYYY")).append(" by going to the link:\n");
+
         text.append(applicationProperties.getMail().getDomain()).append("/hungry/").append(menuDate.getYear()).append("/").append(menuDate.getWeekOfWeekyear()).append("\n");
+
         text.append("\n");
         text.append("Thank you for your order!\n");
 
@@ -184,7 +190,7 @@ public class EmailService {
         text.append("\n");
         text.append("Your account has been activated.\n");
         text.append("You can login by going to the link:\n");
-        text.append(applicationProperties.getMail().getDomain()).append("/\n");;
+        text.append(applicationProperties.getMail().getDomain()).append("/\n");
         text.append("\n");
         text.append("Enjoy your meals on Yum!\n");
 

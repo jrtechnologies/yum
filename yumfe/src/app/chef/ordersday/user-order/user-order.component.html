@@ -75,7 +75,7 @@
 
   <div fxLayout="row" class="align-right print-row-border-total">
     <div fxFlex="10" fxFlexOffset="90" class="totalPrice">
-      {{user.total | number : '1.2-2'}} <span [innerHTML]="currency | async"></span>
+      {{total | number : '1.2-2'}} <span [innerHTML]="currency | async"></span>
     </div>
   </div>
 

@@ -96,4 +96,17 @@ public interface AuthApi {
         method = RequestMethod.GET)
     @CrossOrigin   
     ResponseEntity<PrivacyInfo> authPrivacyGet() throws ApiException;
+
+    
+        @ApiOperation(value = "", notes = "get yum authentication method", response = String.class, tags={ "auth", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "ok", response = String.class),
+        @ApiResponse(code = 500, message = "An unexpected error occured.", response = Error.class) })
+    
+    @RequestMapping(value = "/auth/method",
+        produces = { "text/plain" }, 
+        method = RequestMethod.GET)
+    @CrossOrigin  
+    ResponseEntity<String> authMethodGet();
+
 }

@@ -13,17 +13,24 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 package org.bootcamp.yum.api.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Objects;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+
+
 /**
  * Login credentials DTO
  */
 @ApiModel(description = "Login credentials DTO")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-04-20T10:12:43.892+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-08-14T11:53:22.024+03:00")
+
 
 public class Login   {
   @JsonProperty("email")
@@ -31,6 +38,11 @@ public class Login   {
 
   @JsonProperty("password")
   private String password = null;
+
+
+  @JsonProperty("username")
+  private String username = null;
+
 
   public Login email(String email) {
     this.email = email;
@@ -42,6 +54,8 @@ public class Login   {
    * @return email
   **/
   @ApiModelProperty(value = "")
+
+
   public String getEmail() {
     return email;
   }
@@ -60,6 +74,8 @@ public class Login   {
    * @return password
   **/
   @ApiModelProperty(value = "")
+
+
   public String getPassword() {
     return password;
   }
@@ -67,6 +83,27 @@ public class Login   {
   public void setPassword(String password) {
     this.password = password;
   }
+
+  public Login username(String username) {
+    this.username = username;
+    return this;
+  }
+
+   /**
+   * Get username
+   * @return username
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
 
 
   @Override
@@ -79,12 +116,16 @@ public class Login   {
     }
     Login login = (Login) o;
     return Objects.equals(this.email, login.email) &&
-        Objects.equals(this.password, login.password);
+        Objects.equals(this.password, login.password) &&
+        Objects.equals(this.username, login.username);
+
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, password);
+
+    return Objects.hash(email, password, username);
+
   }
 
   @Override
@@ -94,6 +135,8 @@ public class Login   {
     
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
+    sb.append("    username: ").append(toIndentedString(username)).append("\n");
+
     sb.append("}");
     return sb.toString();
   }

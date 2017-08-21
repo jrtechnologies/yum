@@ -155,7 +155,7 @@ export class FoodComponent implements OnInit {
 
   handleUpdateFood(food) {
     this.food.foodItem = food;
-    this.food.foodItem.price = Number(this.decpipe.transform(this.food.foodItem.price, '1.2-2'));
+    //this.food.foodItem.price = Number(this.decpipe.transform(this.food.foodItem.price, '1.2-2'));
     if (this.flagClone) {
       this.openSnackBar('Food clone succefully created!', 'ok', true);
       this.flagClone = false;
