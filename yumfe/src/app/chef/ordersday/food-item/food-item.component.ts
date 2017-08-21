@@ -61,8 +61,10 @@ export class FoodItemComponent implements OnInit {
         this.total += food.price * this.orderItems[i].quantity;
       }
     }
-    this.total = Number(this.decpipe.transform(this.total, '1.2-2'));
 
+    //Depricated, use pipe directly
+    //this.total = Number(this.decpipe.transform(this.total, '1.2-2')); 
+    
   } // ngOnInit
 
 }

@@ -100,7 +100,7 @@ export class MenusComponent implements OnInit {
   }
 
   public onMonthNavChange(dt: Date){
-    if (dt.getMonth() === new Date().getMonth()) {
+    if (dt.getMonth() === new Date().getMonth() && dt.getFullYear()=== new Date().getFullYear()) {
       this.router.navigate(['/chef/menus/']);
     }
     else{

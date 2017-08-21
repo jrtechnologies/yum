@@ -1,15 +1,15 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 
-import { AppLdapRouteGuard } from './app-ldap-route.guard';
+import { AppExtAuthRouteGuard } from './app-extAuth-route.guard';
 
 describe('AppLdapRouteGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AppLdapRouteGuard]
+      providers: [AppExtAuthRouteGuard]
     });
   });
 
-  it('should ...', inject([AppLdapRouteGuard], (guard: AppLdapRouteGuard) => {
+  it('should ...', inject([AppExtAuthRouteGuard], (guard: AppExtAuthRouteGuard) => {
     expect(guard).toBeTruthy();
   }));
 });

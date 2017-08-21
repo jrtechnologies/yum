@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import * as remote from '../../remote';
 import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
 import { AdminNavComponent } from './../shared/admin-nav/admin-nav.component';
-import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
+import { AuthenticationService } from '../../shared/authentication.service';
 
 @Component({
   templateUrl: './home.component.html',
@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit {
   public totalUsers: number;
   private totalpages: number;
   public showLoadSpinner = false;
+  public externalAuth: Boolean = false;
 
   // Options for pageSize Select
   public pageSizes = [
@@ -48,7 +49,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private adminService: remote.AdminApi, private fb: FormBuilder,
     public snackBar: MdSnackBar, public dialog: MdDialog,
-    private gss: GlobalSettingsService) {
+    private authService: AuthenticationService) {
     //this.someExpression = null;
   }
 
@@ -99,8 +100,9 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     // Create Form group, form controls, validators
     this.userGroup = this.buildForm();
-    this.loadUsers(this.page);
-    console.log('LDAP:' + this.gss.isLDAPenabled());
+    this.loadUsers(this.page); 
+    this.externalAuth = this.authService.hasExternalAuth();
+     
   }
 
 

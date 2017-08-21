@@ -161,7 +161,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
 
   public onMonthNavChange(dt: Date) {
     // console.log("MonthNavComponent child changed:",dt)
-    if (dt.getMonth() === new Date().getMonth()) {
+    if (dt.getMonth() === new Date().getMonth() && dt.getFullYear()=== new Date().getFullYear()) {
       this.router.navigate(['/hungry/history/']);
     }
     else{

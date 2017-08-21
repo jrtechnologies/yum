@@ -16,9 +16,12 @@
 package org.bootcamp.yum.service;
 
 import io.swagger.annotations.ApiParam;
+import java.io.UnsupportedEncodingException;
 import static java.lang.Math.signum;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -85,6 +88,7 @@ public class FoodsService {
     }
     
     private Food foodFindByName(String name){
+
         List<org.bootcamp.yum.data.entity.Food> foods = foodrepo.findByNameAndArchived(name, false);        
         
         if(foods!=null && foods.size() > 0){
