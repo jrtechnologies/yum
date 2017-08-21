@@ -89,8 +89,8 @@ public class User {
     @Lob @Column(name="picture")
     private byte[] picture;
     
-    @Column(name = "object_guid")
-    private String objectGuid;
+    @Column(name = "ldap_id")
+    private byte[] ldapId;
     
     public User() {
     }
@@ -280,12 +280,12 @@ public class User {
         return this.picture.length;
     }
 
-    public String getObjectGuid() {
-        return objectGuid;
+    public byte[] getLdapId() {
+        return ldapId;
     }
 
-    public void setObjectGuid(String objectGuid) {
-        this.objectGuid = objectGuid;
+    public void setLdapId(byte[] ldapId) {
+        this.ldapId = ldapId;
     }
     
     

@@ -52,6 +52,8 @@ public class ApplicationProperties {
         private String base;
         private String url;
         private String domain;
+        private String idAttribute;
+        private String principalAttribute;
 
         public boolean isEnabled() {
             return enabled;
@@ -85,6 +87,21 @@ public class ApplicationProperties {
             this.domain = domain;
         }
         
+        public String getIdAttribute() {
+            return idAttribute;
+        }
+
+        public void setIdAttribute(String idAttribute) {
+            this.idAttribute = idAttribute;
+        }
+
+        public String getPrincipalAttribute() {
+            return principalAttribute;
+        }
+
+        public void setPrincipalAttribute(String principalAttribute) {
+            this.principalAttribute = principalAttribute;
+        }
     }
     
     private Mail mail;

@@ -29,7 +29,7 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long>{
     User findById(long id);
     User findByEmail(String email);
     User findBySecret(String secret);
-    User findByObjectGuid(String objectGuid);
+    User findByLdapId(byte[] ldapId);
     List<User> findByUserRole(UserRole userRole);
 
     //Page<User> findPageable(Pageable pageable);
