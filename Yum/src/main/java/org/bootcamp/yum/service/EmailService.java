@@ -16,6 +16,7 @@ package org.bootcamp.yum.service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import org.bootcamp.ApplicationProperties;
 import org.bootcamp.yum.data.entity.DailyMenu;
 import org.bootcamp.yum.data.entity.DailyOrder;
 import org.bootcamp.yum.data.entity.Food;
@@ -27,7 +28,6 @@ import org.bootcamp.yum.data.repository.UserRepository;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -38,11 +38,8 @@ public class EmailService {
     @Autowired
     private MailSender mailSender;
 
-    @Value("${yum.mail.senderEmailAddress}")
-    private String senderEmailAddress;
-
-    @Value("${yum.hostname}")
-    private String yumHostname;
+    @Autowired
+    private ApplicationProperties applicationProperties;
 
     @Autowired
     private UserRepository userRep;
@@ -53,14 +50,15 @@ public class EmailService {
     private void sendEmail(String sendTo, String subject, String text) {
         // Prepares the message
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(senderEmailAddress);
+        //message.setFrom(senderEmailAddress);
+        message.setFrom(applicationProperties.getMail().getFrom());
         message.setTo(sendTo);
         message.setSubject(subject);
         message.setText(text);
         mailSender.send(message);
 
     }
-
+    
     public void sendNewUserEmailToAllAdmins(User newUser) {
 
         // When a new user registers, is unapproved by default.
@@ -85,11 +83,11 @@ public class EmailService {
         text.append("\n");
         text.append("You have to approve this user so he/she can log in.\n");
         text.append("Click on this link to approve the user:\n");
-        text.append(yumHostname).append("/admin/users/").append(newUser.getId());
+        text.append(applicationProperties.getMail().getDomain()).append("/admin/users/").append(newUser.getId());
 
         // Iterate over a list of admin users. For each admin:
         List<User> admins = userRep.findByUserRole(UserRole.ADMIN);
-        for (User admin : admins) {            
+        for (User admin : admins) {
             // Adds a greeting sentence to the text
             String textString = "Dear " + admin.getFirstName() + " " + admin.getLastName() + ",\r\n" + text;
             //mailSender.send(message);
@@ -132,7 +130,7 @@ public class EmailService {
         text.append("\ttotal : ").append(total).append(" euro").append("\n");
         text.append("\n");
         text.append("You can modify this order until ").append(settingsRep.findOne(1).getDeadline().toString("HH:mm")).append(", on ").append(menuDate.minusDays(1).toString("EEEE dd MMMM YYYY")).append(" by going to the link:\n");
-        text.append(yumHostname).append("/hungry/").append(menuDate.getYear()).append("/").append(menuDate.getWeekOfWeekyear()).append("\n");
+        text.append(applicationProperties.getMail().getDomain()).append("/hungry/").append(menuDate.getYear()).append("/").append(menuDate.getWeekOfWeekyear()).append("\n");
         text.append("\n");
         text.append("Thank you for your order!\n");
 
@@ -158,19 +156,18 @@ public class EmailService {
         text.append("You just requested your password to be reset. If that was not you, please discard this message.\n");
         text.append("\n");
         text.append("To enter your new password, please visit this link:\n");
-        text.append(yumHostname).append("/resetpwd/token?token=").append(user.getSecret()).append("\n");
+        text.append(applicationProperties.getMail().getDomain()).append("/resetpwd/token?token=").append(user.getSecret()).append("\n");
         text.append("\n");
         DateTime creationTime = user.getSecretCreation().plusDays(1);
         text.append("The link will be active for 24 hours (until ").append(creationTime.toString("HH:mm:ss")).append(", on ").append(creationTime.toString("EEEE dd MMMM YYYY")).append(").\n");
         text.append("\n");
         text.append("Thank you for using Yum!\n");
-   
+
         // Sends the email
         sendEmail(user.getEmail(), "[Yum] Password reset", text.toString());
     }
 
-    
-     public void sendApprovalEmail(User user) {
+    public void sendApprovalEmail(User user) {
 
         // send this email to the user that requested a password reset.
         // prepare the text like follow:
@@ -187,11 +184,10 @@ public class EmailService {
         text.append("\n");
         text.append("Your account has been activated.\n");
         text.append("You can login by going to the link:\n");
-        text.append(yumHostname).append("/\n");;
+        text.append(applicationProperties.getMail().getDomain()).append("/\n");;
         text.append("\n");
         text.append("Enjoy your meals on Yum!\n");
 
-   
         // Sends the email
         sendEmail(user.getEmail(), "[Yum] Account activated", text.toString());
     }

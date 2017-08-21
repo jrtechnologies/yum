@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 @Transactional
 @Component
 public class CmdLineApp implements CommandLineRunner{
-    
+
     private static final Logger LOGGER = Logger.getLogger( CmdLineApp.class.getName() );
     FoodTypeConverter foodTypeConverter = new FoodTypeConverter();
     
@@ -41,4 +41,3 @@ public class CmdLineApp implements CommandLineRunner{
     
 }
     
-
