@@ -24,7 +24,7 @@ Team members:
 * Piperidi Sofia Anna
 
 Also contributed to this project: Vasilis Antonakis, Alex Ntousakis, Angie Spyrou, Thymios Floros, Dimitris Ntilis, George Filippakis, 
-Stavros Apostolakis, Stefanos Markakis, Andreas Kolokotronis, Isidoros Kefakis, Kostas Asargiotakis, Dimitris Marmatakis, Stelios Iliadis
+Stavros Apostolakis, Stefanos Markakis, Andreas Kolokotronis, Isidoros Kefakis, Kostas Asargiotakis, Dimitris Marmatakis, Stelios Iliadis.
 
 ## Requirements
 
@@ -40,7 +40,9 @@ Stavros Apostolakis, Stefanos Markakis, Andreas Kolokotronis, Isidoros Kefakis, 
 ```
 npm install npm@latest -g
 ```
-* netbeans (with NB spring boot plugin installed)
+**Debug/Development:**
+
+* Netbeans (with NB spring boot plugin installed)
 
 ## Installation
 
@@ -52,13 +54,21 @@ npm install npm@latest -g
 	* Modify the username and password of the datasource to match with your mysql user.
 	* Modify `spring.mail.host`, `spring.mail.port`, `spring.mail.username` and `spring.mail.password` to match with your SMTP account.
 	* If your SMTP server needs extra authentication or encryption, you can use the following properties `spring.mail.properties.mail.smtp.*` below.
-	* Modify `yum.mail.senderEmailAddress` and enter here the email address that should be used as sender to send all automatic emails.
-	* Modify `yum.hostname` to reflect the hostname your yum server will be accessible to on the network
-
+	* Modify `yum.mail.from` and enter here the email address that should be used as sender to send all automatic emails.
+	* Modify `yum.mail.domain` to reflect the hostname your yum server will be accessible to on the network
+	*  LDAP / Active directory authentication:
+	Optionally you can enable ldap authentication by setting the following vars:
+		* Modify `yum.ldap.enabled` to true to enable ldap auth.
+		* Modify `yum.ldap.base` to set the base DN.
+		* Modify `yum.ldap.url`to point to the ldap server.
+		* Modify `yum.ldap.domain` optionally for Active Directory to authenticate users on domain.
+		* Modify `yum.ldap.idAttribute`to point to the appropriate binary user id attribute (ex. objectGuid for AD). This value will be stored in the yum database.
+		* Modify `yum.ldap.principalAttribute`to point to the appropriate user name attribute (ex. sAMAccountName for AD).
+		
 * Run the SQL file `Yum/install.sql` into your mysql database.
 	
 * in a console / command line, run the command:
-`java -jar yum-1.0.x.jar`
+`java -jar yum-1.0.4.jar`
 
 * Access your server at the hostname you specified (by example: http://localhost/)
 
@@ -76,9 +86,9 @@ npm install npm@latest -g
 
 #### Front-end and Back-end on separate servers (for coding, debug...)
 
-* configure the client-side by editing the file `yumfe/src/app/app.module.ts` and modifying the line:
+* configure the client-side by editing the file `yumfe/src/environments/environment.ts` and modifying the line:
 
-`{provide: BASE_PATH, useValue: "http://localhost:8082/api"}` ( replace `localhost:8082` with the hostname of your backend server )
+` base_path: 'http://localhost:8080/api'` ( replace `localhost:8080` with the hostname of your backend server )
 
 * in the folder `yumfe` run the command
 
@@ -92,16 +102,23 @@ npm install npm@latest -g
 
 #### Front-end and Back-end on same server ( for deploy )
 
-* in the file `yumfe/src/app/app.module.ts` change the line 39 to become `{provide: BASE_PATH, useValue: "/api"},`
 
 * in the `yumfe` folder, run `ng build --prod`
 
 * copy the whole content of the subfolder `dist` inside the folder `Yum/src/main/resources/static` so that the `index.html` and all other files now reside in the static folder.
 
-* Open the folder `Yum` in netbeans
-
 * If you want to change the secret for the JWT token, you can do so in the file `Yum/src/main/java/org/bootcamp/JWTCodec.java` by changing the `key` string.
 
-* Build the project.
+*	##### Build using Netbeans:
 
-* You should now have a file called `target/yum-1.0.x.jar` that you can move to your installation folder.
+	* Open the folder `Yum` in netbeans.
+
+	* Build the project.  
+
+
+	##### Build in a console / command line: 
+
+	* Navigate to the folder Yum and run: 
+    `mvnw clean install`  
+
+* You should now have a file called `target/yum-1.0.4.jar` that you can move to your installation folder.
