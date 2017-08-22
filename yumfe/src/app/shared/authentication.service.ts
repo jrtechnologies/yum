@@ -85,10 +85,19 @@ export class AuthenticationService {
     this.user = currentUser && currentUser.user;
     this.extAuth = currentUser && currentUser.extAuth;
     var token = currentUser && currentUser.token;
-    if (token !== "") {
+    if (token && token !== "") {
       this.token = token;
       this.conf.apiKey = "Bearer " + token;
+
+      const jwt: string[]= this.token.split(".");
+      const payload = JSON.parse(atob(jwt[1]));
+      if(payload.exp && payload.exp>0){
+        if(payload.exp <= new Date().getTime() / 1000){
+          
+        }
+      }
     }
+    
 
   }
 
