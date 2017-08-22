@@ -148,8 +148,6 @@ paths:
             $ref: '#/definitions/Info'
         '500':
           $ref: '#/responses/Error'
-<<<<<<< HEAD
-=======
   /auth/method:
     get:
       tags:
@@ -164,7 +162,6 @@ paths:
             type: string
         '500':
           $ref: '#/responses/Error'
->>>>>>> laz_ldap
   /settings:
     get:
       security:
@@ -1105,11 +1102,7 @@ paths:
         '500':
           $ref: '#/responses/Error'
   '/users/{id}/picture/token':
-<<<<<<< HEAD
-    get: 
-=======
     get:
->>>>>>> laz_ldap
       tags:
         - admin
       description: Get profile picture.
@@ -1259,11 +1252,8 @@ definitions:
         type: string
       email:
         type: string
-<<<<<<< HEAD
-=======
       userName:
         type: string
->>>>>>> laz_ldap
       role:
         type: string
       registrationDate:
@@ -1324,11 +1314,8 @@ definitions:
         type: string
       password:
         type: string
-<<<<<<< HEAD
-=======
       username:
         type: string
->>>>>>> laz_ldap
   ResetPwd:
     type: object
     description: Token and password
