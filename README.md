@@ -98,10 +98,20 @@ npm install npm@latest -g
 
 * copy the whole content of the subfolder `dist` inside the folder `Yum/src/main/resources/static` so that the `index.html` and all other files now reside in the static folder.
 
-* Open the folder `Yum` in netbeans
+* BUILD THE PROJECT
 
-* If you want to change the secret for the JWT token, you can do so in the file `Yum/src/main/java/org/bootcamp/JWTCodec.java` by changing the `key` string.
+	* If you want to change the secret for the JWT token, you can do so in the file `Yum/src/main/java/org/bootcamp/JWTCodec.java` by changing the `key` string.
 
-* Build the project.
+	- Using Netbeans:
+
+	* Open the folder `Yum` in netbeans.
+
+	* Build the project.  
+
+	- From the command line/shell:
+
+	* Navigate to the folder Yum and run: 
+
+	`mvnw clean install`  
 
 * You should now have a file called `target/yum-1.0.x.jar` that you can move to your installation folder.
