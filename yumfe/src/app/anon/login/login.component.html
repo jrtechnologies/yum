@@ -1,4 +1,4 @@
-<div class="background min-sizes">
+<div class="" [ngClass]="{'min-sizes, background': !disableRoute, 'dialog-sizes':disableRoute}" >
   <div class="login">
     <form (ngSubmit)="login()" [formGroup]="loginForm"  autocomplete="off" >
       <img src="/assets/img/Yum-logo-small.png">
@@ -27,14 +27,14 @@
         <button md-raised-button type="submit" color="accent" [disabled]="disableBtn || loginForm.invalid">Login</button>
         <img class="spinner" *ngIf="showSpinner" src="../../assets/img/spinner.gif">
       </form>
-    <div class="links" *ngIf=!externalAuth>
+    <div class="links" *ngIf="!externalAuth && !disableRoute">
       <a routerLink="/forgotpwd" routerLinkActive="active">Forgot password?</a>
     </div>
-    <div class="links" *ngIf=!externalAuth>
+    <div class="links" *ngIf="!externalAuth && !disableRoute">
       <a routerLink="/register" routerLinkActive="active">Create account </a>
     </div>
   </div>
-  <div class="text">
+  <div class="text" *ngIf=!disableRoute>
     <p>
         What I've enjoyed most, though, is meeting people who have
         a real interest in food and sharing ideas with them.

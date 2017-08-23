@@ -91,10 +91,8 @@ export class AuthenticationService {
 
       const jwt: string[]= this.token.split(".");
       const payload = JSON.parse(atob(jwt[1]));
-      if(payload.exp && payload.exp>0){
-        if(payload.exp <= new Date().getTime() / 1000){
-          
-        }
+      if(payload.exp &&  payload.exp <= new Date().getTime() / 1000){
+          this.logout();        
       }
     }
     
@@ -150,8 +148,10 @@ export class AuthenticationService {
     //Get authentication method from server
     return this.authService.authMethodGet().map(
       value => {
-        this.extAuth = value;
-        return value;
+        if(value){
+          this.extAuth = value;
+          return value;
+        }
       }).catch((error: any) => {
         return Observable.throw(error);
       });

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../shared/authentication.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -6,10 +6,15 @@ import { MdSnackBar } from '@angular/material';
 
 @Component({
   moduleId: module.id,
+  selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
+  @Input() public disableRoute: Boolean; //Login as a dialog form
+  @Output() loginOk = new EventEmitter<Boolean>(); 
+
   public loginForm: FormGroup;
   // create spinner
   public showSpinner = false;
@@ -82,18 +87,23 @@ export class LoginComponent implements OnInit {
         //this.openSnackBar('Successful login', 'ok', 1);
         if (result != null) {
           console.log('Logged as:' + result[1]);
-          switch (result[1]) {
-            case 'admin':
-              this.router.navigate(['admin']);
-              break;
-            case 'hungry':
-              this.router.navigate(['hungry']);
-              break;
-            case 'chef':
-              this.router.navigate(['chef']);
-              break;
+
+          if( this.disableRoute===true){
+              this.loginOk.emit(true);
+          }else{
+            switch (result[1]) {
+              case 'admin':
+                this.router.navigate(['admin']);
+                break;
+              case 'hungry':
+                this.router.navigate(['hungry']);
+                break;
+              case 'chef':
+                this.router.navigate(['chef']);
+                break;
+            }
           }
-        }
+        } 
       },
       error => { // login failed
         console.log(error.body);

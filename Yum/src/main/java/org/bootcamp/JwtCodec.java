@@ -27,7 +27,9 @@ public class JwtCodec {
     private static String key = "dArg!@SFst3t32(35&t%v4[124v45@#2fhjpIy";
 
     public static String encode(String subject, ArrayList<String> roles ) {
-        return Jwts.builder().setSubject(subject).claim("roles", roles).setIssuedAt(new Date())
+        Date dt = new Date();
+        dt.setTime((new Date()).getTime() + 10000);
+        return Jwts.builder().setSubject(subject).claim("roles", roles).setExpiration(dt).setIssuedAt(new Date())
         .signWith(SignatureAlgorithm.HS256, key).compact();
     }
 

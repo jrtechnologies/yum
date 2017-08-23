@@ -57,3 +57,14 @@ a{
 a:hover{
   color:#FF5B57;
 }
+
+.fullScreen { min-width:100%; min-height:100%; background-color: rgba(0,0,0,0.5); }
+.dialog-sizes .login{
+  position:initial;
+  background-color: white;
+  width: 341px;
+  height: 490px;
+  padding: 0;
+  margin:20px 0 0 0;
+  text-align: center;
+}
