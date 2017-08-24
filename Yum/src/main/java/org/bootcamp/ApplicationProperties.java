@@ -102,10 +102,35 @@ public class ApplicationProperties {
         public void setPrincipalAttribute(String principalAttribute) {
             this.principalAttribute = principalAttribute;
         }
+        
+    }
+    
+    public static class TokenExpiration {
+        private String unit;
+        private int value;     
+
+        public String getUnit() {
+            return unit;
+        }
+
+        public void setUnit(String unit) {
+            this.unit = unit;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public void setValue(int value) {
+            this.value = value;
+        }
+        
+        
     }
     
     private Mail mail;
     private Ldap ldap;
+    private TokenExpiration tokenExpiration;
 
     public Mail getMail() {
         return mail;
@@ -122,5 +147,13 @@ public class ApplicationProperties {
     public void setLdap(Ldap ldap) {
         this.ldap = ldap;
     }
-        
+
+    public TokenExpiration getTokenExpiration() {
+        return tokenExpiration;
+    }
+
+    public void setTokenExpiration(TokenExpiration tokenExpiration) {
+        this.tokenExpiration = tokenExpiration;
+    }
+       
 }
