@@ -53,7 +53,10 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log('----- on init HistoryComponent!! -----');
-    this.foods = this.foodsService.getFoods();
+     this.foodsService.getFoods().subscribe( foods=>{
+        this.foods = foods;
+     });
+
     this.viewdate = new Date();
 
     this.sub = this.route.params.subscribe(params => {

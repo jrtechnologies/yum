@@ -22,7 +22,7 @@ export class UserOrderComponent implements OnInit {
   public mainFoodOrders = new Array<customOrderItem>();
   public saladFoodOrders = new Array<customOrderItem>();
   public drinkFoodOrders = new Array<customOrderItem>();
-  public total: number= 0;
+  public total: number = 0;
   public currency: Observable<string>;
 
   constructor(
@@ -41,35 +41,38 @@ export class UserOrderComponent implements OnInit {
       orderItems = this.userOrders[i].orderItems;
 
       for (let j = 0; j < orderItems.length; j++) {
-        food = this.foodsService.getFoodById(orderItems[j].foodId);
+        // food = this.foodsService.getFoodById(orderItems[j].foodId);
+        this.foodsService.getFoodById(orderItems[j].foodId).subscribe(food => {
+          if (food.foodType === 'Main') {
+            this.mainFoodOrders.push({
+              food: food,
+              quantity: orderItems[j].quantity
+            });
+            this.total += food.price * orderItems[j].quantity;
+            this.userOrders[i].total += food.price * orderItems[j].quantity;
+          } else if (food.foodType === 'Salad') {
+            this.saladFoodOrders.push({
+              food: food,
+              quantity: orderItems[j].quantity
+            });
+            this.total += food.price * orderItems[j].quantity;
+            this.userOrders[i].total += food.price * orderItems[j].quantity;
+          } else if (food.foodType === 'Drink') {
+            this.drinkFoodOrders.push({
+              food: food,
+              quantity: orderItems[j].quantity
+            });
+            this.total += food.price * orderItems[j].quantity;
+            this.userOrders[i].total += food.price * orderItems[j].quantity;
+          }
+        });
 
-        if (food.foodType === 'Main') {
-          this.mainFoodOrders.push({
-            food: food,
-            quantity: orderItems[j].quantity
-          });
-          this.total += food.price * orderItems[j].quantity;
-          this.userOrders[i].total += food.price * orderItems[j].quantity;
-        } else if (food.foodType === 'Salad') {
-          this.saladFoodOrders.push({
-            food: food,
-            quantity: orderItems[j].quantity
-          });
-          this.total += food.price * orderItems[j].quantity;
-          this.userOrders[i].total += food.price * orderItems[j].quantity;
-        } else if (food.foodType === 'Drink') {
-          this.drinkFoodOrders.push({
-            food: food,
-            quantity: orderItems[j].quantity
-          });
-          this.total += food.price * orderItems[j].quantity;
-          this.userOrders[i].total += food.price * orderItems[j].quantity;
-        }
+
       }
 
       //this.total = Number(this.decpipe.transform(this.total, '1.2-2'));
       //this.userOrders[i].total = Number(this.decpipe.transform(this.userOrders[i].total, '1.2-2'));
-        
+
     }
 
   } // ngOnInit

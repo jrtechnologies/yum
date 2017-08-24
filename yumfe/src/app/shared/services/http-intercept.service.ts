@@ -34,7 +34,8 @@ export class InterceptHttp extends Http {
                 this.httpSubjectService.addHttp500(err);
                 return Observable.throw(err);
             } else {
-                return Observable.empty();
+               // return Observable.empty();
+                return Observable.throw(err);
             }
         })
             .finally(() => {

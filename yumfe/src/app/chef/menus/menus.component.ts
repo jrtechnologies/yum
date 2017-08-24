@@ -52,7 +52,10 @@ export class MenusComponent implements OnInit {
 
   ngOnInit() {
     this.viewdate = new Date( );
-    this.foods = this.foodsService.getFoods();
+    
+    this.foodsService.getFoods().subscribe( foods=>{
+        this.foods = foods;        
+     });
 
 
     this.sub = this.route.params.subscribe(params => {
@@ -68,6 +71,10 @@ export class MenusComponent implements OnInit {
 
     });
 
+    this.getThisMonthMenus();
+
+  }
+  private getThisMonthMenus(){
     if (isToday(this.viewdate)) {
       this.remote = this.chefService.dailyMenusMonthlyGet()
       .finally(() => {
@@ -78,9 +85,6 @@ export class MenusComponent implements OnInit {
         this.setMenus(menus);
       }, error => console.log(error));
     }
-
-
-
   }
 
   private getRemoteMenus(monthYear:string){
