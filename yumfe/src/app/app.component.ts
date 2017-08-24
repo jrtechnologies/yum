@@ -18,7 +18,8 @@ export class AppComponent {
 
     constructor(
         private authService: AuthenticationService, private httpSubjectService: HttpSubjectService,
-        public dialog: MdDialog, private router: Router
+        public dialog: MdDialog, private router: Router,
+        public hugryService: remote.HungryApi
     ) { }
 
     ngOnInit(): void {
@@ -31,19 +32,33 @@ export class AppComponent {
                 if (this.dialogOpen == false) {
                     this.dialogOpen = true;
                     this.authService.logout();
-                    
+
                     //this.router.navigate(['/']);
-                    
+
                     let dialogRef = this.dialog.open(DialogLogin, { disableClose: true });
 
                     dialogRef.afterClosed().subscribe(result => {
-                        this.dialogOpen = false;                                  
-                        window.location.reload();              
+                        this.dialogOpen = false;
+                        window.location.reload();
                     });
-                     
+
                 }
             }
         });
+
+
+        this.httpSubjectService.httpCallSubject.subscribe(
+            (url: string) => {
+                if (this.authService.isLogged()) {
+                    if (!/refreshToken$/.test(url)) {
+                        this.hugryService.refreshTokenGet().subscribe(token => {
+                            if (token) this.authService.refreshToken(token);
+                        });
+                    }
+                }
+            }
+        );
+
 
     }
 

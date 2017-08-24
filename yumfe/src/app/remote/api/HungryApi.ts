@@ -27,87 +27,87 @@ import { Configuration } from '../configuration';
 
 @Injectable()
 export class HungryApi {
-  protected basePath = 'http://localhost:8082/api';
-  public defaultHeaders: Headers = new Headers();
-  public configuration: Configuration = new Configuration();
+    protected basePath = 'http://localhost:8082/api';
+    public defaultHeaders: Headers = new Headers();
+    public configuration: Configuration = new Configuration();
 
-  constructor(protected http: Http, @Optional() @Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
-    if (basePath) {
-      this.basePath = basePath;
+    constructor(protected http: Http, @Optional() @Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+        if (basePath) {
+            this.basePath = basePath;
+        }
+        if (configuration) {
+            this.configuration = configuration;
+        }
     }
-    if (configuration) {
-      this.configuration = configuration;
-    }
-  }
 
-  /**
-   * Gets monthly menus.
-   * Return a list containing all menus of the month.
-   */
-  public menusMonthlyGet(extraHttpRequestParams?: any): Observable<Array<models.DailyMenu>> {
-    return this.menusMonthlyGetWithHttpInfo(extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json();
-        }
-      });
-  }
-
-  /**
-   * Gets monthly menus of the specified month.
-   * Returns a list containing all menus of the month.
-   * @param monthyear ex. 12-2016
-   */
-  public menusMonthlyMonthyearGet(monthyear: string, extraHttpRequestParams?: any): Observable<Array<models.DailyMenu>> {
-    return this.menusMonthlyMonthyearGetWithHttpInfo(monthyear, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json();
-        }
-      });
-  }
-
-  /**
-   * Gets weekly menus
-   * Returns a list containing all menus of the week.
-   */
-  public menusWeeklyGet(extraHttpRequestParams?: any): Observable<Array<models.DailyMenu>> {
-    return this.menusWeeklyGetWithHttpInfo(extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json();
-        }
-      });
-  }
-
-  /**
-   * Gets weekly menu of the specified week
-   * Returns a list containing all menus of the week.
-   * @param week ex. 02-2017
-   */
-  public menusWeeklyWeekGet(week: string, extraHttpRequestParams?: any): Observable<Array<models.DailyMenu>> {
-    return this.menusWeeklyWeekGetWithHttpInfo(week, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json();
-        }
-      });
-  }
-
-  /**
-     * Deletes specified order
-     * Deletes the order
-     * @param id
-     * @param dailyMenuDetails dailymenu details id, version, date
+    /**
+     * Gets monthly menus.
+     * Return a list containing all menus of the month.
      */
+    public menusMonthlyGet(extraHttpRequestParams?: any): Observable<Array<models.DailyMenu>> {
+        return this.menusMonthlyGetWithHttpInfo(extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     * Gets monthly menus of the specified month.
+     * Returns a list containing all menus of the month.
+     * @param monthyear ex. 12-2016
+     */
+    public menusMonthlyMonthyearGet(monthyear: string, extraHttpRequestParams?: any): Observable<Array<models.DailyMenu>> {
+        return this.menusMonthlyMonthyearGetWithHttpInfo(monthyear, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     * Gets weekly menus
+     * Returns a list containing all menus of the week.
+     */
+    public menusWeeklyGet(extraHttpRequestParams?: any): Observable<Array<models.DailyMenu>> {
+        return this.menusWeeklyGetWithHttpInfo(extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     * Gets weekly menu of the specified week
+     * Returns a list containing all menus of the week.
+     * @param week ex. 02-2017
+     */
+    public menusWeeklyWeekGet(week: string, extraHttpRequestParams?: any): Observable<Array<models.DailyMenu>> {
+        return this.menusWeeklyWeekGetWithHttpInfo(week, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+       * Deletes specified order
+       * Deletes the order
+       * @param id
+       * @param dailyMenuDetails dailymenu details id, version, date
+       */
     public ordersIdDelete(id: number, dailyMenuDetails?: models.DailyMenuDetails, extraHttpRequestParams?: any): Observable<{}> {
         return this.ordersIdDeleteWithHttpInfo(id, dailyMenuDetails, extraHttpRequestParams)
             .map((response: Response) => {
@@ -119,14 +119,14 @@ export class HungryApi {
             });
     }
 
-  /**
-     * Modifies order for the specified day
-     * Modify the order
-     * @param id
-     * @param dailyMenuId
-     * @param dailyMenuVersion
-     * @param dailyMenuDate
-     */
+    /**
+       * Modifies order for the specified day
+       * Modify the order
+       * @param id
+       * @param dailyMenuId
+       * @param dailyMenuVersion
+       * @param dailyMenuDate
+       */
     public ordersIdGet(id: number, dailyMenuId: number, dailyMenuVersion: number, dailyMenuDate: Date, extraHttpRequestParams?: any): Observable<models.DailyOrder> {
         return this.ordersIdGetWithHttpInfo(id, dailyMenuId, dailyMenuVersion, dailyMenuDate, extraHttpRequestParams)
             .map((response: Response) => {
@@ -138,38 +138,38 @@ export class HungryApi {
             });
     }
 
-  /**
-   * Modifies order for the specified day
-   * Modify the order
-   * @param id
-   * @param updateOrderItems The order items to modify
-   */
-  public ordersIdPut(id: number, updateOrderItems?: models.UpdateOrderItems, extraHttpRequestParams?: any): Observable<models.LastEdit> {
-    return this.ordersIdPutWithHttpInfo(id, updateOrderItems, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json();
-        }
-      });
-  }
+    /**
+     * Modifies order for the specified day
+     * Modify the order
+     * @param id
+     * @param updateOrderItems The order items to modify
+     */
+    public ordersIdPut(id: number, updateOrderItems?: models.UpdateOrderItems, extraHttpRequestParams?: any): Observable<models.LastEdit> {
+        return this.ordersIdPutWithHttpInfo(id, updateOrderItems, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
 
-  /**
-   * Place a new order
-   * A new order for the specified daily menu
-   * @param order The order to place
-   */
-  public ordersPost(order?: models.Order, extraHttpRequestParams?: any): Observable<models.DailyMenu> {
-    return this.ordersPostWithHttpInfo(order, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json();
-        }
-      });
-  }
+    /**
+     * Place a new order
+     * A new order for the specified daily menu
+     * @param order The order to place
+     */
+    public ordersPost(order?: models.Order, extraHttpRequestParams?: any): Observable<models.DailyMenu> {
+        return this.ordersPostWithHttpInfo(order, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
 
 
     /**
@@ -248,172 +248,172 @@ export class HungryApi {
                     return response.json();
                 }
             });
-   }
-
-  /**
-   * Gets monthly menus.
-   * Return a list containing all menus of the month.
-   */
-  public menusMonthlyGetWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
-    const path = this.basePath + `/menus/monthly`;
-
-    let queryParameters = new URLSearchParams();
-    let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-    // to determine the Content-Type header
-    let consumes: string[] = [
-    ];
-
-    // to determine the Accept header
-    let produces: string[] = [
-      'application/json'
-    ];
-
-    // authentication (Bearer) required
-    if (this.configuration.apiKey) {
-      headers.set('Authorization', this.configuration.apiKey);
     }
 
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Get,
-      headers: headers,
-      search: queryParameters
-    });
-
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
-
-    return this.http.request(path, requestOptions);
-  }
-
-  /**
-   * Gets monthly menus of the specified month.
-   * Returns a list containing all menus of the month.
-   * @param monthyear ex. 12-2016
-   */
-  public menusMonthlyMonthyearGetWithHttpInfo(monthyear: string, extraHttpRequestParams?: any): Observable<Response> {
-    const path = this.basePath + `/menus/monthly/${monthyear}`;
-
-    let queryParameters = new URLSearchParams();
-    let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-    // verify required parameter 'monthyear' is not null or undefined
-    if (monthyear === null || monthyear === undefined) {
-      throw new Error('Required parameter monthyear was null or undefined when calling menusMonthlyMonthyearGet.');
-    }
-    // to determine the Content-Type header
-    let consumes: string[] = [
-    ];
-
-    // to determine the Accept header
-    let produces: string[] = [
-      'application/json'
-    ];
-
-    // authentication (Bearer) required
-    if (this.configuration.apiKey) {
-      headers.set('Authorization', this.configuration.apiKey);
-    }
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Get,
-      headers: headers,
-      search: queryParameters
-    });
-
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
-
-    return this.http.request(path, requestOptions);
-  }
-
-  /**
-   * Gets weekly menus
-   * Returns a list containing all menus of the week.
-   */
-  public menusWeeklyGetWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
-    const path = this.basePath + `/menus/weekly`;
-
-    let queryParameters = new URLSearchParams();
-    let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-    // to determine the Content-Type header
-    let consumes: string[] = [
-    ];
-
-    // to determine the Accept header
-    let produces: string[] = [
-      'application/json'
-    ];
-
-    // authentication (Bearer) required
-    if (this.configuration.apiKey) {
-      headers.set('Authorization', this.configuration.apiKey);
-    }
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Get,
-      headers: headers,
-      search: queryParameters
-    });
-
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
-
-    return this.http.request(path, requestOptions);
-  }
-
-  /**
-   * Gets weekly menu of the specified week
-   * Returns a list containing all menus of the week.
-   * @param week ex. 02-2017
-   */
-  public menusWeeklyWeekGetWithHttpInfo(week: string, extraHttpRequestParams?: any): Observable<Response> {
-    const path = this.basePath + `/menus/weekly/${week}`;
-
-    let queryParameters = new URLSearchParams();
-    let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-    // verify required parameter 'week' is not null or undefined
-    if (week === null || week === undefined) {
-      throw new Error('Required parameter week was null or undefined when calling menusWeeklyWeekGet.');
-    }
-    // to determine the Content-Type header
-    let consumes: string[] = [
-    ];
-
-    // to determine the Accept header
-    let produces: string[] = [
-      'application/json'
-    ];
-
-    // authentication (Bearer) required
-    if (this.configuration.apiKey) {
-      headers.set('Authorization', this.configuration.apiKey);
-    }
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Get,
-      headers: headers,
-      search: queryParameters
-    });
-
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
-
-    return this.http.request(path, requestOptions);
-  }
-
-   /**
-     * Deletes specified order
-     * Deletes the order
-     * @param id
-     * @param dailyMenuDetails dailymenu details id, version, date
+    /**
+     * Gets monthly menus.
+     * Return a list containing all menus of the month.
      */
+    public menusMonthlyGetWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/menus/monthly`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json'
+        ];
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKey) {
+            headers.set('Authorization', this.configuration.apiKey);
+        }
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters
+        });
+
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
+        }
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Gets monthly menus of the specified month.
+     * Returns a list containing all menus of the month.
+     * @param monthyear ex. 12-2016
+     */
+    public menusMonthlyMonthyearGetWithHttpInfo(monthyear: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/menus/monthly/${monthyear}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'monthyear' is not null or undefined
+        if (monthyear === null || monthyear === undefined) {
+            throw new Error('Required parameter monthyear was null or undefined when calling menusMonthlyMonthyearGet.');
+        }
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json'
+        ];
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKey) {
+            headers.set('Authorization', this.configuration.apiKey);
+        }
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters
+        });
+
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
+        }
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Gets weekly menus
+     * Returns a list containing all menus of the week.
+     */
+    public menusWeeklyGetWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/menus/weekly`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json'
+        ];
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKey) {
+            headers.set('Authorization', this.configuration.apiKey);
+        }
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters
+        });
+
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
+        }
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Gets weekly menu of the specified week
+     * Returns a list containing all menus of the week.
+     * @param week ex. 02-2017
+     */
+    public menusWeeklyWeekGetWithHttpInfo(week: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/menus/weekly/${week}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'week' is not null or undefined
+        if (week === null || week === undefined) {
+            throw new Error('Required parameter week was null or undefined when calling menusWeeklyWeekGet.');
+        }
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json'
+        ];
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKey) {
+            headers.set('Authorization', this.configuration.apiKey);
+        }
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters
+        });
+
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
+        }
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+      * Deletes specified order
+      * Deletes the order
+      * @param id
+      * @param dailyMenuDetails dailymenu details id, version, date
+      */
     public ordersIdDeleteWithHttpInfo(id: number, dailyMenuDetails?: models.DailyMenuDetails, extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + `/orders/${id}`;
 
@@ -454,14 +454,14 @@ export class HungryApi {
         return this.http.request(path, requestOptions);
     }
 
-  /**
-     * Modifies order for the specified day
-     * Modify the order
-     * @param id
-     * @param dailyMenuId
-     * @param dailyMenuVersion
-     * @param dailyMenuDate
-     */
+    /**
+       * Modifies order for the specified day
+       * Modify the order
+       * @param id
+       * @param dailyMenuId
+       * @param dailyMenuVersion
+       * @param dailyMenuDate
+       */
     public ordersIdGetWithHttpInfo(id: number, dailyMenuId: number, dailyMenuVersion: number, dailyMenuDate: Date, extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + `/orders/${id}`;
 
@@ -523,12 +523,12 @@ export class HungryApi {
         return this.http.request(path, requestOptions);
     }
 
-  /**
-     * Modifies order for the specified day
-     * Modify the order
-     * @param id
-     * @param updateOrderItems The order items to modify
-     */
+    /**
+       * Modifies order for the specified day
+       * Modify the order
+       * @param id
+       * @param updateOrderItems The order items to modify
+       */
     public ordersIdPutWithHttpInfo(id: number, updateOrderItems?: models.UpdateOrderItems, extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + `/orders/${id}`;
 
@@ -569,11 +569,11 @@ export class HungryApi {
         return this.http.request(path, requestOptions);
     }
 
-  /**
-     * Place a new order
-     * A new order for the specified daily menu
-     * @param order The order to place
-     */
+    /**
+       * Place a new order
+       * A new order for the specified daily menu
+       * @param order The order to place
+       */
     public ordersPostWithHttpInfo(order?: models.Order, extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + `/orders`;
         let queryParameters = new URLSearchParams();
@@ -610,10 +610,10 @@ export class HungryApi {
     }
 
 
-/**
-     *
-     * get user settings
-     */
+    /**
+         *
+         * get user settings
+         */
     public settingsGetWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + `/settings`;
 
@@ -647,10 +647,10 @@ export class HungryApi {
         return this.http.request(path, requestOptions);
     }
 
-/**
-     * deletes profile picture.
-     *
-     */
+    /**
+         * deletes profile picture.
+         *
+         */
     public settingsPictureDeleteWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + `/settings/picture`;
 
@@ -747,7 +747,7 @@ export class HungryApi {
             throw new Error('Required parameter token was null or undefined when calling settingsPictureTokenGet.');
         }
         if (token !== undefined) {
-                queryParameters.set('token', <any>token);
+            queryParameters.set('token', <any>token);
 
         }
 
@@ -819,4 +819,56 @@ export class HungryApi {
 
         return this.http.request(path, requestOptions);
     }
+
+
+    /**
+     * get refreshed token
+     */
+    public refreshTokenGet(extraHttpRequestParams?: any): Observable<string> {
+        return this.refreshTokenGetWithHttpInfo(extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.text() || '';
+                }
+            });
+    }
+    /**
+ * 
+ * get refreshed token
+ */
+    public refreshTokenGetWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + '/refreshToken';
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'text/plain'
+        ];
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKey) {
+            headers.set('Authorization', this.configuration.apiKey);
+        }
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            withCredentials: this.configuration.withCredentials
+        });
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
+        }
+
+        return this.http.request(path, requestOptions);
+    }
+
 }

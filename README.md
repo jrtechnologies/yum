@@ -56,6 +56,8 @@ npm install npm@latest -g
 	* If your SMTP server needs extra authentication or encryption, you can use the following properties `spring.mail.properties.mail.smtp.*` below.
 	* Modify `yum.mail.from` and enter here the email address that should be used as sender to send all automatic emails.
 	* Modify `yum.mail.domain` to reflect the hostname your yum server will be accessible to on the network
+	* Modify `yum.tokenExpiration.unit` and enter here the unit of time (SECOND, MINUTE or HOUR) for the expiration of the jwt token. 
+	* Modify `yum.tokenExpiration.value` and enter here the value for the expiration of the jwt token.
 	*  LDAP / Active directory authentication:
 	Optionally you can enable ldap authentication by setting the following vars:
 		* Modify `yum.ldap.enabled` to true to enable ldap auth.

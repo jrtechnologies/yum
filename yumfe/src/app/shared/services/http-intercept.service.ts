@@ -20,6 +20,8 @@ export class InterceptHttp extends Http {
     }
 
     request(url: string | Request, options?: RequestOptionsArgs): Observable<Response> {
+ 
+        this.httpSubjectService.addHttpCall(url,options);
 
         return super.request(url, options).map(res => {
             //Successful Response;
