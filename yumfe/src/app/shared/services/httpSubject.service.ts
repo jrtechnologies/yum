@@ -9,6 +9,7 @@ export class HttpSubjectService {
     public http401Subject = new Subject();
     public http500Subject = new Subject();
     public httpCallSubject = new Subject();
+    public httpErrorSubject = new Subject();
 
     constructor() { }
 
@@ -29,4 +30,7 @@ export class HttpSubjectService {
         this.httpCallSubject.next(url);
     }
 
+    public addHttpError(result: any): void {
+        this.httpErrorSubject.next(result);
+    }
 }

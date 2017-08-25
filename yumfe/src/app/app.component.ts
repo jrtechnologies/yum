@@ -3,6 +3,7 @@ import { AuthenticationService } from './shared/authentication.service';
 import { HttpSubjectService } from './shared/services/httpSubject.service';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 import { Router } from '@angular/router';
+import { MdSnackBar } from '@angular/material';
 import * as remote from './remote';
 
 import { LoginComponent } from './anon/login/login.component';
@@ -19,7 +20,8 @@ export class AppComponent {
     constructor(
         private authService: AuthenticationService, private httpSubjectService: HttpSubjectService,
         public dialog: MdDialog, private router: Router,
-        public hugryService: remote.HungryApi
+        public hugryService: remote.HungryApi,
+        public snackBar: MdSnackBar
     ) { }
 
     ngOnInit(): void {
@@ -59,7 +61,13 @@ export class AppComponent {
             }
         );
 
-
+        this.httpSubjectService.httpErrorSubject.subscribe(
+            (result: string) => {
+                  this.snackBar.open("Server or network error, please try again later", "OK", {
+          extraClasses: ['error-snack-bar']
+        });
+            }
+        );
     }
 
 }

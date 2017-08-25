@@ -16,7 +16,7 @@ export class InterceptHttp extends Http {
         defaultOptions.headers.append("Cache-control", "no-store");
         defaultOptions.headers.append("Pragma", "no-cache");
         defaultOptions.headers.append("Expires", "0");
-        defaultOptions.headers.append("Access-Control-Allow-Origin", "*");
+        // defaultOptions.headers.append("Access-Control-Allow-Origin", "*");
     }
 
     request(url: string | Request, options?: RequestOptionsArgs): Observable<Response> {
@@ -29,14 +29,20 @@ export class InterceptHttp extends Http {
             return res;
         }).catch((err) => {
             console.log(url, options);
-            if (err.status === 401) {
+            if (err.status === 401 ) {
                 this.httpSubjectService.addHttp401(err);
                 return Observable.throw(err);
             } else if (err.status === 500) {
                 this.httpSubjectService.addHttp500(err);
                 return Observable.throw(err);
-            } else {
-                return Observable.empty();
+            } 
+            else if(err.status===0){
+                this.httpSubjectService.addHttpError(err);
+                return Observable.throw(err);
+            }
+            else {
+                //return Observable.empty();
+                return Observable.throw(err);
             }
         })
             .finally(() => {
