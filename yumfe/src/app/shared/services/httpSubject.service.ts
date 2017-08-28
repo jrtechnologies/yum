@@ -8,6 +8,8 @@ export class HttpSubjectService {
     public notificationSubject = new Subject();
     public http401Subject = new Subject();
     public http500Subject = new Subject();
+    public httpCallSubject = new Subject();
+    public httpErrorSubject = new Subject();
 
     constructor() { }
 
@@ -24,4 +26,11 @@ export class HttpSubjectService {
         this.http500Subject.next(result);
     }
 
+    public addHttpCall(url:any, options:any): void {
+        this.httpCallSubject.next(url);
+    }
+
+    public addHttpError(result: any): void {
+        this.httpErrorSubject.next(result);
+    }
 }

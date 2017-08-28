@@ -15,6 +15,7 @@ const localStorageItem = "currentUser4";
 export class AuthenticationService {
 
   private user: remote.User;
+  //debug token: JSON.parse(localStorage.getItem("currentUser4")).token
   private token: string;
   private extAuth: string;
   private changes: Subject<string> = new Subject();
@@ -168,4 +169,9 @@ export class AuthenticationService {
     }
   }
 
+  public refreshToken(token){
+     this.token = token;
+     this.conf.apiKey = "Bearer " + this.token;
+     localStorage.setItem(localStorageItem, JSON.stringify({ user: this.user, token: this.token, extAuth: this.extAuth }));
+  }
 }
