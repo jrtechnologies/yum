@@ -51,15 +51,14 @@ export class SettingsComponent implements OnInit {
       ]
       ],
       password: ['', [ //, disabled: this.externalAuth 
-        //Validators.required,
+    
         // tslint:disable-next-line:max-line-length
-
-        Validators.pattern(emailPattern)
+        Validators.pattern(/^(?=.*[A-Za-z\d$@!%*#?&\^\-\_\=\+\<\>\(\)\{\}\[\]\\\\\/\.\,~`|])[A-Za-z\d$@!%*#?&\^\-\_\=\+\<\>\(\)\{\}\[\]\\\\\/\.\,~`|]{6,}$/)
       ]],
       confirm: ['' , [
-        //Validators.required,
+  
         // tslint:disable-next-line:max-line-length
-        Validators.pattern(emailPattern),
+        Validators.pattern(/^(?=.*[A-Za-z\d$@!%*#?&\^\-\_\=\+\<\>\(\)\{\}\[\]\\\\\/\.\,~`|])[A-Za-z\d$@!%*#?&\^\-\_\=\+\<\>\(\)\{\}\[\]\\\\\/\.\,~`|]{6,}$/),
         this.validateEqual
       ],
       ],

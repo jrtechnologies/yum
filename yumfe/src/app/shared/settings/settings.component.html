@@ -22,7 +22,8 @@
       </md-grid-tile>
     </md-grid-list>
 
-    <app-profile *ngIf="user" [(user)]="user" [change]="change" [admin]="false" (invalidProfileForm)="handleInvalidProfileForm($event)" (updateVersion)="handleUpdateVersion($event)">
+    <app-profile *ngIf="user" [(user)]="user" [change]="change" [admin]="false" (invalidProfileForm)="handleInvalidProfileForm($event)"
+      (updateVersion)="handleUpdateVersion($event)">
     </app-profile>
     <div class="divider heading sec">
       <div class="heading">Change Password <small>(Leave it empty if you don't want to change your password)</small></div>
@@ -33,7 +34,7 @@
           <md-input-container>
 
             <input mdInput type="password" placeholder="Password" formControlName="password" (keyup)="onPasswordChange()">
-            <md-hint *ngIf="profileGroup.get('password').value===null ||profileGroup.get('password').value.length<6" >Password should be at least 6 characters (space not allowed) </md-hint>
+            <md-hint *ngIf="profileGroup.get('password').value===null ||profileGroup.get('password').value.length<6">Password should be at least 6 characters (space not allowed) </md-hint>
             <md-error *ngIf="profileGroup.get('password').hasError('required') && profileGroup.get('password').touched">
               Password is required
             </md-error>
@@ -49,6 +50,9 @@
             <input mdInput type="password" placeholder="Confirm Password" formControlName="confirm">
             <md-error *ngIf="profileGroup.get('confirm').hasError('required') && profileGroup.get('confirm').touched">
               Password Confirming is required
+            </md-error>
+            <md-error *ngIf="profileGroup.get('confirm').hasError('confirmError') && profileGroup.get('confirm').touched">
+              Password and confirm do not match.
             </md-error>
           </md-input-container>
         </md-grid-tile>
