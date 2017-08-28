@@ -27,20 +27,20 @@
   </div>
 </div>
 
-<div *ngFor="let user of userOrders" class="user">
+<div *ngFor="let user of userFinalOrders" class="user">
 
   <div fxLayout="row">
 
     <div fxFlex="15">
       <div fxLayout="column">
-        <div class="bold-chars">{{user.lastName}}</div>
-        <div class="bold-chars">{{user.firstName}}</div>
+        <div class="bold-chars">{{user.userOrder.lastName}}</div>
+        <div class="bold-chars">{{user.userOrder.firstName}}</div>
       </div>
     </div>
 
     <div fxFlex="25">
       <div fxLayout="column">
-        <div *ngFor="let foodOrder of mainFoodOrders">
+        <div *ngFor="let foodOrder of user.mainFoodOrders">
           <div fxLayout="row">
             <div fxFlex="20" class="align-left bold-chars">{{foodOrder.quantity}}</div>
             <div fxFlex="80">{{foodOrder.food.foodName}}</div>
@@ -51,7 +51,7 @@
 
     <div fxFlex="25">
       <div fxLayout="column">
-        <div *ngFor="let foodOrder of saladFoodOrders">
+        <div *ngFor="let foodOrder of user.saladFoodOrders">
           <div fxLayout="row">
             <div fxFlex="20" class="align-left bold-chars">{{foodOrder.quantity}}</div>
             <div fxFlex="80">{{foodOrder.food.foodName}}</div>
@@ -62,7 +62,7 @@
 
     <div fxFlex="25">
       <div fxLayout="column">
-        <div *ngFor="let foodOrder of drinkFoodOrders">
+        <div *ngFor="let foodOrder of user.drinkFoodOrders">
           <div fxLayout="row">
             <div fxFlex="20" class="align-left bold-chars">{{foodOrder.quantity}}</div>
             <div fxFlex="80">{{foodOrder.food.foodName}}</div>
@@ -75,7 +75,7 @@
 
   <div fxLayout="row" class="align-right print-row-border-total">
     <div fxFlex="10" fxFlexOffset="90" class="totalPrice">
-      {{total | number : '1.2-2'}} <span [innerHTML]="currency | async"></span>
+      {{user.userOrder.total  | number : '1.2-2'}} <span [innerHTML]="currency | async"></span>
     </div>
   </div>
 

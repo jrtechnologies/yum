@@ -19,9 +19,7 @@ export class UserOrderComponent implements OnInit {
 
   @Input() userOrders: Array<remote.UserOrder>;
 
-  public mainFoodOrders = new Array<customOrderItem>();
-  public saladFoodOrders = new Array<customOrderItem>();
-  public drinkFoodOrders = new Array<customOrderItem>();
+  public userFinalOrders: Array<any>;
   public total: number = 0;
   public currency: Observable<string>;
 
@@ -36,29 +34,34 @@ export class UserOrderComponent implements OnInit {
     let orderItems: Array<remote.OrderItem>;
     let food: remote.Food;
     this.currency = this.globalSettingsService.getCurrency();
+    this.userFinalOrders = new Array<any>();
 
     for (let i = 0; i < this.userOrders.length; i++) {
       orderItems = this.userOrders[i].orderItems;
+
+      const mainFoodOrders = new Array<customOrderItem>();
+      const saladFoodOrders = new Array<customOrderItem>();
+      const drinkFoodOrders = new Array<customOrderItem>();
 
       for (let j = 0; j < orderItems.length; j++) {
         // food = this.foodsService.getFoodById(orderItems[j].foodId);
         this.foodsService.getFoodById(orderItems[j].foodId).subscribe(food => {
           if (food.foodType === 'Main') {
-            this.mainFoodOrders.push({
+              mainFoodOrders.push({
               food: food,
               quantity: orderItems[j].quantity
             });
             this.total += food.price * orderItems[j].quantity;
             this.userOrders[i].total += food.price * orderItems[j].quantity;
           } else if (food.foodType === 'Salad') {
-            this.saladFoodOrders.push({
+              saladFoodOrders.push({
               food: food,
               quantity: orderItems[j].quantity
             });
             this.total += food.price * orderItems[j].quantity;
             this.userOrders[i].total += food.price * orderItems[j].quantity;
           } else if (food.foodType === 'Drink') {
-            this.drinkFoodOrders.push({
+              drinkFoodOrders.push({
               food: food,
               quantity: orderItems[j].quantity
             });
@@ -70,6 +73,8 @@ export class UserOrderComponent implements OnInit {
 
       }
 
+      this.userFinalOrders[i] = ({userOrder: this.userOrders[i], mainFoodOrders: mainFoodOrders, saladFoodOrders:saladFoodOrders, drinkFoodOrders:drinkFoodOrders });
+      
       //this.total = Number(this.decpipe.transform(this.total, '1.2-2'));
       //this.userOrders[i].total = Number(this.decpipe.transform(this.userOrders[i].total, '1.2-2'));
 
