@@ -131,7 +131,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public previousWeek() {
     this.date = subWeeks(this.date, 1);
-    if (getISOWeek(this.date) === getISOWeek(new Date())) {
+    if (getISOWeek(this.date) === getISOWeek(new Date())  && this.date.getFullYear()=== new Date().getFullYear()) {
       this.router.navigate(['/hungry']);
     } else {
       this.navWeekYear(this.date);
@@ -142,7 +142,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   public nextWeek() {
     this.date = addWeeks(this.date, 1);
-    if (getISOWeek(this.date) === getISOWeek(new Date())) {
+    if (getISOWeek(this.date) === getISOWeek(new Date())  && this.date.getFullYear()=== new Date().getFullYear()) {
       this.router.navigate(['/hungry']);
     } else {
       this.navWeekYear(this.date);
