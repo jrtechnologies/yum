@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, Renderer2, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../shared/authentication.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -13,7 +13,8 @@ import { MdSnackBar } from '@angular/material';
 export class LoginComponent implements OnInit {
 
   @Input() public disableRoute: Boolean; //Login as a dialog form
-  @Output() loginOk = new EventEmitter<Boolean>(); 
+  @Output() loginOk = new EventEmitter<Boolean>();
+  @ViewChild('password') elPass;
 
   public loginForm: FormGroup;
   // create spinner
@@ -26,7 +27,9 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private snackBar: MdSnackBar,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private elRef: ElementRef,
+    private renderer: Renderer2
   ) { }
 
   ngOnInit() {
@@ -36,7 +39,7 @@ export class LoginComponent implements OnInit {
 
     this.loginForm = this.fb.group({
       username: [''
-      , Validators.required
+        , Validators.required
       ],
       email: ['', [
         Validators.required,
@@ -44,18 +47,20 @@ export class LoginComponent implements OnInit {
         Validators.pattern(emailPattern)
       ]],
       password: ['', [
-        Validators.required
+        Validators.required,
+        Validators.minLength(6)
       ]]
     });
 
     this.authService.getRemoteAuthMethod().subscribe(
-      value => { 
+      value => {
 
         if (value === 'ldap') {
           this.externalAuth = true;
           this.loginForm.get('username').setValidators([Validators.required]);
           this.loginForm.get('email').clearValidators();
-           
+          this.loginForm.get('password').setValidators([Validators.required]);
+          this.loginForm.get('password').updateValueAndValidity();
         } else {
           this.externalAuth = false;
           this.loginForm.get('username').clearValidators();
@@ -64,21 +69,44 @@ export class LoginComponent implements OnInit {
             Validators.minLength(2),
             Validators.pattern(emailPattern)
           ]);
-          
+
         }
 
-        this.loginForm.get('username').updateValueAndValidity( {onlySelf: true, emitEvent:false});
-        this.loginForm.get('email').updateValueAndValidity( {onlySelf:true, emitEvent:false});
+        this.loginForm.get('username').updateValueAndValidity({ onlySelf: true, emitEvent: false });
+        this.loginForm.get('email').updateValueAndValidity({ onlySelf: true, emitEvent: false });
+
+
+        // Handle chrome autofill password  
+        let a = this.loginForm.controls['password'].valueChanges
+          .startWith(null)
+          .debounceTime(200)
+          .distinctUntilChanged()
+          .subscribe(c => {
+            let el = this.elRef.nativeElement.querySelector('input[type=password]:-webkit-autofill');
+            if (el && c === null) {
+              this.loginForm.get('password').setValidators([]);              
+            }
+            else if (value === 'ldap'){
+              this.loginForm.get('password').setValidators([Validators.required]);              
+            }
+            else{
+              this.loginForm.get('password').setValidators([Validators.required, Validators.minLength(6)]);              
+            }
+            this.loginForm.get('password').updateValueAndValidity();
+          });
+
+
       });
-      
-   
+
+
+
 
   }
 
   public login() {
     this.showSpinner = true;
     this.disableBtn = true;
-    this.authService.login(this.loginForm.value.email, this.loginForm.value.password, this.loginForm.value.username )
+    this.authService.login(this.loginForm.value.email, this.loginForm.value.password, this.loginForm.value.username)
       .finally(() => {
         this.showSpinner = false;
         this.disableBtn = false;
@@ -88,9 +116,9 @@ export class LoginComponent implements OnInit {
         if (result != null) {
           console.log('Logged as:' + result[1]);
 
-          if( this.disableRoute===true){
-              this.loginOk.emit(true);
-          }else{
+          if (this.disableRoute === true) {
+            this.loginOk.emit(true);
+          } else {
             switch (result[1]) {
               case 'admin':
                 this.router.navigate(['admin']);
@@ -103,7 +131,7 @@ export class LoginComponent implements OnInit {
                 break;
             }
           }
-        } 
+        }
       },
       error => { // login failed
         console.log(error.body);

@@ -1,10 +1,10 @@
 <div class="" [ngClass]="{'min-sizes, background': !disableRoute, 'dialog-sizes':disableRoute}" >
   <div class="login">
-    <form (ngSubmit)="login()" [formGroup]="loginForm"  autocomplete="off" >
+    <form (ngSubmit)="login()" [formGroup]="loginForm"    >
       <img src="/assets/img/Yum-logo-small.png">
       <h2>Sign in</h2>
         <md-input-container  *ngIf=!externalAuth>
-          <input mdInput type="email" placeholder="user email" formControlName="email"  />
+          <input mdInput type="text" placeholder="user email" formControlName="email"  />
           <md-error class="error" *ngIf="loginForm.get('email').touched && (loginForm.get('email').hasError('required'))">
             Email is required.
           </md-error>
@@ -13,7 +13,7 @@
           </md-error>
         </md-input-container>
         <md-input-container *ngIf=externalAuth>
-          <input mdInput type="username" placeholder="user name" formControlName="username"  />
+          <input mdInput type="username" placeholder="user name" type="text" formControlName="username"  />
           <md-error class="error" *ngIf="loginForm.get('username').touched && (loginForm.get('username').hasError('required'))">
             User name is required.
           </md-error>
