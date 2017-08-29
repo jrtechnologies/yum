@@ -162,6 +162,22 @@ paths:
             type: string
         '500':
           $ref: '#/responses/Error'
+  /refreshToken:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - hungry
+      description: get refreshed token
+      produces:
+        - text/plain
+      responses:
+        '200':
+          description: refreshed token string
+          schema:
+            type: string
+        '500':
+          $ref: '#/responses/Error'
   /settings:
     get:
       security:
