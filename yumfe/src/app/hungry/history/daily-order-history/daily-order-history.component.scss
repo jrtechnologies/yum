@@ -2,3 +2,5 @@
 .is-flex { display: flex; align-items: center; justify-content: space-between;}
 
 .clickable{ cursor: pointer; }
+
+.foodsList {overflow-y: auto; max-height: 160px;  margin-top: 5px;}

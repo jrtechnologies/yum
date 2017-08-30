@@ -15,9 +15,11 @@
     <div *ngIf="dailyMenuOrderChef.orderItems.length>0" class="foodsList">
 
       <div *ngFor="let orderItem of dailyMenuOrderChef.orderItems" class="is-flex foodsListItem">
-        <span [ngClass]="{'icon-Meal': getFood(orderItem.foodId).foodType==='Main', 'icon-Salad': getFood(orderItem.foodId).foodType==='Salad', 'icon-Drink': getFood(orderItem.foodId).foodType==='Drink'}"> </span>
-        <div> {{getFood(orderItem.foodId).foodName}} </div>
-        <div class="foodListItemQty"> {{orderItem.quantity}}</div>
+        <ng-container *ngIf=" getFood(orderItem.foodId)| async; let foodItem;">
+          <span [ngClass]="{'icon-Meal': foodItem.foodType==='Main', 'icon-Salad': foodItem.foodType==='Salad', 'icon-Drink': foodItem.foodType==='Drink'}"> </span>
+          <div> {{ foodItem.foodName }} </div>
+          <div class="foodListItemQty"> {{orderItem.quantity}}</div>
+        </ng-container>
       </div>
 
     </div>

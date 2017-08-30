@@ -80,6 +80,12 @@ export class DailyMenuComponent implements OnInit, OnChanges {
           //console.log("menu changed:"+changes.menu.currentValue.date, changes.menu.currentValue);
           this.setup();
       }
+
+      if (changes.foods!==undefined && !changes.foods.isFirstChange()){
+        //console.log("refresh menu foods");
+          this.setAvailableFoods();
+          this.setup();
+      }
    }
   setAvailableFoods(){
     this.foodsAvailable=[];
@@ -121,11 +127,13 @@ export class DailyMenuComponent implements OnInit, OnChanges {
       if (this.menu !== undefined) {
 
             for(let menuFood of this.menu.foods){
-                let food = this.foodsService.getFoodById(menuFood.foodId);
-                if( food!==undefined){
-                  //this.food = food;
-                  this.addMenuFood(food);
-                }
+                //let food = this.foodsService.getFoodById(menuFood.foodId);
+                 this.foodsService.getFoodById(menuFood.foodId).subscribe( food=>{
+                   if( food!==undefined){ 
+                    this.addMenuFood(food);
+                  }      
+                });
+
             }
         }
 

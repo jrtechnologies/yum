@@ -1,82 +1,94 @@
 import { Injectable } from '@angular/core';
 import * as remote from '../../remote';
-//import {Observable} from 'rxjs/Observable';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 
 @Injectable()
 export class FoodsService {
 
-  private foods: remote.Food[] = [];
-  private foodsMap: Map<number, remote.Food> = new Map<number, remote.Food>();
+  private foods: BehaviorSubject<remote.Food[]> = new BehaviorSubject<remote.Food[]>([]);
+  private foodsMap: BehaviorSubject<Map<number, remote.Food>> = new BehaviorSubject<Map<number, remote.Food>>(new Map);
   private foods_version: number = 0;
-  private  sortFoodTypes = new Map<string, number>();
+  private sortFoodTypes = new Map<string, number>();
 
-  constructor(private chefService: remote.ChefApi ) {
-
+  constructor(private chefService: remote.ChefApi) {
+    //Food priority listing
     this.sortFoodTypes.set("Main", 10);
     this.sortFoodTypes.set("Salad", 20);
     this.sortFoodTypes.set("Drink", 30);
   }
 
-  public getFoodById(id: number): remote.Food{
-    return this.foodsMap.get(id);
-  }
 
-  public getFoods(): remote.Food[]{
+  public getFoods(): Observable<remote.Food[]> {
 
-    //check version
-     this.chefService.foodsGet(false, null, null, "All", null, null, this.foods_version ).subscribe( foodsPageRemote => {
+    //check version    
+    this.chefService.foodsGet(false, null, null, "All", null, null, this.foods_version).subscribe(foodsPageRemote => {
 
-        let foodsPage: remote.FoodsPage = foodsPageRemote;
-        if(foodsPage.foods_version !== this.foods_version){
+      let foodsPage: remote.FoodsPage = foodsPageRemote;
+      console.log("Local foods version:" + this.foods_version + " remote:" + foodsPage.foods_version);
+      if (foodsPage.foods_version !== this.foods_version) {
+        this.getRemoteFoods();
+      }
 
-            this.getRemoteFoods();
-        }
-        else{
-           console.log("Foods not changed");
-        }
-
-      console.log("Local foods version:"+this.foods_version + " remote:" + foodsPage.foods_version);
-     // console.log(this.foods);
-
-      }, error => console.log(error));
-
+    }, error => console.log(error));
 
     return this.foods;
-   }
+
+  }
 
 
-  private getRemoteFoods(){
+  private getRemoteFoods() {
     //Renew foods lists
-     this.chefService.foodsGet(false, null, null, "All", null, null).subscribe( foodsPageRemote => {
+    this.chefService.foodsGet(false, null, null, "All", null, null).subscribe(foodsPageRemote => {
 
-        let foodsPage: remote.FoodsPage = foodsPageRemote;
-        //console.log(foodsPage);
-        for(let i=0;i<foodsPage.foods.length;i++){
-          this.foods.push(foodsPage.foods[i].foodItem);
-          this.foodsMap.set( foodsPage.foods[i].foodItem.id, foodsPage.foods[i].foodItem);
+      let foodArr: remote.Food[] = new Array();
+      let foodMap: Map<number, remote.Food> = new Map();
+
+      for (let food of foodsPageRemote.foods) {
+        foodArr.push(food.foodItem);
+        foodMap.set(food.foodItem.id, food.foodItem);
+      }
+
+      this.foods.next(this.sortArrayOfFoods(foodArr));
+      this.foodsMap.next(foodMap);
+
+      this.foods_version = foodsPageRemote.foods_version;
+
+    }, error => console.log(error));
+  }
+
+  public getFoodById(id: number): Observable<remote.Food> {
+
+    return Observable.create((observer) => {
+      this.foodsMap.subscribe(foodsMap => {
+        let foundFood = foodsMap.get(id);
+        if (foundFood === undefined) {
+          // observer.error("Food not found");
+          // possible new food
+          console.log("--get foods--");
+          console.log(foodsMap);
+          this.getFoods();
         }
-
-        this.foods = this.sortArrayOfFoods(this.foods);
-
-        this.foods_version = foodsPageRemote.foods_version;
-        //console.log("Renew foods", this.foods, this.foodsMap  );
-        console.log("Renewed foods");
-      }, error => console.log(error));
+        else {
+          observer.next(foundFood);
+          observer.complete();
+        }
+      });
+    });
 
   }
 
   //public sortArrayOfFoods(foods: Array<remote.Food>): Array<remote.Food> {
-  public sortArrayOfFoods(foods)  {
-        foods.sort((n1, n2) => {
-              if (this.sortFoodTypes.get(n1.foodType) > this.sortFoodTypes.get(n2.foodType) ){
-                  return 1;
-              }
-              if (this.sortFoodTypes.get(n1.foodType) < this.sortFoodTypes.get(n2.foodType) ){
-                  return -1;
-              }
-              return 0;
-          });
-        return foods;
+  public sortArrayOfFoods(foods) {
+    foods.sort((n1, n2) => {
+      if (this.sortFoodTypes.get(n1.foodType) > this.sortFoodTypes.get(n2.foodType)) {
+        return 1;
+      }
+      if (this.sortFoodTypes.get(n1.foodType) < this.sortFoodTypes.get(n2.foodType)) {
+        return -1;
+      }
+      return 0;
+    });
+    return foods;
   }
 
 }

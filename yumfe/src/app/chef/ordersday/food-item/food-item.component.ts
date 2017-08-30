@@ -39,32 +39,34 @@ export class FoodItemComponent implements OnInit {
 
     for (let i = 0; i < this.orderItems.length; i++) {
       id = this.orderItems[i].foodId;
-      food = this.foodsService.getFoodById(id);
+      // food = this.foodsService.getFoodById(id);
+      this.foodsService.getFoodById(id).subscribe(food => {
 
-      if (food.foodType === 'Main') {
-        this.mainFoodOrders.push({
-          food: food,
-          quantity: this.orderItems[i].quantity
-        });
-        this.total += food.price * this.orderItems[i].quantity;
-      } else if (food.foodType === 'Salad') {
-        this.saladFoodOrders.push({
-          food: food,
-          quantity: this.orderItems[i].quantity
-        });
-        this.total += food.price * this.orderItems[i].quantity;
-      } else if (food.foodType === 'Drink') {
-        this.drinkFoodOrders.push({
-          food: food,
-          quantity: this.orderItems[i].quantity
-        });
-        this.total += food.price * this.orderItems[i].quantity;
-      }
+        if (food.foodType === 'Main') {
+          this.mainFoodOrders.push({
+            food: food,
+            quantity: this.orderItems[i].quantity
+          });
+          this.total += food.price * this.orderItems[i].quantity;
+        } else if (food.foodType === 'Salad') {
+          this.saladFoodOrders.push({
+            food: food,
+            quantity: this.orderItems[i].quantity
+          });
+          this.total += food.price * this.orderItems[i].quantity;
+        } else if (food.foodType === 'Drink') {
+          this.drinkFoodOrders.push({
+            food: food,
+            quantity: this.orderItems[i].quantity
+          });
+          this.total += food.price * this.orderItems[i].quantity;
+        }
+      });
     }
 
     //Depricated, use pipe directly
     //this.total = Number(this.decpipe.transform(this.total, '1.2-2')); 
-    
+
   } // ngOnInit
 
 }
