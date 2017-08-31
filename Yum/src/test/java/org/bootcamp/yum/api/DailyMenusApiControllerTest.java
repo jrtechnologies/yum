@@ -136,7 +136,7 @@ public class DailyMenusApiControllerTest
 
         mockDailyMenu = new DailyMenu();
         mockDailyMenu.setId(6);
-        mockDailyMenu.setDate(new LocalDate(2017, 9, 1));
+        mockDailyMenu.setDate(new LocalDate(2117, 9, 1));
         mockDailyMenu.setLastEdit(new DateTime(2017, 4, 28, 14, 00));
         mockDailyMenu.setVersion(1);
         
