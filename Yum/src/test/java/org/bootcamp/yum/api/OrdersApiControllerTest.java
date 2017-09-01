@@ -98,7 +98,7 @@ public class OrdersApiControllerTest {
         //Mock hungry user
         mockUser = new User(1);
         mockUser.setApproved(true);
-        mockUser.setEmail("lazos.chr@gmail.com");
+        mockUser.setEmail("hungry@yum.com");
         mockUser.setDailyOrders(new ArrayList<DailyOrder>());
         mockUser.setFirstName("firstName");
         mockUser.setLastName("lastName");
