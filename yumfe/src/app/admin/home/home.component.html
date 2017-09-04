@@ -137,7 +137,7 @@
 </md-grid-list>
 
 <md-card class="user-card" *ngFor="let user of getUsers()">
-  <app-admin-user [user]=user (userDeleted)="handleDeletedUser($event)"></app-admin-user>
+  <app-admin-user [user]=user [externalAuth]=externalAuth (userDeleted)="handleDeletedUser($event)"></app-admin-user>
 </md-card>
 
 <md-grid-list *ngIf="showLoadSpinner" cols="1" rowHeight="200px">

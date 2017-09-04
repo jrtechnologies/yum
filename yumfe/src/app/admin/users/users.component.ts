@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
 
 import * as remote from '../../remote';
+import { AuthenticationService } from '../../shared/authentication.service';
 
 @Component({
   selector: 'app-users',
@@ -27,9 +28,11 @@ export class UsersComponent implements OnInit {
   //spinner
   public showSpinner = false;
   public invalid = false;
+  public externalAuth: Boolean = false; 
 
   constructor(private route: ActivatedRoute, private adminService: remote.AdminApi, private fb: FormBuilder,
-    public snackBar: MdSnackBar, public dialog: MdDialog, private router: Router) { }
+    public snackBar: MdSnackBar, public dialog: MdDialog, private router: Router,
+    private authService: AuthenticationService) { }
 
   ngOnInit() {
     //check if id is valid
@@ -53,6 +56,7 @@ export class UsersComponent implements OnInit {
       ]
     });
 
+    this.externalAuth = this.authService.hasExternalAuth();
   }
 
   ngOnChanges() {

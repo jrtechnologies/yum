@@ -12,6 +12,7 @@ export class SlideToggleComponent implements OnInit {
 
  // @Input() approvedText;
   @Input() user: remote.User;
+  @Input() public externalAuth: Boolean = false;
 
   @Output() updateVersion = new EventEmitter();
 

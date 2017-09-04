@@ -14,7 +14,7 @@
       </div>
     </md-grid-tile>
     <md-grid-tile colspan="4" class="right">
-      <app-slide-toggle-component *ngIf="user" [user]="user" (updateVersion)="handleUpdateVersion($event)"></app-slide-toggle-component>
+      <app-slide-toggle-component *ngIf="user" [user]="user" [externalAuth]=externalAuth (updateVersion)="handleUpdateVersion($event)"></app-slide-toggle-component>
     </md-grid-tile>
   </md-grid-list>
      <app-profile *ngIf="user" [(user)]="user" [change]="change" [admin]="true" (invalidProfileForm)="handleInvalidProfileForm($event)" (updateVersion)="handleUpdateVersion($event)">
