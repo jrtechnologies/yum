@@ -37,6 +37,7 @@ public class JwtCodec {
 
     private static String key = "dArg!@SFst3t32(35&t%v4[124v45@#2fhjpIy";
 
+
     public static String encode(String subject, ArrayList<String> roles) {
         // prepare expiration date according to application properties
         Date expDate = new Date();
@@ -60,6 +61,7 @@ public class JwtCodec {
 
         return Jwts.builder().setSubject(subject).claim("roles", roles).setIssuedAt(new Date()).setExpiration(expDate)
                 .signWith(SignatureAlgorithm.HS256, key).compact();
+
     }
 
     public static Claims decode(String token) throws SignatureException {

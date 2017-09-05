@@ -82,8 +82,9 @@ public class JwtFilter extends GenericFilterBean  {
             }
             catch(BadCredentialsException e) {
                 SecurityContextHolder.clearContext();
+                response.setHeader("Access-Control-Allow-Origin", "*");
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
-                //response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+              
                 return;
             }
         }

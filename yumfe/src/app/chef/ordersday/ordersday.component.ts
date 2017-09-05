@@ -29,7 +29,10 @@ export class OrdersdayComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.foods = this.foodsService.getFoods();
+    
+    this.foodsService.getFoods().subscribe( foods=>{
+        this.foods = foods;
+     });
 
     this.sub = this.route.params.subscribe(params => {
       this.date = params['day'];

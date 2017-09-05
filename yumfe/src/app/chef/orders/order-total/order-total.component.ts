@@ -38,9 +38,12 @@ export class OrderTotalComponent implements OnInit {
     if (this.dailyMenuOrderChef !== undefined) {
 
       for (let orderItem of this.dailyMenuOrderChef.orderItems) {
-        let food  = this.foodsService.getFoodById(orderItem.foodId);
-        orderItem.foodType = food.foodType;
-        this.total += food.price * orderItem.quantity;
+        //let food  = this.foodsService.getFoodById(orderItem.foodId);
+        this.foodsService.getFoodById(orderItem.foodId).subscribe( food=>{
+          orderItem.foodType = food.foodType;
+          this.total += food.price * orderItem.quantity;   
+        });
+
       }
       this.dailyMenuOrderChef.orderItems = this.foodsService.sortArrayOfFoods(this.dailyMenuOrderChef.orderItems);
     }
@@ -48,8 +51,8 @@ export class OrderTotalComponent implements OnInit {
 
   }
 
-  public getFood(foodId) {
-    return this.foodsService.getFoodById(foodId);
+  public getFood(foodId): Observable<remote.Food>{
+    return this.foodsService.getFoodById(foodId).share();
   }
 
 }

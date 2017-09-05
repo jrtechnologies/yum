@@ -25,9 +25,8 @@ export class GlobalSettingsService {
   public getDeadLine(): Observable<Date> {
     return new Observable(observer => {
       this.getSettings().subscribe(settings => {
-
         const d: Date = new Date();
-        d.setMilliseconds( Date.parse('2000-1-1 ' + settings.deadline));
+        d.setTime( Date.parse('2000-1-1 ' + settings.deadline));
         observer.next(d);
         observer.complete();
       } );
