@@ -22,6 +22,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.transaction.Transactional;
+import org.bootcamp.ApplicationProperties;
 import org.bootcamp.yum.api.ApiException;
 import org.bootcamp.yum.api.ConcurrentModificationException;
 import org.bootcamp.yum.api.model.LastEdit;
@@ -58,6 +59,8 @@ public class UsersService {
     SettingsRepository settingsRepo;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private ApplicationProperties applicationProperties;
 
     private static final Logger LOGGER = Logger.getLogger(UsersService.class.getName());
 
@@ -99,6 +102,10 @@ public class UsersService {
     @Transactional
     public void usersIdApprovePut(Long id, Boolean approve, Boolean force) throws ApiException {
 
+        if(applicationProperties.getLdap().isEnabled()){ 
+            throw new ApiException(404, "Disabled");
+        }
+        
         org.bootcamp.yum.data.entity.User user = userRepo.findById(id);
         if (user == null) {
             throw new ApiException(404, "User not found");
@@ -290,6 +297,10 @@ public class UsersService {
     @Transactional
     public void usersIdDelete(Long id, Boolean force) throws ApiException, Exception {
 
+        if(applicationProperties.getLdap().isEnabled()){ 
+            throw new ApiException(404, "Disabled");
+        }   
+        
         if (id > 0) {
             //Check if user exist.
             if (userRepo.findById(id) != null) {
