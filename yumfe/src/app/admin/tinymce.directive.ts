@@ -47,7 +47,7 @@ export class TinymceDirective implements OnDestroy, AfterViewInit, ControlValueA
         console.log('tinymce');
         tinymce.init({
             selector: `[data-tinymce-uniqueid=${this.uniqueId}]`,
-            skin_url: 'assets/skins/lightgray',
+            skin_url: '/assets/skins/lightgray',
             menubar: false,
             statusbar: false,
             schema: 'html5',
