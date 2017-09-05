@@ -38,7 +38,7 @@ export class SettingsComponent implements OnInit {
     const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,20}$/;
 
     this.externalAuth = this.authService.hasExternalAuth();
-    console.log("settings auth:" + this.externalAuth);
+    //console.log("settings auth:" + this.externalAuth);
 
     
     this.profileGroup = this.fb.group({

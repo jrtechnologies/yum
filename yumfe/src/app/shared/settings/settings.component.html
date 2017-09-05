@@ -30,32 +30,39 @@
     </div>
     <form [formGroup]="profileGroup" autocomplete="off">
       <md-grid-list cols="6" rowHeight="160px">
-        <md-grid-tile colspan="2" class="left">
-          <md-input-container>
+        <div *ngIf="externalAuth && user && user.id !== 1; then thenBlock else elseBlock"> </div>
+        <ng-template #thenBlock>
+          <md-grid-tile colspan="4" class="left"></md-grid-tile>
+        </ng-template>
+        <ng-template #elseBlock>
 
-            <input mdInput type="password" placeholder="Password" formControlName="password" (keyup)="onPasswordChange()">
-            <md-hint *ngIf="profileGroup.get('password').value===null ||profileGroup.get('password').value.length<6">Password should be at least 6 characters (space not allowed) </md-hint>
-            <md-error *ngIf="profileGroup.get('password').hasError('required') && profileGroup.get('password').touched">
-              Password is required
-            </md-error>
+          <md-grid-tile colspan="2" class="left">
+            <md-input-container>
 
-            <md-error *ngIf="profileGroup.get('password').hasError('pattern') && profileGroup.get('password').touched">
-              Password should be at least 6 characters (space not allowed)
-            </md-error>
+              <input mdInput type="password" placeholder="Password" formControlName="password" (keyup)="onPasswordChange()">
+              <md-hint *ngIf="profileGroup.get('password').value===null ||profileGroup.get('password').value.length<6">Password should be at least 6 characters (space not allowed) </md-hint>
+              <md-error *ngIf="profileGroup.get('password').hasError('required') && profileGroup.get('password').touched">
+                Password is required
+              </md-error>
 
-          </md-input-container>
-        </md-grid-tile>
-        <md-grid-tile colspan="2">
-          <md-input-container>
-            <input mdInput type="password" placeholder="Confirm Password" formControlName="confirm">
-            <md-error *ngIf="profileGroup.get('confirm').hasError('required') && profileGroup.get('confirm').touched">
-              Password Confirming is required
-            </md-error>
-            <md-error *ngIf="profileGroup.get('confirm').hasError('confirmError') && profileGroup.get('confirm').touched">
-              Password and confirm do not match.
-            </md-error>
-          </md-input-container>
-        </md-grid-tile>
+              <md-error *ngIf="profileGroup.get('password').hasError('pattern') && profileGroup.get('password').touched">
+                Password should be at least 6 characters (space not allowed)
+              </md-error>
+
+            </md-input-container>
+          </md-grid-tile>
+          <md-grid-tile colspan="2">
+            <md-input-container>
+              <input mdInput type="password" placeholder="Confirm Password" formControlName="confirm">
+              <md-error *ngIf="profileGroup.get('confirm').hasError('required') && profileGroup.get('confirm').touched">
+                Password Confirming is required
+              </md-error>
+              <md-error *ngIf="profileGroup.get('confirm').hasError('confirmError') && profileGroup.get('confirm').touched">
+                Password and confirm do not match.
+              </md-error>
+            </md-input-container>
+          </md-grid-tile>
+        </ng-template>
         <md-grid-tile colspan="1">
           <button md-raised-button color="accent" type="button" (click)="cancelEditing()">Cancel</button>
         </md-grid-tile>
