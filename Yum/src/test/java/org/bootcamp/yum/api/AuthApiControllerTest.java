@@ -72,7 +72,7 @@ public class AuthApiControllerTest {
     public static void initMock() {
         mockUser = new User(1);
         mockUser.setApproved(true);
-        mockUser.setEmail("lazos.chr@gmail.com");
+        mockUser.setEmail("hungry@yum.com");
         mockUser.setDailyOrders(new ArrayList<DailyOrder>());
         mockUser.setFirstName("firstName");
         mockUser.setLastName("lastName");
@@ -82,7 +82,7 @@ public class AuthApiControllerTest {
 
         mockModifiedUser = new User(1);
         mockModifiedUser.setApproved(true);
-        mockModifiedUser.setEmail("lazos.chr@gmail.com");
+        mockModifiedUser.setEmail("hungry@yum.com");
         mockModifiedUser.setDailyOrders(new ArrayList<>());
         mockModifiedUser.setFirstName("firstName");
         mockModifiedUser.setLastName("lastName");
@@ -92,7 +92,7 @@ public class AuthApiControllerTest {
 
         mockUserReset = new User(1);
         mockUserReset.setApproved(true);
-        mockUserReset.setEmail("lazos.chr@gmail.com");
+        mockUserReset.setEmail("hungry@yum.com");
         mockUserReset.setDailyOrders(new ArrayList<DailyOrder>());
         mockUserReset.setFirstName("firstName");
         mockUserReset.setLastName("lastName");
@@ -104,7 +104,7 @@ public class AuthApiControllerTest {
 
         mockModifiedUserReset = new User(1);
         mockModifiedUserReset.setApproved(true);
-        mockModifiedUserReset.setEmail("lazos.chr@gmail.com");
+        mockModifiedUserReset.setEmail("hungry@yum.com");
         mockModifiedUserReset.setDailyOrders(new ArrayList<>());
         mockModifiedUserReset.setFirstName("firstName");
         mockModifiedUserReset.setLastName("lastName");
@@ -136,20 +136,20 @@ public class AuthApiControllerTest {
     @Test
     public void testAuthForgotpwdPost204() throws Exception {
 
-        given(mockUserRepository.findByEmail("lazos.chr@gmail.com")).willReturn(mockUser);
+        given(mockUserRepository.findByEmail("hungry@yum.com")).willReturn(mockUser);
 
         // We perform the API call, and check that the response status code, and the JSON response are corrects
         mockMvc.perform(post("/api/auth/forgotpwd")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("lazos.chr@gmail.com"))
+                .content("hungry@yum.com"))
                 .andExpect(status().isNoContent());
 
         // we verify that we called findAll method once only on the repo.
-        verify(mockUserRepository, times(1)).findByEmail("lazos.chr@gmail.com");
+        verify(mockUserRepository, times(1)).findByEmail("hungry@yum.com");
         // we verify that we didnt call anything else on the repo
         verifyNoMoreInteractions(mockUserRepository);
         // we verify that we modifies the user as expected
-        assertEquals(mockModifiedUser, mockUserRepository.findByEmail("lazos.chr@gmail.com"));
+        assertEquals(mockModifiedUser, mockUserRepository.findByEmail("hungry@yum.com"));
 
     }
 
@@ -157,7 +157,7 @@ public class AuthApiControllerTest {
     public void testAuthForgotpwdPost400() throws Exception {
 
         given(mockUserRepository.findByEmail("giotis.chr@gmail.com")).willReturn(null);
-        given(mockUserRepository.findByEmail("lazos.chr@gmail.com")).willReturn(mockUser);
+        given(mockUserRepository.findByEmail("hungry@yum.com")).willReturn(mockUser);
 
         // We perform the API call, and check that the response status code, and the JSON response are corrects
         mockMvc.perform(post("/api/auth/forgotpwd")
@@ -170,7 +170,7 @@ public class AuthApiControllerTest {
         // we verify that we didnt call anything else on the repo
         verifyNoMoreInteractions(mockUserRepository);
         // we verify that we didnt modify the user in the repository
-        assertEquals(mockModifiedUser, mockUserRepository.findByEmail("lazos.chr@gmail.com"));
+        assertEquals(mockModifiedUser, mockUserRepository.findByEmail("hungry@yum.com"));
 
     }
 

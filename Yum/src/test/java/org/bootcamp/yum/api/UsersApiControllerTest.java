@@ -123,7 +123,7 @@ public class UsersApiControllerTest {
         
         mockUser = new User(1);
         mockUser.setApproved(true);
-        mockUser.setEmail("lazos.chr@gmail.com");
+        mockUser.setEmail("hungry@yum.com");
         mockUser.setDailyOrders(new ArrayList<DailyOrder>());
         mockUser.setFirstName("firstName");
         mockUser.setLastName("lastName");
@@ -133,7 +133,7 @@ public class UsersApiControllerTest {
 
         mockModifiedUser = new User(1);
         mockModifiedUser.setApproved(true);
-        mockModifiedUser.setEmail("lazos.chr@gmail.com");
+        mockModifiedUser.setEmail("hungry@yum.com");
         mockModifiedUser.setDailyOrders(new ArrayList<>());
         mockModifiedUser.setFirstName("firstName");
         mockModifiedUser.setLastName("lastName");
