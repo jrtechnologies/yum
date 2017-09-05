@@ -368,6 +368,12 @@ public class OrdersService {
                     LastEdit lastEdit = new LastEdit();
                     lastEdit.setTimeStamp(dailyOrderEntity.getLastEdit());
                     lastEdit.setVersion(dailyOrderEntity.getVersion());
+                    
+                    // If user requested email confirmation the email service is injected  
+                    if (updateOrderItems.getEmailRequest() && (emailService!=null)){
+                        emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
+                    }
+                    
                     return lastEdit;
 
                     // if quantities same and no new orderItem    
