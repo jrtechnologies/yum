@@ -9,7 +9,7 @@ import 'rxjs/add/observable/throw';
 
 import * as remote from '../remote';
 
-const localStorageItem = "currentUser4";
+const localStorageItem = "yum";
 
 @Injectable()
 export class AuthenticationService {
