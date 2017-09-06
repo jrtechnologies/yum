@@ -21,7 +21,7 @@ info:
       
     ------------------------------------
 
-        Last edit: 18/05/2017 13:30
+        Last edit: 06/09/2017 09:55
 
     -------------------------------------
 basePath: /api
@@ -176,6 +176,10 @@ paths:
           description: refreshed token string
           schema:
             type: string
+        '404':
+          description: Invalid role
+          schema:
+            $ref: '#/definitions/Error'
         '500':
           $ref: '#/responses/Error'
   /settings:
