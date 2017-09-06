@@ -12,15 +12,15 @@
 
   <div *ngIf="dailyMenuOrderChef!==undefined" class="flexGrow">
 
-    <div *ngIf="dailyMenuOrderChef.orderItems.length>0" class="foodsList">
+    <div *ngIf="dailyMenuOrderChef.orderItems.length>0" class="foodsList grid-container">
 
-      <div *ngFor="let orderItem of dailyMenuOrderChef.orderItems" class="is-flex foodsListItem">
+      <ng-container *ngFor="let orderItem of dailyMenuOrderChef.orderItems" class="">
         <ng-container *ngIf=" getFood(orderItem.foodId)| async; let foodItem;">
-          <span [ngClass]="{'icon-Meal': foodItem.foodType==='Main', 'icon-Salad': foodItem.foodType==='Salad', 'icon-Drink': foodItem.foodType==='Drink'}"> </span>
-          <div> {{ foodItem.foodName }} </div>
-          <div class="foodListItemQty"> {{orderItem.quantity}}</div>
+          <div [ngClass]="{'icon-Meal': foodItem.foodType==='Main', 'icon-Salad': foodItem.foodType==='Salad', 'icon-Drink': foodItem.foodType==='Drink'}" class="cell"> </div>
+          <div class="cell"> {{ foodItem.foodName }} </div>
+          <div class="foodListItemQty cell cellLast"> {{orderItem.quantity}}</div>
         </ng-container>
-      </div>
+      </ng-container>
 
     </div>
 
