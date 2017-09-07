@@ -32,7 +32,7 @@ public class RefreshTokenApiController implements RefreshTokenApi {
 
     @Override
     @PreAuthorize("hasAuthority('hungry')")
-    public ResponseEntity<String> refreshTokenGet() throws ApiException{
+    public ResponseEntity<String> refreshTokenGet() {
         return new ResponseEntity<>(refreshTokenService.authRefreshTokenGet(), HttpStatus.OK);
     }
 

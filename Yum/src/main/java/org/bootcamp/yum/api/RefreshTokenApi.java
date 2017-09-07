@@ -33,13 +33,12 @@ public interface RefreshTokenApi {
     }, tags={ "hungry", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "refreshed token string", response = String.class),
-        @ApiResponse(code = 404, message = "Invalid role", response = Error.class),
         @ApiResponse(code = 500, message = "An unexpected error occured.", response = Error.class) })
     
     @RequestMapping(value = "/refreshToken",
         produces = { "text/plain" }, 
         method = RequestMethod.GET)
     @CrossOrigin   
-    ResponseEntity<String> refreshTokenGet() throws ApiException;
+    ResponseEntity<String> refreshTokenGet();
 
 }

@@ -176,10 +176,6 @@ paths:
           description: refreshed token string
           schema:
             type: string
-        '404':
-          description: Invalid role
-          schema:
-            $ref: '#/definitions/Error'
         '500':
           $ref: '#/responses/Error'
   /settings:

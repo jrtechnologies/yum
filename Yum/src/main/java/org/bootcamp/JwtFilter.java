@@ -26,17 +26,29 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.bootcamp.yum.data.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 
-
+@Component
 public class JwtFilter extends GenericFilterBean  {
 
     final private String allow, reject;
+    
+    private static UserRepository userRep;
+    
+    @Autowired
+    public JwtFilter(UserRepository userRep) {
+        JwtFilter.userRep = userRep;
+        allow="";
+        reject="";
+    }
 
     public JwtFilter(String allow, String reject) {
         this.allow = allow;
@@ -69,6 +81,24 @@ public class JwtFilter extends GenericFilterBean  {
                             
                     // Create our Authentication and let Spring know about it
                     List<String> roles = (List<String>)claims.get("roles");
+                    // retrieve role from db based on the id from the token 
+                    String role = userRep.findRole(Long.parseLong(claims.getSubject()));
+                  
+                    // compare highest role form token to role from db and response 401 if different
+                    if (roles.contains("admin")){
+                        if (!role.equals("admin")){
+                            throw new BadCredentialsException("Invalid role");
+                        }
+                    } else if (roles.contains("chef")){
+                        if (!role.equals("chef")){
+                            throw new BadCredentialsException("Invalid role");
+                        }
+                    } else {
+                        if (!role.equals("hungry")){
+                            throw new BadCredentialsException("Invalid role");
+                        }
+                    }
+                    
                     List<SimpleGrantedAuthority> newList = new ArrayList<>() ;
                     for (String myRole : roles) { 
                       newList.add(new SimpleGrantedAuthority(myRole)); 

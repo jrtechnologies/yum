@@ -74,7 +74,7 @@ export class AuthenticationService {
   }
 
   bootstrapUser(): void {
-     
+
     //Get remote auth setting
     // - loads user details from localStorage
     // - sets this.conf.apiKey
@@ -93,10 +93,10 @@ export class AuthenticationService {
       const jwt: string[]= this.token.split(".");
       const payload = JSON.parse(atob(jwt[1]));
       if(payload.exp &&  payload.exp <= new Date().getTime() / 1000){
-          this.logout();        
+          this.logout();
       }
     }
-    
+
 
   }
 
@@ -127,7 +127,7 @@ export class AuthenticationService {
     // - persists the user details in localStorage
     this.user = newUserDetails;
     this.user.role.toLowerCase();
-  
+
     this.changes.next(Math.random().toString(36).substring(7));
 
     localStorage.setItem(localStorageItem, JSON.stringify({ user: this.user, token: this.token, extAuth: this.extAuth }));
@@ -160,7 +160,7 @@ export class AuthenticationService {
 
   }
 
-  public hasExternalAuth(): Boolean { 
+  public hasExternalAuth(): Boolean {
     if (this.extAuth === 'ldap') {
       return true;
     }

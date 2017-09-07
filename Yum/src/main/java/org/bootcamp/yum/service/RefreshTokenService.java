@@ -17,43 +17,16 @@ package org.bootcamp.yum.service;
 
 import java.util.ArrayList;
 import org.bootcamp.JwtCodec;
-import org.bootcamp.yum.api.ApiException;
-import org.bootcamp.yum.data.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RefreshTokenService {
-    
-    @Autowired
-    private UserRepository userRep;
-    
-    public String authRefreshTokenGet() throws ApiException {
+    public String authRefreshTokenGet() {
         //Retrieve user id
         Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        
-        //Retrieve user roles from db
-        String role= userRep.findRole(userId);
-        
-        ArrayList<String> roles = new ArrayList<>();
-        
-        switch (role) {
-            case "hungry":
-                roles.add("hungry");
-                break;
-            case "chef":
-                roles.add("hungry");
-                roles.add("chef");
-                break;
-            case "admin":
-                roles.add("hungry");
-                roles.add("chef");
-                roles.add("admin");
-                break;
-            default:
-                throw new ApiException(404, "No valid role found");
-        }        
+        //Retrieve user roles
+        ArrayList<String> roles = (ArrayList) SecurityContextHolder.getContext().getAuthentication().getCredentials();
        
         // the subject should be the ID of the user converted to string
         String subject = Long.toString(userId);
