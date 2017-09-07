@@ -22,7 +22,7 @@ import org.springframework.context.annotation.ComponentScan;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
-@ComponentScan(basePackages = {"io.swagger","org.bootcamp","yum.data.repository"})
+@ComponentScan(basePackages = {"io.swagger","org.bootcamp"})
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @EnableSwagger2
 public class YumApplication {
