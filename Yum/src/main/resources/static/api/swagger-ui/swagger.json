@@ -2409,6 +2409,10 @@
         "deadline": {
           "type": "string"
         },
+        "deadlineDays": {
+          "type": "integer",
+          "format": "int32"
+        },
         "currency": {
           "type": "string"
         },
@@ -2419,6 +2423,9 @@
           "type": "string"
         },
         "policy": {
+          "type": "string"
+        },
+        "reportEmail": {
           "type": "string"
         },
         "lastEdit": {

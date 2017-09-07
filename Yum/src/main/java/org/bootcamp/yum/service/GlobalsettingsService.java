@@ -41,12 +41,14 @@ public class GlobalsettingsService {
         
         globalSettings.setCurrency(settings.getCurrency());
         globalSettings.setDeadline(settings.getDeadline().toString());
+        globalSettings.setDeadlineDays(settings.getDeadlineDays());
         LastEdit lastEdit = new LastEdit();
         lastEdit.setTimeStamp(settings.getLastEdit());
         lastEdit.setVersion(settings.getVersion());
         globalSettings.setLastEdit(lastEdit);
         globalSettings.setNotes(settings.getNotes());
         globalSettings.setPolicy(settings.getPolicy());
+        globalSettings.setReportEmail(settings.getReportEmail());
         globalSettings.setTos(settings.getTos());        
         
         return globalSettings;
@@ -65,46 +67,66 @@ public class GlobalsettingsService {
             GlobalSettings globalSettings = new GlobalSettings();
             globalSettings.setCurrency(settings.getCurrency());
             globalSettings.setDeadline(settings.getDeadline().toString());
+            globalSettings.setDeadlineDays(settings.getDeadlineDays());
             LastEdit lastEdit = new LastEdit();
             lastEdit.setTimeStamp(settings.getLastEdit());
             lastEdit.setVersion(settings.getVersion());
             globalSettings.setLastEdit(lastEdit);
             globalSettings.setNotes(settings.getNotes());
             globalSettings.setPolicy(settings.getPolicy());
+            globalSettings.setReportEmail(settings.getReportEmail());
             globalSettings.setTos(settings.getTos());  
             
             throw new ConcurrentModificationException(409, "Concurrent modification error.", globalSettings);
         }
         else
         {
-            int flag = 0;
-            // if there are changes the new data will be update
-            if(upSettings.getCurrency() != null && !upSettings.getCurrency().trim().equals(settings.getCurrency())){
-                settings.setCurrency(upSettings.getCurrency());
-                flag = 1;
+            boolean changes = false;
+            // if there are changes the settings will be updated
+                      
+            String currency = upSettings.getCurrency();
+            if(currency != null && !currency.trim().equals(settings.getCurrency())){
+                settings.setCurrency(currency);
+                changes = true;
             }
             
-            if(upSettings.getDeadline() != null && !upSettings.getDeadline().trim().equals(settings.getDeadline().toString())){
-                settings.setDeadline(new LocalTime(upSettings.getDeadline()));
-                flag = 1;
+            String deadLine = upSettings.getDeadline();
+            if(deadLine != null && !deadLine.trim().equals(settings.getDeadline().toString())){
+                settings.setDeadline(new LocalTime(deadLine));
+                changes = true;
             }
             
-            if(upSettings.getNotes() != null && !upSettings.getNotes().trim().equals(settings.getNotes())){
-                settings.setNotes(upSettings.getNotes());
-                flag = 1;
+            Integer deadlineDays = upSettings.getDeadlineDays();
+            if(deadlineDays != null && deadlineDays!=settings.getDeadlineDays()){
+                settings.setDeadlineDays(deadlineDays);
+                changes = true;
             }
             
-            if(upSettings.getPolicy() != null && !upSettings.getPolicy().trim().equals(settings.getPolicy())){
-                settings.setPolicy(upSettings.getPolicy());
-                flag = 1;
+            String notes = upSettings.getNotes(); 
+            if(notes != null && !notes.trim().equals(settings.getNotes())){
+                settings.setNotes(notes);
+                changes = true;
             }
             
-            if(upSettings.getTos() != null && !upSettings.getTos().trim().equals(settings.getTos())){
-                settings.setTos(upSettings.getTos());
-                flag = 1;
+            String policy = upSettings.getPolicy();
+            if(policy != null && !policy.trim().equals(settings.getPolicy())){
+                settings.setPolicy(policy);
+                changes = true;
             }
             
-            if(flag == 0)
+            String tos = upSettings.getTos();
+            if(tos != null && !tos.trim().equals(settings.getTos())){
+                settings.setTos(tos);
+                changes = true;
+            }
+            
+            String reportEmail = upSettings.getReportEmail();
+            if(reportEmail != null && !reportEmail.trim().equals(settings.getReportEmail())){
+                settings.setReportEmail(reportEmail);
+                changes = true;
+            }
+            
+            if(!changes)
                 throw new ApiException(400, "Bad Request"); // no changes for update
         }        
     }

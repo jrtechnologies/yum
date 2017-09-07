@@ -42,6 +42,9 @@ public class Settings {
     @Column(name="deadline")
     private LocalTime deadline;
     
+    @Column(name="deadline_days")
+    private int deadlineDays;
+    
     @Column(name="last_edit", updatable=false, insertable=false)
     @Convert(converter = LocalDateTimeAttributeConverter.class)
     private DateTime lastEdit;
@@ -64,6 +67,10 @@ public class Settings {
     
     @Column(name="foods_version")
     private int foods_version;
+    
+    @Column(name="report_email")
+    private String reportEmail;
+    
 
     public Settings(int id, LocalTime deadline, DateTime lastEdit, String currency, String notes, String tos, String policy, int version, int foods_version) {
         this.id = id;
@@ -92,6 +99,14 @@ public class Settings {
 
     public void setDeadline(LocalTime deadline) {
         this.deadline = deadline;
+    }
+
+    public int getDeadlineDays() {
+        return deadlineDays;
+    }
+
+    public void setDeadlineDays(int deadlineDays) {
+        this.deadlineDays = deadlineDays;
     }
 
     public DateTime getLastEdit() {
@@ -154,9 +169,17 @@ public class Settings {
         this.foods_version = foods_version;
     }
 
+    public String getReportEmail() {
+        return reportEmail;
+    }
+
+    public void setReportEmail(String reportEmail) {
+        this.reportEmail = reportEmail;
+    }
+
     @Override
     public String toString() {
-        return "Settings{" + "id=" + id + ", deadline=" + deadline + ", lastEdit=" + lastEdit + ", currency=" + currency + ", notes=" + notes + ", tos=" + tos + ", policy=" + policy + ", version=" + version + ", foods_version=" + foods_version + '}';
+        return "Settings{" + "id=" + id + ", deadline=" + deadline + ", deadline_days=" + deadlineDays + ", lastEdit=" + lastEdit + ", currency=" + currency + ", notes=" + notes + ", tos=" + tos + ", policy=" + policy + ", version=" + version + ", foods_version=" + foods_version + ", report_email=" + reportEmail + '}';
     }
 
     
