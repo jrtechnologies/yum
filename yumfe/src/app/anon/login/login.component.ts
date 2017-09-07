@@ -2,7 +2,8 @@ import { Component, OnInit, EventEmitter, Input, Output, Renderer2, ElementRef, 
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../shared/authentication.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { MdSnackBar } from '@angular/material';
+import { MdSnackBar, MdSnackBarConfig } from '@angular/material';
+import { ViewContainerRef } from '@angular/core';
 
 @Component({
   moduleId: module.id,
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
   public disableBtn = false;
 
   public externalAuth: Boolean = true;
+  public config: MdSnackBarConfig;
 
   constructor(
     private fb: FormBuilder,
@@ -29,8 +31,11 @@ export class LoginComponent implements OnInit {
     private snackBar: MdSnackBar,
     private authService: AuthenticationService,
     private elRef: ElementRef,
-    private renderer: Renderer2
-  ) { }
+    private renderer: Renderer2,
+    public viewContainerRef: ViewContainerRef
+  ) {
+    this.config = new MdSnackBarConfig();
+   }
 
   ngOnInit() {
     // Create Form group, form controls, validators.
@@ -158,18 +163,17 @@ export class LoginComponent implements OnInit {
   }
   // status -> 1:success , 3:error
   private openSnackBar(message: string, action: string, status: number) {
-    switch (status) {
-      case 1:
-        this.snackBar.open(message, action, {
-          duration: 3000,
-          extraClasses: ['success-snack-bar']
-        });
+    //this.snackBar.dismiss();
+    
+    this.config.duration = 3000;
+    switch (status) {      
+      case 1:        
+        this.config.extraClasses = ['success-snack-bar'];        
         break;
       case 2:
-        this.snackBar.open(message, action, {
-          extraClasses: ['error-snack-bar']
-        });
+        this.config.extraClasses = ['error-snack-bar'];
         break;
     }
+      this.snackBar.open(message, action, this.config );
   }
 }
