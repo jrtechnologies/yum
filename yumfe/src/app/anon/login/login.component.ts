@@ -77,11 +77,17 @@ export class LoginComponent implements OnInit {
 
 
         // Handle chrome autofill password  
-        let a = this.loginForm.controls['password'].valueChanges
+        let passwordListener = this.loginForm.controls['password'].valueChanges
           .startWith(null)
           .debounceTime(200)
           .distinctUntilChanged()
           .subscribe(c => {
+
+            if(c !== null){
+              passwordListener.unsubscribe(); 
+              return;
+            }
+
             let el = this.elRef.nativeElement.querySelector('input[type=password]:-webkit-autofill');
             if (el && c === null) {
               this.loginForm.get('password').setValidators([]);              
@@ -93,13 +99,10 @@ export class LoginComponent implements OnInit {
               this.loginForm.get('password').setValidators([Validators.required, Validators.minLength(6)]);              
             }
 
-            if(c !== null){
-              a.unsubscribe(); 
-            }
             this.loginForm.get('password').updateValueAndValidity();
           });
 
-
+          
       });
 
 

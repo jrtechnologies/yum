@@ -3,17 +3,18 @@
     <span class="cal-day-number">{{ day | date:"d" }}</span>
   </div>
 
-  <div class=" flexGrow is-flex-column clickable" *ngIf="dailyMenu!==undefined" (click)='viewDailyMenu()'>
+  <div class=" flexGrow is-flex-column" *ngIf="dailyMenu!==undefined" >
 
     <!--<md-card-title>{{dailyMenu.date}}</md-card-title>-->
     <div *ngIf="dailyMenu.foods!==undefined">
       <ng-container *ngIf="dailyMenu.foods.length>0">
-        <div class="foodsList">
-          <div *ngFor="let food of dailyMenu.foods" class="is-flex foodsListItem">
-
-            <div> {{food.food.foodName}} </div>
-            <div class="foodListItemQty"> {{food.quantity}}</div>
-          </div>
+        <div class="foodsList grid-container">
+          <ng-container *ngFor="let food of dailyMenu.foods" class="is-flex foodsListItem">
+            <div [ngClass]="{'icon-Meal': food.food.foodType==='MAIN', 'icon-Salad': food.food.foodType==='SALAD', 'icon-Drink': food.food.foodType==='DRINK'}"
+              class="cell"> </div>
+            <div  class="cell"> {{food.food.foodName}} </div>
+            <div class="foodListItemQty cell cellLast"> {{food.quantity}}</div>
+          </ng-container>
         </div>
         <!--<small style="margin: 5px"></small>-->
       </ng-container>

@@ -62,4 +62,7 @@ export class DailyOrderHistoryComponent implements OnInit, OnChanges  {
       this.router.navigate(['/hungry/', getYear(dt),  getISOWeek(dt)]);
   }
 
+  public str(obj: any): string{
+    return JSON.stringify(obj);
+  }
 }

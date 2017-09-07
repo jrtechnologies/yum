@@ -20,14 +20,14 @@
 
   <md-grid-tile colspan="3" rowspan="2">
 
-    <app-slide-toggle-component [user]="user"></app-slide-toggle-component>
+    <app-slide-toggle-component [user]="user" [externalAuth]=externalAuth></app-slide-toggle-component>
 
   </md-grid-tile>
   <md-grid-tile colspan="2" rowspan="2">
     <a [routerLink]="editRouterLink" routerLinkActive="active" md-fab color="accent" title="Edit user!" ><i class="material-icons">edit</i></a>
   </md-grid-tile>
   <md-grid-tile colspan="1" rowspan="2">
-    <button md-icon-button color="accent" (click)="deleteConfirm()" [disabled]="user.id===1||user.id===userId" title="Delete user!"><i class="material-icons bigger-button">delete_forever</i></button>
+    <button md-icon-button color="accent" (click)="deleteConfirm()" [disabled]="user.id===1||user.id===userId||externalAuth" title="Delete user!"><i class="material-icons bigger-button">delete_forever</i></button>
   </md-grid-tile>
   <md-grid-tile colspan="2">
     {{getUser().firstName}}

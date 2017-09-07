@@ -11,7 +11,7 @@ import { AuthenticationService } from '../../../shared/authentication.service';
 })
 export class UserComponent implements OnInit {
   @Input() public user: remote.User;
-
+  @Input() public externalAuth: Boolean = false; 
   @Output() userDeleted = new EventEmitter();
 
   public editRouterLink: string;
