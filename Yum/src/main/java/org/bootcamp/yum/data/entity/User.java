@@ -222,24 +222,36 @@ public class User {
         this.secretCreation = secretCreation;
     }
 
-    public boolean hasNonFinalOrders(LocalTime deadlineTime) {
+//    public boolean hasNonFinalOrders(LocalTime deadlineTime) {
+//        if (dailyOrders == null) {
+//            return false;
+//        } else {
+//            for (DailyOrder dailyOrder : dailyOrders) {
+//                if (!dailyOrder.isFinalised(deadlineTime)) {
+//                    return true;
+//                }
+//            }
+//            return false;
+//        }
+//    }
+     public boolean hasNonFinalOrders(LocalTime deadlineTime, int deadlineDays) {
         if (dailyOrders == null) {
             return false;
         } else {
             for (DailyOrder dailyOrder : dailyOrders) {
-                if (!dailyOrder.isFinalised(deadlineTime)) {
+                if (!dailyOrder.isFinalised(deadlineTime, deadlineDays)) {
                     return true;
                 }
             }
             return false;
         }
     }
-    public boolean hasFinalOrders(LocalTime deadlineTime) {
+    public boolean hasFinalOrders(LocalTime deadlineTime, int deadlineDays) {
         if (dailyOrders == null) {
             return false;
         } else {
             for (DailyOrder dailyOrder : dailyOrders) {
-                if (dailyOrder.isFinalised(deadlineTime)) {
+                if (dailyOrder.isFinalised(deadlineTime, deadlineDays)) {
                     return true;
                 }
             }
@@ -247,13 +259,13 @@ public class User {
         }
     }
     //Return user order status Orders =>(past = 1 | mix = 2 | future = 3) 
-    public int getUsersOrdersStatus(){
+    public int getUsersOrdersStatus(LocalTime deadlineTime, int deadlineDays){
         //Check if user haven't orders.
         if (this.getDailyOrders().isEmpty()) {return 0;} 
         //Check if user orders is Final or not.
-        if (this.hasFinalOrders(LocalTime.now()) && this.hasNonFinalOrders(LocalTime.now())) {
+        if (this.hasFinalOrders(deadlineTime, deadlineDays) && this.hasNonFinalOrders(deadlineTime,deadlineDays)) {
             return 2;
-        } else if (this.hasFinalOrders(LocalTime.now())) {
+        } else if (this.hasFinalOrders(deadlineTime,deadlineDays)) {
             return 1;
         } else {
             return 3;

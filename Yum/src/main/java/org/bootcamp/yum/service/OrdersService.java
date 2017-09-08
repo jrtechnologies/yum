@@ -111,24 +111,21 @@ public class OrdersService {
             }
             //Check if daily Order already exists 
             org.bootcamp.yum.data.entity.DailyOrder dailyOrder = dailyOrderRep.findByUserIdAndDailyMenuId(user.getId(), dailyMenuId);
-            if (dailyOrder != null) {  
+            if (dailyOrder != null) {
                 throw new ConcurrentCreationException(409, "Order already placed", dailyOrder.toDtoDailyMenu());
             } else {
 
                 LocalDate dailyMenuDate = dailyMenuEntity.getDate();
-                // Gets the deadline
-                LocalDateTime deadline = dailyMenuDate.minusDays(1).toLocalDateTime(settingsRep.findOne(1).getDeadline());
-
                 // Check for deadline
-                if (deadline.compareTo(LocalDateTime.now()) < 0) {
+                if (settingsRep.findOne(1).deadlinePassed(dailyMenuDate)) {
                     throw new ApiException(412, "Deadline passed");
 
-                    // Passes Validation
+                // Passes Validation
                 } else {
                     DailyMenu dailyMenu = new DailyMenu();
                     dailyMenu.setId(dailyMenuId);
                     dailyMenu.setDate(dailyMenuDate);
-                    dailyMenu.setFoods(new ArrayList<FoodWithQuantity>());
+                    dailyMenu.setFoods(new ArrayList<>());
 
                     dailyOrderEntity.setOrderItems(orderItemsEntity);
                     dailyOrderEntity.setDailyMenuId(dailyMenuId);
@@ -164,7 +161,7 @@ public class OrdersService {
                         dailyMenu.addFoodsItem(foodWithQuantity);
                     }
                     dailyOrderRep.save(dailyOrderEntity);
-                    
+
                     List<FoodWithQuantity> foodsWQ = dailyMenu.getFoods();
                     for (org.bootcamp.yum.data.entity.Food food : dailyMenuEntity.getFoods()) {
                         boolean contains = false;
@@ -188,10 +185,10 @@ public class OrdersService {
                     dailyMenu.setLastEdit(lastEdit);
                     dailyMenu.setIsFinal(false);
                     // If user requested email confirmation the email service is injected  
-                    if (order.getEmailRequest() && (emailService!=null)){
+                    if (order.getEmailRequest() && (emailService != null)) {
                         emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
                     }
-                   
+
                     return dailyMenu;
                 }
             }
@@ -203,7 +200,6 @@ public class OrdersService {
             org.bootcamp.yum.data.entity.User user, org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity) throws ApiException {
 
         long userId = user.getId();
-        //org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity = dailyOrderRep.findByDailyOrderId(id);
         ConcurrentOrderDeletion concurrentOrderDeletion = new ConcurrentOrderDeletion();
         org.bootcamp.yum.api.model.Error error = new org.bootcamp.yum.api.model.Error();
         concurrentOrderDeletion.setError(error);
@@ -256,7 +252,7 @@ public class OrdersService {
             }
             //  Validation for daily order
             org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity = dailyOrderRep.findByDailyOrderId(id);
-            
+
             // check if there is no order with this id 
             ConcurrentOrderDeletionCheck(id, updateOrderItems.getDailyMenuId(), updateOrderItems.getDailyMenuVersion(),
                     updateOrderItems.getDailyMenuDate(), user, dailyOrderEntity);
@@ -269,7 +265,6 @@ public class OrdersService {
             }
 
             // Concurrent modification       
-            //DateTime lastEditDateTime = dailyOrderEntity.getLastEdit();   
             int version = dailyOrderEntity.getVersion();
             if (version != updateOrderItems.getLastEdit().getVersion()) {
                 DailyOrder dailyOrder = new DailyOrder();
@@ -293,12 +288,13 @@ public class OrdersService {
                 //return dailyOrder;
                 throw new ConcurrentModificationException(409, "Concurrent modification error.", dailyOrder);
 
-            } else if (dailyOrderEntity.isFinalised(settingsRep.findOne(1).getDeadline())) {
+            } else if (settingsRep.findOne(1).deadlinePassed(dailyOrderEntity.getDailyMenu().getDate())) {
+                dailyOrderEntity.setFinalised(true);
                 throw new ApiException(412, "Deadline for orders passed");
             } else {
                 List<OrderItem> orderItemsList = updateOrderItems.getOrderItems();
 
-                if (orderItemsList.isEmpty()){
+                if (orderItemsList.isEmpty()) {
 
                     throw new ApiException(400, "Order couldn't be modified.");
                 }
@@ -368,12 +364,12 @@ public class OrdersService {
                     LastEdit lastEdit = new LastEdit();
                     lastEdit.setTimeStamp(dailyOrderEntity.getLastEdit());
                     lastEdit.setVersion(dailyOrderEntity.getVersion());
-                    
+
                     // If user requested email confirmation the email service is injected  
-                    if (updateOrderItems.getEmailRequest() && (emailService!=null)){
+                    if (updateOrderItems.getEmailRequest() && (emailService != null)) {
                         emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
                     }
-                    
+
                     return lastEdit;
 
                     // if quantities same and no new orderItem    
@@ -405,8 +401,9 @@ public class OrdersService {
         //  Validation for user, dailyMenu 
         if ((dailyMenuEntity == null) || user.getId() != dailyOrderEntity.getUserId()) {
             throw new ApiException(400, "Order couldn't be deleted.");
-            // Check for deadline             
-        } else if (dailyOrderEntity.isFinalised(settingsRep.findOne(1).getDeadline())) {
+        // Check for deadline             
+        } else if (settingsRep.findOne(1).deadlinePassed(dailyOrderEntity.getDailyMenu().getDate())) {
+            dailyOrderEntity.setFinalised(true);
             throw new ApiException(412, "Deadline for orders passed");
         } else {
             dailyOrderRep.delete(dailyOrderEntity);

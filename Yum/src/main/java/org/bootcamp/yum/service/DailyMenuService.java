@@ -85,9 +85,11 @@ public class DailyMenuService
             }            
         }
         
-        if (dailyMenuEntity.isFinalised(settingsRepo.findOne(1).getDeadline())) //after the deadline past the chef can't modify the menu            
+        //If the deadline passed, chef can't modify the menu
+        if (settingsRepo.findOne(1).deadlinePassed(dailyMenuEntity.getDate())) {
+            dailyMenuEntity.setFinalised(true);
             throw new ApiException(412, "Can't modify menu, deadline time has passed");
-        
+        }    
         if(dailyMenu.getLastEdit()==null ){
             throw new ApiException(400, "Bad request data");
         }
