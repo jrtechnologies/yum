@@ -8,7 +8,7 @@ export class GlobalSettingsService {
   private observable;
 
   constructor(
-    private settingsService: remote.AdminApi 
+    private settingsService: remote.AdminApi
   ) { }
 
   private getSettings() {
@@ -22,12 +22,16 @@ export class GlobalSettingsService {
     return this.observable;
   }
 
-  public getDeadLine(): Observable<Date> {
+  public getDeadLine(): Observable<any> {
     return new Observable(observer => {
       this.getSettings().subscribe(settings => {
-        const d: Date = new Date();
-        d.setTime( Date.parse('2000-1-1 ' + settings.deadline));
-        observer.next(d);
+        const deadlineDays: number = settings.deadlineDays;
+        const deadlineTime: Date = new Date();
+        deadlineTime.setTime( Date.parse('2000-1-1 ' + settings.deadline));
+        const deadline = {
+          dDays: deadlineDays, dTime: deadlineTime
+        };
+        observer.next(deadline);
         observer.complete();
       } );
     });
