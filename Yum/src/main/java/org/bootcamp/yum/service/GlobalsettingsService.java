@@ -16,6 +16,7 @@
 package org.bootcamp.yum.service;
 
 import javax.transaction.Transactional;
+import org.bootcamp.tasks.ReportEmail;
 import org.bootcamp.yum.api.ApiException;
 import org.bootcamp.yum.api.ConcurrentModificationException;
 import org.bootcamp.yum.api.model.GlobalSettings;
@@ -34,7 +35,9 @@ public class GlobalsettingsService {
     @Autowired
     SettingsRepository settingsRepo;
     
-    
+    @Autowired
+    ReportEmail reportEmail;
+        
     public GlobalSettings globalsettingsGet() throws ApiException{
         GlobalSettings globalSettings = new GlobalSettings();        
         Settings settings = settingsRepo.findById(1);
@@ -106,6 +109,9 @@ public class GlobalsettingsService {
             
             if(flag == 0)
                 throw new ApiException(400, "Bad Request"); // no changes for update
+            
+             
+            reportEmail.registerSchedule();
         }        
     }
 

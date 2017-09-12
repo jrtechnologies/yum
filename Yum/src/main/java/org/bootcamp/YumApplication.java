@@ -15,19 +15,26 @@
 
 package org.bootcamp;
 
+import org.bootcamp.tasks.ReportEmail; 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 @ComponentScan(basePackages = {"io.swagger","org.bootcamp"})
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @EnableSwagger2
+@EnableScheduling
 public class YumApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(YumApplication.class, args);
-	}
+    
+     
+    public static void main(String[] args) {
+            SpringApplication.run(YumApplication.class, args); 
+    }
+    
+    
 }
