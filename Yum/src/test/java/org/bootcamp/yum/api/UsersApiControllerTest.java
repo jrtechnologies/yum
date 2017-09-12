@@ -17,6 +17,7 @@ package org.bootcamp.yum.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.bootcamp.ApplicationProperties;
 import org.bootcamp.test.MockAuthRule;
 import org.bootcamp.test.annotation.WithMockAuth;
 import org.bootcamp.yum.data.entity.DailyOrder;
@@ -36,6 +37,7 @@ import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.given;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -70,7 +72,9 @@ public class UsersApiControllerTest {
 
     @Mock
     private UserRepository mockUserRepository;
-    
+    @Mock
+    private ApplicationProperties applicationProperties;
+        
     private MockMvc mockMvc;
     
     private User mockIoannisUser;
@@ -148,6 +152,10 @@ public class UsersApiControllerTest {
 
     @Before
     public void setUp() {
+        ApplicationProperties.Ldap ldap = mock(ApplicationProperties.Ldap.class);
+        ldap.setEnabled(false);
+        
+        given(applicationProperties.getLdap()).willReturn(ldap);
         mockMvc = MockMvcBuilders.standaloneSetup( new UsersApiController(usersService) )
                 .setControllerAdvice(new ExceptionControllerAdvice())
                 .build();
