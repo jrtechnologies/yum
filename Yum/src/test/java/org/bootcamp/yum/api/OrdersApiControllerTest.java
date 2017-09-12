@@ -211,7 +211,7 @@ public class OrdersApiControllerTest {
         
          // Adding the trird mock DailyOrder instance
         org.bootcamp.yum.data.entity.DailyOrder mockDailyOrder3 = new org.bootcamp.yum.data.entity.DailyOrder(3);
-        mockDailyOrder3.setDailyMenu(mockDailyMenu);
+        mockDailyOrder3.setDailyMenu(mockDailyMenu2);
         mockDailyOrder3.setDailyMenuId(3);
         mockDailyOrder3.setFinalised(true);
         mockDailyOrder3.setLastEdit(new DateTime(2017, 4, 22, 9, 0));
@@ -250,6 +250,7 @@ public class OrdersApiControllerTest {
         mockSettings = new Settings(1);
         
         mockSettings.setDeadline(new LocalTime(11,0));
+        mockSettings.setDeadlineDays(1);
 
     }
 

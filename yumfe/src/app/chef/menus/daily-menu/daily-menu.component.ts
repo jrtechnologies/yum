@@ -110,14 +110,15 @@ export class DailyMenuComponent implements OnInit, OnChanges {
       this.foodsSelectedMap.clear();
       this.foodsSelected = [];
 
-      this.globalSettingsService.getDeadLine().subscribe(dt =>{
+      this.globalSettingsService.getDeadLine().subscribe(deadline =>{
 
             let today = new Date();
             let menuDate= new Date(this.day);
             menuDate.setHours(0,0,0,0);
             //console.log("menu date", menuDate);
-            menuDate = subDays(menuDate,1);
-            menuDate.setHours(getHours(dt), getMinutes(dt), getSeconds(dt));
+            menuDate = subDays(menuDate, deadline.dDays);
+            let deadlineTime: Date = deadline.dTime;
+            menuDate.setHours(getHours(deadlineTime), getMinutes(deadlineTime), getSeconds(deadlineTime));
             this.menuCanBeEdited = new Date(menuDate) > today;
 
             //console.log("deadline:", new Date(menuDate));
@@ -129,9 +130,9 @@ export class DailyMenuComponent implements OnInit, OnChanges {
             for(let menuFood of this.menu.foods){
                 //let food = this.foodsService.getFoodById(menuFood.foodId);
                  this.foodsService.getFoodById(menuFood.foodId).subscribe( food=>{
-                   if( food!==undefined){ 
+                   if( food!==undefined){
                     this.addMenuFood(food);
-                  }      
+                  }
                 });
 
             }

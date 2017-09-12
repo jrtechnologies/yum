@@ -118,6 +118,14 @@ public class DailyMenu {
         this.date = date;
     }
 
+    public boolean isFinalised() {
+        return finalised;
+    }
+
+    public void setFinalised(boolean finalised) {
+        this.finalised = finalised;
+    }
+
     public List<Food> getFoods() {
         return foods;
     }
@@ -156,18 +164,6 @@ public class DailyMenu {
     {
         this.lastEdit = lastEdit;
 
-    }
-    
-    public boolean isFinalised(LocalTime deadlineTime) {                
-        if (!finalised){
-            // Gets the deadline
-            LocalDateTime deadline = this.date.minusDays(1).toLocalDateTime(deadlineTime);
-            // if deadline passed sets finalized to true
-            if (deadline.compareTo(LocalDateTime.now()) < 0){               
-                finalised=true;
-            }   
-        }
-        return finalised;
     }
     
     @Override
