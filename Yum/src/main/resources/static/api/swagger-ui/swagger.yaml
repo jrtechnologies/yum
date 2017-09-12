@@ -1570,6 +1570,9 @@ definitions:
     properties:
       deadline:
         type: string
+      deadlineDays:
+        type: integer
+        format: int32
       currency:
         type: string
       notes:
@@ -1577,6 +1580,8 @@ definitions:
       tos:
         type: string
       policy:
+        type: string
+      reportEmail:
         type: string
       lastEdit:
         $ref: '#/definitions/LastEdit'

@@ -12,7 +12,6 @@
  * You should have received a copy of the GNU General Public License along with Yum. 
  * If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.bootcamp.yum.data.entity;
 
 import java.util.List;
@@ -35,51 +34,47 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
-
-
 @Entity
-@Table(name="daily_order")
+@Table(name = "daily_order")
 public class DailyOrder {
-    
+
     @Id
-    @Column(name="id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long dailyOrderId;
-    
+
     @ManyToOne
-    @JoinColumn(name = "user_id", insertable=false, updatable=false)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 //    
     @ManyToOne
-    @JoinColumn(name = "dailymenu_id", insertable=false, updatable=false)
+    @JoinColumn(name = "dailymenu_id", insertable = false, updatable = false)
     private DailyMenu dailyMenu;
 //    
-    @OneToMany(mappedBy = "dailyOrder", cascade= CascadeType.ALL, orphanRemoval=true)  //PERSIST
+    @OneToMany(mappedBy = "dailyOrder", cascade = CascadeType.ALL, orphanRemoval = true)  //PERSIST
     private List<OrderItem> orderItems;
-    
-    @Column(name="final")
+
+    @Column(name = "final")
     private boolean finalised;
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private long userId;
-    @Column(name="dailymenu_id")
+    @Column(name = "dailymenu_id")
     private long dailyMenuId;
-   
-    @Column(name="last_edit")
+
+    @Column(name = "last_edit")
     @Convert(converter = LocalDateTimeAttributeConverter.class)
     private DateTime lastEdit;
-    
- 
- 
+
     @Version
-    @Column(name="version")
+    @Column(name = "version")
     private int version;
- 
- 
-    public DailyOrder(long dailyOrderId){
+
+    public DailyOrder(long dailyOrderId) {
         this.dailyOrderId = dailyOrderId;
     }
-    
-    public DailyOrder(){}
+
+    public DailyOrder() {
+    }
 
     //Use for mockups
     public DailyOrder(long dailyOrderId, User user, DailyMenu dailyMenu, List<OrderItem> orderItems, boolean finalised, long userId, long dailyMenuId, DateTime lastEdit, int version) {
@@ -104,10 +99,9 @@ public class DailyOrder {
         hash = 53 * hash + (this.finalised ? 1 : 0);
         hash = 53 * hash + (int) (this.userId ^ (this.userId >>> 32));
         hash = 53 * hash + (int) (this.dailyMenuId ^ (this.dailyMenuId >>> 32));
-       //hash = 53 * hash + Objects.hashCode(this.lastEdit);
+        //hash = 53 * hash + Objects.hashCode(this.lastEdit);
         return hash;
     }
- 
 
     @Override
     public boolean equals(Object obj) {
@@ -115,9 +109,7 @@ public class DailyOrder {
         System.out.println("obj.hashCode()" + obj.hashCode());
         return obj.hashCode() == hashCode();
     }
-    
-    
-    
+
     public long getDailyOrderId() {
         return dailyOrderId;
     }
@@ -126,20 +118,12 @@ public class DailyOrder {
         this.dailyOrderId = dailyOrderId;
     }
 
-
-    
-    public boolean isFinalised(LocalTime deadlineTime) {                
-        if (!finalised){
-            // Gets the deadline
-            LocalDateTime deadline = dailyMenu.getDate().minusDays(1).toLocalDateTime(deadlineTime);
-            // if deadline passed sets finalized to true
-            if (deadline.compareTo(LocalDateTime.now()) < 0){               
-                finalised=true;
-            }   
-        }
+    public boolean isFinalised(LocalTime deadlineTime, int deadlineDays) {
+        // check if deadline passed, set finalised field accordingly and return it  
+        finalised = dailyMenu.getDate().minusDays(deadlineDays).toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0;
         return finalised;
     }
-    
+
     public void setFinalised(boolean finalised) {
         this.finalised = finalised;
     }
@@ -184,13 +168,11 @@ public class DailyOrder {
         this.orderItems = orderItems;
     }
 
-    public DateTime getLastEdit()
-    {
+    public DateTime getLastEdit() {
         return lastEdit;
     }
 
-    public void setLastEdit(DateTime lastEdit)
-    {
+    public void setLastEdit(DateTime lastEdit) {
         this.lastEdit = lastEdit;
     }
 
@@ -201,15 +183,15 @@ public class DailyOrder {
     public void setVersion(int version) {
         this.version = version;
     }
-    
-    public org.bootcamp.yum.api.model.DailyMenu toDtoDailyMenu() {   
+
+    public org.bootcamp.yum.api.model.DailyMenu toDtoDailyMenu() {
         org.bootcamp.yum.api.model.DailyMenu dto = new org.bootcamp.yum.api.model.DailyMenu();
         dto.setId(dailyMenu.getId());
         dto.setDate(dailyMenu.getDate());
         dto.setOrderId(dailyOrderId);
         dto.setLastEdit(new org.bootcamp.yum.api.model.LastEdit(dailyMenu.getLastEdit(), dailyMenu.getVersion()));
-        dto.setIsFinal(finalised);   
-        for ( OrderItem orderItem: orderItems){
+        dto.setIsFinal(finalised);
+        for (OrderItem orderItem : orderItems) {
             FoodWithQuantity foodWithQuantity = new FoodWithQuantity();
             foodWithQuantity.setFood(orderItem.getFood().toDtoFood());
             foodWithQuantity.setQuantity(orderItem.getQuantity());
@@ -225,17 +207,15 @@ public class DailyOrder {
             if (!contains) {
                 FoodWithQuantity foodWithQuantity = new FoodWithQuantity();
                 foodWithQuantity.setFood(food.toDtoFood());
-                foodWithQuantity.setQuantity(0);  
+                foodWithQuantity.setQuantity(0);
                 dto.addFoodsItem(foodWithQuantity);
             }
         }
         return dto;
     }
 
-    
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "DailyOrder{" + "dailyOrderId=" + dailyOrderId + ", dailyMenu=" + dailyMenu + ", orderItems=" + orderItems + ", finalised=" + finalised + ", userId=" + userId + ", dailyMenuId=" + dailyMenuId + ", lastEdit=" + lastEdit + '}';
     }
 

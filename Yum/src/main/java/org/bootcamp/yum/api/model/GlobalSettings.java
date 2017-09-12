@@ -15,19 +15,24 @@
 
 package org.bootcamp.yum.api.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Objects;
+import javax.validation.Valid;
+
 /**
  * Global Settings DTO
  */
 @ApiModel(description = "Global Settings DTO")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-04-20T10:12:43.892+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-09-07T13:23:35.925+03:00")
 
 public class GlobalSettings   {
   @JsonProperty("deadline")
   private String deadline = null;
+
+  @JsonProperty("deadlineDays")
+  private Integer deadlineDays = null;
 
   @JsonProperty("currency")
   private String currency = null;
@@ -40,6 +45,9 @@ public class GlobalSettings   {
 
   @JsonProperty("policy")
   private String policy = null;
+
+  @JsonProperty("reportEmail")
+  private String reportEmail = null;
 
   @JsonProperty("lastEdit")
   private LastEdit lastEdit = null;
@@ -54,12 +62,34 @@ public class GlobalSettings   {
    * @return deadline
   **/
   @ApiModelProperty(value = "")
+
+
   public String getDeadline() {
     return deadline;
   }
 
   public void setDeadline(String deadline) {
     this.deadline = deadline;
+  }
+
+  public GlobalSettings deadlineDays(Integer deadlineDays) {
+    this.deadlineDays = deadlineDays;
+    return this;
+  }
+
+   /**
+   * Get deadlineDays
+   * @return deadlineDays
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Integer getDeadlineDays() {
+    return deadlineDays;
+  }
+
+  public void setDeadlineDays(Integer deadlineDays) {
+    this.deadlineDays = deadlineDays;
   }
 
   public GlobalSettings currency(String currency) {
@@ -72,6 +102,8 @@ public class GlobalSettings   {
    * @return currency
   **/
   @ApiModelProperty(value = "")
+
+
   public String getCurrency() {
     return currency;
   }
@@ -90,6 +122,8 @@ public class GlobalSettings   {
    * @return notes
   **/
   @ApiModelProperty(value = "")
+
+
   public String getNotes() {
     return notes;
   }
@@ -108,6 +142,8 @@ public class GlobalSettings   {
    * @return tos
   **/
   @ApiModelProperty(value = "")
+
+
   public String getTos() {
     return tos;
   }
@@ -126,12 +162,34 @@ public class GlobalSettings   {
    * @return policy
   **/
   @ApiModelProperty(value = "")
+
+
   public String getPolicy() {
     return policy;
   }
 
   public void setPolicy(String policy) {
     this.policy = policy;
+  }
+
+  public GlobalSettings reportEmail(String reportEmail) {
+    this.reportEmail = reportEmail;
+    return this;
+  }
+
+   /**
+   * Get reportEmail
+   * @return reportEmail
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getReportEmail() {
+    return reportEmail;
+  }
+
+  public void setReportEmail(String reportEmail) {
+    this.reportEmail = reportEmail;
   }
 
   public GlobalSettings lastEdit(LastEdit lastEdit) {
@@ -144,6 +202,9 @@ public class GlobalSettings   {
    * @return lastEdit
   **/
   @ApiModelProperty(value = "")
+
+  @Valid
+
   public LastEdit getLastEdit() {
     return lastEdit;
   }
@@ -163,16 +224,18 @@ public class GlobalSettings   {
     }
     GlobalSettings globalSettings = (GlobalSettings) o;
     return Objects.equals(this.deadline, globalSettings.deadline) &&
+        Objects.equals(this.deadlineDays, globalSettings.deadlineDays) &&
         Objects.equals(this.currency, globalSettings.currency) &&
         Objects.equals(this.notes, globalSettings.notes) &&
         Objects.equals(this.tos, globalSettings.tos) &&
         Objects.equals(this.policy, globalSettings.policy) &&
+        Objects.equals(this.reportEmail, globalSettings.reportEmail) &&
         Objects.equals(this.lastEdit, globalSettings.lastEdit);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(deadline, currency, notes, tos, policy, lastEdit);
+    return Objects.hash(deadline, deadlineDays, currency, notes, tos, policy, reportEmail, lastEdit);
   }
 
   @Override
@@ -181,10 +244,12 @@ public class GlobalSettings   {
     sb.append("class GlobalSettings {\n");
     
     sb.append("    deadline: ").append(toIndentedString(deadline)).append("\n");
+    sb.append("    deadlineDays: ").append(toIndentedString(deadlineDays)).append("\n");
     sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
     sb.append("    notes: ").append(toIndentedString(notes)).append("\n");
     sb.append("    tos: ").append(toIndentedString(tos)).append("\n");
     sb.append("    policy: ").append(toIndentedString(policy)).append("\n");
+    sb.append("    reportEmail: ").append(toIndentedString(reportEmail)).append("\n");
     sb.append("    lastEdit: ").append(toIndentedString(lastEdit)).append("\n");
     sb.append("}");
     return sb.toString();

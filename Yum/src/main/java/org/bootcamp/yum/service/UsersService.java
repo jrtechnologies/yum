@@ -33,6 +33,7 @@ import org.bootcamp.yum.api.model.UserSettings;
 import org.bootcamp.yum.api.model.UsersPage;
 import org.bootcamp.yum.data.converter.UserRoleConverter;
 import org.bootcamp.yum.data.entity.DailyOrder;
+import org.bootcamp.yum.data.entity.Settings;
 import org.bootcamp.yum.data.enums.UserRole;
 import org.bootcamp.yum.data.repository.DailyOrderRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
@@ -65,9 +66,12 @@ public class UsersService {
     private static final Logger LOGGER = Logger.getLogger(UsersService.class.getName());
 
     private void deleteDailyOrders(List<DailyOrder> dailyOrders) {
+        Settings settings = settingsRepo.findOne(1);
         for (DailyOrder dailyOrder : dailyOrders) {
-            if (!dailyOrder.isFinalised(settingsRepo.findOne(1).getDeadline())) {
+            if (!settings.deadlinePassed(dailyOrder.getDailyMenu().getDate())) {
                 dailyOrderRepo.delete(dailyOrder);
+            } else {
+                dailyOrder.setFinalised(true);
             }
         }
     }
@@ -126,8 +130,8 @@ public class UsersService {
             if (force == null) {
                 throw new ApiException(400, "Bad request");
             } else {
-                Boolean notFinalOrders = user.hasNonFinalOrders(settingsRepo.findOne(1).getDeadline());
-//                System.out.println("notFinalOrders " + notFinalOrders);
+                Settings settings= settingsRepo.findOne(1);
+                Boolean notFinalOrders = user.hasNonFinalOrders(settings.getDeadline(), settings.getDeadlineDays());                
                 if (!notFinalOrders) {
                     user.setApproved(approve);
                 } else {
@@ -306,8 +310,8 @@ public class UsersService {
             if (userRepo.findById(id) != null) {
                 org.bootcamp.yum.data.entity.User userEntity = userRepo.findById(id);
                 //Check if user have order with method getUsersOrdersStatus from User Entity Class.
-
-                switch (userEntity.getUsersOrdersStatus()) {
+                Settings settings = settingsRepo.findById(1);
+                switch (userEntity.getUsersOrdersStatus(settings.getDeadline(), settings.getDeadlineDays())) {
                     case 0:
                         userRepo.delete(userEntity);
                         return; //After success delete, just return.

@@ -21,6 +21,7 @@ import org.bootcamp.yum.data.entity.DailyMenu;
 import org.bootcamp.yum.data.entity.DailyOrder;
 import org.bootcamp.yum.data.entity.Food;
 import org.bootcamp.yum.data.entity.OrderItem;
+import org.bootcamp.yum.data.entity.Settings;
 import org.bootcamp.yum.data.entity.User;
 import org.bootcamp.yum.data.enums.UserRole;
 import org.bootcamp.yum.data.repository.SettingsRepository;
@@ -133,7 +134,8 @@ public class EmailService {
         text.append("\n");
         text.append("\ttotal : ").append(total).append(" euro").append("\n");
         text.append("\n");
-        text.append("You can modify this order until ").append(settingsRep.findOne(1).getDeadline().toString("HH:mm")).append(", on ").append(menuDate.minusDays(1).toString("EEEE dd MMMM YYYY")).append(" by going to the link:\n");
+        Settings settings = settingsRep.findOne(1);
+        text.append("You can modify this order until ").append(settings.getDeadline().toString("HH:mm")).append(", on ").append(menuDate.minusDays(settings.getDeadlineDays()).toString("EEEE dd MMMM YYYY")).append(" by going to the link:\n");
 
         text.append(applicationProperties.getMail().getDomain()).append("/hungry/").append(menuDate.getYear()).append("/").append(menuDate.getWeekOfWeekyear()).append("\n");
 
