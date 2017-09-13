@@ -15,7 +15,7 @@
    <input #blurMe class="dropList" type="text" mdInput  [formControl]="selectCtrl" [mdAutocomplete]="auto" placeholder="select food"  >
    </md-form-field>
 
-  <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn" >
+  <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn()" >
     <md-option *ngFor="let food of filteredFoods | async" [value]="food"  >
       <div class="is-flex"><span [ngClass]="{'icon-Meal': food.foodType==='Main', 'icon-Salad': food.foodType==='Salad', 'icon-Drink': food.foodType==='Drink'}" > </span>
         <span>{{ food.foodName }}</span>

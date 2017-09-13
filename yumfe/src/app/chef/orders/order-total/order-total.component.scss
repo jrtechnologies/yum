@@ -7,6 +7,11 @@
    grid-template-columns: 2fr 6fr 1fr;
    grid-template-rows: auto;
    grid-row-gap: 3px;
+
+
+   -ms-grid-template-columns: 2fr 6fr 1fr;
+   -ms-grid-template-rows: auto;
+   -ms-grid-row-gap: 3px;
 }
 
 .grid-container .cell{
