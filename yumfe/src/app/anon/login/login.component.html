@@ -3,7 +3,7 @@
     <form (ngSubmit)="login()" [formGroup]="loginForm"    >
       <img src="/assets/img/Yum-logo-small.png">
       <h2>Sign in</h2>
-        <md-input-container  *ngIf=!externalAuth>
+        <md-form-field  *ngIf=!externalAuth>
           <input mdInput type="text" placeholder="user email" formControlName="email"  />
           <md-error class="error" *ngIf="loginForm.get('email').touched && (loginForm.get('email').hasError('required'))">
             Email is required.
@@ -11,19 +11,19 @@
           <md-error class="error" *ngIf="loginForm.get('email').touched && loginForm.get('email').hasError('pattern')">
             Wrong email address
           </md-error>
-        </md-input-container>
-        <md-input-container *ngIf=externalAuth>
+        </md-form-field>
+        <md-form-field *ngIf=externalAuth>
           <input mdInput type="username" placeholder="user name" type="text" formControlName="username"  />
           <md-error class="error" *ngIf="loginForm.get('username').touched && (loginForm.get('username').hasError('required'))">
             User name is required.
           </md-error>
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
           <input mdInput type="password" placeholder="password" formControlName="password"/>
           <md-error class="error" *ngIf="loginForm.get('password').touched && loginForm.get('password').hasError('required')">
             Password is required.
           </md-error>
-        </md-input-container>
+        </md-form-field>
         <button md-raised-button type="submit" color="accent" [disabled]="disableBtn || loginForm.invalid">Login</button>
         <img class="spinner" *ngIf="showSpinner" src="../../assets/img/spinner.gif">
       </form>

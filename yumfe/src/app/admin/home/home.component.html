@@ -25,7 +25,7 @@
         </md-radio-group>
       </md-grid-tile>
       <md-grid-tile colspan="2" rowspan="2">
-        <md-input-container>
+        <md-form-field>
           <input mdInput type="text" placeholder="First name" formControlName="firstName">
           <md-error *ngIf="userGroup.get('firstName').touched && userGroup.get('firstName').hasError('required')">
             First Name is required
@@ -33,10 +33,10 @@
           <md-error *ngIf="userGroup.get('firstName').touched && userGroup.get('firstName').hasError('minlength')">
             Minimum of 2 characters
           </md-error>
-        </md-input-container>
+        </md-form-field>
       </md-grid-tile>
       <md-grid-tile colspan="2" rowspan="2">
-        <md-input-container>
+        <md-form-field>
           <input mdInput type="text" placeholder="Last name" formControlName="lastName">
           <md-error *ngIf="userGroup.get('lastName').touched && userGroup.get('lastName').hasError('required')">
             Last Name is required
@@ -44,10 +44,10 @@
           <md-error *ngIf="userGroup.get('lastName').touched && userGroup.get('lastName').hasError('minlength')">
             Minimum of 2 characters
           </md-error>
-        </md-input-container>
+        </md-form-field>
       </md-grid-tile>
       <md-grid-tile colspan="2" rowspan="2">
-        <md-input-container class="input-med-width">
+        <md-form-field class="input-med-width">
           <input mdInput type="email" placeholder="User email address" formControlName="email">
           <md-error *ngIf="userGroup.get('email').hasError('required') && userGroup.get('email').touched">
             Email is required
@@ -55,10 +55,10 @@
           <md-error *ngIf="userGroup.get('email').hasError('pattern') && userGroup.get('email').touched">
             Email is not valid
           </md-error>
-        </md-input-container>
+        </md-form-field>
       </md-grid-tile>
       <md-grid-tile colspan="2" rowspan="2">
-        <md-input-container>
+        <md-form-field>
 
           <input mdInput type="password" placeholder="Password" formControlName="password" (keyup)="onPasswordChange()">
 
@@ -72,10 +72,10 @@
             Password shoud be at least 6 characters (space not allowed)
           </md-error>
 
-        </md-input-container>
+        </md-form-field>
       </md-grid-tile>
       <md-grid-tile colspan="2" rowspan="2">
-        <md-input-container>
+        <md-form-field>
           <input mdInput type="password" placeholder="Confirm Password" formControlName="confirm">
           <md-error *ngIf="userGroup.get('confirm').hasError('required') && userGroup.get('confirm').touched">
             Password Confirming is required
@@ -88,7 +88,7 @@
           <md-error *ngIf="userGroup.get('confirm').hasError('confirmError') && userGroup.get('confirm').touched">
             Password and confirm do not match
           </md-error>
-        </md-input-container>
+        </md-form-field>
       </md-grid-tile>
       <md-grid-tile colspan="2" rowspan="2">
         <button md-raised-button color="accent" type="button" (click)="createUser()" [disabled]="userGroup.invalid || showSpinner">Create user</button>
