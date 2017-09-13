@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   protected sub: any;
   protected dailymenusMap: Map<String, remote.DailyMenu> = new Map<String, remote.DailyMenu>();
   public currency: Observable<string>;
-  public deadline: Observable<Date>;
+  public deadline: Observable<any>;
   public notes: Observable<string>;
   public showLoadSpinner= false;
   public weeklyTotalPrice = 0;
@@ -177,11 +177,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public formattedDeadline(deadline: any): string {
     if (deadline != null) {
-      return (this.datePipe.transform(deadline.dTime, 'H:mm'));
+      const time: Date = deadline.dTime;
+      return ('0' + time.getHours()).slice(-2) + ':' + ('0' + time.getMinutes()).slice(-2);
     } else {
       return '';
     }
-
   }
 
   public formattedDeadlineDays(deadline: any): string {
@@ -193,7 +193,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           return 'the previous day';
         default:
           return deadline.dDays + ' days before';
-
       }
     } else {
       return '';
