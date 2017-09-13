@@ -31,7 +31,7 @@
 
 
     <md-grid-tile [colspan]="2" class="left-no-pad">
-      <md-input-container class="input-extra-width">
+      <md-form-field class="input-extra-width">
         <input mdInput type="text" placeholder="First name" formControlName="firstName">
 
 
@@ -41,10 +41,10 @@
         <md-error *ngIf="profileGroup.get('firstName').touched && profileGroup.get('firstName').hasError('minlength')">
           Minimum of 2 characters
         </md-error>
-      </md-input-container>
+      </md-form-field>
     </md-grid-tile>
     <md-grid-tile [colspan]="2">
-      <md-input-container class="input-extra-width">
+      <md-form-field class="input-extra-width">
         <input mdInput type="text" placeholder="Last name" formControlName="lastName">
 
         <md-error *ngIf="profileGroup.get('lastName').touched && profileGroup.get('lastName').hasError('required')">
@@ -53,16 +53,16 @@
         <md-error *ngIf="profileGroup.get('lastName').touched && profileGroup.get('lastName').hasError('minlength')">
           Minimum of 2 characters
         </md-error>
-      </md-input-container>
+      </md-form-field>
     </md-grid-tile>
     <md-grid-tile [colspan]="3" class="right">
-      <md-input-container class="input-extra-width">
+      <md-form-field class="input-extra-width">
         <input mdInput type="email" placeholder="User email address" formControlName="email">
 
         <md-error *ngIf="profileGroup.get('email').hasError('required') && profileGroup.get('email').touched">
           Email is required
         </md-error>
-      </md-input-container>
+      </md-form-field>
     </md-grid-tile>
 
   </md-grid-list>

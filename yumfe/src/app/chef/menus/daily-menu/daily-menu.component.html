@@ -11,9 +11,9 @@
    </div>
 
 
-  <md-input-container *ngIf="menuCanBeEdited" class="smallInputContainer">
+  <md-form-field *ngIf="menuCanBeEdited" class="smallInputContainer">
    <input #blurMe class="dropList" type="text" mdInput  [formControl]="selectCtrl" [mdAutocomplete]="auto" placeholder="select food"  >
-   </md-input-container>
+   </md-form-field>
 
   <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn" >
     <md-option *ngFor="let food of filteredFoods | async" [value]="food"  >

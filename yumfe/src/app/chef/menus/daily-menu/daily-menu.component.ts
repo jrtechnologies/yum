@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, SimpleChanges, OnChanges, EventEmitter, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { Validators, FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { MdInputContainer, MdAutocomplete, MdAutocompleteTrigger, MdProgressBar } from '@angular/material';
+import { MdAutocomplete, MdAutocompleteTrigger, MdProgressBar } from '@angular/material';
 import { subDays,  isValid , getHours, getMinutes, getSeconds, addDays, getMonth } from 'date-fns';
 import * as remote from '../../../remote';
 import * as models from './../../../shared/models';

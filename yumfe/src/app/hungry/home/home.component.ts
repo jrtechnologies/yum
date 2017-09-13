@@ -126,7 +126,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public dailyMenuExists(dateStr: String) {
-    return this.dailymenusMap.has(dateStr);
+      return this.dailymenusMap.has(dateStr);
   }
 
   public previousWeek() {
@@ -168,5 +168,36 @@ export class HomeComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['/hungry/', getYear(dt), this.pad(getISOWeek(dt), 2)]);
     }
+  }
+
+  public formattedDay(day: string): string {
+    const date = new Date(day);
+    return (this.datePipe.transform(date, 'EEEE / d MMM'));
+  }
+
+  public formattedDeadline(deadline: any): string {
+    if (deadline != null) {
+      return (this.datePipe.transform(deadline.dTime, 'H:mm'));
+    } else {
+      return '';
+    }
+
+  }
+
+  public formattedDeadlineDays(deadline: any): string {
+    if (deadline != null) {
+      switch (deadline.dDays) {
+        case 0:
+          return 'the same day';
+        case 1:
+          return 'the previous day';
+        default:
+          return deadline.dDays + ' days before';
+
+      }
+    } else {
+      return '';
+    }
+
   }
 }

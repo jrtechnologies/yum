@@ -3,7 +3,7 @@
     <form [formGroup]="registerForm" autocomplete="off">
       <img src="/assets/img/Yum-logo-small.png">
       <h2>Register</h2>
-      <md-input-container>
+      <md-form-field>
         <input mdInput type="text" placeholder="First name" formControlName="firstName">
         <md-error class="error" *ngIf="registerForm.get('firstName').touched && registerForm.get('firstName').hasError('required')">
             First name is required.
@@ -11,8 +11,8 @@
         <md-error *ngIf="registerForm.get('firstName').touched && registerForm.get('firstName').hasError('minlength')">
             Minimum of 2 characters
         </md-error>
-      </md-input-container>
-      <md-input-container>
+      </md-form-field>
+      <md-form-field>
         <input mdInput type="text" placeholder="Last name" formControlName="lastName">
         <md-error class="error" *ngIf="registerForm.get('lastName').touched && registerForm.get('lastName').hasError('required')">
             Last name is required.
@@ -20,8 +20,8 @@
         <md-error *ngIf="registerForm.get('lastName').touched && registerForm.get('lastName').hasError('minlength')">
             Minimum of 2 characters
         </md-error>
-      </md-input-container>
-      <md-input-container>
+      </md-form-field>
+      <md-form-field>
         <input mdInput  type="email" placeholder="email" formControlName="email">
         <md-error class="error" *ngIf="registerForm.get('email').touched && registerForm.get('email').hasError('required')">
           Email is required.
@@ -32,8 +32,8 @@
          <md-error class="error" *ngIf="registerForm.get('email').touched && registerForm.get('email').hasError('maxlength')">
           Too long email address (150 characters max)
         </md-error>
-      </md-input-container>
-      <md-input-container>
+      </md-form-field>
+      <md-form-field>
         <input mdInput autocomplete="off" nofill type="password" placeholder="password" formControlName="password" (keyup)= "onPasswordChange()">
         <md-error class="error" *ngIf="registerForm.get('password').touched && registerForm.get('password').hasError('required')">
           Password is required.
@@ -41,8 +41,8 @@
         <md-error class="error" *ngIf="registerForm.get('password').touched && registerForm.get('password').hasError('pattern')">
           Password min 6 characters.
         </md-error>
-      </md-input-container>
-      <md-input-container>
+      </md-form-field>
+      <md-form-field>
         <input mdInput autocomplete="off" nofill type="password" placeholder="password verification" formControlName="confirm">
         <md-error *ngIf="registerForm.get('confirm').hasError('required') && registerForm.get('confirm').touched">
           Password Confirming is required.
@@ -53,7 +53,7 @@
         <md-error *ngIf="registerForm.get('confirm').hasError('confirmError') && registerForm.get('confirm').touched">
           Password and confirm do not match.
         </md-error>
-      </md-input-container>
+      </md-form-field>
       <button class="submitBtn" md-raised-button type="button" (click)="register()" [disabled]="registerForm.invalid || disableBtn === true" color="accent">Create account</button>
       <img *ngIf="showSpinner" class="spinner" src="../../assets/img/spinner.gif">
     </form>
