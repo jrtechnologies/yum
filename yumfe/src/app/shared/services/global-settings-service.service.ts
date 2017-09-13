@@ -26,8 +26,8 @@ export class GlobalSettingsService {
     return new Observable(observer => {
       this.getSettings().subscribe(settings => {
         const deadlineDays: number = settings.deadlineDays;
-        const deadlineTime: Date = new Date();
-        deadlineTime.setTime( Date.parse('2000-1-1 ' + settings.deadline));
+        const parts = settings.deadline.split(':');
+        const deadlineTime = new Date(2000, 0, 1, parts[0], parts[1] );
         const deadline = {
           dDays: deadlineDays, dTime: deadlineTime
         };
