@@ -73,7 +73,8 @@ public class ReportEmail implements ApplicationListener<ApplicationReadyEvent> {
    // @PostConstruct
     public void registerSchedule(){
         
-        sendAutoOrderSummary( );
+        //Use to immediately send summary report:
+        //sendAutoOrderSummary( );
         
         Settings settings = settingsRepo.findById(1);
         LocalTime lt = settings.getDeadline();
