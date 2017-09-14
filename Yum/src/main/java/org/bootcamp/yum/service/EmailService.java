@@ -377,9 +377,12 @@ public class EmailService {
         sb.append("</div>");
         
         //System.out.println(sb);
-       ArrayList<String> emailsTo = new ArrayList<>(Arrays.asList(settingsRep.findById(1).getReportEmail().split(";")));   
-       for(String emailTo : emailsTo){
-        sendHtmlEmail(emailTo, "Order summary for " + formattedDate, sb.toString());
+       String emails = settingsRep.findById(1).getReportEmail();
+       if(emails !=null && !emails.isEmpty()){
+            ArrayList<String> emailsTo = new ArrayList<>(Arrays.asList( emails.split(";")));   
+            for(String emailTo : emailsTo){
+             sendHtmlEmail(emailTo, "Order summary for " + formattedDate, sb.toString());
+            }
        }
         
        
