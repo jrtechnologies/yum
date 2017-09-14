@@ -22,12 +22,15 @@
       </md-grid-tile>
     </md-grid-list>
     <div class="textareas">
-      <md-grid-list cols="8" rowHeight="25px">
+      <md-grid-list cols="11" rowHeight="25px">
         <md-grid-tile class="left-no-pad" colspan="2" rowspan="1">
           <label for="deadline">Time of last order</label>
         </md-grid-tile>
         <md-grid-tile class="left-no-pad" colspan="3" rowspan="1">
           <label for="deadlineDays">Days before Daily Menu</label>
+        </md-grid-tile>
+        <md-grid-tile class="left-no-pad" colspan="3" rowspan="1">
+          <label for="reportEmail">Order summary email report</label>
         </md-grid-tile>
         <md-grid-tile class="right-no-pad" colspan="3" rowspan="1">
           <label for="currency">Active currency</label>
@@ -37,6 +40,9 @@
         </md-grid-tile>
          <md-grid-tile class="left-no-pad" colspan="3" rowspan="2">
           <input class="deadlineDays" type="number" min="0" name="deadlineDays" [(ngModel)]="gss.deadlineDays">
+        </md-grid-tile>
+         <md-grid-tile class="left-no-pad" colspan="3" rowspan="2">
+          <input class="reportEmail" type="text" name="reportEmail" [(ngModel)]="gss.reportEmail">
         </md-grid-tile>
         <md-grid-tile class="right-no-pad" colspan="3" rowspan="2">
           <md-select class="deadlineCurrency" [(ngModel)]="gss.currency" name="currency">
