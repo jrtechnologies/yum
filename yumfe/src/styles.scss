@@ -83,6 +83,11 @@ html, body{margin:0; padding:0;  font-family:'Roboto Slab', serif;}
   background-color: #F44336 !important;
 }
 
+.mat-simple-snackbar-action {
+  color: white !important;
+  font-weight: bold !important;
+}
+
 .dialog-content-size {
   height: '300px';
   width: '500px';

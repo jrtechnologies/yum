@@ -219,7 +219,7 @@ export class DailyMenuComponent implements OnInit {
               this.disableBtn = false;
               this.dailyTotalPrice.emit(this.getTotalPrice());
               console.log('Order changed');
-              this.openSnackBar('Modify Order placed successfully!', 'ok', 1); // Success SnackBar
+              this.openSnackBar('Order modified successfully!', 'ok', 1); // Success SnackBar
             },
             error => {
               switch (error.status) {
@@ -227,7 +227,7 @@ export class DailyMenuComponent implements OnInit {
                   this.openSnackBar('Unmodified data', 'ok', 2);
                   break;
                 case 400:
-                  this.openSnackBar('Order couldn t be modified.', 'ok', 3);
+                  this.openSnackBar('Order couldnot be modified.', 'ok', 3);
                   break;
                 case 404:
                   this.openSnackBar('Order not found', 'ok', 3);
@@ -236,7 +236,7 @@ export class DailyMenuComponent implements OnInit {
                   const dailyOrder: remote.DailyOrder = JSON.parse(error._body);
                   this.updateFoodMapWithOrderedFoods(dailyOrder.foods);
                   this.lastEditDailyOrder = dailyOrder.lastEdit;
-                  this.openSnackBar('Order couldn t changed because have changed in past, Order now displayed in your page', 'ok', 3);
+                  this.openSnackBar('Order not modified! It has been modified in the past and now is displayed in your page!', 'ok', 3);
                   break;
                 case 410: // Concurrent Order Deletion error. Return an error message and the new daily Menu.
                   const errorDeletion: remote.ConcurrentOrderDeletion = JSON.parse(error._body);
@@ -286,19 +286,19 @@ export class DailyMenuComponent implements OnInit {
               this.disableBtn = false;
               this.dailyTotalPrice.emit(this.getTotalPrice());
               console.log('Order placed');
-              this.openSnackBar('Foods ordered successfully!', 'ok', 1);
+              this.openSnackBar('Order placed successfully!', 'ok', 1);
             },
             error => {
               switch (error.status) {
                 case 400:
-                  this.openSnackBar('Order couldn t have been placed.', 'ok', 3);
+                  this.openSnackBar('Order couldnot be placed.', 'ok', 3);
                   break;
                 case 409:
                   this.dailyMenu = JSON.parse(error._body);
                   this.isOrderBoolean = true;
                   this.getOrderLastEdit();
                   this.createFoodMap();
-                  this.openSnackBar('Order have already placed, And now is displayed in page', 'ok', 2);
+                  this.openSnackBar('Order has already been placed and now is displayed in page', 'ok', 2);
                   break;
                 case 410: // Concurrent Order Deletion error. Return an error message and the new daily Menu.
                   const errorDeletion: remote.ConcurrentOrderDeletion = JSON.parse(error._body);
@@ -310,7 +310,7 @@ export class DailyMenuComponent implements OnInit {
                   this.createFoodMap();
                   break;
                 case 412:
-                  this.openSnackBar('Deadline for orders passed, Your order Canceled.', 'ok', 3);
+                  this.openSnackBar('Deadline for orders passed, Your order is canceled.', 'ok', 3);
                   break;
                 default:
                   this.isOrderBoolean = false;
@@ -350,7 +350,7 @@ export class DailyMenuComponent implements OnInit {
           error => {
             switch (error.status) {
               case 400:
-                this.openSnackBar('Order couldn t be deleted.', 'ok', 3);
+                this.openSnackBar('Order couldnot be deleted.', 'ok', 3);
                 break;
               case 404:
                 this.openSnackBar('Order not found', 'ok', 3);
