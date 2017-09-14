@@ -14,6 +14,7 @@
  */
 package org.bootcamp.yum.data.entity;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -91,6 +92,9 @@ public class User {
 
     @Column(name = "ldap_id")
     private byte[] ldapId;
+    
+    @Column(name = "balance")
+    private BigDecimal balance;
     
     public User() {
     }
@@ -301,7 +305,13 @@ public class User {
         this.ldapId = ldapId;
     }
 
-    
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
     
     @Override
     public int hashCode() {
