@@ -31,17 +31,19 @@
 
   /** Explicit Positioning - For IE 10, IE 11 and Edge > 16 */
     .cell {
-         @include cellCoordinates(4);
+      background-color: #f2f2f2; 
+      color: #333333; 
+      display: flex;
+      align-items: center;
+      padding: 2px 4px;
+ 
+      @include cellCoordinates(3);
     }
 
+    .cellLast{ background-color: #ff5b57!important; color:#fff!important; justify-content: flex-end; padding: 2px 8px;}
+
 }
 
-.grid-container .cell{
-    background-color: #f2f2f2; 
-    color: #333333; 
-    display: flex;
-    align-items: center;
-    padding: 2px 4px;
-}
+ 
 
-.grid-container .cellLast{ background-color: #ff5b57!important; color:#fff!important; justify-content: flex-end; padding: 2px 8px;}
+ 
