@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { startOfWeek, setISOWeek, getISOWeek, getYear, addWeeks, isToday, addDays, isValid, subWeeks, getMonth } from 'date-fns';
+import { startOfWeek, setISOWeek, getISOWeek, getISOYear, getYear, addWeeks, isToday, addDays, isValid, subWeeks, getMonth } from 'date-fns';
 import { Router } from '@angular/router';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   protected dailymenus: Array<remote.DailyMenu>;
   protected date: Date = new Date();
   public monthDate: Date = new Date();
-  public weekDays: Array<String> = [];
+  public weekDays: Array<string> = [];
   protected sub: any;
   protected dailymenusMap: Map<String, remote.DailyMenu> = new Map<String, remote.DailyMenu>();
   public currency: Observable<string>;
@@ -48,9 +48,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
           console.log('router dt:', dt);
           this.date  = dt;
-          this.monthDate = this.date;
+          //this.monthDate = this.date;
 
           this.weekDaysCal(startOfWeek(this.date, {weekStartsOn: 1}));
+          this.monthDate = new Date(this.weekDays[this.weekDays.length-1]);
+
           this.getCurrentWeeklyMenu(this.buildweekYear(this.date));
         } else {
           console.warn('invalid router date');
@@ -152,7 +154,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.router.navigate(['/hungry/', getYear(dt), this.pad(getISOWeek(dt), 2)]);
   }
   private buildweekYear(dt: Date) {
-     return this.pad(getISOWeek(dt), 2) + '-' + getYear(dt);
+     return this.pad(getISOWeek(dt), 2) + '-' + getISOYear(dt);
   }
   private pad(num: number, size: number): string {
       let s = num + '';
@@ -162,11 +164,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       return s;
   }
   public onMonthNavView(dt: Date) {
-    this.monthDate = dt;
+    //this.monthDate = dt;
     if (dt.getMonth() === new Date().getMonth() && dt.getFullYear()=== new Date().getFullYear()) {
       this.router.navigate(['/hungry']);
     } else {
-      this.router.navigate(['/hungry/', getYear(dt), this.pad(getISOWeek(dt), 2)]);
+      this.router.navigate(['/hungry/', getISOYear(dt), this.pad(getISOWeek(dt), 2)]);
     }
   }
 
