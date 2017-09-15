@@ -2,18 +2,30 @@
   background-image: url("/assets/img/Login-Bg.jpg");
   background-size: cover;
   background-repeat: no-repeat;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: space-around;
+  flex-wrap: wrap;
 }
+
+.oVasilisHrthe{    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
 .register{
   background-color: white;
   width: 404px;
   padding: 15px 10px 10px 10px;
   text-align: center;
 
+  .mat-form-field{
+    display: block;
+  }
 }
+
 .submitBtn{
   width: 340px;
   height: 40px;
