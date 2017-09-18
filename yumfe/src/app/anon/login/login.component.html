@@ -40,10 +40,9 @@
   <div class="text" *ngIf=!disableRoute>
 
 
-    <div *ngIf="this.quote; else elseBlock">
-      <p>
-        {{this.quote.quoteText}}<br><br> {{this.quote.quoteAuthor}}
-      </p>
+    <div *ngIf="this.quote; else elseBlock" >
+      <p [innerHTML]=quote.quote>  </p><br>
+      <p [innerHTML]=quote.author></p>      
 
     </div>
     <ng-template #elseBlock>

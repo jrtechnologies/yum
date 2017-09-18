@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, Http, XHRBackend, RequestOptions } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AuthApi, ChefApi } from './remote';
 
 import { AppComponent } from './app.component';
@@ -24,6 +25,8 @@ import { environment } from '../environments/environment';
 import { HttpSubjectService } from './shared/services/httpSubject.service';
 import { InterceptHttp, interceptHttpLoader } from './shared/services/http-intercept.service';
 import { DialogLogin } from './app.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +42,8 @@ import { DialogLogin } from './app.component';
     HungryModule,
     ChefModule,
     AdminModule,
-    AnonModule
+    AnonModule,
+    HttpClientModule
   ],
 
   entryComponents: [
@@ -55,7 +59,7 @@ import { DialogLogin } from './app.component';
     {
       provide: Http, useFactory: interceptHttpLoader,
       deps: [XHRBackend, RequestOptions, HttpSubjectService]
-    }
+    } 
   ],
   bootstrap: [AppComponent]
 })
