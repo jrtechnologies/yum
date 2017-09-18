@@ -31,6 +31,7 @@ import org.bootcamp.yum.data.repository.OrderItemRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
 import org.bootcamp.yum.data.repository.UserRepository;
 import org.joda.time.LocalDate;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,8 @@ public class MenusService {
     @Autowired
     private UserRepository userRepo;
 
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(MenusService.class);
+    
     @Transactional
     public List<DailyMenu> menusWeeklyGet() throws ApiException, Exception {
         LocalDate today = LocalDate.now();
@@ -65,11 +68,14 @@ public class MenusService {
 
     @Transactional
     public List<DailyMenu> menusWeeklyWeekGet(String week) throws ApiException, Exception {
+         
+        
         String patternString = "^\\d{2}-\\d{4}$";
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(patternString);
         Matcher matcher = pattern.matcher(week);
         if (matcher.matches()) {
-            int year = Integer.parseInt(week.substring(3, 7));
+            int year = Integer.parseInt(week.substring(3, 7)); 
+            
             int weekNumber = Integer.parseInt(week.substring(0, 2));
             int weeksOfYear = getWeeksofYear(year);
             //Validation check for weeks number.
@@ -81,13 +87,15 @@ public class MenusService {
              * (it haven't 53 weeks, then some days is in next year) then print 
              * first week of next year with last days of previous year.
              */
-            if (weeksOfYear == 1 && weekNumber == 53) {
+            if (weeksOfYear == 53 && weekNumber == 53) { 
                 weekNumber = 01;
                 year += 1;
             }
+             
+            
             firstDayOfWeek = new LocalDate().withYear(year).withWeekOfWeekyear(weekNumber);
-            firstDayOfWeek = firstDayOfWeek.minusDays(firstDayOfWeek.getDayOfWeek() - 1);
-
+            firstDayOfWeek = firstDayOfWeek.minusDays(firstDayOfWeek.getDayOfWeek() - 1); 
+            
             //refactor 28/5/17 k
             /*switch (firstDayOfWeek.dayOfWeek().getAsText()){
                 case "Monday":
