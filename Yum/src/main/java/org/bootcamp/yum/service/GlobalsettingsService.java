@@ -62,7 +62,8 @@ public class GlobalsettingsService {
         globalSettings.setNotes(settings.getNotes());
         globalSettings.setPolicy(settings.getPolicy());
         globalSettings.setReportEmail(settings.getReportEmail());
-        globalSettings.setTos(settings.getTos());        
+        globalSettings.setTos(settings.getTos());   
+        globalSettings.setWorkingDays(settings.getWorkingDays());
         
         return globalSettings;
     }
@@ -94,6 +95,7 @@ public class GlobalsettingsService {
             globalSettings.setPolicy(settings.getPolicy());
             globalSettings.setReportEmail(settings.getReportEmail());
             globalSettings.setTos(settings.getTos());  
+            globalSettings.setWorkingDays(settings.getWorkingDays());
             
             throw new ConcurrentModificationException(409, "Concurrent modification error.", globalSettings);
         }
@@ -105,6 +107,12 @@ public class GlobalsettingsService {
             LocalTime oldDeadlineTime = settings.getDeadline();
             int oldDeadlineDays = settings.getDeadlineDays();
                       
+            String workingDays = upSettings.getWorkingDays();
+            if(workingDays != null && !workingDays.trim().equals(settings.getWorkingDays())){
+                settings.setWorkingDays(workingDays);
+                changes = true;
+            }
+            
             String currency = upSettings.getCurrency();
             if(currency != null && !currency.trim().equals(settings.getCurrency())){
                 settings.setCurrency(currency);

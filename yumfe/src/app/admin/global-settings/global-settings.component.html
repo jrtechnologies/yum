@@ -38,10 +38,10 @@
         <md-grid-tile class="left-no-pad" colspan="2" rowspan="2">
           <input class="deadlineTime" type="time" name="deadline" [(ngModel)]="gss.deadline">
         </md-grid-tile>
-         <md-grid-tile class="left-no-pad" colspan="3" rowspan="2">
+        <md-grid-tile class="left-no-pad" colspan="3" rowspan="2">
           <input class="deadlineDays" type="number" min="0" name="deadlineDays" [(ngModel)]="gss.deadlineDays">
         </md-grid-tile>
-         <md-grid-tile class="left-no-pad" colspan="3" rowspan="2">
+        <md-grid-tile class="left-no-pad" colspan="3" rowspan="2">
           <input class="reportEmail" type="text" name="reportEmail" [(ngModel)]="gss.reportEmail">
         </md-grid-tile>
         <md-grid-tile class="right-no-pad" colspan="3" rowspan="2">
@@ -50,6 +50,17 @@
           </md-select>
         </md-grid-tile>
       </md-grid-list>
+
+      <div>
+        <div class="headerText">Working days</div>
+        <md-button-toggle-group name="checkbox" #mdButtongroup="mdButtonToggleGroup" multiple  >
+          <md-button-toggle *ngFor="let wDay of availableWorkingDays;" [value]="wDay.value" [checked]="workingDays.includes(wDay.value)" (change)="wDaysChanged($event)"   >
+            <span>{{wDay.name}}</span>
+          </md-button-toggle>
+        </md-button-toggle-group>
+        <div class="example-selected-value">Selected value: {{mdButtongroup.value}}</div>
+      </div>
+
       <div class="area">
         <label for="notes">Notes</label>
         <textarea htmlEditor [(ngModel)]="gss.notes" rows="20" cols="100" name="notes"></textarea>

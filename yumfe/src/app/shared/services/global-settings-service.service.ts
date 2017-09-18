@@ -36,6 +36,14 @@ export class GlobalSettingsService {
       } );
     });
   }
+  public getWorkingDays(): Observable<number[]> {
+    return new Observable(observer => {
+      this.getSettings().subscribe(settings => {
+        observer.next(JSON.parse(settings.workingDays).days);
+        observer.complete();
+      } );
+    });
+  }
 
   public getCurrency(): Observable<string> {
     return new Observable(observer => {

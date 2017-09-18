@@ -6,7 +6,7 @@ import { Location } from '@angular/common';
 import * as remote from '../../remote';
 import { DatePipe } from '@angular/common';
 import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.component';
-import {GlobalSettingsService } from '../../shared/services/global-settings-service.service';
+import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 import { Observable } from 'rxjs/Rx';
 
 @Component({
@@ -24,8 +24,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   public currency: Observable<string>;
   public deadline: Observable<any>;
   public notes: Observable<string>;
-  public showLoadSpinner= false;
+  public showLoadSpinner = false;
   public weeklyTotalPrice = 0;
+  public workingDays: number[];
 
   constructor(
     private hungryService: remote.HungryApi,
@@ -40,35 +41,45 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.currency = this.globalSettingsService.getCurrency();
     this.deadline = this.globalSettingsService.getDeadLine();
     this.notes = this.globalSettingsService.getNotes();
+
+    this.globalSettingsService.getWorkingDays().subscribe(wdays => {
+      this.workingDays = wdays;
+      this.setup();
+    });
+
+  }
+
+  public setup() {
     this.sub = this.route.params.subscribe(params => {
-        let dt = new Date(+params['year'], 1, 1) ; // (+) converts string 'year' na d 'month' to a number
-        dt = setISOWeek(dt, +params['week']);
-        if (isValid(dt)) {
-          dt = addDays(dt, 1);
+      let dt = new Date(+params['year'], 1, 1); // (+) converts string 'year' na d 'month' to a number
+      dt = setISOWeek(dt, +params['week']);
+      if (isValid(dt)) {
+        dt = addDays(dt, 1);
 
-          console.log('router dt:', dt);
-          this.date  = dt;
-          //this.monthDate = this.date;
+        console.log('router dt:', dt);
+        this.date = dt;
+        //this.monthDate = this.date;
 
-          this.weekDaysCal(startOfWeek(this.date, {weekStartsOn: 1}));
-          this.monthDate = new Date(this.weekDays[this.weekDays.length-1]);
+        this.weekDaysCal(startOfWeek(this.date, { weekStartsOn: 1 }));
+        this.monthDate = new Date(this.weekDays[this.weekDays.length - 1]);
 
-          this.getCurrentWeeklyMenu(this.buildweekYear(this.date));
-        } else {
-          console.warn('invalid router date');
-        }
+        this.getCurrentWeeklyMenu(this.buildweekYear(this.date));
+      } else {
+        console.warn('invalid router date');
+      }
     });
     if (isToday(this.date)) {
       this.showLoadSpinner = true;
-      this.monthDate = this.date ;
-      this.weekDaysCal(startOfWeek(this.date, {weekStartsOn: 1}));
-      this.hungryService.menusWeeklyGet().subscribe( dailymenus => {
+      this.monthDate = this.date;
+      this.weekDaysCal(startOfWeek(this.date, { weekStartsOn: 1 }));
+      this.hungryService.menusWeeklyGet().subscribe(dailymenus => {
         this.showLoadSpinner = false;
         this.dailymenus = dailymenus;
         this.weekMenuMap();
       }, error => this.showLoadSpinner = false);
     }
   }
+
 
   public handleUserUpdated(dailyTPrice, day) {
     const menu: remote.DailyMenu = this.dailymenusMap.get(day);
@@ -90,7 +101,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private getCurrentWeeklyMenu(weekYear: string) {
     this.showLoadSpinner = true;
-    this.hungryService.menusWeeklyWeekGet(weekYear).subscribe( dailymenus => {
+    this.hungryService.menusWeeklyWeekGet(weekYear).subscribe(dailymenus => {
       this.showLoadSpinner = false;
       this.dailymenus = dailymenus;
       this.weekMenuMap();
@@ -99,11 +110,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private weekDaysCal(d: Date) {
     this.weekDays = [];
-    for (let i = 0; i < 5; i++) {
-      const dtStr = this.datePipe.transform(d, 'yyyy-MM-dd');
-      this.weekDays.push(dtStr);
+    
+    for (let i = 0; i < 7; i++) {
+      
+      const dtStr = this.datePipe.transform(d, 'yyyy-MM-dd');     
+      
+      if(this.workingDays.includes(d.getDay())){
+        this.weekDays.push(dtStr);
+      }
+
       d = addDays(d, 1);
     }
+
+    console.log(this.weekDays);
   }
 
   private weekMenuMap() {
@@ -111,7 +130,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.dailymenus.length; i++) {
       const dt = new Date(this.dailymenus[i].date);
       const dtStr = this.datePipe.transform(dt, 'yyyy-MM-dd');
-      this.dailymenusMap.set( dtStr, this.dailymenus[i]);
+      this.dailymenusMap.set(dtStr, this.dailymenus[i]);
     }
   }
 
@@ -120,7 +139,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public getDailyMenu(d: any) {
-    for (const dailymenu of this.dailymenus){
+    for (const dailymenu of this.dailymenus) {
       if (dailymenu.date === d) {
         return dailymenu;
       }
@@ -128,12 +147,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public dailyMenuExists(dateStr: String) {
-      return this.dailymenusMap.has(dateStr);
+    return this.dailymenusMap.has(dateStr);
   }
 
   public previousWeek() {
     this.date = subWeeks(this.date, 1);
-    if (getISOWeek(this.date) === getISOWeek(new Date())  && this.date.getFullYear()=== new Date().getFullYear()) {
+    if (getISOWeek(this.date) === getISOWeek(new Date()) && this.date.getFullYear() === new Date().getFullYear()) {
       this.router.navigate(['/hungry']);
     } else {
       this.navWeekYear(this.date);
@@ -144,7 +163,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   public nextWeek() {
     this.date = addWeeks(this.date, 1);
-    if (getISOWeek(this.date) === getISOWeek(new Date())  && this.date.getFullYear()=== new Date().getFullYear()) {
+    if (getISOWeek(this.date) === getISOWeek(new Date()) && this.date.getFullYear() === new Date().getFullYear()) {
       this.router.navigate(['/hungry']);
     } else {
       this.navWeekYear(this.date);
@@ -154,18 +173,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.router.navigate(['/hungry/', getYear(dt), this.pad(getISOWeek(dt), 2)]);
   }
   private buildweekYear(dt: Date) {
-     return this.pad(getISOWeek(dt), 2) + '-' + getISOYear(dt);
+    return this.pad(getISOWeek(dt), 2) + '-' + getISOYear(dt);
   }
   private pad(num: number, size: number): string {
-      let s = num + '';
-      while (s.length < size) {
-        s = '0' + s;
-      }
-      return s;
+    let s = num + '';
+    while (s.length < size) {
+      s = '0' + s;
+    }
+    return s;
   }
   public onMonthNavView(dt: Date) {
     //this.monthDate = dt;
-    if (dt.getMonth() === new Date().getMonth() && dt.getFullYear()=== new Date().getFullYear()) {
+    if (dt.getMonth() === new Date().getMonth() && dt.getFullYear() === new Date().getFullYear()) {
       this.router.navigate(['/hungry']);
     } else {
       this.router.navigate(['/hungry/', getISOYear(dt), this.pad(getISOWeek(dt), 2)]);

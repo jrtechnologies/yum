@@ -57,7 +57,7 @@ public class MenusService {
         LocalDate today = LocalDate.now();
         LocalDate firstDayOfWeek = today.minusDays(today.getDayOfWeek() - 1);
         List<org.bootcamp.yum.api.model.DailyMenu> weeklyMenu = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 7; i++) {
             DailyMenu dailymenu = createWeekDailyMenu(firstDayOfWeek.plusDays(i));
             if (dailymenu.getDate() != null) {
                 weeklyMenu.add(dailymenu);
@@ -120,7 +120,7 @@ public class MenusService {
                     break;
             }*/
             List<org.bootcamp.yum.api.model.DailyMenu> weeklyMenu = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 7; i++) {
                 DailyMenu dailymenu = createWeekDailyMenu(firstDayOfWeek.plusDays(i));
                 if (dailymenu.getDate() != null) {
                     weeklyMenu.add(dailymenu);

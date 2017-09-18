@@ -1583,6 +1583,8 @@ definitions:
         type: string
       reportEmail:
         type: string
+      workingDays:
+        type: string
       lastEdit:
         $ref: '#/definitions/LastEdit'
   Info:

@@ -20,12 +20,16 @@ import { GlobalSettingsComponent } from './global-settings/global-settings.compo
 import { AdminNavComponent } from './shared/admin-nav/admin-nav.component';
 import { AdminRouteGuard } from './admin-route.guard';
 import { TinymceDirective } from './tinymce.directive';
+import {
+  MdButtonToggleModule
+} from '@angular/material';
 
 @NgModule({
   imports: [
     CommonModule,
     AdminRouting,
-    SharedModule
+    SharedModule,
+    MdButtonToggleModule
   ],
   declarations: [
       HomeComponent,

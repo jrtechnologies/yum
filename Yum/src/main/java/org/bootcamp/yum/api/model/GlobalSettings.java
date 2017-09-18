@@ -48,7 +48,10 @@ public class GlobalSettings   {
 
   @JsonProperty("reportEmail")
   private String reportEmail = null;
-
+  
+  @JsonProperty("workingDays")
+  private String workingDays = null;
+  
   @JsonProperty("lastEdit")
   private LastEdit lastEdit = null;
 
@@ -196,7 +199,27 @@ public class GlobalSettings   {
     this.lastEdit = lastEdit;
     return this;
   }
+  
 
+
+   /**
+   * Get workingDays
+   * @return workingDays
+  **/
+  @ApiModelProperty(value = "")
+
+  public GlobalSettings workingDays(String workingDays) {
+    this.workingDays = workingDays;
+    return this;
+  }
+  
+  public String getWorkingDays() {
+    return workingDays;
+  }
+
+  public void setWorkingDays(String workingDays) {
+    this.workingDays = workingDays;
+  }
    /**
    * Get lastEdit
    * @return lastEdit
@@ -230,12 +253,13 @@ public class GlobalSettings   {
         Objects.equals(this.tos, globalSettings.tos) &&
         Objects.equals(this.policy, globalSettings.policy) &&
         Objects.equals(this.reportEmail, globalSettings.reportEmail) &&
+        Objects.equals(this.workingDays, globalSettings.workingDays) &&
         Objects.equals(this.lastEdit, globalSettings.lastEdit);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(deadline, deadlineDays, currency, notes, tos, policy, reportEmail, lastEdit);
+    return Objects.hash(deadline, deadlineDays, currency, notes, tos, policy, reportEmail, workingDays, lastEdit);
   }
 
   @Override
@@ -250,6 +274,7 @@ public class GlobalSettings   {
     sb.append("    tos: ").append(toIndentedString(tos)).append("\n");
     sb.append("    policy: ").append(toIndentedString(policy)).append("\n");
     sb.append("    reportEmail: ").append(toIndentedString(reportEmail)).append("\n");
+    sb.append("    workingDays: ").append(toIndentedString(workingDays)).append("\n");
     sb.append("    lastEdit: ").append(toIndentedString(lastEdit)).append("\n");
     sb.append("}");
     return sb.toString();

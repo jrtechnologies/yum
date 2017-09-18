@@ -13,7 +13,7 @@ import 'rxjs/add/operator/switchMap';
 import { DailyOrderHistoryComponent } from './daily-order-history/daily-order-history.component';
 import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.component';
 import { Observable } from 'rxjs/Rx';
-import {GlobalSettingsService } from '../../shared/services/global-settings-service.service';
+import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 
 @Component({
   selector: 'app-hungry-history',
@@ -37,7 +37,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
 
   // exclude weekends
   excludeDays: number[] = [0, 6];
-
+  alldays: number[] = [0, 1, 2, 3, 4, 5, 6];
   /////////////////////
 
   nextMonth: string;
@@ -45,7 +45,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
   private sub: any;
   private remote: any;
   currency: Observable<string>;
-  totalSum:   number = 0;
+  totalSum: number = 0;
   public showSpinner: boolean = true;
 
   constructor(
@@ -61,6 +61,12 @@ export class HistoryComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     console.log('----- on init HistoryComponent!! -----');
+
+    this.globalSettingsService.getWorkingDays().subscribe(days => {
+      this.excludeDays = this.alldays.filter(function (el) {
+        return !days.includes(el);
+      });
+    });
 
     this.viewdate = new Date();
 
@@ -79,14 +85,14 @@ export class HistoryComponent implements OnInit, OnDestroy {
 
     if (isToday(this.viewdate)) {
       this.remote = this.hungryService.menusMonthlyGet()
-      .finally(() => { this.showSpinner = false; })
-      .subscribe(dailymenus => {
-        console.log('subscribed orders of current month');
-        this.dailymenus = dailymenus;
-        this.setDailyMenusMap();
-        // console.log("route params:", this.route.params,this.route.params['month'] + '-' + this.route.params['year']);
+        .finally(() => { this.showSpinner = false; })
+        .subscribe(dailymenus => {
+          console.log('subscribed orders of current month');
+          this.dailymenus = dailymenus;
+          this.setDailyMenusMap();
+          // console.log("route params:", this.route.params,this.route.params['month'] + '-' + this.route.params['year']);
 
-      }, error => console.log(error));
+        }, error => console.log(error));
     }
 
   } // ngOnInit
@@ -99,20 +105,20 @@ export class HistoryComponent implements OnInit, OnDestroy {
   private getRemoteDailyMenus(monthYear: string) {
 
     this.remote = this.hungryService.menusMonthlyMonthyearGet(monthYear)
-    .finally(() => { this.showSpinner = false; })
-    .subscribe( dailymenus => {
-      console.log("subscribed orders of:", monthYear);
+      .finally(() => { this.showSpinner = false; })
+      .subscribe(dailymenus => {
+        console.log("subscribed orders of:", monthYear);
 
-      this.dailymenus = dailymenus;
-      this.setDailyMenusMap();
+        this.dailymenus = dailymenus;
+        this.setDailyMenusMap();
 
-    }, error => console.log(error));
+      }, error => console.log(error));
 
   }
 
   private setDailyMenusMap() {
 
-    this.dailymenusMap =  new Map<String, remote.DailyMenu>();
+    this.dailymenusMap = new Map<String, remote.DailyMenu>();
 
     for (let i = 0; i < this.dailymenus.length; i++) {
       let dt = new Date(this.dailymenus[i].date);
@@ -137,15 +143,15 @@ export class HistoryComponent implements OnInit, OnDestroy {
   }
 
   getTotal() {
-      this.totalSum = 0;
-      if(this.dailymenus !== undefined){
-        for (let dm of this.dailymenus) {
-          for(let foodItem of dm.foods )
+    this.totalSum = 0;
+    if (this.dailymenus !== undefined) {
+      for (let dm of this.dailymenus) {
+        for (let foodItem of dm.foods)
           //this.total += this.dailyMenu.foods[i].quantity * this.dailyMenu.foods[i].food.price;
-          this.totalSum += foodItem.quantity *  foodItem.food.price;
-        }
+          this.totalSum += foodItem.quantity * foodItem.food.price;
       }
-      return this.totalSum;
+    }
+    return this.totalSum;
   }
 
   private buildMonthYear(dt: Date) {
@@ -161,10 +167,10 @@ export class HistoryComponent implements OnInit, OnDestroy {
 
   public onMonthNavChange(dt: Date) {
     // console.log("MonthNavComponent child changed:",dt)
-    if (dt.getMonth() === new Date().getMonth() && dt.getFullYear()=== new Date().getFullYear()) {
+    if (dt.getMonth() === new Date().getMonth() && dt.getFullYear() === new Date().getFullYear()) {
       this.router.navigate(['/hungry/history/']);
     }
-    else{
+    else {
       this.router.navigate(['/hungry/history/', getYear(dt), this.pad(getMonth(dt) + 1, 2)]);
     }
     // this.getRemoteDailyMenus(this.buildMonthYear(this.viewdate));

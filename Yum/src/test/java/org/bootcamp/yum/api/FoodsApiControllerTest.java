@@ -115,7 +115,7 @@ public class FoodsApiControllerTest {
         mockFoodList.add(mockFoodOk);
         mockFoodList.add(mockFoodOk2);
         
-        Settings global_settings = new Settings(1, LocalTime.MIDNIGHT,  DateTime.now(), "", "", "", "", 0, 1);
+        Settings global_settings = new Settings(1, LocalTime.MIDNIGHT,  DateTime.now(), "", "", "", "", 0, 1, "", "");
         given(settingsRepo.findOne(1)).willReturn(global_settings);
         
         // telling Mockito to use this mock list every time the findAll method is called on the foodRepo
