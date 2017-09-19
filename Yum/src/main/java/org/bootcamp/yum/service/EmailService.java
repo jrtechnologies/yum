@@ -172,39 +172,18 @@ public class EmailService {
     }
 
     public void sendNewUserEmailToAllAdmins(User newUser) {
-
-        // When a new user registers, is unapproved by default.
-        // We need to let the admin know that the user is unapproved.
-        // This method will send an email to each admin.
-        // prepare the text of the email
-        // Text ex.::
-        // 
-        // A new user just registered. Here are the new user details
-        //     first name: <newUser.firstName>
-        //      last name: <newUser.lastName>
-        //          email: <newUser.email>
-        // 
-        // You have to approve this user so he/she can log in.
-        // click on this link to approve the user:
-        // http://<yumHostname>/admin/users/<newUser.id>
-        StringBuilder text = new StringBuilder();
-        text.append("A new user just registered. Here are the new user details\n");
-        text.append("       first name: ").append(newUser.getFirstName()).append("\n");
-        text.append("        last name: ").append(newUser.getLastName()).append("\n");
-        text.append("            email: ").append(newUser.getEmail()).append("\n");
-        text.append("\n");
-        text.append("You have to approve this user so he/she can log in.\n");
-        text.append("Click on this link to approve the user:\n");
-
-        text.append(applicationProperties.getMail().getDomain()).append("/admin/users/").append(newUser.getId());
-
-        // Iterate over a list of admin users. For each admin:
+        
+        // create hashmap for the placeholders of the template
+        Map<String, Object> model = new HashMap<>();
+        model.put("firstName", newUser.getFirstName());
+        model.put("lastName", newUser.getLastName());
+        model.put("email", newUser.getEmail());
+        model.put("link", applicationProperties.getMail().getDomain() + "/admin/users/" + newUser.getId());
         List<User> admins = userRep.findByUserRole(UserRole.ADMIN);
         for (User admin : admins) {
-            // Adds a greeting sentence to the text
-            String textString = "Dear " + admin.getFirstName() + " " + admin.getLastName() + ",\r\n" + text;
-            //mailSender.send(message);
-            sendEmail(admin.getEmail(), "[Yum] new user registered", textString);
+            model.put("adminFirstName", admin.getFirstName());
+            model.put("adminLastName", admin.getLastName());
+            sendHtmlTemplateEmail(admin.getEmail(), "[Yum] New user registered", model, "user-registered.html");
         }
     }
 
@@ -237,9 +216,8 @@ public class EmailService {
         model.put("balance", user.getBalance());
         sendHtmlTemplateEmail(user.getEmail(), "[Yum] Order Confirmation", model, "order.html");
 
-
     }
-
+    
     public void sendResetPasswordLinkEmail(User user) {
 
         // send this email to the user that requested a password reset.
@@ -268,31 +246,46 @@ public class EmailService {
         // Sends the email
         sendEmail(user.getEmail(), "[Yum] Password reset", text.toString());
     }
-
+    
     public void sendApprovalEmail(User user) {
+  
+        Settings settings = settingsRep.findOne(1);
 
-        // send this email to the user that requested a password reset.
-        // prepare the text like follow:
-        // Dear <user.firtname> <user.lastname>,
-        // 
-        // You just requested your password to be reset. If that was not you, please discard this message.
-        //
-        // To enter your new password, please visit this link:
-        // http://<yumHostname>/changepassword/<user.getResetPwdSecret()>
-        // 
-        // Thank you for using Yum!    
-        StringBuilder text = new StringBuilder();
-        text.append("Dear ").append(user.getFirstName()).append(" ").append(user.getLastName()).append(",\n");
-        text.append("\n");
-        text.append("Your account has been activated.\n");
-        text.append("You can login by going to the link:\n");
-        text.append(applicationProperties.getMail().getDomain()).append("/\n");
-        text.append("\n");
-        text.append("Enjoy your meals on Yum!\n");
-
+        // create hashmap for the placeholders of the template
+        Map<String, Object> model = new HashMap<>();
+        model.put("firstName", user.getFirstName());
+        model.put("lastName", user.getLastName());
+        model.put("link", applicationProperties.getMail().getDomain());
+        
         // Sends the email
-        sendEmail(user.getEmail(), "[Yum] Account activated", text.toString());
+        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Account activated", model, "user-approval.html");
+        
     }
+
+//    public void sendApprovalEmail(User user) {
+//
+//        // send this email to the user that requested a password reset.
+//        // prepare the text like follow:
+//        // Dear <user.firtname> <user.lastname>,
+//        // 
+//        // You just requested your password to be reset. If that was not you, please discard this message.
+//        //
+//        // To enter your new password, please visit this link:
+//        // http://<yumHostname>/changepassword/<user.getResetPwdSecret()>
+//        // 
+//        // Thank you for using Yum!    
+//        StringBuilder text = new StringBuilder();
+//        text.append("Dear ").append(user.getFirstName()).append(" ").append(user.getLastName()).append(",\n");
+//        text.append("\n");
+//        text.append("Your account has been activated.\n");
+//        text.append("You can login by going to the link:\n");
+//        text.append(applicationProperties.getMail().getDomain()).append("/\n");
+//        text.append("\n");
+//        text.append("Enjoy your meals on Yum!\n");
+//
+//        // Sends the email
+//        sendEmail(user.getEmail(), "[Yum] Account activated", text.toString());
+//    }
 
     @Transactional
     public void sendOrderSummary(LocalDate day) {
