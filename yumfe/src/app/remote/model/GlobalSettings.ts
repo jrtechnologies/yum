@@ -28,6 +28,8 @@ export interface GlobalSettings {
 
     policy?: string;
 
+    reportEmail?: string;
+
     lastEdit?: models.LastEdit;
 
 }

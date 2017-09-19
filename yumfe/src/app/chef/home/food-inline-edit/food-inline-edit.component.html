@@ -8,7 +8,7 @@
     <div fxFlex="20" class="align-left">
       <div fxLayout="column">
         <div>
-          <md-input-container>
+          <md-form-field>
             <input mdInput placeholder="Food Name" type="text" formControlName="foodName" (keyup)="nameChangesAndUnique($event.target.value)">
             <md-error *ngIf="foodEditForm.get('foodName').touched && foodEditForm.get('foodName').hasError('required')">
               Food Name is required
@@ -27,7 +27,7 @@
                 This name already exists
               </md-error>
             </div>
-          </md-input-container>
+          </md-form-field>
         </div>
 
         <div class="top-margin">
@@ -44,17 +44,17 @@
     </div>
 
     <div fxFlex="20">
-      <md-input-container class="example-full-width" (keyup)="descriptionChanges($event.target.value)">
+      <md-form-field class="example-full-width" (keyup)="descriptionChanges($event.target.value)">
         <textarea mdInput placeholder="Description" type="text" formControlName="description" cols="40" rows="3" (keyup)="count(tweetmsg)" [(ngModel)]="tweetmsg" class="noResize"></textarea>
         <md-hint>{{characterleft}} charcter(s) left</md-hint>
         <md-error *ngIf="foodEditForm.get('description').touched && foodEditForm.get('description').hasError('maxlength')">
           Maximum of 250 characters
         </md-error>
-      </md-input-container>
+      </md-form-field>
     </div>
 
     <div fxFlex="20" class="smallLeftPad">
-      <md-input-container>
+      <md-form-field>
         <input mdInput placeholder="Price" formControlName="price" (keyup)="priceChanges($event.target.value)">
         <md-error *ngIf="foodEditForm.get('price').touched && foodEditForm.get('price').hasError('required')">
           Price is required
@@ -65,7 +65,7 @@
         <md-error *ngIf="foodEditForm.get('price').touched && foodEditForm.get('price').hasError('pattern')">
           Invalid price
         </md-error>
-      </md-input-container>
+      </md-form-field>
     </div>
 
     <div fxFlex="20">

@@ -292,6 +292,7 @@ public class AuthService {
         userModel.setApproved(user.isApproved());
         userModel.setLastEdit(new LastEdit(user.getLastEdit(), user.getVersion()));
         userModel.setHasPicture(user.hasPicture());
+        userModel.setBalance(user.getBalance());
         token.setUser(userModel);
 
         return token;

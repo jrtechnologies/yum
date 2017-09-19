@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   protected sub: any;
   protected dailymenusMap: Map<String, remote.DailyMenu> = new Map<String, remote.DailyMenu>();
   public currency: Observable<string>;
-  public deadline: Observable<Date>;
+  public deadline: Observable<any>;
   public notes: Observable<string>;
   public showLoadSpinner= false;
   public weeklyTotalPrice = 0;
@@ -126,7 +126,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public dailyMenuExists(dateStr: String) {
-    return this.dailymenusMap.has(dateStr);
+      return this.dailymenusMap.has(dateStr);
   }
 
   public previousWeek() {
@@ -168,5 +168,35 @@ export class HomeComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['/hungry/', getYear(dt), this.pad(getISOWeek(dt), 2)]);
     }
+  }
+
+  public formattedDay(day: string): string {
+    const date = new Date(day);
+    return (this.datePipe.transform(date, 'EEEE / d MMM'));
+  }
+
+  public formattedDeadline(deadline: any): string {
+    if (deadline != null) {
+      const time: Date = deadline.dTime;
+      return ('0' + time.getHours()).slice(-2) + ':' + ('0' + time.getMinutes()).slice(-2);
+    } else {
+      return '';
+    }
+  }
+
+  public formattedDeadlineDays(deadline: any): string {
+    if (deadline != null) {
+      switch (deadline.dDays) {
+        case 0:
+          return 'the same day';
+        case 1:
+          return 'the previous day';
+        default:
+          return deadline.dDays + ' days before';
+      }
+    } else {
+      return '';
+    }
+
   }
 }

@@ -16,9 +16,9 @@
 
       <ng-container *ngFor="let orderItem of dailyMenuOrderChef.orderItems" class="">
         <ng-container *ngIf=" getFood(orderItem.foodId)| async; let foodItem;">
-          <div [ngClass]="{'icon-Meal': foodItem.foodType==='Main', 'icon-Salad': foodItem.foodType==='Salad', 'icon-Drink': foodItem.foodType==='Drink'}" class="cell"> </div>
-          <div class="cell"> {{ foodItem.foodName }} </div>
-          <div class="foodListItemQty cell cellLast"> {{orderItem.quantity}}</div>
+          <div  [ngClass]="{'icon-Meal': foodItem.foodType==='Main', 'icon-Salad': foodItem.foodType==='Salad', 'icon-Drink': foodItem.foodType==='Drink'}" class="cell"> </div>
+          <div class=" cell"> {{ foodItem.foodName }} </div>
+          <div class="  foodListItemQty cell cellLast"> {{orderItem.quantity}}</div>
         </ng-container>
       </ng-container>
 

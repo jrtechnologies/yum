@@ -3,7 +3,7 @@
   <form createNewFoodItemForm [formGroup]="food" autocomplete="off">
     <md-grid-list cols="4" rowHeight="100px">
       <md-grid-tile [colspan]="3" [rowspan]="1">
-        <md-input-container class="full-width">
+        <md-form-field class="full-width">
           <input mdInput placeholder="Food Name" type="text" formControlName="foodName" (blur)="uniqueName($event.target.value)">
           <md-error *ngIf="food.get('foodName').touched && food.get('foodName').hasError('required')">
             Food Name is required
@@ -22,7 +22,7 @@
               This name already exists
             </md-error>
           </div>
-        </md-input-container>
+        </md-form-field>
       </md-grid-tile>
       <md-grid-tile [colspan]="1" [rowspan]="1">
       </md-grid-tile>
@@ -35,16 +35,16 @@
       </md-grid-tile>
 
       <md-grid-tile [colspan]="2" [rowspan]="1" class="smallPaddingBottom">
-        <md-input-container class="full-width">
+        <md-form-field class="full-width">
           <textarea mdInput placeholder="Description" type="text" formControlName="description" cols="50" rows="3" class="noResize" (keyup)="count(tweetmsg)"  [(ngModel)]="tweetmsg"></textarea>
           <md-hint>{{characterleft}} character(s) left</md-hint>
           <md-error *ngIf="food.get('description').touched && food.get('description').hasError('maxlength')">
             Maximum of 250 characters
           </md-error>
-        </md-input-container>
+        </md-form-field>
       </md-grid-tile>
       <md-grid-tile [colspan]="1" [rowspan]="1" class="alignBottom">
-        <md-input-container class="noMarginInput">
+        <md-form-field class="noMarginInput">
           <input mdInput placeholder='Price' formControlName="price" />
           <md-error *ngIf="food.get('price').touched && food.get('price').hasError('required')">
             Price is required
@@ -55,7 +55,7 @@
           <md-error *ngIf="food.get('price').touched && food.get('price').hasError('pattern')">
             Invalid price
           </md-error>
-        </md-input-container>
+        </md-form-field>
       </md-grid-tile>
       <md-grid-tile [colspan]="3" [rowspan]="1">
       </md-grid-tile>

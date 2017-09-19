@@ -37,7 +37,7 @@
         <ng-template #elseBlock>
 
           <md-grid-tile colspan="2" class="left">
-            <md-input-container>
+            <md-form-field>
 
               <input mdInput type="password" placeholder="Password" formControlName="password" (keyup)="onPasswordChange()">
               <md-hint *ngIf="profileGroup.get('password').value===null ||profileGroup.get('password').value.length<6">Password should be at least 6 characters (space not allowed) </md-hint>
@@ -49,10 +49,10 @@
                 Password should be at least 6 characters (space not allowed)
               </md-error>
 
-            </md-input-container>
+            </md-form-field>
           </md-grid-tile>
           <md-grid-tile colspan="2">
-            <md-input-container>
+            <md-form-field>
               <input mdInput type="password" placeholder="Confirm Password" formControlName="confirm">
               <md-error *ngIf="profileGroup.get('confirm').hasError('required') && profileGroup.get('confirm').touched">
                 Password Confirming is required
@@ -60,7 +60,7 @@
               <md-error *ngIf="profileGroup.get('confirm').hasError('confirmError') && profileGroup.get('confirm').touched">
                 Password and confirm do not match.
               </md-error>
-            </md-input-container>
+            </md-form-field>
           </md-grid-tile>
         </ng-template>
         <md-grid-tile colspan="1">

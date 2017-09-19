@@ -10,61 +10,51 @@
       <div>{{getUser().lastName}}</div>
     </div>
     <div class="">
-       <button md-icon-button  md-raised-button [ngClass]="{'isOpen': trigger.menuOpen}" (click)="triggerMenu()" ><i class="material-icons md-32">keyboard_arrow_down</i></button>
+      <button md-icon-button md-raised-button [ngClass]="{'isOpen': trigger.menuOpen}" (click)="triggerMenu()"><i class="material-icons md-32">keyboard_arrow_down</i></button>
 
     </div>
     <div class="menuDrawerButton">
 
-      <button md-icon-button  class="hidden "   md-raised-button [mdMenuTriggerFor]="menu" ><i class="material-icons md-32">keyboard_arrow_down</i></button>
+      <button md-icon-button class="hidden" md-raised-button [mdMenuTriggerFor]="menu"><i class="material-icons md-32">keyboard_arrow_down</i></button>
 
-      <md-menu #menu="mdMenu" [classList]="testClass" xPosition="before" class="menuDrawer"  aria-label="Open settings menu">
+      <!-- <md-menu #menu="mdMenu" [classList]="testClass" xPosition="before" class="menuDrawer"  aria-label="Open settings menu"> -->
+      <md-menu #menu="mdMenu" xPosition="before" class="menuDrawer" aria-label="Open settings menu">
+        <div>
           <div class="is-flex menuDrawerContent">
 
-              <!--<div class="inline smallPad">
-                    <button md-raised-button color="accent" routerLink="/"  [routerLinkActiveOptions]="{ exact: true }" routerLinkActive  #rlaHungry="routerLinkActive" [disabled]='rlaHungry.isActive' routerLinkActive="active"><i class="material-icons">home</i></button>
-              </div>-->
-
-              <div class="inline smallPad">
-                <button  md-raised-button color="accent"
-                routerLink="/settings"
-      routerLinkActive  #rlaSettings="routerLinkActive" [disabled]='rlaSettings.isActive' routerLinkActive="active"
-                >Account settings</button>
-              </div>
-
-              <div class="inline smallPad">
-                <button (click)="logOff()" title="Sign out" md-icon-button  md-raised-button><i class="material-icons md-32"><i class="material-icons">power_settings_new</i></i></button>
-              </div>
 
 
-        </div>
+            <div class="inline smallPad">
+              <button md-raised-button color="accent" routerLink="/settings" routerLinkActive #rlaSettings="routerLinkActive" [disabled]='rlaSettings.isActive'
+                routerLinkActive="active">Account settings</button>
+            </div>
 
-        <div class="smallPad marginTop" *ngIf="role=='admin' || role=='chef'">
-                <!--<md-select [(ngModel)]="homepage" #selectHome="ngModel" class="responsive" placeholder="Go to page" >
-                  <md-option *ngFor="let homepage of homepages" [value]='homepage'  (click)="goToHomepage(homepage)">
-                    {{ homepage.display }}
-                  </md-option>
-                </md-select>-->
-
-                <button  md-raised-button color="accent"
-                routerLink="/hungry"
-      routerLinkActive  #rlaHungryHome="routerLinkActive" [disabled]='rlaHungryHome.isActive' routerLinkActive="active"
-                >Hungry</button>
-
-
-                <button   *ngIf="role=='admin' || role=='chef'" md-raised-button color="accent"
-                routerLink="/chef"
-      routerLinkActive  #rlaChefHome="routerLinkActive" [disabled]='rlaChefHome.isActive' routerLinkActive="active"
-                >Chef</button>
-
-                <button   *ngIf="role=='admin'" md-raised-button color="accent"
-                routerLink="/admin"
-      routerLinkActive  #rlaAdminHome="routerLinkActive" [disabled]='rlaAdminHome.isActive' routerLinkActive="active"
-                >Admin</button>
+            <div class="inline smallPad">
+              <button (click)="logOff()" title="Sign out" md-icon-button md-raised-button><i class="material-icons md-32"><i class="material-icons">power_settings_new</i></i></button>
+            </div>
 
 
           </div>
 
+          <div class="smallPad marginTop" *ngIf="role=='admin' || role=='chef'">
+
+
+            <button md-raised-button color="accent" routerLink="/hungry" routerLinkActive #rlaHungryHome="routerLinkActive" [disabled]='rlaHungryHome.isActive'
+              routerLinkActive="active">Hungry</button>
+
+
+            <button *ngIf="role=='admin' || role=='chef'" md-raised-button color="accent" routerLink="/chef" routerLinkActive #rlaChefHome="routerLinkActive"
+              [disabled]='rlaChefHome.isActive' routerLinkActive="active">Chef</button>
+
+            <button *ngIf="role=='admin'" md-raised-button color="accent" routerLink="/admin" routerLinkActive #rlaAdminHome="routerLinkActive"
+              [disabled]='rlaAdminHome.isActive' routerLinkActive="active">Admin</button>
+
+
+          </div>
+        </div>
       </md-menu>
+      <!-- <button md-icon-button    md-raised-button [mdMenuTriggerFor]="menu" ><i class="material-icons md-32">keyboard_arrow_down</i></button> -->
+
     </div>
 
   </div>

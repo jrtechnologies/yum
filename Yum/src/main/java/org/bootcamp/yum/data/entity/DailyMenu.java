@@ -19,6 +19,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,6 +56,7 @@ public class DailyMenu {
     )
     private List<Food> foods;
     
+    //@OneToMany(mappedBy = "dailyMenu", fetch = FetchType.EAGER)
     @OneToMany(mappedBy = "dailyMenu")
     private List<DailyOrder> dailyOrders;
     

@@ -2,19 +2,48 @@
 
 .foodsList {overflow-y: auto; max-height: 160px;  margin-top: 5px;}
 
- .grid-container{ 
+@mixin cellCoordinates($n) {   
+  
+  @for $i from 1 through 60 { //cannot know num of elements
+    &:nth-child(0n + #{$i}){ 
+      $row: floor(($i + ($n - 1)) / $n  );         
+      -ms-grid-row: ( $row );
+    }
+  }
+  
+  @for $i from 1 through $n {
+    &:nth-child(#{$n}n +#{$i}){   
+        -ms-grid-column: #{$i};       
+    }
+  }
+}
+
+.grid-container{ 
    display: grid;
    grid-template-columns: 2fr 6fr 1fr;
    grid-template-rows: auto;
    grid-row-gap: 3px;
+
+   display: -ms-grid;  
+   -ms-grid-columns: 2fr 6fr 1fr;
+   -ms-grid-rows: auto;
+   -ms-grid-row-gap: 3px;
+
+  /** Explicit Positioning - For IE 10, IE 11 and Edge > 16 */
+    .cell {
+      background-color: #f2f2f2; 
+      color: #333333; 
+      display: flex;
+      align-items: center;
+      padding: 2px 4px;
+ 
+      @include cellCoordinates(3);
+    }
+
+    .cellLast{ background-color: #ff5b57!important; color:#fff!important; justify-content: flex-end; padding: 2px 8px;}
+
 }
 
-.grid-container .cell{
-    background-color: #f2f2f2; 
-    color: #333333; 
-    display: flex;
-    align-items: center;
-    padding: 2px 4px;
-}
+ 
 
-.grid-container .cellLast{ background-color: #ff5b57!important; color:#fff!important; justify-content: flex-end; padding: 2px 8px;}
+ 

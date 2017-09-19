@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, SimpleChanges, OnChanges, EventEmitter, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { Validators, FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { MdInputContainer, MdAutocomplete, MdAutocompleteTrigger, MdProgressBar } from '@angular/material';
-import { subDays,  isValid , getHours, getMinutes, getSeconds, addDays, getMonth } from 'date-fns';
+import { MdAutocomplete, MdAutocompleteTrigger, MdProgressBar } from '@angular/material';
+import { subDays,  isValid , getHours, getMinutes, getSeconds, addDays, getMonth, compareAsc } from 'date-fns';
 import * as remote from '../../../remote';
 import * as models from './../../../shared/models';
 
@@ -63,8 +63,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
         dropList: this.selectCtrl
     });
 
-
-
+ 
     if(getMonth(this.day)!==getMonth(this.viewdate)){
       this.showSpinner=false;
       return;
@@ -110,20 +109,24 @@ export class DailyMenuComponent implements OnInit, OnChanges {
       this.foodsSelectedMap.clear();
       this.foodsSelected = [];
 
-      this.globalSettingsService.getDeadLine().subscribe(deadline =>{
+      if(this.day){
+        this.globalSettingsService.getDeadLine().subscribe(deadline =>{
 
-            let today = new Date();
-            let menuDate= new Date(this.day);
-            menuDate.setHours(0,0,0,0);
-            //console.log("menu date", menuDate);
-            menuDate = subDays(menuDate, deadline.dDays);
-            let deadlineTime: Date = deadline.dTime;
-            menuDate.setHours(getHours(deadlineTime), getMinutes(deadlineTime), getSeconds(deadlineTime));
-            this.menuCanBeEdited = new Date(menuDate) > today;
+              let today = new Date();
+              let menuDate= new Date(this.day);
+              menuDate.setHours(0,0,0,0);
+              //console.log("menu date", menuDate);
+              menuDate = subDays(menuDate, deadline.dDays);
+              let deadlineTime: Date = deadline.dTime;
+              menuDate.setHours(getHours(deadlineTime), getMinutes(deadlineTime), getSeconds(deadlineTime));
 
-            //console.log("deadline:", new Date(menuDate));
+              //this.menuCanBeEdited = ( compareAsc(new Date(menuDate), today)==1 );
+              this.menuCanBeEdited = new Date(menuDate) > today;
 
-        });
+              //console.log("deadline:", new Date(menuDate));
+
+          });
+      }
 
       if (this.menu !== undefined) {
 

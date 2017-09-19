@@ -261,6 +261,7 @@ public class UsersService {
                 lastEdit.setTimeStamp(userEntity.getLastEdit());
                 lastEdit.setVersion(userEntity.getVersion());
                 userModel.setLastEdit(lastEdit);
+                userModel.setBalance(userEntity.getBalance());
                 usersModelList.add(userModel); // add user in List of users
             }
             // return usersModelList; // Return list of all users from database
@@ -293,6 +294,7 @@ public class UsersService {
             userModel.setApproved(userEntity.isApproved());
             userModel.setLastEdit(lastEdit);
             userModel.setHasPicture(userEntity.hasPicture());
+            userModel.setBalance(userEntity.getBalance());
             return userModel; // Return one user.
         }
         throw new ApiException(404, "User not found");

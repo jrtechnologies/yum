@@ -18,19 +18,28 @@ hr{
 .deadlineTime{
   width: 150px;
   border: 2px solid #CECECE;
+  padding: 2px 0 1px 3px;
+  line-height: 1.45rem;
 }
 .deadlineDays{
   width: 100px;
   // height: 18px;
-  padding-top: 4px;
+  padding: 4px 0 0 3px;
   border: 2px solid #CECECE;
+  line-height: 1.5rem;
 }
 .deadlineCurrency{
   width: 200px;
   border: 2px solid #CECECE;
 }
+.reportEmail{
+  width:100%;
+  border: 2px solid #CECECE;
+  padding: 2px 0 1px 3px;
+  line-height: 1.6rem;
+}
 .textareas{
-  width:70%;
+  width:75%;
 }
 .area{
   margin-top: 3%;

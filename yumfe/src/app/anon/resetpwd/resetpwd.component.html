@@ -6,7 +6,7 @@
         <p>
         Please enter a new password<br>to continue.
         </p>
-        <md-input-container>
+        <md-form-field>
           <input mdInput type="password" placeholder="New Password" formControlName="password" (keyup)= "onPasswordChange()"/>
           <md-error class="error" *ngIf="resetForm.get('password').touched && resetForm.get('password').hasError('required')">
             Password is required.
@@ -14,8 +14,8 @@
           <md-error class="error" *ngIf="resetForm.get('password').touched && resetForm.get('password').hasError('pattern')">
             Password min 6 characters.
           </md-error>
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
           <input mdInput type="password" placeholder="Confirm Password" formControlName="confirm"/>
           <md-error *ngIf="resetForm.get('confirm').hasError('required') && resetForm.get('confirm').touched">
             Password Confirming is required.
@@ -26,7 +26,7 @@
           <md-error *ngIf="resetForm.get('confirm').hasError('confirmError') && resetForm.get('confirm').touched">
             Password and confirm do not match.
           </md-error>
-        </md-input-container>
+        </md-form-field>
         <div>
           <button md-raised-button type="submit" color="warn" [disabled]="resetForm.invalid || isDisable === true">Change Password</button>
           <img class="spinner" *ngIf="showSpinner" src="../../assets/img/spinner.gif">

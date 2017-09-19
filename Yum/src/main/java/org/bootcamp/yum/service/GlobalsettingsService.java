@@ -16,6 +16,7 @@
 package org.bootcamp.yum.service;
 
 import javax.transaction.Transactional;
+import org.bootcamp.tasks.ReportEmail;
 import org.bootcamp.yum.api.ApiException;
 import org.bootcamp.yum.api.ConcurrentModificationException;
 import org.bootcamp.yum.api.model.GlobalSettings;
@@ -37,8 +38,15 @@ public class GlobalsettingsService {
     
     @Autowired
     SettingsRepository settingsRepo;
+    
+    @Autowired
+    ReportEmail reportEmail;
+
     @Autowired
     DailyMenuRepository dailyMenuRepo;
+    
+    @Autowired
+    EmailService emailService;
     
     public GlobalSettings globalsettingsGet() throws ApiException{
         GlobalSettings globalSettings = new GlobalSettings();        
@@ -107,7 +115,10 @@ public class GlobalsettingsService {
             if(deadLine != null && !deadLine.trim().equals(settings.getDeadline().toString())){
                 settings.setDeadline(new LocalTime(deadLine));
                 changes = true;
-                updateDeadline = true;                
+                updateDeadline = true;  
+                if ( emailService != null){
+                    reportEmail.registerSchedule();
+                }
             }
             
             Integer deadlineDays = upSettings.getDeadlineDays();
@@ -144,8 +155,9 @@ public class GlobalsettingsService {
             if(!changes)
                 throw new ApiException(400, "Bad Request"); // no changes for update
             
+ 
             // in case of changes to deadline days and/or time, examine if email reports have to be sent
-            if(updateDeadline){
+            if(updateDeadline){                 
                 int newDeadlineDays = settings.getDeadlineDays();
                 LocalTime newDeadlineTime = settings.getDeadline();
                 //if new deadline is earlier than old deadline
@@ -155,13 +167,14 @@ public class GlobalsettingsService {
                         LocalDate dailyMenuDate = (new LocalDate()).plusDays(i);
                         // if old deadline not passed and new deadline passed and dailyMenu not null, send report email
                         if (!oldDeadlinePassed(dailyMenuDate, oldDeadlineDays, oldDeadlineTime) && settings.deadlinePassed(dailyMenuDate) && dailyMenuRepo.findByDate(dailyMenuDate) != null){
-                                System.out.println(">>>>>>>>>>>>>sending email, date: " + dailyMenuDate);
-                                //TODO call method of email service for sending daily menus report email
+                                //System.out.println(">>>>>>>>>>>>>sending email, date: " + dailyMenuDate);
+                                emailService.sendOrderSummary(dailyMenuDate);                                 
                         }
                     }
                     
                 }
             }
+ 
         }        
     }
 

@@ -21,7 +21,7 @@ info:
       
     ------------------------------------
 
-        Last edit: 06/09/2017 09:55
+        Last edit: 14/09/2017 04:15
 
     -------------------------------------
 basePath: /api
@@ -1279,6 +1279,9 @@ definitions:
         type: boolean
       hasPicture:
         type: boolean
+      balance:
+        type: number
+        format: int64
       lastEdit:
         $ref: '#/definitions/LastEdit'
   UsersPage:

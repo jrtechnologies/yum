@@ -9,7 +9,7 @@
         instructions.
         </p>
         <label>Enter your email address</label>
-        <md-input-container>
+        <md-form-field>
           <input mdInput type="email" placeholder="Email" formControlName="email"/>
           <md-error class="error" *ngIf="forgotForm.get('email').touched && forgotForm.get('email').hasError('required')">
             Email is required.
@@ -17,7 +17,7 @@
           <md-error class="error" *ngIf="forgotForm.get('email').touched && forgotForm.get('email').hasError('pattern')">
             Wrong email address
           </md-error>
-        </md-input-container>
+        </md-form-field>
         <div>
           <button md-raised-button type="submit" color="accent" [disabled]="forgotForm.invalid || isDisable === true">Reset Password</button>
           <img class="spinner" *ngIf="showSpinner" src="../../assets/img/spinner.gif">
