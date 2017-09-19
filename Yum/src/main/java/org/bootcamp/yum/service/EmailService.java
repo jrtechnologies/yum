@@ -220,36 +220,21 @@ public class EmailService {
     
     public void sendResetPasswordLinkEmail(User user) {
 
-        // send this email to the user that requested a password reset.
-        // prepare the text like follow:
-        // Dear <user.firtname> <user.lastname>,
-        // 
-        // You just requested your password to be reset. If that was not you, please discard this message.
-        //
-        // To enter your new password, please visit this link:
-        // http://<yumHostname>/changepassword/<user.getResetPwdSecret()>
-        // 
-        // Thank you for using Yum!    
-        StringBuilder text = new StringBuilder();
-        text.append("Dear ").append(user.getFirstName()).append(" ").append(user.getLastName()).append(",\n");
-        text.append("\n");
-        text.append("You just requested your password to be reset. If that was not you, please discard this message.\n");
-        text.append("\n");
-        text.append("To enter your new password, please visit this link:\n");
-        text.append(applicationProperties.getMail().getDomain()).append("/resetpwd/token?token=").append(user.getSecret()).append("\n");
-        text.append("\n");
-        DateTime creationTime = user.getSecretCreation().plusDays(1);
-        text.append("The link will be active for 24 hours (until ").append(creationTime.toString("HH:mm:ss")).append(", on ").append(creationTime.toString("EEEE dd MMMM YYYY")).append(").\n");
-        text.append("\n");
-        text.append("Thank you for using Yum!\n");
-
+        // create hashmap for the placeholders of the template
+        Map<String, Object> model = new HashMap<>();
+        model.put("firstName", user.getFirstName());
+        model.put("lastName", user.getLastName());
+        model.put("link", applicationProperties.getMail().getDomain()+"/resetpwd/token?token="+user.getSecret());
+        DateTime expiration = user.getSecretCreation().plusDays(1);
+        model.put("expirationTime", expiration.toString("HH:mm:ss"));
+        model.put("expirationDate", expiration.toString("EEEE dd MMMM YYYY"));
         // Sends the email
-        sendEmail(user.getEmail(), "[Yum] Password reset", text.toString());
+        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Password reset", model, "reset-password.html");
+        
     }
+
     
     public void sendApprovalEmail(User user) {
-  
-        Settings settings = settingsRep.findOne(1);
 
         // create hashmap for the placeholders of the template
         Map<String, Object> model = new HashMap<>();
@@ -261,31 +246,6 @@ public class EmailService {
         sendHtmlTemplateEmail(user.getEmail(), "[Yum] Account activated", model, "user-approval.html");
         
     }
-
-//    public void sendApprovalEmail(User user) {
-//
-//        // send this email to the user that requested a password reset.
-//        // prepare the text like follow:
-//        // Dear <user.firtname> <user.lastname>,
-//        // 
-//        // You just requested your password to be reset. If that was not you, please discard this message.
-//        //
-//        // To enter your new password, please visit this link:
-//        // http://<yumHostname>/changepassword/<user.getResetPwdSecret()>
-//        // 
-//        // Thank you for using Yum!    
-//        StringBuilder text = new StringBuilder();
-//        text.append("Dear ").append(user.getFirstName()).append(" ").append(user.getLastName()).append(",\n");
-//        text.append("\n");
-//        text.append("Your account has been activated.\n");
-//        text.append("You can login by going to the link:\n");
-//        text.append(applicationProperties.getMail().getDomain()).append("/\n");
-//        text.append("\n");
-//        text.append("Enjoy your meals on Yum!\n");
-//
-//        // Sends the email
-//        sendEmail(user.getEmail(), "[Yum] Account activated", text.toString());
-//    }
 
     @Transactional
     public void sendOrderSummary(LocalDate day) {
