@@ -14,6 +14,7 @@
  */
 package org.bootcamp.yum.service;
 
+import freemarker.core.ParseException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -59,6 +60,13 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import freemarker.template.Configuration;
+import freemarker.template.MalformedTemplateNameException;
+import freemarker.template.TemplateException;
+import java.io.IOException;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 
 @Service
 public class EmailService {
@@ -68,6 +76,9 @@ public class EmailService {
 
     @Autowired
     private JavaMailSender mailHtmlSender;
+
+    @Autowired
+    Configuration freeMarkerConfig;
 
     @Autowired
     private ApplicationProperties applicationProperties;
@@ -83,8 +94,6 @@ public class EmailService {
 
     @Autowired
     private SettingsRepository settingsRep;
-    
-   
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(EmailService.class);
 
@@ -98,6 +107,19 @@ public class EmailService {
         message.setText(emailBody);
         mailSender.send(message);
 
+    }
+
+    public String getContentFromTemplate(Map<String, Object> model, String templateFileName) {
+        StringBuffer content = new StringBuffer();
+
+        try {
+            freeMarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates");
+            content.append(FreeMarkerTemplateUtils
+                    .processTemplateIntoString(freeMarkerConfig.getTemplate(templateFileName), model));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return content.toString();
     }
 
     private void sendHtmlEmail(String sendTo, String subject, String emailBody) {
@@ -114,6 +136,37 @@ public class EmailService {
             Logger.getLogger(EmailService.class.getName()).log(Level.WARNING, null, ex);
         } catch (MessagingException ex) {
             Logger.getLogger(EmailService.class.getName()).log(Level.WARNING, null, ex);
+        }
+
+    }
+
+    private void sendHtmlTemplateEmail(String sendTo, String subject, Map<String, Object> model, String templateFileName) {
+        try {
+            MimeMessage message = mailHtmlSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(InternetAddress.parse(sendTo));
+            helper.setFrom(applicationProperties.getMail().getFrom());
+            helper.setSubject(subject);
+
+            StringBuilder content = new StringBuilder();
+            freeMarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates");
+            content.append(FreeMarkerTemplateUtils
+                    .processTemplateIntoString(freeMarkerConfig.getTemplate(templateFileName), model));
+
+            helper.setText(content.toString(), true);
+            helper.addInline("yumLogo", new ClassPathResource("templates/images/Yum-logo-small.png"));
+            mailHtmlSender.send(message);
+
+        } catch (AddressException ex) {
+            Logger.getLogger(EmailService.class.getName()).log(Level.WARNING, null, ex);
+        } catch (MessagingException ex) {
+            Logger.getLogger(EmailService.class.getName()).log(Level.WARNING, null, ex);
+        } catch (MalformedTemplateNameException ex) {
+            Logger.getLogger(EmailService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException | TemplateException ex) {
+            Logger.getLogger(EmailService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(EmailService.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -157,49 +210,33 @@ public class EmailService {
 
     public void sendConfirmOrderEmailToHungry(DailyOrder order, DailyMenu dailyMenu) {
 
-        // send this email to the user associated with the order.
-        // prepare the text like follow:
-        // Dear <user.firtname> <user.lastname>,
-        // 
-        // You just placed this order for the day 01/01/2017
-        //
-        //    food1   qty 1 x 5 euro 
-        //    food2
-        //
-        //    total :  15 euro
-        //
-        // You can modify this order until <deadline time> <date-1> by going to the link:
-        // http://<yumHostname>/hungry/<week-year>/
-        // 
-        // Thank you for your order!
         User user = userRep.findById(order.getUserId());
-        StringBuilder text = new StringBuilder();
-        String currency = settingsRep.findById(1).getCurrency();
-        
         LocalDate menuDate = dailyMenu.getDate();
-        text.append("Dear ").append(user.getFirstName()).append(" ").append(user.getLastName()).append(",\n");
-        text.append("\n");
-        text.append("You just placed this order for ").append(menuDate.toString("EEEE dd MMMM YYYY")).append("\n");
-        text.append("\n");
+        Settings settings = settingsRep.findOne(1);
+
+        // create hashmap for the placeholders of the template
+        Map<String, Object> model = new HashMap<>();
+        model.put("firstName", user.getFirstName());
+        model.put("lastName", user.getLastName());
+        model.put("menuDate", menuDate.toString("EEEE dd MMMM YYYY"));
+        model.put("link", applicationProperties.getMail().getDomain() + "/hungry/" + menuDate.getYear() + "/" + menuDate.getWeekOfWeekyear());
+        model.put("orderItems", order.getOrderItems());
+        model.put("currency", settings.getCurrency());
         BigDecimal total = new BigDecimal("0");
+        int totalQuantity =0;
         for (OrderItem orderItem : order.getOrderItems()) {
             Food food = orderItem.getFood();
-            BigDecimal price = food.getPrice();
+            int quantity = orderItem.getQuantity();
+            BigDecimal price = food.getPrice().multiply(new BigDecimal(quantity));
             total = total.add(price);
-            text.append("\t").append(food.getName()).append("\tqty ").append(orderItem.getQuantity()).append(" x ").append(price).append(currency+"\n");
+            totalQuantity += quantity;
         }
-        text.append("\n");
-        text.append("\ttotal : ").append(total).append(currency).append("\n");
-        text.append("\n");
-        Settings settings = settingsRep.findOne(1);
-        text.append("You can modify this order until ").append(settings.getDeadline().toString("HH:mm")).append(", on ").append(menuDate.minusDays(settings.getDeadlineDays()).toString("EEEE dd MMMM YYYY")).append(" by going to the link:\n");
+        model.put("total", total);
+        model.put("totalQuantity", totalQuantity);
+        model.put("deadline", settings.getDeadline().toString("HH:mm") + ", on " + menuDate.minusDays(settings.getDeadlineDays()).toString("EEEE dd MMMM YYYY"));
+        model.put("balance", user.getBalance());
+        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Order Confirmation", model, "order.html");
 
-        text.append(applicationProperties.getMail().getDomain()).append("/hungry/").append(menuDate.getYear()).append("/").append(menuDate.getWeekOfWeekyear()).append("\n");
-
-        text.append("\n");
-        text.append("Thank you for your order!\n");
-
-        sendEmail(user.getEmail(), "[Yum] Order Confirmation", text.toString());
 
     }
 
@@ -274,7 +311,7 @@ public class EmailService {
 
         DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
         DateTimeFormatter fmtFull = DateTimeFormat.forPattern("EEEE dd MMMM yyyy");
-        
+
         String formattedDate = day.toString(fmt);
         String titleDate = day.toString(fmtFull);
         DecimalFormat df = new DecimalFormat();
@@ -282,18 +319,16 @@ public class EmailService {
         df.setMinimumFractionDigits(2);
 
         String currency = settingsRep.findById(1).getCurrency();
-        
+
         //Styles
-        
         String cellAlignLeft = " style=\"text-align: left;\" ";
         String cellAlignRight = " style=\"text-align: right;\" ";
-        
+
         //Build data
         HashMap<String, ArrayList<org.bootcamp.yum.api.model.OrderItem>> orderByFoodType = new HashMap<>();
 
         orderByFoodType = getFoodByType(dailyOrderSummary.getOrderItems());
 
-        
         sb.append("<div style=\"width:100%; margin 0 auto;text-align:center; padding:0 20px;\">\n");
         sb.append("<h1>YUM orders</h1>\n");
         sb.append("<h2>" + titleDate + "</h2><br>\n\n");
@@ -310,8 +345,8 @@ public class EmailService {
             for (org.bootcamp.yum.api.model.OrderItem o : v) {
                 Food f = foodRep.findById(o.getFoodId());
 
-                sb.append("<tr><td>" + f.getName() + "</td> <td>" + o.getQuantity() + "</td>  <td>" + df.format(f.getPrice()) + currency + "</td> <td "+cellAlignRight+">" + df.format(f.getPrice().multiply(new BigDecimal(o.getQuantity()))) + currency + "</td> </tr>\n");
-               sumTotal = sumTotal.add(f.getPrice().multiply(new BigDecimal(o.getQuantity())));
+                sb.append("<tr><td>" + f.getName() + "</td> <td>" + o.getQuantity() + "</td>  <td>" + df.format(f.getPrice()) + currency + "</td> <td " + cellAlignRight + ">" + df.format(f.getPrice().multiply(new BigDecimal(o.getQuantity()))) + currency + "</td> </tr>\n");
+                sumTotal = sumTotal.add(f.getPrice().multiply(new BigDecimal(o.getQuantity())));
             }
         }
 
@@ -319,39 +354,35 @@ public class EmailService {
         sb.append("<div style=\"text-align:right;\"><div style='display: inline-block;border-top: 2px solid #f44336; padding: 10px; font-weight:bold; '>Total: " + df.format(sumTotal) + currency + "</div></div>\n");
         sb.append("<br><br>");
 
-        
         // Orders by user
-        
         sb.append("<h2>Orders by user</h2>");
         sb.append("<table cellpadding=\"10\" cellspacing=\"5\" style=\"text-align:left; border-collapse: collapse; width:100%; \"  >");
         sb.append("<tr style=\"border-bottom:1px solid #ccc;\">");
         sb.append("<th style=\"text-align: left;\">Full name</th> <th style=\"text-align: left;\">Qty.</th><th style=\"text-align: left;\">Meal</th>  <th style=\"text-align: left;\">Qty.</th><th style=\"text-align: left;\">Salad</th> <th style=\"text-align: left;\">Qty.</th><th style=\"text-align: left;\">Drink</th> <th style=\"text-align: right;\">Total</th> </tr>\n");
 
-        
         for (UserOrder userOrder : dailyOrderSummary.getUserOrders()) {
             sumTotal = new BigDecimal(0);
             orderByFoodType = getFoodByType(userOrder.getOrderItems());
-            
+
             //get max row size
             int maxRows = 0;
             for (Map.Entry<String, ArrayList<org.bootcamp.yum.api.model.OrderItem>> entry : orderByFoodType.entrySet()) {
                 ArrayList<org.bootcamp.yum.api.model.OrderItem> v = entry.getValue();
-                if(maxRows<v.size()){
+                if (maxRows < v.size()) {
                     maxRows = v.size();
-                }            
+                }
             }
-            
+
             sb.append("<tr style=\"border-bottom:1px solid #ccc;\">\n");
 
             if (sumTotal.compareTo(new BigDecimal(0)) == 0) {
                 sb.append("<td>" + userOrder.getFirstName() + " " + userOrder.getLastName() + "</td>");
             }
 
-            
             ArrayList<String> foodTypes = new ArrayList<>(Arrays.asList("MAIN", "SALAD", "DRINK"));
-            
-            for( String foodType : foodTypes){
-            
+
+            for (String foodType : foodTypes) {
+
                 sb.append("\n<td colspan=\"2\"><table cellpadding=\"10\" cellspacing=\"5\" style=\"text-align:left; \"   >\n");
                 ArrayList<org.bootcamp.yum.api.model.OrderItem> meals = orderByFoodType.get(foodType);
                 if (meals != null) {
@@ -365,27 +396,23 @@ public class EmailService {
                 }
                 sb.append("</table></td>\n");
             }
-         
 
-            sb.append("<td "+cellAlignRight+">"+df.format(sumTotal) + currency+"</td> ");
+            sb.append("<td " + cellAlignRight + ">" + df.format(sumTotal) + currency + "</td> ");
             sb.append("</tr>\n");
-            
 
         }
 
         sb.append("</table>");
         sb.append("</div>");
-        
+
         //System.out.println(sb);
-       String emails = settingsRep.findById(1).getReportEmail();
-       if(emails !=null && !emails.isEmpty()){
-            ArrayList<String> emailsTo = new ArrayList<>(Arrays.asList( emails.split(";")));   
-            for(String emailTo : emailsTo){
-             sendHtmlEmail(emailTo, "Order summary for " + formattedDate, sb.toString());
+        String emails = settingsRep.findById(1).getReportEmail();
+        if (emails != null && !emails.isEmpty()) {
+            ArrayList<String> emailsTo = new ArrayList<>(Arrays.asList(emails.split(";")));
+            for (String emailTo : emailsTo) {
+                sendHtmlEmail(emailTo, "Order summary for " + formattedDate, sb.toString());
             }
-       }
-        
-       
+        }
 
     }
 
