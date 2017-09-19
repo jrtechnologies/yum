@@ -21,11 +21,10 @@ import {
   MdSnackBarModule,
   MdIconModule,
   MdProgressSpinnerModule,
-  MdProgressBarModule,
   MdAutocompleteModule,
   MaterialModule,
   MdMenuModule,
-  MdTabsModule
+  //MdTabsModule
 } from '@angular/material';
 
 import 'hammerjs';
@@ -39,14 +38,17 @@ import {
   SlideToggleComponent,
   UserDisapproveDialog
 } from './slide-toggle/slide-toggle.component';
-import { ProfileComponent } from './profile/profile.component';
+//import { ProfileComponent } from './profile/profile.component';
 import { GlobalSettingsService } from './services/global-settings-service.service';
-import { SettingsComponent } from './settings/settings.component';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent, TermsDialog } from './footer/footer.component';
-import { FileUploadModule } from 'ng2-file-upload';
-import { DeletePictureDialog } from './profile/profile.component';
-import { TabsComponent } from './footer/tabs/tabs.component';
+//import { SettingsComponent } from './settings/settings.component';
+//import { SettingsModule} from './settings/settings.module';
+//import { HeaderComponent } from './header/header.component';
+import { HeaderModule } from './header/header.module';
+//import { FooterComponent, TermsDialog } from './footer/footer.component';
+import { FooterModule } from './footer/footer.module';
+//import { FileUploadModule } from 'ng2-file-upload';
+//import { DeletePictureDialog } from './profile/profile.component';
+//import { TabsComponent } from './footer/tabs/tabs.component';
 
 @NgModule({
   imports: [
@@ -62,11 +64,13 @@ import { TabsComponent } from './footer/tabs/tabs.component';
     MdSelectModule,
     MdInputModule,
     MdDialogModule,
-    FileUploadModule,
-    MdProgressBarModule,
+    //FileUploadModule,
     FlexLayoutModule,
     MdMenuModule,
-    MdTabsModule
+    //MdTabsModule,
+    //SettingsModule,
+    HeaderModule,
+    FooterModule
   ],
   exports: [
     BrowserAnimationsModule,
@@ -93,8 +97,8 @@ import { TabsComponent } from './footer/tabs/tabs.component';
     PaginationComponent,
     SlideToggleComponent,
     UserDisapproveDialog,
-    DeletePictureDialog,
-    ProfileComponent,
+    //DeletePictureDialog,
+    //ProfileComponent,
     RouterModule,
     FlexLayoutModule
 
@@ -106,13 +110,13 @@ import { TabsComponent } from './footer/tabs/tabs.component';
     PaginationComponent,
     SlideToggleComponent,
     UserDisapproveDialog,
-    DeletePictureDialog,
-    ProfileComponent,
-    SettingsComponent,
-    HeaderComponent,
-    FooterComponent,
-    TermsDialog,
-    TabsComponent
+    //DeletePictureDialog,
+    //ProfileComponent,
+    //SettingsComponent,
+    //HeaderComponent,
+    //FooterComponent,
+    //TermsDialog,
+    //TabsComponent
   ],
   providers: [
     AuthenticationService,
@@ -124,8 +128,8 @@ import { TabsComponent } from './footer/tabs/tabs.component';
   ],
   entryComponents: [
     UserDisapproveDialog,
-    DeletePictureDialog,
-    TermsDialog
+    //DeletePictureDialog,
+    //TermsDialog
   ]
 })
 export class SharedModule { }

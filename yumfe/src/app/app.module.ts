@@ -6,11 +6,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthApi, ChefApi } from './remote';
 
 import { AppComponent } from './app.component';
-import { SharedModule } from './shared/shared.module';
+//import { SharedModule } from './shared/shared.module';
 import { HungryModule } from './hungry/hungry.module';
 import { ChefModule } from './chef/chef.module';
 import { AdminModule } from './admin/admin.module';
 import { AnonModule } from './anon/anon.module';
+
 import { AppRouting } from './app.routing';
 
 import { CalendarModule } from 'angular-calendar';
@@ -25,7 +26,7 @@ import { environment } from '../environments/environment';
 import { HttpSubjectService } from './shared/services/httpSubject.service';
 import { InterceptHttp, interceptHttpLoader } from './shared/services/http-intercept.service';
 import { DialogLogin } from './app.component';
-
+import { AuthenticationService } from './shared/authentication.service';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { DialogLogin } from './app.component';
     AppExtAuthRouteGuard,
     SettingsRouteGuard,
     HttpSubjectService,
+    AuthenticationService,
     {
       provide: Http, useFactory: interceptHttpLoader,
       deps: [XHRBackend, RequestOptions, HttpSubjectService]

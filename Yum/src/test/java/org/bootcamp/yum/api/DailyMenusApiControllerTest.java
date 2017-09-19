@@ -211,7 +211,7 @@ public class DailyMenusApiControllerTest
         mockDailyMenuList.add(mockDailyMenu);
 
         LocalTime deadline = new LocalTime(0, 0);
-        Settings sets = new Settings(1, deadline, null, "€", "notes", "tos", "policy", 0, 0);
+        Settings sets = new Settings(1, deadline, null, "€", "notes", "tos", "policy", 0, 0, "", "");
         given(mockSettingsRepository.findOne(1)).willReturn(sets);
         
         given(mockDailyMenuRepository.findById(6)).willReturn(mockDailyMenu);

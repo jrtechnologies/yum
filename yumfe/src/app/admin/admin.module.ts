@@ -23,13 +23,15 @@ import { TinymceDirective } from './tinymce.directive';
 import {
   MdButtonToggleModule
 } from '@angular/material';
+import { ProfileModule } from '../shared/profile/profile.module';
 
 @NgModule({
   imports: [
     CommonModule,
     AdminRouting,
     SharedModule,
-    MdButtonToggleModule
+    MdButtonToggleModule,
+    ProfileModule
   ],
   declarations: [
       HomeComponent,

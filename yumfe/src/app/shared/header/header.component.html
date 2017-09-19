@@ -2,7 +2,9 @@
   <div id="logo"> <a href="/"><img src="/assets/img/Yum-logo.png" alt="logo"></a></div>
   <div class="is-flex relative">
     <div>
-      <i *ngIf="!user.hasPicture" class="material-icons face">face</i>
+      <div *ngIf="!user.hasPicture">
+        <i  class="material-icons face">face</i>
+      </div>
       <img *ngIf="user.hasPicture" class="img-circle smallImage " src="{{userPicture}}" />
     </div>
     <div class="red">
