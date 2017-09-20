@@ -62,7 +62,7 @@ export class UserComponent implements OnInit {
           } else if (error.status === 409) {
             event.source.checked = true;
             // User has non final orders. Force disapprove?
-            let dialogRef = this.dialog.open(UserDisapproveDialog);
+            let dialogRef = this.dialog.open(UserListDisapproveDialog);
             dialogRef.afterClosed().subscribe(result => {
 
               if (result === 'Yes') {
@@ -182,8 +182,8 @@ export class UserComponent implements OnInit {
   selector: 'app-admin-disapprove-dialog',
   templateUrl: './user-disapprove-dialog.html',
 })
-export class UserDisapproveDialog {
-  constructor(public dialogRef: MdDialogRef<UserDisapproveDialog>) { }
+export class UserListDisapproveDialog {
+  constructor(public dialogRef: MdDialogRef<UserListDisapproveDialog>) { }
 }
 
 
