@@ -61,7 +61,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         //this.monthDate = this.date;
 
         this.weekDaysCal(startOfWeek(this.date, { weekStartsOn: 1 }));
-        this.monthDate = new Date(this.weekDays[this.weekDays.length - 1]);
+        if(this.weekDays.length>0){
+          this.monthDate = new Date(this.weekDays[this.weekDays.length - 1]);
+        }
+        else{this.monthDate=this.date; }
 
         this.getCurrentWeeklyMenu(this.buildweekYear(this.date));
       } else {
