@@ -52,6 +52,11 @@
       </md-grid-list>
 
       <div>
+        <div class="headerText">Holidays</div>
+        <button md-raised-button color="accent" routerLink="holidays"  [routerLinkActiveOptions]="{ exact: true }" routerLinkActive  routerLinkActive="active">Set bank Holidays</button>
+      </div>
+
+      <div>
         <div class="headerText">Working days</div>
         <md-button-toggle-group name="checkbox" #mdButtongroup="mdButtonToggleGroup" multiple  >
           <md-button-toggle *ngFor="let wDay of availableWorkingDays;" [value]="wDay.value" [checked]="workingDays.includes(wDay.value)" (change)="wDaysChanged($event)"   >

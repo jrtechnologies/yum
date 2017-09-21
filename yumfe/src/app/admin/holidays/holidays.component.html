@@ -1,0 +1,23 @@
+<md-grid-list cols="8" rowHeight="100px">
+  <md-grid-tile class="left-no-pad" colspan="4" rowspan="1">
+    <h2>Holidays</h2>
+  </md-grid-tile>
+  <md-grid-tile class="right-no-pad" colspan="4" rowspan="1">
+    <app-admin-nav></app-admin-nav>
+  </md-grid-tile>
+</md-grid-list>
+<md-grid-list *ngIf="showLoadSpinner" cols="1" rowHeight="200px">
+  <md-grid-tile>
+    <md-spinner class="centered" color="accent"></md-spinner>
+  </md-grid-tile>
+</md-grid-list>
+
+<md-card>
+  <md-datepicker #picker1></md-datepicker>
+
+
+  <input mdInput [mdDatepicker]="picker" placeholder="Choose a date">
+  <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
+  <md-datepicker #picker></md-datepicker>
+
+</md-card>
