@@ -1,0 +1,6 @@
+.headerText{    font-weight: bold;  }
+
+.year-calendar{ flex-wrap: wrap;     align-items: flex-start; }
+
+.yearNav{ align-items: center;
+    justify-content: flex-start; }

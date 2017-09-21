@@ -124,6 +124,18 @@ html, body{margin:0; padding:0;  font-family:'Roboto Slab', serif;}
   margin-bottom: 0 !important;
 }
 .cal-month-view .cal-cell-top {  min-height: 35px !important; flex: 0 !important; }
+.year-calendar .cal-month-view .cal-day-cell {
+    min-height: auto!important;
+        padding: 4px;
+    display: flex;
+    align-items: center;
+
+    &.cal-today .cal-day-number {
+        font-size: 1.2em;
+        color: #000000;
+    }
+}
+  
 .mat-card-footer{ position: relative !important;}
 
 .calendarDate{ position: relative; height:250px; width:auto;  background-color: $white; }
@@ -219,6 +231,7 @@ button.mat-raised-button.active {
     background: rgba(255, 0, 0, 0.6) !important;
 }
 
+.headerText{ padding: 10px 0;}
 
 .largerSelect .mat-select-trigger { min-width: 150px; }
 

@@ -4,6 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { UsersComponent } from './users/users.component';
 import { LoggedComponent } from '../shared/logged/logged.component';
 import {GlobalSettingsComponent} from './global-settings/global-settings.component';
+import {HolidaysComponent} from './holidays/holidays.component';
 import {AdminRouteGuard} from './admin-route.guard';
 
 const adminRoutes: Routes = [
@@ -13,7 +14,8 @@ const adminRoutes: Routes = [
     children: [
       { path: '', component: HomeComponent },
       { path: 'users/:id', component: UsersComponent },
-      { path: 'globalSettings', component: GlobalSettingsComponent }
+      { path: 'globalSettings', component: GlobalSettingsComponent },
+      { path: 'globalSettings/holidays', component: HolidaysComponent }
     ]
   }
 ];
