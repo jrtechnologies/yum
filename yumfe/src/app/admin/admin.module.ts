@@ -28,6 +28,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaginationModule } from '../shared/pagination/pagination.module';
 import {   SlideToggleComponent, UserDisapproveDialog } from '../shared/slide-toggle/slide-toggle.component';
 import {LoggedModule} from '../shared/logged/logged.module';
+import { HolidaysComponent } from './holidays/holidays.component';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import {LoggedModule} from '../shared/logged/logged.module';
       GlobalSettingsComponent,
       AdminNavComponent,
       TinymceDirective,
-      SlideToggleComponent
+      SlideToggleComponent,
+      HolidaysComponent
     ],
   providers: [
       AdminApi,AdminRouteGuard

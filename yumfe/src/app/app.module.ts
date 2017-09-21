@@ -41,7 +41,7 @@ import { AuthenticationService } from './shared/authentication.service';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    CommonModule,
+    //CommonModule,
     FormsModule,
     HttpModule,
     AppRouting,
