@@ -32,13 +32,16 @@
 
 <md-card>
   <div class="is-flex year-calendar">
-  <div *ngFor="let yearMonth of yearMonths" > 
-    <div class="headerText">{{yearMonth | date:"MMMM"}}</div>
+  <!-- <div *ngFor="let yearMonth of yearMonths" >  -->
+  <div *ngFor='let key of  [0,1,2,3,4,5,6,7,8,9,10,11]' >
+    <div class="headerText">{{yearMonths[key] | date:"MMMM"}}</div>
     <div [ngSwitch]="view">
       <mwl-calendar-month-view
-        [viewDate]="yearMonth" 
-        [cellTemplate]="calCellTemplate"
-        [locale]="locale"
+        [viewDate]="yearMonths[key]" 
+        [cellTemplate]="calCellTemplate" 
+        [locale]="locale" 
+        (dayClicked)="clickedDate($event.day, yearMonths[key])" 
+        (beforeViewRender)="beforeMonthViewRender($event)"
         >
       </mwl-calendar-month-view>
     </div>
