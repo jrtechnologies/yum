@@ -66,14 +66,14 @@ public class ReportEmail implements ApplicationListener<ApplicationReadyEvent> {
         Settings settings = settingsRepo.findById(1);
         
         LocalDate day = new LocalDate();
-        day = day.minusDays(-3);
+        day = day.minusDays(settings.getDeadlineDays());
         this.eService.sendOrderSummary(day);
     }
     
    // @PostConstruct
     public void registerSchedule(){
         
-        sendAutoOrderSummary( );
+        //sendAutoOrderSummary( );
         
         Settings settings = settingsRepo.findById(1);
         LocalTime lt = settings.getDeadline();

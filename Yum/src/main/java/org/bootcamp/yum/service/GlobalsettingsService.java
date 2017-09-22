@@ -168,7 +168,8 @@ public class GlobalsettingsService {
                         // if old deadline not passed and new deadline passed and dailyMenu not null, send report email
                         if (!oldDeadlinePassed(dailyMenuDate, oldDeadlineDays, oldDeadlineTime) && settings.deadlinePassed(dailyMenuDate) && dailyMenuRepo.findByDate(dailyMenuDate) != null){
                                 //System.out.println(">>>>>>>>>>>>>sending email, date: " + dailyMenuDate);
-                                emailService.sendOrderSummary(dailyMenuDate);                                 
+                                //emailService.sendOrderSummaryHtml(dailyMenuDate);  
+                                emailService.sendOrderSummary(dailyMenuDate); 
                         }
                     }
                     

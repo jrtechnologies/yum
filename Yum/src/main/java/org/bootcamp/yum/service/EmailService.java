@@ -65,6 +65,7 @@ import freemarker.template.Configuration;
 import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import org.bootcamp.yum.data.repository.DailyMenuRepository;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 
@@ -94,6 +95,9 @@ public class EmailService {
 
     @Autowired
     private SettingsRepository settingsRep;
+
+    @Autowired
+    private DailyMenuRepository dailyMenuRep;
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(EmailService.class);
 
@@ -172,7 +176,7 @@ public class EmailService {
     }
 
     public void sendNewUserEmailToAllAdmins(User newUser) {
-        
+
         // create hashmap for the placeholders of the template
         Map<String, Object> model = new HashMap<>();
         model.put("firstName", newUser.getFirstName());
@@ -202,7 +206,7 @@ public class EmailService {
         model.put("orderItems", order.getOrderItems());
         model.put("currency", settings.getCurrency());
         BigDecimal total = new BigDecimal("0");
-        int totalQuantity =0;
+        int totalQuantity = 0;
         for (OrderItem orderItem : order.getOrderItems()) {
             Food food = orderItem.getFood();
             int quantity = orderItem.getQuantity();
@@ -217,23 +221,22 @@ public class EmailService {
         sendHtmlTemplateEmail(user.getEmail(), "[Yum] Order Confirmation", model, "order.html");
 
     }
-    
+
     public void sendResetPasswordLinkEmail(User user) {
 
         // create hashmap for the placeholders of the template
         Map<String, Object> model = new HashMap<>();
         model.put("firstName", user.getFirstName());
         model.put("lastName", user.getLastName());
-        model.put("link", applicationProperties.getMail().getDomain()+"/resetpwd/token?token="+user.getSecret());
+        model.put("link", applicationProperties.getMail().getDomain() + "/resetpwd/token?token=" + user.getSecret());
         DateTime expiration = user.getSecretCreation().plusDays(1);
         model.put("expirationTime", expiration.toString("HH:mm:ss"));
         model.put("expirationDate", expiration.toString("EEEE dd MMMM YYYY"));
         // Sends the email
         sendHtmlTemplateEmail(user.getEmail(), "[Yum] Password reset", model, "reset-password.html");
-        
+
     }
 
-    
     public void sendApprovalEmail(User user) {
 
         // create hashmap for the placeholders of the template
@@ -241,152 +244,85 @@ public class EmailService {
         model.put("firstName", user.getFirstName());
         model.put("lastName", user.getLastName());
         model.put("link", applicationProperties.getMail().getDomain());
-        
+
         // Sends the email
         sendHtmlTemplateEmail(user.getEmail(), "[Yum] Account activated", model, "user-approval.html");
-        
+
     }
 
     @Transactional
-    public void sendOrderSummary(LocalDate day) {
-        String dayStr = day.toString();
-        DailyOrderSummary dailyOrderSummary = null;
+    public void sendOrderSummary(LocalDate date) {
 
-        try {
-            dailyOrderSummary = chefService.ordersDailyDayGet(dayStr);
-            System.out.println(">>>>" + dailyOrderSummary);
-        } catch (org.bootcamp.yum.api.ApiException ex) {
-            Logger.getLogger(EmailService.class.getName()).log(Level.INFO, "Trying to get order summary for: " + day + ", result: No menu");
-            return;
-        }
+        DailyMenu dailyMenu = dailyMenuRep.findByDate(date);
+        if (dailyMenu != null) {
 
-        StringBuilder sb = new StringBuilder();
+            DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
+            DateTimeFormatter fmtFull = DateTimeFormat.forPattern("EEEE dd MMMM yyyy");
 
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
-        DateTimeFormatter fmtFull = DateTimeFormat.forPattern("EEEE dd MMMM yyyy");
+            String formattedDate = date.toString(fmt);
+            String titleDate = date.toString(fmtFull);
+            DecimalFormat df = new DecimalFormat();
+            df.setMaximumFractionDigits(2);
+            df.setMinimumFractionDigits(2);
 
-        String formattedDate = day.toString(fmt);
-        String titleDate = day.toString(fmtFull);
-        DecimalFormat df = new DecimalFormat();
-        df.setMaximumFractionDigits(2);
-        df.setMinimumFractionDigits(2);
+            String currency = settingsRep.findById(1).getCurrency();
 
-        String currency = settingsRep.findById(1).getCurrency();
+            //Build data
+            HashMap<String, HashMap<Food, Integer>> orderByFoodType = getFoodByType(getOrderItems(dailyMenu));
 
-        //Styles
-        String cellAlignLeft = " style=\"text-align: left;\" ";
-        String cellAlignRight = " style=\"text-align: right;\" ";
+            // create hashmap for the placeholders of the template
+            Map<String, Object> model = new HashMap<>();
+            model.put("date", titleDate);
+            model.put("orderItemsByMain", orderByFoodType.get("MAIN"));
+            model.put("orderItemsBySalad", orderByFoodType.get("SALAD"));
+            model.put("orderItemsByDrink", orderByFoodType.get("DRINK"));
+            model.put("currency", currency);
 
-        //Build data
-        HashMap<String, ArrayList<org.bootcamp.yum.api.model.OrderItem>> orderByFoodType = new HashMap<>();
+            List<DailyOrder> dailyOrders = dailyMenu.getDailyOrders();
+            model.put("dailyOrders", dailyOrders);
 
-        orderByFoodType = getFoodByType(dailyOrderSummary.getOrderItems());
-
-        sb.append("<div style=\"width:100%; margin 0 auto;text-align:center; padding:0 20px;\">\n");
-        sb.append("<h1>YUM orders</h1>\n");
-        sb.append("<h2>" + titleDate + "</h2><br>\n\n");
-        sb.append("<h2> Order Summary</h2>\n");
-
-        sb.append("<table cellpadding=\"10\" cellspacing=\"5\" style=\"text-align:left; border-collapse: collapse; width:100%;\"   >");
-        BigDecimal sumTotal = new BigDecimal(0);
-
-        for (Map.Entry<String, ArrayList<org.bootcamp.yum.api.model.OrderItem>> entry : orderByFoodType.entrySet()) {
-            String k = entry.getKey();
-            ArrayList<org.bootcamp.yum.api.model.OrderItem> v = entry.getValue();
-
-            sb.append("<tr style=\"border-bottom:1px solid #ccc;\"> <th style=\"text-align: left;\">" + k + "</th> <th  style=\"text-align: left;\">QTY</th>  <th style=\"text-align: left;\">Price</th> <th style=\"text-align: right;\">Total</th> </tr>\n");
-            for (org.bootcamp.yum.api.model.OrderItem o : v) {
-                Food f = foodRep.findById(o.getFoodId());
-
-                sb.append("<tr><td>" + f.getName() + "</td> <td>" + o.getQuantity() + "</td>  <td>" + df.format(f.getPrice()) + currency + "</td> <td " + cellAlignRight + ">" + df.format(f.getPrice().multiply(new BigDecimal(o.getQuantity()))) + currency + "</td> </tr>\n");
-                sumTotal = sumTotal.add(f.getPrice().multiply(new BigDecimal(o.getQuantity())));
-            }
-        }
-
-        sb.append("</table>\n");
-        sb.append("<div style=\"text-align:right;\"><div style='display: inline-block;border-top: 2px solid #f44336; padding: 10px; font-weight:bold; '>Total: " + df.format(sumTotal) + currency + "</div></div>\n");
-        sb.append("<br><br>");
-
-        // Orders by user
-        sb.append("<h2>Orders by user</h2>");
-        sb.append("<table cellpadding=\"10\" cellspacing=\"5\" style=\"text-align:left; border-collapse: collapse; width:100%; \"  >");
-        sb.append("<tr style=\"border-bottom:1px solid #ccc;\">");
-        sb.append("<th style=\"text-align: left;\">Full name</th> <th style=\"text-align: left;\">Qty.</th><th style=\"text-align: left;\">Meal</th>  <th style=\"text-align: left;\">Qty.</th><th style=\"text-align: left;\">Salad</th> <th style=\"text-align: left;\">Qty.</th><th style=\"text-align: left;\">Drink</th> <th style=\"text-align: right;\">Total</th> </tr>\n");
-
-        for (UserOrder userOrder : dailyOrderSummary.getUserOrders()) {
-            sumTotal = new BigDecimal(0);
-            orderByFoodType = getFoodByType(userOrder.getOrderItems());
-
-            //get max row size
-            int maxRows = 0;
-            for (Map.Entry<String, ArrayList<org.bootcamp.yum.api.model.OrderItem>> entry : orderByFoodType.entrySet()) {
-                ArrayList<org.bootcamp.yum.api.model.OrderItem> v = entry.getValue();
-                if (maxRows < v.size()) {
-                    maxRows = v.size();
+            String emails = settingsRep.findById(1).getReportEmail();
+            if (emails != null && !emails.isEmpty()) {
+                ArrayList<String> emailsTo = new ArrayList<>(Arrays.asList(emails.split(";")));
+                for (String emailTo : emailsTo) {
+                    sendHtmlTemplateEmail(emailTo, "Order summary for " + formattedDate, model, "order-summary.html");
                 }
             }
-
-            sb.append("<tr style=\"border-bottom:1px solid #ccc;\">\n");
-
-            if (sumTotal.compareTo(new BigDecimal(0)) == 0) {
-                sb.append("<td>" + userOrder.getFirstName() + " " + userOrder.getLastName() + "</td>");
-            }
-
-            ArrayList<String> foodTypes = new ArrayList<>(Arrays.asList("MAIN", "SALAD", "DRINK"));
-
-            for (String foodType : foodTypes) {
-
-                sb.append("\n<td colspan=\"2\"><table cellpadding=\"10\" cellspacing=\"5\" style=\"text-align:left; \"   >\n");
-                ArrayList<org.bootcamp.yum.api.model.OrderItem> meals = orderByFoodType.get(foodType);
-                if (meals != null) {
-                    for (org.bootcamp.yum.api.model.OrderItem meal : meals) {
-                        Food f = foodRep.findById(meal.getFoodId());
-                        sb.append("<tr><td>" + meal.getQuantity() + "</td><td>" + f.getName() + "</td></tr>\n");
-                        sumTotal = sumTotal.add(f.getPrice().multiply(new BigDecimal(meal.getQuantity())));
-                    }
-                } else {
-                    sb.append("<tr><td></td></tr>\n");
-                }
-                sb.append("</table></td>\n");
-            }
-
-            sb.append("<td " + cellAlignRight + ">" + df.format(sumTotal) + currency + "</td> ");
-            sb.append("</tr>\n");
-
         }
-
-        sb.append("</table>");
-        sb.append("</div>");
-
-        //System.out.println(sb);
-        String emails = settingsRep.findById(1).getReportEmail();
-        if (emails != null && !emails.isEmpty()) {
-            ArrayList<String> emailsTo = new ArrayList<>(Arrays.asList(emails.split(";")));
-            for (String emailTo : emailsTo) {
-                sendHtmlEmail(emailTo, "Order summary for " + formattedDate, sb.toString());
-            }
-        }
-
     }
 
-    private HashMap<String, ArrayList<org.bootcamp.yum.api.model.OrderItem>> getFoodByType(List<org.bootcamp.yum.api.model.OrderItem> orderItems) {
+    // Get total quantities per food for given DailyMenu
+    private HashMap<Food, Integer> getOrderItems(DailyMenu dailyMenu) {
+        HashMap<Food, Integer> foodQtys = new HashMap<>();
 
-        HashMap<String, ArrayList<org.bootcamp.yum.api.model.OrderItem>> orderByFoodType = new HashMap<>();
+        // get all orders
+        List<DailyOrder> dailyOrders = dailyMenu.getDailyOrders();
+        for (DailyOrder dailyOrder : dailyOrders) {
+            for (OrderItem orderItem : dailyOrder.getOrderItems()) {
+                Food food = orderItem.getFood();
+                foodQtys.put(food, (foodQtys.get(food) == null ? 0 : foodQtys.get(food)) + orderItem.getQuantity());
+            }
+        }
+        return foodQtys;
+    }
 
-        for (org.bootcamp.yum.api.model.OrderItem orderItem : orderItems) {
-            Food food = foodRep.findById(orderItem.getFoodId());
+    // return a hashmap with keys food types and values hashmaps (key: Food, value: quantity)
+    private HashMap<String, HashMap<Food, Integer>> getFoodByType(HashMap<Food, Integer> foodQty) {
+        HashMap<String, HashMap<Food, Integer>> orderByFoodType = new HashMap<>();
+
+        for (Map.Entry<Food, Integer> foodEntry : foodQty.entrySet()) {
+            Food food = foodEntry.getKey();
+            Integer quantity = foodEntry.getValue();
             String foodType = food.getFoodType().toString();
 
             if (!orderByFoodType.containsKey(foodType)) {
-                ArrayList<org.bootcamp.yum.api.model.OrderItem> fwq = new ArrayList<>();
-                fwq.add(orderItem);
-                orderByFoodType.put(foodType, fwq);
+                HashMap<Food, Integer> foodQtyByType = new HashMap<>();
+                foodQtyByType.put(food, quantity);
+                orderByFoodType.put(foodType, foodQtyByType);
             } else {
-                orderByFoodType.get(foodType).add(orderItem);
+                orderByFoodType.get(foodType).put(food, quantity);
             }
-
         }
-
         return orderByFoodType;
     }
 
