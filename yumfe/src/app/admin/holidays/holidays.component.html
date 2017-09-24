@@ -12,6 +12,45 @@
   </md-grid-tile>
 </md-grid-list>
 
+<<<<<<< HEAD
+ 
+
+<md-card>
+   
+    <div class="is-flex yearNav">
+      <h2>{{viewYear.getValue() | date:"y"}}</h2> 
+      <button md-icon-button (click)="prevYear()" >  <i class="material-icons md-48">keyboard_arrow_up</i> </button> 
+      <button md-icon-button (click)="nextYear()">  <i class="material-icons md-48">keyboard_arrow_down</i></button>
+  </div>
+</md-card>
+
+<md-card>
+  <div class="is-flex year-calendar">
+  <!-- <div *ngFor="let yearMonth of yearMonths" >  -->
+  <div *ngFor='let key of  [0,1,2,3,4,5,6,7,8,9,10,11]' >
+    <div class="headerText">{{yearMonths[key] | date:"MMMM"}}</div>
+    <div [ngSwitch]="view">
+      <mwl-calendar-month-view
+        [viewDate]="yearMonths[key]" 
+        [cellTemplate]="calCellTemplate" 
+        [locale]="locale" 
+        (dayClicked)="clickedDate($event.day, yearMonths[key])" 
+        (beforeViewRender)="beforeMonthViewRender($event)"
+        >
+      </mwl-calendar-month-view>
+    </div>
+  </div>
+  </div>
+ </md-card> 
+
+
+
+   <ng-template #calCellTemplate let-day="day" let-locale="locale">
+      <ng-container>
+        <app-calendar-day [day]=day.date ></app-calendar-day>
+      </ng-container>
+  </ng-template>
+=======
 <md-card>
   <md-datepicker #picker1></md-datepicker>
 
@@ -21,3 +60,4 @@
   <md-datepicker #picker></md-datepicker>
 
 </md-card>
+>>>>>>> 4570f6e... [Angular] Bank Holidays UI

@@ -20,13 +20,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.OptimisticLockException;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import org.bootcamp.yum.api.model.GlobalSettings;
+import org.bootcamp.yum.api.model.Holidays;
 import org.bootcamp.yum.service.GlobalsettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-04-20T10:12:43.892+03:00")
 
@@ -66,5 +71,29 @@ public class GlobalsettingsApiController implements GlobalsettingsApi {
         }
 
     }
+    
+    @Override
+    public ResponseEntity<Holidays> globalsettingsHolidaysYearGet( @Min(2000) @Max(2100)@ApiParam(value = "",required=true ) @PathVariable("year") Integer year) throws ApiException {        
+        return new ResponseEntity<Holidays>(globalsettingsService.getHolidays(year), HttpStatus.OK);
+    }
 
+    @Override
+    public ResponseEntity<Object> globalsettingsHolidaysYearPost( @Min(2000) @Max(2100)@ApiParam(value = "",required=true ) @PathVariable("year") Integer year,
+        @ApiParam(value = "The holidays to set" ,required=true )  @Valid @RequestBody Holidays holidays)  throws ApiException {
+        try {
+             
+        globalsettingsService.setHolidays(year, holidays);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        
+        } catch (OptimisticLockException ex) {
+            try {
+                Holidays lastHolidays = globalsettingsService.getHolidays(year);
+                throw new ConcurrentModificationException(409, "Concurrent modification error.", lastHolidays);
+            } catch (ApiException ex1) {
+                Logger.getLogger(SettingsApiController.class.getName()).log(Level.SEVERE, null, ex1);
+                throw new ApiException(500, "Concurrent modification exception: internal error");
+            }
+        }    
+        
+    }
 }
