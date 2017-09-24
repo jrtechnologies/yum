@@ -16,9 +16,14 @@
 package org.bootcamp.yum.api;
 
 import io.swagger.annotations.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import org.bootcamp.yum.api.model.GlobalSettings;
+import org.bootcamp.yum.api.model.Holidays;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,12 +52,40 @@ public interface GlobalsettingsApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 204, message = "settings saved", response = Void.class),
         @ApiResponse(code = 400, message = "An unexpected error occured.", response = Void.class),
-        @ApiResponse(code = 409, message = "Concurrent modification error", response = Void.class),
+        @ApiResponse(code = 409, message = "Concurrent modification error", response = GlobalSettings.class),
         @ApiResponse(code = 500, message = "An unexpected error occured.", response = Void.class) })
     @RequestMapping(value = "/globalsettings",
         produces = { "application/json" }, 
         method = RequestMethod.PUT)
     @CrossOrigin          
     ResponseEntity<Object> globalsettingsPut(@ApiParam(value = "The global settings to be updated" ,required=true ) @RequestBody GlobalSettings settings) throws ApiException;
+
+    
+    @ApiOperation(value = "", notes = "get holidays by year", response = Holidays.class, authorizations = {
+        @Authorization(value = "Bearer")
+    }, tags={ "admin", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "ok", response = Holidays.class),
+        @ApiResponse(code = 500, message = "An unexpected error occured.", response = org.bootcamp.yum.api.model.Error.class) })
+    
+    @RequestMapping(value = "/globalsettings/holidays/{year}",
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
+    ResponseEntity<Holidays> globalsettingsHolidaysYearGet( @Min(2000) @Max(2100)@ApiParam(value = "",required=true ) @PathVariable("year") Integer year) throws ApiException;
+
+
+    @ApiOperation(value = "", notes = "set holidays by year", response = Void.class, authorizations = {
+        @Authorization(value = "Bearer")
+    }, tags={ "admin", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 204, message = "holidays saved", response = Void.class),
+        @ApiResponse(code = 400, message = "An unexpected error occured.", response = org.bootcamp.yum.api.model.Error.class),
+        @ApiResponse(code = 409, message = "Concurrent modification error", response = Holidays.class),
+        @ApiResponse(code = 500, message = "An unexpected error occured.", response = org.bootcamp.yum.api.model.Error.class) })
+    
+    @RequestMapping(value = "/globalsettings/holidays/{year}",
+        produces = { "application/json" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<Object> globalsettingsHolidaysYearPost( @Min(2000) @Max(2100)@ApiParam(value = "",required=true ) @PathVariable("year") Integer year,@ApiParam(value = "The holidays to set" ,required=true )  @Valid @RequestBody Holidays holidays) throws ApiException;
 
 }

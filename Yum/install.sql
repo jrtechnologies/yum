@@ -95,7 +95,11 @@ CREATE TABLE yum_settings (
    PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `yum`.`holidays` (
+  `holidate` DATE NOT NULL,
+  PRIMARY KEY (`holiday`));
 
+  
 INSERT INTO `user` VALUES (1,'admin','admin','admin@yum.com','admin','$2a$10$94RawXgiAdX76VORM7MkRevNSYa8NzlVcQVPZJqaNNBdmrq62y3aa','2017-03-28','','2017-05-22 15:22:09',0,NULL,NULL,NULL,NULL);
 
 
