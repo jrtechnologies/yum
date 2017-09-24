@@ -30,6 +30,7 @@ public class Holiday {
     @EmbeddedId 
     private HolidayId id;
 
+
     public Holiday() {
     }
  
@@ -49,5 +50,9 @@ public class Holiday {
 
 
     
+    @Override
+    public String toString() {
+        return "Holiday{" + "id=" + id + '}';
+    }
     
 }

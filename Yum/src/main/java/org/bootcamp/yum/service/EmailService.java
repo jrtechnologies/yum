@@ -259,12 +259,17 @@ public class EmailService {
 
     @Transactional
     public void sendOrderSummary(LocalDate day) {
+        
+         
+        
         String dayStr = day.toString();
         DailyOrderSummary dailyOrderSummary = null;
+        
+        System.out.println("Email: "+ dayStr);
 
         try {
             dailyOrderSummary = chefService.ordersDailyDayGet(dayStr);
-            System.out.println(">>>>" + dailyOrderSummary);
+            //System.out.println(">>>> " + dailyOrderSummary);
         } catch (org.bootcamp.yum.api.ApiException ex) {
             Logger.getLogger(EmailService.class.getName()).log(Level.INFO, "Trying to get order summary for: " + day + ", result: No menu");
             return;
@@ -381,7 +386,7 @@ public class EmailService {
        if(emails !=null && !emails.isEmpty()){
             ArrayList<String> emailsTo = new ArrayList<>(Arrays.asList( emails.split(";")));   
             for(String emailTo : emailsTo){
-             sendHtmlEmail(emailTo, "Order summary for " + formattedDate, sb.toString());
+            // sendHtmlEmail(emailTo, "Order summary for " + formattedDate, sb.toString());
             }
        }
         

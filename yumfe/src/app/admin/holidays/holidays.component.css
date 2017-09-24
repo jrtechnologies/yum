@@ -6,7 +6,7 @@
     justify-content: flex-start; 
 }
 
-.cal-day-selected, .cal-day-selected:hover {
+.cal-day-selected:not(.cal-out-month), .cal-day-selected:not(.cal-out-month):hover {
       background-color: #f44336 !important;
 }
 
@@ -18,3 +18,5 @@
 mwl-calendar-month-cell.cal-cell.cal-day-cell.cal-in-month:hover {
     cursor: pointer;
 }
+
+.saveHolidaysButton{ margin-left: auto; }

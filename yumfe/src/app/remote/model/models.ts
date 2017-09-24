@@ -32,3 +32,4 @@ export * from './UserReg';
 export * from './UserSettings';
 export * from './UsersPage';
 export * from './ConcurrentOrderDeletion';
+export * from './Holidays';

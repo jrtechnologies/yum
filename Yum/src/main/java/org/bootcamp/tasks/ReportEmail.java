@@ -18,7 +18,9 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
+import org.bootcamp.yum.data.entity.Holiday;
 import org.bootcamp.yum.data.entity.Settings;
+import org.bootcamp.yum.data.repository.HolidaysRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
 import org.bootcamp.yum.service.EmailService;
 import org.joda.time.LocalDate;
@@ -47,6 +49,9 @@ public class ReportEmail implements ApplicationListener<ApplicationReadyEvent> {
     @Autowired
     ScheduledTasks scheduledTask;
     
+    @Autowired
+    HolidaysRepository holidaysRepo;
+        
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     
     
@@ -65,10 +70,32 @@ public class ReportEmail implements ApplicationListener<ApplicationReadyEvent> {
         //Get deadline days
         Settings settings = settingsRepo.findById(1);
         
+        int deadlinedays = settings.getDeadlineDays();
         LocalDate day = new LocalDate();
-        day = day.minusDays(settings.getDeadlineDays());
-        this.eService.sendOrderSummary(day);
+        day = day.minusDays(deadlinedays);
+        
+        Holiday holiday = this.holidaysRepo.findByIdHoliday(day);
+        if(holiday==null){
+            this.eService.sendOrderSummary(day);
+        }
+        
+        LocalDate nextDay = day.plusDays(1);      
+        
+        while(this.holidaysRepo.findByIdHoliday(nextDay)!=null){
+            this.eService.sendOrderSummary(nextDay);
+            for (int k = 2; k < deadlinedays; k++) {                                    
+                LocalDate expired = nextDay.plusDays(k); 
+                this.eService.sendOrderSummary(expired);
+                 
+            }
+            nextDay = nextDay.plusDays(1);            
+        } 
+
     }
+    
+    
+ 
+    
     
    // @PostConstruct
     public void registerSchedule(){
