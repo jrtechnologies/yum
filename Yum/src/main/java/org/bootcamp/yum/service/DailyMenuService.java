@@ -31,13 +31,17 @@ import org.bootcamp.yum.api.model.OrderItem;
 import org.bootcamp.yum.data.converter.FoodTypeConverter;
 import org.bootcamp.yum.data.entity.DailyMenu;
 import org.bootcamp.yum.data.entity.Food;
+import org.bootcamp.yum.data.entity.Settings;
 import org.bootcamp.yum.data.repository.DailyMenuRepository;
 import org.bootcamp.yum.data.repository.DailyOrderRepository;
 import org.bootcamp.yum.data.repository.FoodRepository;
+import org.bootcamp.yum.data.repository.HolidaysRepository;
 import org.bootcamp.yum.data.repository.OrderItemRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -58,6 +62,8 @@ public class DailyMenuService
     FoodRepository foodRep;
     @Autowired
     private SettingsRepository settingsRepo;
+    @Autowired
+    HolidaysRepository holidaysRepo;
 
     FoodTypeConverter fooodTypeConverter = new FoodTypeConverter();
     /**
@@ -351,5 +357,18 @@ public class DailyMenuService
 
         return foodDTO;
     }
-
+    public boolean deadlinePassed(LocalDate date) {
+        Settings settings = settingsRepo.findById(1);
+        int deadlineDays = settings.getDeadlineDays();
+        LocalTime deadlineTime = settings.getDeadline();
+         
+        date = date.minusDays(deadlineDays);
+        
+        while (this.holidaysRepo.findByIdHoliday(date) != null) {
+             date = date.minusDays(1);
+        }        
+        
+        // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
+        return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
+    }
 }

@@ -112,9 +112,7 @@ export class GlobalSettingsComponent implements OnInit {
  
 
   public wDaysChanged(event) {
-
-    console.log(event);
-    console.log(this.groupButtonWorkingDays);
+ 
     let day = event.value;
     if (event.source.checked) {
       this.workingDays.push(day);
@@ -126,9 +124,8 @@ export class GlobalSettingsComponent implements OnInit {
       }
     }
 
-    this.gss.workingDays = JSON.stringify({"days":this.workingDays});
-    console.log(this.workingDays);
-    console.log(this.gss.workingDays);
+    this.gss.workingDays = JSON.stringify({"days":this.workingDays});     
+    //console.log(this.gss.workingDays);
   }
    
 }

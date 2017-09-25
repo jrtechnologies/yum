@@ -18,9 +18,14 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
+import org.bootcamp.yum.data.entity.Holiday;
 import org.bootcamp.yum.data.entity.Settings;
+import org.bootcamp.yum.data.repository.DailyMenuRepository;
+import org.bootcamp.yum.data.repository.HolidaysRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
+import org.bootcamp.yum.service.DailyMenuService;
 import org.bootcamp.yum.service.EmailService;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
@@ -47,6 +52,15 @@ public class ReportEmail implements ApplicationListener<ApplicationReadyEvent> {
     @Autowired
     ScheduledTasks scheduledTask;
     
+    @Autowired
+    HolidaysRepository holidaysRepo;
+
+    @Autowired
+    DailyMenuRepository dailyMenuRepo;
+    
+    @Autowired
+    DailyMenuService dailyMenuService;
+    
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     
     
@@ -65,10 +79,31 @@ public class ReportEmail implements ApplicationListener<ApplicationReadyEvent> {
         //Get deadline days
         Settings settings = settingsRepo.findById(1);
         
+        int deadlinedays = settings.getDeadlineDays();
         LocalDate day = new LocalDate();
-        day = day.minusDays(settings.getDeadlineDays());
-        this.eService.sendOrderSummary(day);
+        day = day.plusDays(deadlinedays);
+        
+        LocalDate maxCheckdate = (new LocalDate()).plusDays(deadlinedays);
+        while (this.holidaysRepo.findByIdHoliday(maxCheckdate) != null) {
+            maxCheckdate = maxCheckdate.plusDays(1);
+        }
+
+        int checkDays = Days.daysBetween((new LocalDate()), maxCheckdate).getDays() + deadlinedays - 1;
+        
+        for (int i = 0; i <= checkDays; i++) { //newDeadlineDays
+            LocalDate dailyMenuDate = (new LocalDate()).plusDays(i);
+            // if old deadline not passed and new deadline passed and dailyMenu not null, send report email
+            if (dailyMenuService.deadlinePassed(dailyMenuDate) && dailyMenuRepo.findByDate(dailyMenuDate) != null) { //
+                //System.out.println(">>>>>>>>>>>>>sending email, date: " + dailyMenuDate); 
+                eService.sendOrderSummary(dailyMenuDate);
+            }
+        }
+
     }
+    
+
+ 
+    
     
    // @PostConstruct
     public void registerSchedule(){

@@ -15,7 +15,8 @@ const adminRoutes: Routes = [
       { path: '', component: HomeComponent },
       { path: 'users/:id', component: UsersComponent },
       { path: 'globalSettings', component: GlobalSettingsComponent },
-      { path: 'globalSettings/holidays', component: HolidaysComponent }
+      { path: 'globalSettings/holidays', component: HolidaysComponent },
+      { path: 'globalSettings/holidays/:year', component: HolidaysComponent }
     ]
   }
 ];

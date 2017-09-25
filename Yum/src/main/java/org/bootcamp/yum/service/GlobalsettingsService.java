@@ -32,6 +32,7 @@ import org.bootcamp.yum.data.entity.Settings;
 import org.bootcamp.yum.data.repository.DailyMenuRepository;
 import org.bootcamp.yum.data.repository.HolidaysRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
@@ -55,6 +56,9 @@ public class GlobalsettingsService {
     @Autowired
     EmailService emailService;
 
+    @Autowired
+    DailyMenuService dailyMenuService;
+        
     @Autowired
     HolidaysRepository holidaysRepo;
 
@@ -178,14 +182,21 @@ public class GlobalsettingsService {
                 LocalTime newDeadlineTime = settings.getDeadline();
                 //if new deadline is earlier than old deadline
                 if (newDeadlineDays > oldDeadlineDays || (newDeadlineDays == oldDeadlineDays && newDeadlineTime.compareTo(oldDeadlineTime) < 0)) {
-                    // iterate through daily menu dates between today+newDeadlineDays and today+oldDeadlineDays
-                    for (int i = oldDeadlineDays; i <= newDeadlineDays; i++) {
+                    
+                    
+                    LocalDate maxCheckdate  = (new LocalDate()).plusDays(newDeadlineDays); 
+                    while(this.holidaysRepo.findByIdHoliday(maxCheckdate)!=null){
+                            maxCheckdate = maxCheckdate.plusDays(1);
+                        }
+                        
+                    int checkDays = Days.daysBetween((new LocalDate()), maxCheckdate ).getDays() + newDeadlineDays-1;
+                    // iterate through daily menu dates between today+newDeadlineDays and today+oldDeadlineDays   
+                    for (int i = oldDeadlineDays; i <= checkDays; i++) { //newDeadlineDays
                         LocalDate dailyMenuDate = (new LocalDate()).plusDays(i);
                         // if old deadline not passed and new deadline passed and dailyMenu not null, send report email
-                        if (!oldDeadlinePassed(dailyMenuDate, oldDeadlineDays, oldDeadlineTime) && settings.deadlinePassed(dailyMenuDate) && dailyMenuRepo.findByDate(dailyMenuDate) != null){
-                                //System.out.println(">>>>>>>>>>>>>sending email, date: " + dailyMenuDate);
-                                //emailService.sendOrderSummaryHtml(dailyMenuDate);  
-                                emailService.sendOrderSummary(dailyMenuDate); 
+                        if (!oldDeadlinePassed(dailyMenuDate, oldDeadlineDays, oldDeadlineTime) && dailyMenuService.deadlinePassed(dailyMenuDate) && dailyMenuRepo.findByDate(dailyMenuDate) != null) { //
+                            //System.out.println(">>>>>>>>>>>>>sending email, date: " + dailyMenuDate); 
+                            emailService.sendOrderSummary(dailyMenuDate);
                         }
                     }
 
@@ -194,7 +205,7 @@ public class GlobalsettingsService {
 
         }
     }
-
+    
     public Holidays getHolidays(Integer year) {
 
         Holidays holidaysDTO = new Holidays();
@@ -213,19 +224,16 @@ public class GlobalsettingsService {
 
     @Transactional
     public void setHolidays(Integer year, Holidays holidays) {
-        
+
         this.holidaysRepo.deleteByYear(year);
-        
+
         holidays.forEach(holiday -> {
-            System.out.println(holiday.getYear());
             HolidayId hid = new HolidayId();
             Holiday h = new Holiday(hid);
             h.setHolidate(holiday);
             this.holidaysRepo.save(h);
-            }
+        }
         );
-        
-       
 
     }
 

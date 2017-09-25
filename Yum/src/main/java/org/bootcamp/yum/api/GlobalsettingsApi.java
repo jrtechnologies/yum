@@ -71,6 +71,7 @@ public interface GlobalsettingsApi {
     @RequestMapping(value = "/globalsettings/holidays/{year}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
+    @CrossOrigin
     ResponseEntity<Holidays> globalsettingsHolidaysYearGet( @Min(2000) @Max(2100)@ApiParam(value = "",required=true ) @PathVariable("year") Integer year) throws ApiException;
 
 
@@ -86,6 +87,7 @@ public interface GlobalsettingsApi {
     @RequestMapping(value = "/globalsettings/holidays/{year}",
         produces = { "application/json" }, 
         method = RequestMethod.POST)
+    @CrossOrigin
     ResponseEntity<Object> globalsettingsHolidaysYearPost( @Min(2000) @Max(2100)@ApiParam(value = "",required=true ) @PathVariable("year") Integer year,@ApiParam(value = "The holidays to set" ,required=true )  @Valid @RequestBody Holidays holidays) throws ApiException;
 
 }

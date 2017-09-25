@@ -49,5 +49,9 @@ public class Holiday {
 
 
     
+    @Override
+    public String toString() {
+        return "Holiday{" + "id=" + id + '}';
+    }
     
 }

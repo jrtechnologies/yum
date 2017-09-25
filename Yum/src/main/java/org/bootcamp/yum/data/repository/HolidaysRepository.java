@@ -19,6 +19,7 @@ import javax.persistence.Convert;
 import javax.transaction.Transactional;
 import org.bootcamp.yum.data.converter.LocalDateAttributeConverter;
 import org.bootcamp.yum.data.entity.Holiday;
+import org.bootcamp.yum.data.entity.HolidayId; 
 import org.joda.time.LocalDate;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -27,9 +28,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface HolidaysRepository extends CrudRepository<Holiday, LocalDate>{
+public interface HolidaysRepository extends CrudRepository<Holiday, HolidayId>{
     
-    //Holiday findById(LocalDate dt);
+    Holiday findByIdHoliday(LocalDate dt);
     
     @Query(value="select h.* from holidays h where year(h.holidate)=:year ", nativeQuery = true)    
     ArrayList<java.sql.Date> findByYear(@Param("year") int year);
