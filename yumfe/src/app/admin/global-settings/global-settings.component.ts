@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MdSnackBar  } from '@angular/material';
+import { MdSnackBar } from '@angular/material';
 import * as remote from '../../remote';
 
 
@@ -12,16 +12,19 @@ import * as remote from '../../remote';
 })
 export class GlobalSettingsComponent implements OnInit {
 
-  public showLoadSpinner= false;
-  currencyList: [{name: string, symbol: string}]=
+  public showLoadSpinner = false;
+  // spinner for button 'save changes'
+  public showSpinner = false;
+
+  currencyList: [{ name: string, symbol: string }] =
   [
-    {name: 'Euro &euro;', symbol: '&euro;'},
-    {name: 'Dollar &dollar;', symbol: '&dollar;'},
-    {name: 'Pound &pound;', symbol: '&pound;'},
-    {name: 'Yen &yen;', symbol: '&yen;'},
-    {name: 'Ruble &#8381;', symbol: '&#8381;'},
-    {name: 'Ruppe &#8377;', symbol: '&#8377;'},
-    {name: 'Yuan &#20803;', symbol: '&#20803;'},
+    { name: 'Euro &euro;', symbol: '&euro;' },
+    { name: 'Dollar &dollar;', symbol: '&dollar;' },
+    { name: 'Pound &pound;', symbol: '&pound;' },
+    { name: 'Yen &yen;', symbol: '&yen;' },
+    { name: 'Ruble &#8381;', symbol: '&#8381;' },
+    { name: 'Ruppe &#8377;', symbol: '&#8377;' },
+    { name: 'Yuan &#20803;', symbol: '&#20803;' },
   ];
 
 
@@ -31,7 +34,7 @@ export class GlobalSettingsComponent implements OnInit {
 
   ngOnInit() {
     this.showLoadSpinner = true;
-    this.adminService.globalsettingsGet().subscribe( response => {
+    this.adminService.globalsettingsGet().subscribe(response => {
       this.showLoadSpinner = false;
       this.gss = response;
     }, error => {
@@ -41,27 +44,33 @@ export class GlobalSettingsComponent implements OnInit {
   }
 
   save(form: NgForm) {
-    this.adminService.globalsettingsPut(this.gss).subscribe( response => {
-      this.gss.lastEdit.version++;
-      this.router.navigate(['/admin/']);
-      this.openSnackBar('Settings saved', 'ok', 1);
+    //show spinner next to button
+    this.showSpinner = true;
+    this.adminService.globalsettingsPut(this.gss)
+      .finally(() => {
+        this.showSpinner = false;
+      })
+      .subscribe(response => {
+        this.gss.lastEdit.version++;
+        this.router.navigate(['/admin/']);
+        this.openSnackBar('Settings saved', 'ok', 1);
       }, error => {
         let errorStr: string;
         switch (error.status) {
-                case 400:
-                 errorStr = 'Settings not changed';
-                  break;
-                case 409:
-                  errorStr = 'Settings already changed';
-                  break;
+          case 400:
+            errorStr = 'Settings not changed';
+            break;
+          case 409:
+            errorStr = 'Settings already changed';
+            break;
         }
         this.openSnackBar(errorStr, 'ok', 3);
-    });
+      });
   }
   public cancel() {
     this.router.navigate(['/admin/']);
   }
-   private openSnackBar(message: string, action: string, status: number) {
+  private openSnackBar(message: string, action: string, status: number) {
     if (action === undefined) { action = 'ok' };
     switch (status) {
       case 1:
