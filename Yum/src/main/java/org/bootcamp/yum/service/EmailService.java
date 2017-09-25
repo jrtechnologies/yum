@@ -218,7 +218,7 @@ public class EmailService {
         model.put("totalQuantity", totalQuantity);
         model.put("deadline", settings.getDeadline().toString("HH:mm") + ", on " + menuDate.minusDays(settings.getDeadlineDays()).toString("EEEE dd MMMM YYYY"));
         model.put("balance", user.getBalance());
-        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Order Confirmation", model, "order.html");
+        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Order Confirmation for " + menuDate.toString("dd/MM/yyyy"), model, "order.html");
 
     }
 
@@ -285,7 +285,7 @@ public class EmailService {
             if (emails != null && !emails.isEmpty()) {
                 ArrayList<String> emailsTo = new ArrayList<>(Arrays.asList(emails.split(";")));
                 for (String emailTo : emailsTo) {
-                    sendHtmlTemplateEmail(emailTo, "Order summary for " + formattedDate, model, "order-summary.html");
+                    sendHtmlTemplateEmail(emailTo, "[Yum] Order summary for " + formattedDate, model, "order-summary.html");
                 }
             }
         }
