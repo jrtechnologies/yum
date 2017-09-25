@@ -1,45 +1,77 @@
-<md-grid-list cols="14" rowHeight="50px">
+<div fxLayout="row" fxLayoutAlign="space-between center">
 
-  <md-grid-tile colspan="2" rowspan="2">
+  <div fxFlex="10">
     <i *ngIf="!user.hasPicture" class="material-icons face">face</i>
     <img class="profile-image" *ngIf="user.hasPicture" src="{{userPicture}}" />
-  </md-grid-tile>
+  </div>
 
-  <md-grid-tile colspan="2" class= "bold">
-    Name
-  </md-grid-tile>
+  <div fxFlex="18" fxFlexAlign="baseline" fxLayout="column" fxLayoutAlign="space-between center" class="user-wrap">
+    <div fxFlex="50" class="bold user-details-header">
+      Name
+    </div>
+    <div fxFlex="50" class="user-details">
+      {{getUser().firstName}} {{getUser().lastName}}
+    </div>
+  </div>
+
+  <div fxFlex="5" fxLayout="column" fxLayoutAlign="space-between center">
+    <div class="bold user-details-header">
+      Role
+    </div>
+    <div class="user-details">
+      {{getUser().role}}
+    </div>
+  </div>
+
+  <div fxFlex="12" fxLayout="column" fxLayoutAlign="space-between center">
+    <div class="bold user-details-header">
+      Registered
+    </div>
+    <div class="user-details">
+      {{getUser().registrationDate}}
+    </div>
+  </div>
+  <div fxFlex="15" fxFlexAlign="baseline" fxLayout="column" fxLayoutAlign="space-between center" class="user-wrap">
+    <div class="bold user-details-header">
+      Email
+    </div>
+    <div class="user-details email">
+      <a href="mailto:{{getUser().email}}">
+       {{emailUserName(getUser().email)}}<span class="zero-space"> </span>{{emailDomain(getUser().email)}}
+      </a>
+    </div>
+  </div>
+  <div fxFlex="10" fxLayout="column" >
+    <div class="bold user-details-header">
+      Balance
+    </div>
+
+     <div fxLayout="row" fxLayoutAlign="space-around center" class="balance">
+      <div fxFlex="70">
+        {{getUser().balance | number : '1.2-2'}}<span [innerHTML]="currency | async"></span>
+      </div>
+      <div fxFlex="30"  fxFlexAlign="end">
+        <a  title="Edit balance and view transactions!" class="f-right"><i class="material-icons">account_balance_wallet</i></a>
+      </div>
+    </div>
+  </div>
+
+  <div fxFlex="2">
+
+  </div>
 
 
-  <md-grid-tile colspan="2" class= "bold">
-    Role
-  </md-grid-tile>
-
-  <md-grid-tile colspan="2" class= "bold">
-    Registered
-  </md-grid-tile>
-
-  <md-grid-tile colspan="3" rowspan="2">
+  <div fxFlex="17">
 
     <app-slide-toggle-component [user]="user" [externalAuth]=externalAuth></app-slide-toggle-component>
 
-  </md-grid-tile>
-  <md-grid-tile colspan="2" rowspan="2">
-    <a [routerLink]="editRouterLink" routerLinkActive="active" md-fab color="accent" title="Edit user!" ><i class="material-icons">edit</i></a>
-  </md-grid-tile>
-  <md-grid-tile colspan="1" rowspan="2">
-    <button md-icon-button color="accent" (click)="deleteConfirm()" [disabled]="user.id===1||user.id===userId||externalAuth" title="Delete user!"><i class="material-icons bigger-button">delete_forever</i></button>
-  </md-grid-tile>
-  <md-grid-tile colspan="2">
-    {{getUser().firstName}}
-    <span class="name-divider"> </span>{{getUser().lastName}}
+  </div>
+  <div fxFlex="7">
+    <a [routerLink]="editRouterLink" routerLinkActive="active" md-fab color="accent" title="Edit user!"><i class="material-icons">edit</i></a>
+  </div>
+  <div fxFlex="4">
+    <button md-icon-button color="accent" (click)="deleteConfirm()" [disabled]="user.id===1||user.id===userId||externalAuth"
+      title="Delete user!"><i class="material-icons bigger-button">delete_forever</i></button>
+  </div>
 
-  </md-grid-tile>
-  <md-grid-tile colspan="2">
-    {{getUser().role}}
-  </md-grid-tile>
-  <md-grid-tile colspan="2">
-    {{getUser().registrationDate}}
-  </md-grid-tile>
-</md-grid-list>
-<!--<app-admin-user-edit>
-</app-admin-user-edit>-->
+</div>

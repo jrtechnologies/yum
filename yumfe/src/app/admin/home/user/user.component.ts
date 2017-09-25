@@ -3,6 +3,8 @@ import * as remote from '../../../remote';
 import { BASE_PATH } from '../../../remote/variables';
 import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
 import { AuthenticationService } from '../../../shared/authentication.service';
+import { GlobalSettingsService } from '../../../shared/services/global-settings-service.service';
+import { Observable } from 'rxjs/Rx';
 
 @Component({
   selector: 'app-admin-user',
@@ -11,9 +13,10 @@ import { AuthenticationService } from '../../../shared/authentication.service';
 })
 export class UserComponent implements OnInit {
   @Input() public user: remote.User;
-  @Input() public externalAuth: Boolean = false; 
+  @Input() public externalAuth: Boolean = false;
   @Output() userDeleted = new EventEmitter();
 
+  public currency: Observable<string>;
   public editRouterLink: string;
 
   public userId = this.authService.getLoggedInUser().id;
@@ -23,11 +26,13 @@ export class UserComponent implements OnInit {
               public snackBar: MdSnackBar,
               public dialog: MdDialog,
               private authService: AuthenticationService,
+              public globalSettingsService: GlobalSettingsService,
               @Inject(BASE_PATH) private baseUrl: string
               ) { }
 
 
   ngOnInit() {
+    this.currency = this.globalSettingsService.getCurrency();
     if (this.user.id === this.userId){
       this.editRouterLink = '../settings/';
     } else {
@@ -174,6 +179,14 @@ export class UserComponent implements OnInit {
       }
     });
   }
+
+  public emailUserName(email: string): string {
+    return email.substring(0, email.indexOf('@'));
+  }
+  public emailDomain(email: string): string {
+    return '@' + email.split('@')[1];
+  }
+
 }
 
 

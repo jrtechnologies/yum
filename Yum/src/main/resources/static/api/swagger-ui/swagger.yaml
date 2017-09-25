@@ -1332,6 +1332,9 @@ definitions:
         type: boolean
       hasPicture:
         type: boolean
+      balance:
+        type: number
+        format: int64
       lastEdit:
         $ref: '#/definitions/LastEdit'
   UsersPage:

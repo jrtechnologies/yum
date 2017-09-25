@@ -36,4 +36,6 @@ export interface User {
 
     hasPicture?: boolean;
 
+    balance?: number;
+
 }

@@ -17,6 +17,8 @@ export class GlobalSettingsComponent implements OnInit {
   @ViewChild('mdButtongroup')
   public groupButtonWorkingDays: MdButtonToggleGroupMultiple; //
 
+  // spinner for button 'save changes'
+  public showSpinner = false;
 
   currencyList: [{ name: string, symbol: string }] =
   [
@@ -59,22 +61,28 @@ export class GlobalSettingsComponent implements OnInit {
   }
 
   save(form: NgForm) {
-    this.adminService.globalsettingsPut(this.gss).subscribe(response => {
-      this.gss.lastEdit.version++;
-      this.router.navigate(['/admin/']);
-      this.openSnackBar('Settings saved', 'ok', 1);
-    }, error => {
-      let errorStr: string;
-      switch (error.status) {
-        case 400:
-          errorStr = 'Settings not changed';
-          break;
-        case 409:
-          errorStr = 'Settings already changed';
-          break;
-      }
-      this.openSnackBar(errorStr, 'ok', 3);
-    });
+    //show spinner next to button
+    this.showSpinner = true;
+    this.adminService.globalsettingsPut(this.gss)
+      .finally(() => {
+        this.showSpinner = false;
+      })
+      .subscribe(response => {
+        this.gss.lastEdit.version++;
+        this.router.navigate(['/admin/']);
+        this.openSnackBar('Settings saved', 'ok', 1);
+      }, error => {
+        let errorStr: string;
+        switch (error.status) {
+          case 400:
+            errorStr = 'Settings not changed';
+            break;
+          case 409:
+            errorStr = 'Settings already changed';
+            break;
+        }
+        this.openSnackBar(errorStr, 'ok', 3);
+      });
   }
   public cancel() {
     this.router.navigate(['/admin/']);
