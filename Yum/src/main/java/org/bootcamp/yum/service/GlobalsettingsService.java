@@ -24,8 +24,7 @@ import org.bootcamp.yum.api.ConcurrentModificationException;
 import org.bootcamp.yum.api.model.GlobalSettings;
 import org.bootcamp.yum.api.model.Holidays;
 import org.bootcamp.yum.api.model.LastEdit;
-import org.bootcamp.yum.data.converter.LocalDateAttributeConverter;
-import org.bootcamp.yum.data.entity.DailyMenu;
+import org.bootcamp.yum.data.converter.LocalDateAttributeConverter; 
 import org.bootcamp.yum.data.entity.Holiday;
 import org.bootcamp.yum.data.entity.HolidayId;
 import org.bootcamp.yum.data.entity.Settings;
@@ -57,7 +56,7 @@ public class GlobalsettingsService {
     EmailService emailService;
 
     @Autowired
-    DailyMenuService dailyMenuService;
+    MenusService menusService;
         
     @Autowired
     HolidaysRepository holidaysRepo;
@@ -84,9 +83,13 @@ public class GlobalsettingsService {
         return globalSettings;
     }
 
-    private boolean oldDeadlinePassed(LocalDate date, int deadlineDays, LocalTime deadline) {
+    private boolean oldDeadlinePassed(LocalDate date, int deadlineDays, LocalTime deadlineTime) {
         // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
-        return (date.minusDays(deadlineDays).toLocalDateTime(deadline).compareTo(LocalDateTime.now()) < 0);
+        date = date.minusDays(deadlineDays);
+        while (this.holidaysRepo.findByIdHoliday(date) != null) {
+             date = date.minusDays(1);
+        }  
+        return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
     }
 
     @Transactional
@@ -189,14 +192,14 @@ public class GlobalsettingsService {
                             maxCheckdate = maxCheckdate.plusDays(1);
                         }
                         
-                    int checkDays = Days.daysBetween((new LocalDate()), maxCheckdate ).getDays() + newDeadlineDays-1;
+                    int checkDays = Days.daysBetween((new LocalDate()), maxCheckdate ).getDays() + newDeadlineDays;
                     // iterate through daily menu dates between today+newDeadlineDays and today+oldDeadlineDays   
                     for (int i = oldDeadlineDays; i <= checkDays; i++) { //newDeadlineDays
                         LocalDate dailyMenuDate = (new LocalDate()).plusDays(i);
                         // if old deadline not passed and new deadline passed and dailyMenu not null, send report email
-                        if (!oldDeadlinePassed(dailyMenuDate, oldDeadlineDays, oldDeadlineTime) && dailyMenuService.deadlinePassed(dailyMenuDate) && dailyMenuRepo.findByDate(dailyMenuDate) != null) { //
-                            //System.out.println(">>>>>>>>>>>>>sending email, date: " + dailyMenuDate); 
-                            emailService.sendOrderSummary(dailyMenuDate);
+                        if (!oldDeadlinePassed(dailyMenuDate, oldDeadlineDays, oldDeadlineTime) && menusService.deadlinePassed(dailyMenuDate) ) { //&& dailyMenuRepo.findByDate(dailyMenuDate) != null
+                            System.out.println(">>>>>>>>>>>>>sending email, date: " + dailyMenuDate); 
+                            //emailService.sendOrderSummary(dailyMenuDate);
                         }
                     }
 

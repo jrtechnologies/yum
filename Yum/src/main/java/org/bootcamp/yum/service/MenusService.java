@@ -27,10 +27,13 @@ import org.bootcamp.yum.data.entity.OrderItemId;
 import org.bootcamp.yum.data.entity.Settings;
 import org.bootcamp.yum.data.repository.DailyMenuRepository;
 import org.bootcamp.yum.data.repository.DailyOrderRepository;
+import org.bootcamp.yum.data.repository.HolidaysRepository;
 import org.bootcamp.yum.data.repository.OrderItemRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
 import org.bootcamp.yum.data.repository.UserRepository;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,7 +52,8 @@ public class MenusService {
     private SettingsRepository settingsRepo;
     @Autowired
     private UserRepository userRepo;
-
+    @Autowired
+    HolidaysRepository holidaysRepo;
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(MenusService.class);
     
     @Transactional
@@ -292,5 +296,20 @@ public class MenusService {
     private int getWeeksofYear(int year) {
         int weeks = (new LocalDate(year, 12, 31)).getWeekOfWeekyear();
         return weeks;
+    }
+    
+    public boolean deadlinePassed(LocalDate date) {
+        Settings settings = settingsRepo.findById(1);
+        int deadlineDays = settings.getDeadlineDays();
+        LocalTime deadlineTime = settings.getDeadline();
+         
+        date = date.minusDays(deadlineDays);
+        
+        while (this.holidaysRepo.findByIdHoliday(date) != null) {
+             date = date.minusDays(1);
+        }        
+        
+        // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
+        return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
     }
 }

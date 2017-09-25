@@ -62,8 +62,7 @@ public class DailyMenuService
     FoodRepository foodRep;
     @Autowired
     private SettingsRepository settingsRepo;
-    @Autowired
-    HolidaysRepository holidaysRepo;
+
 
     FoodTypeConverter fooodTypeConverter = new FoodTypeConverter();
     /**
@@ -357,18 +356,5 @@ public class DailyMenuService
 
         return foodDTO;
     }
-    public boolean deadlinePassed(LocalDate date) {
-        Settings settings = settingsRepo.findById(1);
-        int deadlineDays = settings.getDeadlineDays();
-        LocalTime deadlineTime = settings.getDeadline();
-         
-        date = date.minusDays(deadlineDays);
-        
-        while (this.holidaysRepo.findByIdHoliday(date) != null) {
-             date = date.minusDays(1);
-        }        
-        
-        // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
-        return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
-    }
+
 }
