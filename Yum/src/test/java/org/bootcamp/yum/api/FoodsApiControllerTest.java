@@ -115,7 +115,7 @@ public class FoodsApiControllerTest {
         mockFoodList.add(mockFoodOk);
         mockFoodList.add(mockFoodOk2);
         
-        Settings global_settings = new Settings(1, LocalTime.MIDNIGHT,  DateTime.now(), "", "", "", "", 0, 1);
+        Settings global_settings = new Settings(1, LocalTime.MIDNIGHT,  DateTime.now(), "", "", "", "", 0, 1, "", "");
         given(settingsRepo.findOne(1)).willReturn(global_settings);
         
         // telling Mockito to use this mock list every time the findAll method is called on the foodRepo
@@ -155,7 +155,7 @@ public class FoodsApiControllerTest {
     public void testFoodsPutOk() throws Exception {
         Food mockFoodOk = new Food(10, "Pastitsio", new ArrayList<>(), FoodType.MAIN, "test Pastitsio", new BigDecimal("5.65"), false, newLastEdit("01/01/2017 00:00:00"));
    
-        Settings global_settings = new Settings(1, LocalTime.MIDNIGHT,  DateTime.now(), "", "", "", "", 0, 1);
+        Settings global_settings = new Settings(1, LocalTime.MIDNIGHT,  DateTime.now(), "", "", "", "", 0, 1,"","");
         
         given(mockFoodRepository.findById(10)).willReturn(mockFoodOk);
         given(settingsRepo.findOne(1)).willReturn(global_settings);
@@ -184,7 +184,7 @@ public class FoodsApiControllerTest {
     public void testFoodsPostOk() throws Exception {
         
         Food mockFoodOk = new Food(0, "Pastitsio", new ArrayList<>(), FoodType.MAIN, "test Pastitsio", new BigDecimal("5.65"), false, null);         
-        Settings global_settings = new Settings(1, LocalTime.MIDNIGHT,  DateTime.now(), "", "", "", "", 0, 1);
+        Settings global_settings = new Settings(1, LocalTime.MIDNIGHT,  DateTime.now(), "", "", "", "", 0, 1, "", "");
         
         
         given(settingsRepo.findOne(1)).willReturn(global_settings); 

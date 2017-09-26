@@ -20,6 +20,7 @@ export class FooterComponent implements OnInit {
     instance.tabNumber = tabNumber;
   }
 }
+
 // Terms Dialog.
 @Component({
   selector: 'app-terms-dialog',

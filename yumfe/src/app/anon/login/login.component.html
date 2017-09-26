@@ -1,32 +1,35 @@
-<div class="" [ngClass]="{'min-sizes, background': !disableRoute, 'dialog-sizes':disableRoute}" >
+<div class="" [ngClass]="{'  background': !disableRoute, 'dialog-sizes':disableRoute}">
   <div class="login">
-    <form (ngSubmit)="login()" [formGroup]="loginForm"    >
+    <form (ngSubmit)="login()" [formGroup]="loginForm">
       <img src="/assets/img/Yum-logo-small.png">
       <h2>Sign in</h2>
-        <md-form-field  *ngIf=!externalAuth>
-          <input mdInput type="text" placeholder="user email" formControlName="email"  />
-          <md-error class="error" *ngIf="loginForm.get('email').touched && (loginForm.get('email').hasError('required'))">
-            Email is required.
-          </md-error>
-          <md-error class="error" *ngIf="loginForm.get('email').touched && loginForm.get('email').hasError('pattern')">
-            Wrong email address
-          </md-error>
-        </md-form-field>
-        <md-form-field *ngIf=externalAuth>
-          <input mdInput type="username" placeholder="user name" type="text" formControlName="username"  />
-          <md-error class="error" *ngIf="loginForm.get('username').touched && (loginForm.get('username').hasError('required'))">
-            User name is required.
-          </md-error>
-        </md-form-field>
-        <md-form-field>
-          <input mdInput type="password" placeholder="password" formControlName="password"/>
-          <md-error class="error" *ngIf="loginForm.get('password').touched && loginForm.get('password').hasError('required')">
-            Password is required.
-          </md-error>
-        </md-form-field>
-        <button md-raised-button type="submit" color="accent" [disabled]="disableBtn || loginForm.invalid">Login</button>
+      <md-form-field *ngIf=!externalAuth>
+        <input mdInput type="text" placeholder="user email" formControlName="email" />
+        <md-error class="error" *ngIf="loginForm.get('email').touched && (loginForm.get('email').hasError('required'))">
+          Email is required.
+        </md-error>
+        <md-error class="error" *ngIf="loginForm.get('email').touched && loginForm.get('email').hasError('pattern')">
+          Wrong email address
+        </md-error>
+      </md-form-field>
+      <md-form-field *ngIf=externalAuth>
+        <input mdInput type="username" placeholder="user name" type="text" formControlName="username" />
+        <md-error class="error" *ngIf="loginForm.get('username').touched && (loginForm.get('username').hasError('required'))">
+          User name is required.
+        </md-error>
+      </md-form-field>
+      <md-form-field>
+        <input mdInput type="password" placeholder="password" formControlName="password" />
+        <md-error class="error" *ngIf="loginForm.get('password').touched && loginForm.get('password').hasError('required')">
+          Password is required.
+        </md-error>
+      </md-form-field>
+      <div class="relative">
+        <button class="loginButton" md-raised-button type="submit" color="accent" [disabled]="disableBtn || loginForm.invalid">Login</button>
+
         <img class="spinner" *ngIf="showSpinner" src="../../assets/img/spinner.gif">
-      </form>
+      </div>
+    </form>
     <div class="links" *ngIf="!externalAuth && !disableRoute">
       <a routerLink="/forgotpwd" routerLinkActive="active">Forgot password?</a>
     </div>
@@ -35,13 +38,18 @@
     </div>
   </div>
   <div class="text" *ngIf=!disableRoute>
-    <p>
-        What I've enjoyed most, though, is meeting people who have
-        a real interest in food and sharing ideas with them.
-        Good food is a global thing and I find that there is
-        always something new and amazing to learn - I love it!<br><br>
-        Jamie Oliver<br><br>
-        www.brainyquote.com
-    </p>
+
+
+    <div *ngIf="this.quote; else elseBlock" >
+      <p [innerHTML]=quote.quote>  </p><br>
+      <p [innerHTML]=quote.author></p>      
+
+    </div>
+    <ng-template #elseBlock>
+      <p>
+        What I've enjoyed most, though, is meeting people who have a real interest in food and sharing ideas with them. Good food
+        is a global thing and I find that there is always something new and amazing to learn - I love it!<br><br>        Jamie Oliver<br><br> www.brainyquote.com
+      </p>
+    </ng-template>
   </div>
 </div>

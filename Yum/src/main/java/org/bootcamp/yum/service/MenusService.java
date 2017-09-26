@@ -27,10 +27,14 @@ import org.bootcamp.yum.data.entity.OrderItemId;
 import org.bootcamp.yum.data.entity.Settings;
 import org.bootcamp.yum.data.repository.DailyMenuRepository;
 import org.bootcamp.yum.data.repository.DailyOrderRepository;
+import org.bootcamp.yum.data.repository.HolidaysRepository;
 import org.bootcamp.yum.data.repository.OrderItemRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
 import org.bootcamp.yum.data.repository.UserRepository;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -48,13 +52,16 @@ public class MenusService {
     private SettingsRepository settingsRepo;
     @Autowired
     private UserRepository userRepo;
-
+    @Autowired
+    HolidaysRepository holidaysRepo;
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(MenusService.class);
+    
     @Transactional
     public List<DailyMenu> menusWeeklyGet() throws ApiException, Exception {
         LocalDate today = LocalDate.now();
         LocalDate firstDayOfWeek = today.minusDays(today.getDayOfWeek() - 1);
         List<org.bootcamp.yum.api.model.DailyMenu> weeklyMenu = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 7; i++) {
             DailyMenu dailymenu = createWeekDailyMenu(firstDayOfWeek.plusDays(i));
             if (dailymenu.getDate() != null) {
                 weeklyMenu.add(dailymenu);
@@ -65,11 +72,14 @@ public class MenusService {
 
     @Transactional
     public List<DailyMenu> menusWeeklyWeekGet(String week) throws ApiException, Exception {
+         
+        
         String patternString = "^\\d{2}-\\d{4}$";
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(patternString);
         Matcher matcher = pattern.matcher(week);
         if (matcher.matches()) {
-            int year = Integer.parseInt(week.substring(3, 7));
+            int year = Integer.parseInt(week.substring(3, 7)); 
+            
             int weekNumber = Integer.parseInt(week.substring(0, 2));
             int weeksOfYear = getWeeksofYear(year);
             //Validation check for weeks number.
@@ -81,13 +91,15 @@ public class MenusService {
              * (it haven't 53 weeks, then some days is in next year) then print 
              * first week of next year with last days of previous year.
              */
-            if (weeksOfYear == 1 && weekNumber == 53) {
+            if (weeksOfYear == 53 && weekNumber == 53) { 
                 weekNumber = 01;
                 year += 1;
             }
+             
+            
             firstDayOfWeek = new LocalDate().withYear(year).withWeekOfWeekyear(weekNumber);
-            firstDayOfWeek = firstDayOfWeek.minusDays(firstDayOfWeek.getDayOfWeek() - 1);
-
+            firstDayOfWeek = firstDayOfWeek.minusDays(firstDayOfWeek.getDayOfWeek() - 1); 
+            
             //refactor 28/5/17 k
             /*switch (firstDayOfWeek.dayOfWeek().getAsText()){
                 case "Monday":
@@ -112,7 +124,7 @@ public class MenusService {
                     break;
             }*/
             List<org.bootcamp.yum.api.model.DailyMenu> weeklyMenu = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 7; i++) {
                 DailyMenu dailymenu = createWeekDailyMenu(firstDayOfWeek.plusDays(i));
                 if (dailymenu.getDate() != null) {
                     weeklyMenu.add(dailymenu);
@@ -284,5 +296,20 @@ public class MenusService {
     private int getWeeksofYear(int year) {
         int weeks = (new LocalDate(year, 12, 31)).getWeekOfWeekyear();
         return weeks;
+    }
+    
+    public boolean deadlinePassed(LocalDate date) {
+        Settings settings = settingsRepo.findById(1);
+        int deadlineDays = settings.getDeadlineDays();
+        LocalTime deadlineTime = settings.getDeadline();
+         
+        date = date.minusDays(deadlineDays);
+        
+        while (this.holidaysRepo.findByIdHoliday(date) != null) {
+             date = date.minusDays(1);
+        }        
+        
+        // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
+        return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
     }
 }

@@ -1,12 +1,14 @@
- <div fxLayout="row">
-  <div fxFlex="30">
+<md-grid-list cols="10" rowHeight="50px">
+  <md-grid-tile colspan="3" class="left-no-pad">
+
     <p><span (click)="openDialog(0)">Terms and  Conditions</span> | <span (click)="openDialog(1)">Privacy Policy</span></p>
-  </div>
-  <div fxFlex="70">
+
+  </md-grid-tile>
+
+  <md-grid-tile colspan="7" class="right-no-pad">
     <p class="right">
-      &copy;<a href="http://www.jrtechnologies.com/" target="_blank" class="footerLink" >JR Technologies</a>
-      2017 - <a href="https://github.com/jrtdev/yum" target="_blank"  class="footerLink">Open source GPLv3 on GitHub</a>
-       - Developped by JRT Training Bootcamp 2017
+      &copy;<a href="http://www.jrtechnologies.com/" target="_blank" class="footerLink">JR Technologies</a> 2017 - <a href="https://github.com/jrtdev/yum"
+        target="_blank" class="footerLink">Open source GPLv3 on GitHub</a> - Developped by JRT Training Bootcamp 2017
     </p>
-  </div>
- </div>
+  </md-grid-tile>
+</md-grid-list>

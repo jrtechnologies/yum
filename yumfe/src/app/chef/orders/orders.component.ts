@@ -13,7 +13,7 @@ import 'rxjs/add/operator/switchMap';
 import { OrderTotalComponent } from './order-total/order-total.component';
 import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.component';
 import { FoodsService } from '../services/foods.service';
-
+import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 
 @Component({
   selector: 'app-orders',
@@ -36,6 +36,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   // exclude weekends
   public excludeDays: number[] = [0, 6];
+  alldays: number[] = [0, 1, 2, 3, 4, 5, 6];
   /////////////////////
 
   public nextMonth: string;
@@ -49,10 +50,20 @@ export class OrdersComponent implements OnInit, OnDestroy {
     public datePipe: DatePipe,
     public route: ActivatedRoute,
     public location: Location,
-    public router: Router) { }
+    public router: Router,
+    public globalSettingsService: GlobalSettingsService
+  ) { }
 
   ngOnInit() {
     console.log('----- on init HistoryComponent!! -----');
+
+    this.globalSettingsService.getWorkingDays().subscribe(days => {
+      this.excludeDays = this.alldays.filter(function (el) {
+        return !days.includes(el);
+      });
+
+    });
+
      this.foodsService.getFoods().subscribe( foods=>{
         this.foods = foods;
      });

@@ -62,9 +62,7 @@ export class AuthenticationService {
 
     );
   }
-
-
-
+ 
   getLoggedInUser() {
     return this.user;
   }

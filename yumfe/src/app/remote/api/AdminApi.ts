@@ -10,17 +10,17 @@
  * Do not edit the class manually.
  */
 
-import { Inject, Injectable, Optional }                      from '@angular/core';
-import { Http, Headers, URLSearchParams }                    from '@angular/http';
+import { Inject, Injectable, Optional } from '@angular/core';
+import { Http, Headers, URLSearchParams } from '@angular/http';
 import { RequestMethod, RequestOptions, RequestOptionsArgs } from '@angular/http';
-import { Response, ResponseContentType }                     from '@angular/http';
+import { Response, ResponseContentType } from '@angular/http';
 
-import { Observable }                                        from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
-import * as models                                           from '../model/models';
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
-import { Configuration }                                     from '../configuration';
+import * as models from '../model/models';
+import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
+import { Configuration } from '../configuration';
 
 /* tslint:disable:no-unused-variable member-ordering */
 
@@ -31,7 +31,7 @@ export class AdminApi {
     public defaultHeaders: Headers = new Headers();
     public configuration: Configuration = new Configuration();
 
-    constructor(protected http: Http, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected http: Http, @Optional() @Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
         }
@@ -157,11 +157,11 @@ export class AdminApi {
             });
     }
 
-     /**
-     * deletes profile picture.
-     *
-     * @param id user id
-     */
+    /**
+    * deletes profile picture.
+    *
+    * @param id user id
+    */
     public usersIdPictureDelete(id: number, extraHttpRequestParams?: any): Observable<{}> {
         return this.usersIdPictureDeleteWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
@@ -338,25 +338,25 @@ export class AdminApi {
         let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
         if (page !== undefined) {
 
-                queryParameters.set('page', <any>page);
+            queryParameters.set('page', <any>page);
 
         }
 
         if (size !== undefined) {
 
-                queryParameters.set('size', <any>size);
+            queryParameters.set('size', <any>size);
 
         }
 
         if (orderBy !== undefined) {
 
-                queryParameters.set('orderBy', <any>orderBy);
+            queryParameters.set('orderBy', <any>orderBy);
 
         }
 
         if (orderDirection !== undefined) {
 
-                queryParameters.set('orderDirection', <any>orderDirection);
+            queryParameters.set('orderDirection', <any>orderDirection);
 
         }
 
@@ -410,13 +410,13 @@ export class AdminApi {
         }
         if (approve !== undefined) {
 
-                queryParameters.set('approve', <any>approve);
+            queryParameters.set('approve', <any>approve);
 
         }
 
         if (force !== undefined) {
 
-                queryParameters.set('force', <any>force);
+            queryParameters.set('force', <any>force);
 
         }
 
@@ -577,11 +577,11 @@ export class AdminApi {
         return this.http.request(path, requestOptions);
     }
 
-/**
-     * deletes profile picture.
-     *
-     * @param id user id
-     */
+    /**
+         * deletes profile picture.
+         *
+         * @param id user id
+         */
     public usersIdPictureDeleteWithHttpInfo(id: number, extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + `/users/${id}/picture`;
 
@@ -806,6 +806,132 @@ export class AdminApi {
             search: queryParameters
         });
 
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
+        }
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * get holidays by year
+     * @param year 
+     */
+    public globalsettingsHolidaysYearGet(year: number, extraHttpRequestParams?: any): Observable<Date[]> {
+        return this.globalsettingsHolidaysYearGetWithHttpInfo(year, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json() || {};
+                }
+            });
+    }
+
+    /**
+     * set holidays by year
+     * @param year 
+     * @param holidays The holidays to set
+     */
+    public globalsettingsHolidaysYearPost(year: number, holidays: string[], extraHttpRequestParams?: any): Observable<{}> {
+        return this.globalsettingsHolidaysYearPostWithHttpInfo(year, holidays, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json() || {};
+                }
+            });
+    }
+
+
+    /**
+     * 
+     * get holidays by year
+     * @param year 
+     */
+    public globalsettingsHolidaysYearGetWithHttpInfo(year: number, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + '/globalsettings/holidays/${year}'
+            .replace('${' + 'year' + '}', String(year));
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'year' is not null or undefined
+        if (year === null || year === undefined) {
+            throw new Error('Required parameter year was null or undefined when calling globalsettingsHolidaysYearGet.');
+        }
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json'
+        ];
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKey) {
+            headers.set('Authorization', this.configuration.apiKey);
+        }
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Get,
+            headers: headers,
+            search: queryParameters,
+            withCredentials: this.configuration.withCredentials
+        });
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
+        }
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * set holidays by year
+     * @param year 
+     * @param holidays The holidays to set
+     */
+    public globalsettingsHolidaysYearPostWithHttpInfo(year: number, holidays: string[], extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + '/globalsettings/holidays/${year}'
+            .replace('${' + 'year' + '}', String(year));
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'year' is not null or undefined
+        if (year === null || year === undefined) {
+            throw new Error('Required parameter year was null or undefined when calling globalsettingsHolidaysYearPost.');
+        }
+        // verify required parameter 'holidays' is not null or undefined
+        if (holidays === null || holidays === undefined) {
+            throw new Error('Required parameter holidays was null or undefined when calling globalsettingsHolidaysYearPost.');
+        }
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json'
+        ];
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKey) {
+            headers.set('Authorization', this.configuration.apiKey);
+        }
+
+        headers.set('Content-Type', 'application/json');
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            body: holidays == null ? '' : JSON.stringify(holidays), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            withCredentials: this.configuration.withCredentials
+        });
         // https://github.com/swagger-api/swagger-codegen/issues/4037
         if (extraHttpRequestParams) {
             requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);

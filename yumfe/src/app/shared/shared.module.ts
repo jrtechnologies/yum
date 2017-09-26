@@ -1,131 +1,56 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe, DecimalPipe, LowerCasePipe } from '@angular/common';
 
-import { NotFoundComponent } from './not-found/not-found.component';
-import { LoggedComponent } from './logged/logged.component';
-import { RouterModule } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NotFoundComponent } from './not-found/not-found.component'; 
+import { LoggedModule } from './logged/logged.module';
+import { RouterModule } from '@angular/router'; 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import {
-  MdButtonModule,
-  MdCheckboxModule,
-  MdGridListModule,
-  MdListModule,
-  MdCardModule,
-  MdSlideToggleModule,
-  MdRadioModule,
-  MdInputModule,
-  MdSelectModule,
-  MdDialogModule,
-  MdSnackBarModule,
-  MdIconModule,
-  MdProgressSpinnerModule,
-  MdProgressBarModule,
-  MdAutocompleteModule,
-  MaterialModule,
-  MdMenuModule,
-  MdTabsModule
-} from '@angular/material';
-
-import 'hammerjs';
-
-import { AuthenticationService } from './authentication.service';
+import 'hammerjs'; 
 import { CalendarModule } from 'angular-calendar';
 import { Configuration } from '../remote/configuration';
 import { MonthNavComponent } from './header/month-nav/month-nav.component';
-import { PaginationComponent } from './pagination/pagination.component';
-import {
-  SlideToggleComponent,
-  UserDisapproveDialog
-} from './slide-toggle/slide-toggle.component';
-import { ProfileComponent } from './profile/profile.component';
-import { GlobalSettingsService } from './services/global-settings-service.service';
-import { SettingsComponent } from './settings/settings.component';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent, TermsDialog } from './footer/footer.component';
-import { FileUploadModule } from 'ng2-file-upload';
-import { DeletePictureDialog } from './profile/profile.component';
-import { TabsComponent } from './footer/tabs/tabs.component';
+import { PaginationModule } from './pagination/pagination.module'; 
+import { GlobalSettingsService } from './services/global-settings-service.service'; 
+import {SharedMaterialModule} from './shared-material.module';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
-    MdGridListModule,
-    MdListModule,
-    MdCardModule,
-    MdButtonModule,
-    MdSlideToggleModule,
     FormsModule,
     ReactiveFormsModule,
-    MdSelectModule,
-    MdInputModule,
-    MdDialogModule,
-    FileUploadModule,
-    MdProgressBarModule,
     FlexLayoutModule,
-    MdMenuModule,
-    MdTabsModule
+    PaginationModule,
+    SharedMaterialModule
   ],
-  exports: [
-    BrowserAnimationsModule,
-    MdButtonModule,
-    MdCheckboxModule,
-    MdGridListModule,
-    MdCardModule,
-    MdSlideToggleModule,
-    MdRadioModule,
-    MdInputModule,
-    MdSelectModule,
-    MdDialogModule,
-    MdSnackBarModule,
-    MdProgressSpinnerModule,
-    MdAutocompleteModule,
+  exports: [ 
+    SharedMaterialModule,
     FormsModule,
     ReactiveFormsModule,
     CalendarModule,
     DecimalPipe,
     DatePipe,
     LowerCasePipe,
-    MdIconModule,
     MonthNavComponent,
-    PaginationComponent,
-    SlideToggleComponent,
-    UserDisapproveDialog,
-    DeletePictureDialog,
-    ProfileComponent,
+    PaginationModule, 
     RouterModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    LoggedModule
 
   ],
   declarations: [
-    NotFoundComponent,
-    LoggedComponent,
-    MonthNavComponent,
-    PaginationComponent,
-    SlideToggleComponent,
-    UserDisapproveDialog,
-    DeletePictureDialog,
-    ProfileComponent,
-    SettingsComponent,
-    HeaderComponent,
-    FooterComponent,
-    TermsDialog,
-    TabsComponent
+    NotFoundComponent, 
+    MonthNavComponent,  
   ],
-  providers: [
-    AuthenticationService,
+  providers: [ 
     Configuration,
     DecimalPipe,
     DatePipe,
     GlobalSettingsService,
     LowerCasePipe
   ],
-  entryComponents: [
-    UserDisapproveDialog,
-    DeletePictureDialog,
-    TermsDialog
+  entryComponents: [ 
   ]
 })
 export class SharedModule { }

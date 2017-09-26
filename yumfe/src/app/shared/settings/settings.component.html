@@ -1,4 +1,4 @@
-<div class="content main">
+<div class="content main ">
 
   <app-header> </app-header>
 
@@ -6,72 +6,72 @@
     Account settings
   </h1>
 
-
-  <md-card>
-    <md-grid-list cols="6" rowHeight="50px" class="divider">
-      <md-grid-tile colspan="3" class="left-no-pad">
-        <div>
-          <div class="heading">Profile details</div>
-        </div>
-      </md-grid-tile>
-      <md-grid-tile colspan="3" class="right-no-pad">
-        <div class="heading">
-          You are <span *ngIf="user!=null && user.role==='ADMIN'">an </span><span *ngIf="user!=null && user.role!=='ADMIN'">a</span>
-          <span *ngIf="user!=null">{{displayRole()}}</span>
-        </div>
-      </md-grid-tile>
-    </md-grid-list>
-
-    <app-profile *ngIf="user" [(user)]="user" [change]="change" [admin]="false" (invalidProfileForm)="handleInvalidProfileForm($event)"
-      (updateVersion)="handleUpdateVersion($event)">
-    </app-profile>
-    <div class="divider heading sec">
-      <div class="heading">Change Password <small>(Leave it empty if you don't want to change your password)</small></div>
-    </div>
-    <form [formGroup]="profileGroup" autocomplete="off">
-      <md-grid-list cols="6" rowHeight="160px">
-        <div *ngIf="externalAuth && user && user.id !== 1; then thenBlock else elseBlock"> </div>
-        <ng-template #thenBlock>
-          <md-grid-tile colspan="4" class="left"></md-grid-tile>
-        </ng-template>
-        <ng-template #elseBlock>
-
-          <md-grid-tile colspan="2" class="left">
-            <md-form-field>
-
-              <input mdInput type="password" placeholder="Password" formControlName="password" (keyup)="onPasswordChange()">
-              <md-hint *ngIf="profileGroup.get('password').value===null ||profileGroup.get('password').value.length<6">Password should be at least 6 characters (space not allowed) </md-hint>
-              <md-error *ngIf="profileGroup.get('password').hasError('required') && profileGroup.get('password').touched">
-                Password is required
-              </md-error>
-
-              <md-error *ngIf="profileGroup.get('password').hasError('pattern') && profileGroup.get('password').touched">
-                Password should be at least 6 characters (space not allowed)
-              </md-error>
-
-            </md-form-field>
-          </md-grid-tile>
-          <md-grid-tile colspan="2">
-            <md-form-field>
-              <input mdInput type="password" placeholder="Confirm Password" formControlName="confirm">
-              <md-error *ngIf="profileGroup.get('confirm').hasError('required') && profileGroup.get('confirm').touched">
-                Password Confirming is required
-              </md-error>
-              <md-error *ngIf="profileGroup.get('confirm').hasError('confirmError') && profileGroup.get('confirm').touched">
-                Password and confirm do not match.
-              </md-error>
-            </md-form-field>
-          </md-grid-tile>
-        </ng-template>
-        <md-grid-tile colspan="1">
-          <button md-raised-button color="accent" type="button" (click)="cancelEditing()">Cancel</button>
+    <md-card>
+      <md-grid-list cols="6" rowHeight="50px" class="divider">
+        <md-grid-tile colspan="3" class="left-no-pad">
+          <div>
+            <div class="heading">Profile details</div>
+          </div>
         </md-grid-tile>
-        <md-grid-tile colspan="1" class="right">
-          <button md-raised-button color="accent" type="button" (click)="updateUser()" [disabled]="(profileGroup.invalid)||(!detectChanges())||showSpinner||invalid">Save changes</button>
-          <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
+        <md-grid-tile colspan="3" class="right-no-pad">
+          <div class="heading">
+            You are <span *ngIf="user!=null && user.role==='ADMIN'">an </span><span *ngIf="user!=null && user.role!=='ADMIN'">a</span>
+            <span *ngIf="user!=null">{{displayRole()}}</span>
+          </div>
         </md-grid-tile>
       </md-grid-list>
-    </form>
-  </md-card>
+
+      <app-profile *ngIf="user" [(user)]="user" [change]="change" [admin]="false" (invalidProfileForm)="handleInvalidProfileForm($event)"
+        (updateVersion)="handleUpdateVersion($event)">
+      </app-profile>
+      <div class="divider heading sec">
+        <div class="heading">Change Password <small>(Leave it empty if you don't want to change your password)</small></div>
+      </div>
+      <form [formGroup]="profileGroup" autocomplete="off">
+        <md-grid-list cols="6" rowHeight="160px">
+          <div *ngIf="externalAuth && user && user.id !== 1; then thenBlock else elseBlock"> </div>
+          <ng-template #thenBlock>
+            <md-grid-tile colspan="4" class="left"></md-grid-tile>
+          </ng-template>
+          <ng-template #elseBlock>
+
+            <md-grid-tile colspan="2" class="left">
+              <md-form-field>
+
+                <input mdInput type="password" placeholder="Password" formControlName="password" (keyup)="onPasswordChange()">
+                <md-hint *ngIf="profileGroup.get('password').value===null ||profileGroup.get('password').value.length<6">Password should be at least 6 characters (space not allowed) </md-hint>
+                <md-error *ngIf="profileGroup.get('password').hasError('required') && profileGroup.get('password').touched">
+                  Password is required
+                </md-error>
+
+                <md-error *ngIf="profileGroup.get('password').hasError('pattern') && profileGroup.get('password').touched">
+                  Password should be at least 6 characters (space not allowed)
+                </md-error>
+
+              </md-form-field>
+            </md-grid-tile>
+            <md-grid-tile colspan="2">
+              <md-form-field>
+                <input mdInput type="password" placeholder="Confirm Password" formControlName="confirm">
+                <md-error *ngIf="profileGroup.get('confirm').hasError('required') && profileGroup.get('confirm').touched">
+                  Password Confirming is required
+                </md-error>
+                <md-error *ngIf="profileGroup.get('confirm').hasError('confirmError') && profileGroup.get('confirm').touched">
+                  Password and confirm do not match.
+                </md-error>
+              </md-form-field>
+            </md-grid-tile>
+          </ng-template>
+          <md-grid-tile colspan="1">
+            <button md-raised-button color="accent" type="button" (click)="cancelEditing()">Cancel</button>
+          </md-grid-tile>
+          <md-grid-tile colspan="1" class="right">
+            <button md-raised-button color="accent" type="button" (click)="updateUser()" [disabled]="(profileGroup.invalid)||(!detectChanges())||showSpinner||invalid">Save changes</button>
+            <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
+          </md-grid-tile>
+        </md-grid-list>
+      </form>
+    </md-card>
+
   <app-footer></app-footer>
 </div>

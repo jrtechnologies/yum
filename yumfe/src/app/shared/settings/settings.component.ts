@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class SettingsComponent implements OnInit {
 
-  public userId = this.authService.getLoggedInUser().id;
+  public userId: number;
   public user: remote.User;
   public profileGroup: FormGroup;
 
@@ -32,7 +32,8 @@ export class SettingsComponent implements OnInit {
     public snackBar: MdSnackBar, private router: Router) { }
 
   ngOnInit() {
-    
+    if(!this.authService.getLoggedInUser()){ return; }
+    this.userId =   this.authService.getLoggedInUser().id;
     //const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,20}$/;

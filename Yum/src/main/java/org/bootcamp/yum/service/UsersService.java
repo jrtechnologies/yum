@@ -15,6 +15,7 @@
 
 package org.bootcamp.yum.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -99,6 +100,7 @@ public class UsersService {
         userEntity.setUserRole(userRole);
         userEntity.setRegistrationDate(LocalDate.now());
         userEntity.setLastEdit(DateTime.now());
+        userEntity.setBalance(BigDecimal.ZERO);
         userRepo.save(userEntity); // Save user in database
         return userEntity;
     }
