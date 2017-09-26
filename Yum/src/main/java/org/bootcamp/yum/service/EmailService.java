@@ -14,6 +14,7 @@
  */
 package org.bootcamp.yum.service;
 
+import freemarker.core.ParseException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -59,6 +60,14 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import freemarker.template.Configuration;
+import freemarker.template.MalformedTemplateNameException;
+import freemarker.template.TemplateException;
+import java.io.IOException;
+import org.bootcamp.yum.data.repository.DailyMenuRepository;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 
 @Service
 public class EmailService {
@@ -68,6 +77,9 @@ public class EmailService {
 
     @Autowired
     private JavaMailSender mailHtmlSender;
+
+    @Autowired
+    Configuration freeMarkerConfig;
 
     @Autowired
     private ApplicationProperties applicationProperties;
@@ -83,8 +95,9 @@ public class EmailService {
 
     @Autowired
     private SettingsRepository settingsRep;
-    
-   
+
+    @Autowired
+    private DailyMenuRepository dailyMenuRep;
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(EmailService.class);
 
@@ -98,6 +111,19 @@ public class EmailService {
         message.setText(emailBody);
         mailSender.send(message);
 
+    }
+
+    public String getContentFromTemplate(Map<String, Object> model, String templateFileName) {
+        StringBuffer content = new StringBuffer();
+
+        try {
+            freeMarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates");
+            content.append(FreeMarkerTemplateUtils
+                    .processTemplateIntoString(freeMarkerConfig.getTemplate(templateFileName), model));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return content.toString();
     }
 
     private void sendHtmlEmail(String sendTo, String subject, String emailBody) {
@@ -118,295 +144,185 @@ public class EmailService {
 
     }
 
+    private void sendHtmlTemplateEmail(String sendTo, String subject, Map<String, Object> model, String templateFileName) {
+        try {
+            MimeMessage message = mailHtmlSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(InternetAddress.parse(sendTo));
+            helper.setFrom(applicationProperties.getMail().getFrom());
+            helper.setSubject(subject);
+
+            StringBuilder content = new StringBuilder();
+            freeMarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates");
+            content.append(FreeMarkerTemplateUtils
+                    .processTemplateIntoString(freeMarkerConfig.getTemplate(templateFileName), model));
+
+            helper.setText(content.toString(), true);
+            helper.addInline("yumLogo", new ClassPathResource("templates/images/Yum-logo-small.png"));
+            mailHtmlSender.send(message);
+
+        } catch (AddressException ex) {
+            Logger.getLogger(EmailService.class.getName()).log(Level.WARNING, null, ex);
+        } catch (MessagingException ex) {
+            Logger.getLogger(EmailService.class.getName()).log(Level.WARNING, null, ex);
+        } catch (MalformedTemplateNameException ex) {
+            Logger.getLogger(EmailService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException | TemplateException ex) {
+            Logger.getLogger(EmailService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(EmailService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
     public void sendNewUserEmailToAllAdmins(User newUser) {
 
-        // When a new user registers, is unapproved by default.
-        // We need to let the admin know that the user is unapproved.
-        // This method will send an email to each admin.
-        // prepare the text of the email
-        // Text ex.::
-        // 
-        // A new user just registered. Here are the new user details
-        //     first name: <newUser.firstName>
-        //      last name: <newUser.lastName>
-        //          email: <newUser.email>
-        // 
-        // You have to approve this user so he/she can log in.
-        // click on this link to approve the user:
-        // http://<yumHostname>/admin/users/<newUser.id>
-        StringBuilder text = new StringBuilder();
-        text.append("A new user just registered. Here are the new user details\n");
-        text.append("       first name: ").append(newUser.getFirstName()).append("\n");
-        text.append("        last name: ").append(newUser.getLastName()).append("\n");
-        text.append("            email: ").append(newUser.getEmail()).append("\n");
-        text.append("\n");
-        text.append("You have to approve this user so he/she can log in.\n");
-        text.append("Click on this link to approve the user:\n");
-
-        text.append(applicationProperties.getMail().getDomain()).append("/admin/users/").append(newUser.getId());
-
-        // Iterate over a list of admin users. For each admin:
+        // create hashmap for the placeholders of the template
+        Map<String, Object> model = new HashMap<>();
+        model.put("firstName", newUser.getFirstName());
+        model.put("lastName", newUser.getLastName());
+        model.put("email", newUser.getEmail());
+        model.put("link", applicationProperties.getMail().getDomain() + "/admin/users/" + newUser.getId());
         List<User> admins = userRep.findByUserRole(UserRole.ADMIN);
         for (User admin : admins) {
-            // Adds a greeting sentence to the text
-            String textString = "Dear " + admin.getFirstName() + " " + admin.getLastName() + ",\r\n" + text;
-            //mailSender.send(message);
-            sendEmail(admin.getEmail(), "[Yum] new user registered", textString);
+            model.put("adminFirstName", admin.getFirstName());
+            model.put("adminLastName", admin.getLastName());
+            sendHtmlTemplateEmail(admin.getEmail(), "[Yum] New user registered", model, "user-registered.html");
         }
     }
 
     public void sendConfirmOrderEmailToHungry(DailyOrder order, DailyMenu dailyMenu) {
 
-        // send this email to the user associated with the order.
-        // prepare the text like follow:
-        // Dear <user.firtname> <user.lastname>,
-        // 
-        // You just placed this order for the day 01/01/2017
-        //
-        //    food1   qty 1 x 5 euro 
-        //    food2
-        //
-        //    total :  15 euro
-        //
-        // You can modify this order until <deadline time> <date-1> by going to the link:
-        // http://<yumHostname>/hungry/<week-year>/
-        // 
-        // Thank you for your order!
         User user = userRep.findById(order.getUserId());
-        StringBuilder text = new StringBuilder();
-        String currency = settingsRep.findById(1).getCurrency();
-        
         LocalDate menuDate = dailyMenu.getDate();
-        text.append("Dear ").append(user.getFirstName()).append(" ").append(user.getLastName()).append(",\n");
-        text.append("\n");
-        text.append("You just placed this order for ").append(menuDate.toString("EEEE dd MMMM YYYY")).append("\n");
-        text.append("\n");
+        Settings settings = settingsRep.findOne(1);
+
+        // create hashmap for the placeholders of the template
+        Map<String, Object> model = new HashMap<>();
+        model.put("firstName", user.getFirstName());
+        model.put("lastName", user.getLastName());
+        model.put("menuDate", menuDate.toString("EEEE dd MMMM YYYY"));
+        model.put("link", applicationProperties.getMail().getDomain() + "/hungry/" + menuDate.getYear() + "/" + menuDate.getWeekOfWeekyear());
+        model.put("orderItems", order.getOrderItems());
+        model.put("currency", settings.getCurrency());
         BigDecimal total = new BigDecimal("0");
+        int totalQuantity = 0;
         for (OrderItem orderItem : order.getOrderItems()) {
             Food food = orderItem.getFood();
-            BigDecimal price = food.getPrice();
+            int quantity = orderItem.getQuantity();
+            BigDecimal price = food.getPrice().multiply(new BigDecimal(quantity));
             total = total.add(price);
-            text.append("\t").append(food.getName()).append("\tqty ").append(orderItem.getQuantity()).append(" x ").append(price).append(currency+"\n");
+            totalQuantity += quantity;
         }
-        text.append("\n");
-        text.append("\ttotal : ").append(total).append(currency).append("\n");
-        text.append("\n");
-        Settings settings = settingsRep.findOne(1);
-        text.append("You can modify this order until ").append(settings.getDeadline().toString("HH:mm")).append(", on ").append(menuDate.minusDays(settings.getDeadlineDays()).toString("EEEE dd MMMM YYYY")).append(" by going to the link:\n");
-
-        text.append(applicationProperties.getMail().getDomain()).append("/hungry/").append(menuDate.getYear()).append("/").append(menuDate.getWeekOfWeekyear()).append("\n");
-
-        text.append("\n");
-        text.append("Thank you for your order!\n");
-
-        sendEmail(user.getEmail(), "[Yum] Order Confirmation", text.toString());
+        model.put("total", total);
+        model.put("totalQuantity", totalQuantity);
+        model.put("deadline", settings.getDeadline().toString("HH:mm") + ", on " + menuDate.minusDays(settings.getDeadlineDays()).toString("EEEE dd MMMM YYYY"));
+        model.put("balance", user.getBalance());
+        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Order Confirmation for " + menuDate.toString("dd/MM/yyyy"), model, "order.html");
 
     }
 
     public void sendResetPasswordLinkEmail(User user) {
 
-        // send this email to the user that requested a password reset.
-        // prepare the text like follow:
-        // Dear <user.firtname> <user.lastname>,
-        // 
-        // You just requested your password to be reset. If that was not you, please discard this message.
-        //
-        // To enter your new password, please visit this link:
-        // http://<yumHostname>/changepassword/<user.getResetPwdSecret()>
-        // 
-        // Thank you for using Yum!    
-        StringBuilder text = new StringBuilder();
-        text.append("Dear ").append(user.getFirstName()).append(" ").append(user.getLastName()).append(",\n");
-        text.append("\n");
-        text.append("You just requested your password to be reset. If that was not you, please discard this message.\n");
-        text.append("\n");
-        text.append("To enter your new password, please visit this link:\n");
-        text.append(applicationProperties.getMail().getDomain()).append("/resetpwd/token?token=").append(user.getSecret()).append("\n");
-        text.append("\n");
-        DateTime creationTime = user.getSecretCreation().plusDays(1);
-        text.append("The link will be active for 24 hours (until ").append(creationTime.toString("HH:mm:ss")).append(", on ").append(creationTime.toString("EEEE dd MMMM YYYY")).append(").\n");
-        text.append("\n");
-        text.append("Thank you for using Yum!\n");
-
+        // create hashmap for the placeholders of the template
+        Map<String, Object> model = new HashMap<>();
+        model.put("firstName", user.getFirstName());
+        model.put("lastName", user.getLastName());
+        model.put("link", applicationProperties.getMail().getDomain() + "/resetpwd/token?token=" + user.getSecret());
+        DateTime expiration = user.getSecretCreation().plusDays(1);
+        model.put("expirationTime", expiration.toString("HH:mm:ss"));
+        model.put("expirationDate", expiration.toString("EEEE dd MMMM YYYY"));
         // Sends the email
-        sendEmail(user.getEmail(), "[Yum] Password reset", text.toString());
+        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Password reset", model, "reset-password.html");
+
     }
 
     public void sendApprovalEmail(User user) {
 
-        // send this email to the user that requested a password reset.
-        // prepare the text like follow:
-        // Dear <user.firtname> <user.lastname>,
-        // 
-        // You just requested your password to be reset. If that was not you, please discard this message.
-        //
-        // To enter your new password, please visit this link:
-        // http://<yumHostname>/changepassword/<user.getResetPwdSecret()>
-        // 
-        // Thank you for using Yum!    
-        StringBuilder text = new StringBuilder();
-        text.append("Dear ").append(user.getFirstName()).append(" ").append(user.getLastName()).append(",\n");
-        text.append("\n");
-        text.append("Your account has been activated.\n");
-        text.append("You can login by going to the link:\n");
-        text.append(applicationProperties.getMail().getDomain()).append("/\n");
-        text.append("\n");
-        text.append("Enjoy your meals on Yum!\n");
+        // create hashmap for the placeholders of the template
+        Map<String, Object> model = new HashMap<>();
+        model.put("firstName", user.getFirstName());
+        model.put("lastName", user.getLastName());
+        model.put("link", applicationProperties.getMail().getDomain());
 
         // Sends the email
-        sendEmail(user.getEmail(), "[Yum] Account activated", text.toString());
+        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Account activated", model, "user-approval.html");
+
     }
 
     @Transactional
-    public void sendOrderSummary(LocalDate day) {
-        String dayStr = day.toString();
-        DailyOrderSummary dailyOrderSummary = null;
+    public void sendOrderSummary(LocalDate date) {
 
-        try {
-            dailyOrderSummary = chefService.ordersDailyDayGet(dayStr);
-            System.out.println(">>>>" + dailyOrderSummary);
-        } catch (org.bootcamp.yum.api.ApiException ex) {
-            Logger.getLogger(EmailService.class.getName()).log(Level.INFO, "Trying to get order summary for: " + day + ", result: No menu");
-            return;
-        }
+        DailyMenu dailyMenu = dailyMenuRep.findByDate(date);
+        if (dailyMenu != null) {
 
-        StringBuilder sb = new StringBuilder();
+            DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
+            DateTimeFormatter fmtFull = DateTimeFormat.forPattern("EEEE dd MMMM yyyy");
 
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
-        DateTimeFormatter fmtFull = DateTimeFormat.forPattern("EEEE dd MMMM yyyy");
-        
-        String formattedDate = day.toString(fmt);
-        String titleDate = day.toString(fmtFull);
-        DecimalFormat df = new DecimalFormat();
-        df.setMaximumFractionDigits(2);
-        df.setMinimumFractionDigits(2);
+            String formattedDate = date.toString(fmt);
+            String titleDate = date.toString(fmtFull);
+            DecimalFormat df = new DecimalFormat();
+            df.setMaximumFractionDigits(2);
+            df.setMinimumFractionDigits(2);
 
-        String currency = settingsRep.findById(1).getCurrency();
-        
-        //Styles
-        
-        String cellAlignLeft = " style=\"text-align: left;\" ";
-        String cellAlignRight = " style=\"text-align: right;\" ";
-        
-        //Build data
-        HashMap<String, ArrayList<org.bootcamp.yum.api.model.OrderItem>> orderByFoodType = new HashMap<>();
+            String currency = settingsRep.findById(1).getCurrency();
 
-        orderByFoodType = getFoodByType(dailyOrderSummary.getOrderItems());
+            //Build data
+            HashMap<String, HashMap<Food, Integer>> orderByFoodType = getFoodByType(getOrderItems(dailyMenu));
 
-        
-        sb.append("<div style=\"width:100%; margin 0 auto;text-align:center; padding:0 20px;\">\n");
-        sb.append("<h1>YUM orders</h1>\n");
-        sb.append("<h2>" + titleDate + "</h2><br>\n\n");
-        sb.append("<h2> Order Summary</h2>\n");
+            // create hashmap for the placeholders of the template
+            Map<String, Object> model = new HashMap<>();
+            model.put("date", titleDate);
+            model.put("orderItemsByMain", orderByFoodType.get("MAIN"));
+            model.put("orderItemsBySalad", orderByFoodType.get("SALAD"));
+            model.put("orderItemsByDrink", orderByFoodType.get("DRINK"));
+            model.put("currency", currency);
 
-        sb.append("<table cellpadding=\"10\" cellspacing=\"5\" style=\"text-align:left; border-collapse: collapse; width:100%;\"   >");
-        BigDecimal sumTotal = new BigDecimal(0);
+            List<DailyOrder> dailyOrders = dailyMenu.getDailyOrders();
+            model.put("dailyOrders", dailyOrders);
 
-        for (Map.Entry<String, ArrayList<org.bootcamp.yum.api.model.OrderItem>> entry : orderByFoodType.entrySet()) {
-            String k = entry.getKey();
-            ArrayList<org.bootcamp.yum.api.model.OrderItem> v = entry.getValue();
-
-            sb.append("<tr style=\"border-bottom:1px solid #ccc;\"> <th style=\"text-align: left;\">" + k + "</th> <th  style=\"text-align: left;\">QTY</th>  <th style=\"text-align: left;\">Price</th> <th style=\"text-align: right;\">Total</th> </tr>\n");
-            for (org.bootcamp.yum.api.model.OrderItem o : v) {
-                Food f = foodRep.findById(o.getFoodId());
-
-                sb.append("<tr><td>" + f.getName() + "</td> <td>" + o.getQuantity() + "</td>  <td>" + df.format(f.getPrice()) + currency + "</td> <td "+cellAlignRight+">" + df.format(f.getPrice().multiply(new BigDecimal(o.getQuantity()))) + currency + "</td> </tr>\n");
-               sumTotal = sumTotal.add(f.getPrice().multiply(new BigDecimal(o.getQuantity())));
-            }
-        }
-
-        sb.append("</table>\n");
-        sb.append("<div style=\"text-align:right;\"><div style='display: inline-block;border-top: 2px solid #f44336; padding: 10px; font-weight:bold; '>Total: " + df.format(sumTotal) + currency + "</div></div>\n");
-        sb.append("<br><br>");
-
-        
-        // Orders by user
-        
-        sb.append("<h2>Orders by user</h2>");
-        sb.append("<table cellpadding=\"10\" cellspacing=\"5\" style=\"text-align:left; border-collapse: collapse; width:100%; \"  >");
-        sb.append("<tr style=\"border-bottom:1px solid #ccc;\">");
-        sb.append("<th style=\"text-align: left;\">Full name</th> <th style=\"text-align: left;\">Qty.</th><th style=\"text-align: left;\">Meal</th>  <th style=\"text-align: left;\">Qty.</th><th style=\"text-align: left;\">Salad</th> <th style=\"text-align: left;\">Qty.</th><th style=\"text-align: left;\">Drink</th> <th style=\"text-align: right;\">Total</th> </tr>\n");
-
-        
-        for (UserOrder userOrder : dailyOrderSummary.getUserOrders()) {
-            sumTotal = new BigDecimal(0);
-            orderByFoodType = getFoodByType(userOrder.getOrderItems());
-            
-            //get max row size
-            int maxRows = 0;
-            for (Map.Entry<String, ArrayList<org.bootcamp.yum.api.model.OrderItem>> entry : orderByFoodType.entrySet()) {
-                ArrayList<org.bootcamp.yum.api.model.OrderItem> v = entry.getValue();
-                if(maxRows<v.size()){
-                    maxRows = v.size();
-                }            
-            }
-            
-            sb.append("<tr style=\"border-bottom:1px solid #ccc;\">\n");
-
-            if (sumTotal.compareTo(new BigDecimal(0)) == 0) {
-                sb.append("<td>" + userOrder.getFirstName() + " " + userOrder.getLastName() + "</td>");
-            }
-
-            
-            ArrayList<String> foodTypes = new ArrayList<>(Arrays.asList("MAIN", "SALAD", "DRINK"));
-            
-            for( String foodType : foodTypes){
-            
-                sb.append("\n<td colspan=\"2\"><table cellpadding=\"10\" cellspacing=\"5\" style=\"text-align:left; \"   >\n");
-                ArrayList<org.bootcamp.yum.api.model.OrderItem> meals = orderByFoodType.get(foodType);
-                if (meals != null) {
-                    for (org.bootcamp.yum.api.model.OrderItem meal : meals) {
-                        Food f = foodRep.findById(meal.getFoodId());
-                        sb.append("<tr><td>" + meal.getQuantity() + "</td><td>" + f.getName() + "</td></tr>\n");
-                        sumTotal = sumTotal.add(f.getPrice().multiply(new BigDecimal(meal.getQuantity())));
-                    }
-                } else {
-                    sb.append("<tr><td></td></tr>\n");
+            String emails = settingsRep.findById(1).getReportEmail();
+            if (emails != null && !emails.isEmpty()) {
+                ArrayList<String> emailsTo = new ArrayList<>(Arrays.asList(emails.split(";")));
+                for (String emailTo : emailsTo) {
+                    sendHtmlTemplateEmail(emailTo, "[Yum] Order summary for " + formattedDate, model, "order-summary.html");
                 }
-                sb.append("</table></td>\n");
             }
-         
-
-            sb.append("<td "+cellAlignRight+">"+df.format(sumTotal) + currency+"</td> ");
-            sb.append("</tr>\n");
-            
-
         }
-
-        sb.append("</table>");
-        sb.append("</div>");
-        
-        //System.out.println(sb);
-       String emails = settingsRep.findById(1).getReportEmail();
-       if(emails !=null && !emails.isEmpty()){
-            ArrayList<String> emailsTo = new ArrayList<>(Arrays.asList( emails.split(";")));   
-            for(String emailTo : emailsTo){
-             sendHtmlEmail(emailTo, "Order summary for " + formattedDate, sb.toString());
-            }
-       }
-        
-       
-
     }
 
-    private HashMap<String, ArrayList<org.bootcamp.yum.api.model.OrderItem>> getFoodByType(List<org.bootcamp.yum.api.model.OrderItem> orderItems) {
+    // Get total quantities per food for given DailyMenu
+    private HashMap<Food, Integer> getOrderItems(DailyMenu dailyMenu) {
+        HashMap<Food, Integer> foodQtys = new HashMap<>();
 
-        HashMap<String, ArrayList<org.bootcamp.yum.api.model.OrderItem>> orderByFoodType = new HashMap<>();
+        // get all orders
+        List<DailyOrder> dailyOrders = dailyMenu.getDailyOrders();
+        for (DailyOrder dailyOrder : dailyOrders) {
+            for (OrderItem orderItem : dailyOrder.getOrderItems()) {
+                Food food = orderItem.getFood();
+                foodQtys.put(food, (foodQtys.get(food) == null ? 0 : foodQtys.get(food)) + orderItem.getQuantity());
+            }
+        }
+        return foodQtys;
+    }
 
-        for (org.bootcamp.yum.api.model.OrderItem orderItem : orderItems) {
-            Food food = foodRep.findById(orderItem.getFoodId());
+    // return a hashmap with keys food types and values hashmaps (key: Food, value: quantity)
+    private HashMap<String, HashMap<Food, Integer>> getFoodByType(HashMap<Food, Integer> foodQty) {
+        HashMap<String, HashMap<Food, Integer>> orderByFoodType = new HashMap<>();
+
+        for (Map.Entry<Food, Integer> foodEntry : foodQty.entrySet()) {
+            Food food = foodEntry.getKey();
+            Integer quantity = foodEntry.getValue();
             String foodType = food.getFoodType().toString();
 
             if (!orderByFoodType.containsKey(foodType)) {
-                ArrayList<org.bootcamp.yum.api.model.OrderItem> fwq = new ArrayList<>();
-                fwq.add(orderItem);
-                orderByFoodType.put(foodType, fwq);
+                HashMap<Food, Integer> foodQtyByType = new HashMap<>();
+                foodQtyByType.put(food, quantity);
+                orderByFoodType.put(foodType, foodQtyByType);
             } else {
-                orderByFoodType.get(foodType).add(orderItem);
+                orderByFoodType.get(foodType).put(food, quantity);
             }
-
         }
-
         return orderByFoodType;
     }
 

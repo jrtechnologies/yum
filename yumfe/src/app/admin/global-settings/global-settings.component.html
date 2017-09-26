@@ -17,8 +17,9 @@
     <span layout="row"><hr flex/></span>
     <md-grid-list cols="1" rowHeight="50">
       <md-grid-tile class="right" colspan="1" rowspan="1">
-        <button md-raised-button type="submit" color='accent'>Save Changes</button>
-        <button md-raised-button class="cancel" (click)="cancel()" color='accent'>Cancel</button>
+        <button md-raised-button type="submit" color='accent' [disabled]="showSpinner">Save Changes</button>
+        <button md-raised-button class="cancel" (click)="cancel()" color='accent' [disabled]="showSpinner">Cancel</button>
+        <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
       </md-grid-tile>
     </md-grid-list>
     <div class="textareas">
@@ -65,8 +66,9 @@
     </div>
     <md-grid-list cols="1" rowHeight="50">
       <md-grid-tile class="right" colspan="1" rowspan="1">
-        <button md-raised-button type="submit" color='accent'>Save Changes</button>
-        <button md-raised-button class="cancel" (click)="cancel()" color='accent'>Cancel</button>
+        <button md-raised-button type="submit" color='accent' [disabled]="showSpinner">Save Changes</button>
+        <button md-raised-button class="cancel" (click)="cancel()" color='accent' [disabled]="showSpinner">Cancel</button>
+        <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
       </md-grid-tile>
     </md-grid-list>
   </form>
