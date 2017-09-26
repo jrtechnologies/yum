@@ -21,7 +21,7 @@ info:
       
     ------------------------------------
 
-        Last edit: 14/09/2017 04:15
+        Last edit: 26/09/2017 10:50
 
     -------------------------------------
 basePath: /api
@@ -1239,6 +1239,61 @@ paths:
           description: Concurrent modification error
           schema:
             $ref: '#/definitions/GlobalSettings'
+        '500':
+          $ref: '#/responses/Error'
+  '/balance/{id}':
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - hungry
+      description: Get user's balance
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: ok
+          schema:
+            type: number
+            format: int64
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          $ref: '#/responses/Error'
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - admin
+      description: Update user's balance
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          format: int64
+        - in: body
+          name: amount
+          required: true
+          schema:
+            type: number
+            format: int64
+      responses:
+        '200':
+          description: ok
+          schema:
+            type: number
+            format: int64
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
         '500':
           $ref: '#/responses/Error'
 definitions:
