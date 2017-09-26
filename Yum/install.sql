@@ -95,6 +95,19 @@ CREATE TABLE yum_settings (
    PRIMARY KEY (`id`)
 );
 
+CREATE TABLE transaction(
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+	amount DECIMAL(20,2) NOT NULL,
+    balance DECIMAL(20,2) NOT NULL,
+    date_time TIMESTAMP NULL  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	source_id BIGINT NOT NULL,
+    order_id BIGINT,
+    order_type varchar(60),
+    PRIMARY KEY ( id ),
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (source_id) REFERENCES user(id)
+);
 
 INSERT INTO `user` VALUES (1,'admin','admin','admin@yum.com','admin','$2a$10$94RawXgiAdX76VORM7MkRevNSYa8NzlVcQVPZJqaNNBdmrq62y3aa','2017-03-28','','2017-05-22 15:22:09',0,NULL,NULL,NULL,NULL,0);
 
