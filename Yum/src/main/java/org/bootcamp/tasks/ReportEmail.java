@@ -99,9 +99,9 @@ public class ReportEmail implements ApplicationListener<ApplicationReadyEvent> {
         for (int i = 0; i <= checkDays; i++) { //newDeadlineDays
             LocalDate dailyMenuDate = initDate.plusDays(i);
             // if old deadline not passed and new deadline passed and dailyMenu not null, send report email
-            if (menusService.deadlinePassed(dailyMenuDate) ) { //&& dailyMenuRepo.findByDate(dailyMenuDate) != null
-                System.out.println(">>>>>>>>>>>>>sending email, date: " + dailyMenuDate); 
-                //eService.sendOrderSummary(dailyMenuDate);
+            if (menusService.deadlinePassed(dailyMenuDate) && dailyMenuRepo.findByDate(dailyMenuDate) != null) { //
+                //System.out.println(">>>>>>>>>>>>>sending email, date: " + dailyMenuDate); 
+                eService.sendOrderSummary(dailyMenuDate);
             }
         }
 
