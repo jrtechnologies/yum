@@ -53,7 +53,7 @@ public class Transaction {
     @Column(name = "balance")
     private BigDecimal balance;
     
-    @Column(name = "date_time")
+    @Column(name = "date_time", updatable=false, insertable=false)
     @Convert(converter = LocalDateTimeAttributeConverter.class)
     private DateTime dateTime;
 

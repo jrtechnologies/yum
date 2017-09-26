@@ -60,10 +60,19 @@ public class BalanceApiController implements BalanceApi {
     }
     
     @PreAuthorize("hasAuthority('admin')")
-    public ResponseEntity<BigDecimal> balanceIdPut(@ApiParam(value = "",required=true ) @PathVariable("id") Long id,
+    public ResponseEntity<Object> balanceIdPut(@ApiParam(value = "",required=true ) @PathVariable("id") Long id,
         @ApiParam(value = "" ,required=true )  @Valid @RequestBody BigDecimal amount) throws ApiException {
-        // do some magic!
-        return new ResponseEntity<BigDecimal>(HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(balanceService.balanceIdPut(id, amount),HttpStatus.OK);
+        } catch (ApiException ex) {
+            int exCode = ex.getCode();
+            return new ResponseEntity<>(HttpStatus.valueOf(exCode));
+        } catch (Exception e) {
+            Error error = new Error();
+            error.setError("500");
+            error.setMessage(e.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

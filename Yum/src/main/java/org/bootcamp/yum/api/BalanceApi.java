@@ -68,6 +68,6 @@ public interface BalanceApi {
         produces = { "application/json" }, 
         method = RequestMethod.PUT)
     @CrossOrigin        
-    ResponseEntity<BigDecimal> balanceIdPut(@ApiParam(value = "",required=true ) @PathVariable("id") Long id,@ApiParam(value = "" ,required=true )  @Valid @RequestBody BigDecimal amount)throws ApiException;
+    ResponseEntity<Object> balanceIdPut(@ApiParam(value = "",required=true ) @PathVariable("id") Long id,@ApiParam(value = "" ,required=true )  @Valid @RequestBody BigDecimal amount)throws ApiException;
 
 }

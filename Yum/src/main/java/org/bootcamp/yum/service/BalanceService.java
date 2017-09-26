@@ -16,9 +16,12 @@ package org.bootcamp.yum.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import javax.transaction.Transactional;
 import org.bootcamp.yum.api.ApiException;
+import org.bootcamp.yum.data.entity.Transaction;
 import org.bootcamp.yum.data.entity.User;
 import org.bootcamp.yum.data.repository.UserRepository;
+import org.bootcamp.yum.data.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +32,9 @@ public class BalanceService {
     
     @Autowired
     private UserRepository userRep;
+    
+    @Autowired
+    private TransactionRepository transactionRep;
     
     public BigDecimal balanceIdGet(Long id) throws ApiException {
         
@@ -53,8 +59,33 @@ public class BalanceService {
         return balance;
     }
 
-    public BigDecimal balanceIdPut(Long id, BigDecimal amount) {
-
-        return new BigDecimal(0);
+    @Transactional
+    public BigDecimal balanceIdPut(Long id, BigDecimal amount) throws ApiException {
+        
+        if (id==null || amount==null) {
+            throw new ApiException(400, "Bad request");
+        }
+        User user=userRep.findById(id);
+        if (user==null) {
+            throw new ApiException(404, "User not found");
+        }
+        
+        Transaction transaction = new Transaction();
+        transaction.setUserId(id);
+        transaction.setAmount(amount);
+        BigDecimal balance = user.getBalance();
+        if (balance == null) {
+            transaction.setBalance(amount);
+            user.setBalance(balance);
+        } else {
+            balance = balance.add(amount);
+            transaction.setBalance(balance);
+            user.setBalance(balance);
+        }
+        
+         //Retrieves source user id form token
+        transaction.setSourceId((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        transactionRep.save(transaction);
+        return balance;
     }
 }
