@@ -14,6 +14,7 @@
  */
 package org.bootcamp.yum.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,10 +34,12 @@ import org.bootcamp.yum.api.model.Order;
 import org.bootcamp.yum.api.model.OrderItem;
 import org.bootcamp.yum.api.model.UpdateOrderItems;
 import org.bootcamp.yum.data.entity.OrderItemId;
+import org.bootcamp.yum.data.entity.Transaction;
 import org.bootcamp.yum.data.repository.DailyMenuRepository;
 import org.bootcamp.yum.data.repository.DailyOrderRepository;
 import org.bootcamp.yum.data.repository.FoodRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
+import org.bootcamp.yum.data.repository.TransactionRepository;
 import org.bootcamp.yum.data.repository.UserRepository;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -60,7 +63,20 @@ public class OrdersService {
     private SettingsRepository settingsRep;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private TransactionRepository transactionRep;
 
+//    private void createTransaction(Long userId, BigDecimal amount, BigDecimal balance, Long orderId, String orderType) {
+//        Transaction transaction = new Transaction();
+//        transaction.setUserId(userId);
+//        transaction.setAmount(amount);     
+//        transaction.setBalance(balance);
+//        //Retrieves source user id form token
+//        transaction.setSourceId((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+//        transaction.setOrderId(0);
+//        transactionRep.save(transaction);
+//
+//    }
     @Transactional
     public DailyMenu ordersPost(Order order) throws ApiException {
 
@@ -120,7 +136,7 @@ public class OrdersService {
                 if (settingsRep.findOne(1).deadlinePassed(dailyMenuDate)) {
                     throw new ApiException(412, "Deadline passed");
 
-                // Passes Validation
+                    // Passes Validation
                 } else {
                     DailyMenu dailyMenu = new DailyMenu();
                     dailyMenu.setId(dailyMenuId);
@@ -132,6 +148,7 @@ public class OrdersService {
                     dailyOrderEntity.setUserId(userId);
                     dailyOrderEntity.setLastEdit(DateTime.now());
                     List<OrderItem> orderItems = order.getOrderItems();
+                    BigDecimal orderAmount = new BigDecimal(0);
 
                     for (OrderItem orderItem : orderItems) {
                         Long foodID = orderItem.getFoodId();
@@ -159,8 +176,21 @@ public class OrdersService {
                         foodWithQuantity.setFood(food);
                         foodWithQuantity.setQuantity(itemQuantity);
                         dailyMenu.addFoodsItem(foodWithQuantity);
+                        // Add (food price x quantity) to order amount
+                        orderAmount = orderAmount.add(foodEntity.getPrice().multiply(new BigDecimal(itemQuantity)));
                     }
+
                     dailyOrderRep.save(dailyOrderEntity);
+                    BigDecimal balance = user.getBalance();
+                    if (balance == null) {
+                        balance = orderAmount.negate();
+                    } else {
+                        balance = balance.subtract(orderAmount);
+                    }
+
+                    user.setBalance(balance);
+                    Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), "Order for " + dailyMenuDate.toString("dd/MM/yyyy"));
+                    transactionRep.save(transaction);
 
                     List<FoodWithQuantity> foodsWQ = dailyMenu.getFoods();
                     for (org.bootcamp.yum.data.entity.Food food : dailyMenuEntity.getFoods()) {
@@ -245,7 +275,8 @@ public class OrdersService {
     @Transactional
     public LastEdit ordersIdPut(Long id, UpdateOrderItems updateOrderItems) throws ApiException {
         try {
-            org.bootcamp.yum.data.entity.User user = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            org.bootcamp.yum.data.entity.User user = userRep.findById(userId);
             //  Validation for user
             if (user == null) {
                 throw new ApiException(400, "Order couldn't be modified.");
@@ -317,20 +348,25 @@ public class OrdersService {
 
                 // Passes Validation                            
                 Boolean updated = false;
+                BigDecimal orderAmount = new BigDecimal(0);
+
                 //Iterate over original order items 
                 for (Iterator<org.bootcamp.yum.data.entity.OrderItem> iterator = orderItemsEntity.iterator(); iterator.hasNext();) {
                     org.bootcamp.yum.data.entity.OrderItem orderItemEntity = iterator.next();
                     Boolean found = false;
+                    org.bootcamp.yum.data.entity.Food foodEntity = orderItemEntity.getFood();
+                    int oldQuantity = orderItemEntity.getQuantity();
                     //Iterate over new order items
                     for (Iterator<OrderItem> modelIterator = orderItemsList.iterator(); modelIterator.hasNext();) {
                         OrderItem orderItem = modelIterator.next();
-                        if (orderItemEntity.getFood().getId() == orderItem.getFoodId()) {
+                        if (foodEntity.getId() == orderItem.getFoodId()) {
                             found = true;
                             // Check if quantity has changed
                             int newQuantity = orderItem.getQuantity();
-                            if (orderItemEntity.getQuantity() != newQuantity) {
+                            if (oldQuantity != newQuantity) {
                                 orderItemEntity.setQuantity(newQuantity);
                                 updated = true;
+                                orderAmount = orderAmount.add(foodEntity.getPrice().multiply(new BigDecimal(newQuantity - oldQuantity)));
                             }
                             modelIterator.remove();
                             break;
@@ -340,6 +376,7 @@ public class OrdersService {
                     if (!found) {
                         iterator.remove();
                         updated = true;
+                        orderAmount = orderAmount.subtract(foodEntity.getPrice().multiply(new BigDecimal(oldQuantity)));
                     }
                 }
                 // Insert new order items
@@ -355,6 +392,7 @@ public class OrdersService {
                     orderItemEntity.setDailyOrder(dailyOrderEntity);
                     orderItemEntity.setQuantity(itemQuantity);
                     updated = true;
+                    orderAmount = orderAmount.add(foodEntity.getPrice().multiply(new BigDecimal(itemQuantity)));
                     orderItemsEntity.add(orderItemEntity);
                 }
                 // Update Order version and timestamp and return lastEdit Object
@@ -369,6 +407,18 @@ public class OrdersService {
                     if (updateOrderItems.getEmailRequest() && (emailService != null)) {
                         emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
                     }
+
+                    dailyOrderRep.save(dailyOrderEntity);
+                    BigDecimal balance = user.getBalance();
+                    if (balance == null) {
+                        balance = orderAmount.negate();
+                    } else {
+                        balance = balance.subtract(orderAmount);
+                    }
+
+                    user.setBalance(balance);
+                    Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), "Modified Order for " + dailyMenuEntity.getDate().toString("dd/MM/yyyy"));
+                    transactionRep.save(transaction);
 
                     return lastEdit;
 
@@ -385,8 +435,8 @@ public class OrdersService {
 
     @Transactional
     public void ordersIdDelete(Long id, DailyMenuDetails dailyMenuDetails) throws ApiException {
-
-        org.bootcamp.yum.data.entity.User user = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        org.bootcamp.yum.data.entity.User user = userRep.findById(userId);
         //  Validation for user
         if (user == null) {
             throw new ApiException(400, "Order couldn't be modified.");
@@ -401,11 +451,25 @@ public class OrdersService {
         //  Validation for user, dailyMenu 
         if ((dailyMenuEntity == null) || user.getId() != dailyOrderEntity.getUserId()) {
             throw new ApiException(400, "Order couldn't be deleted.");
-        // Check for deadline             
+            // Check for deadline             
         } else if (settingsRep.findOne(1).deadlinePassed(dailyOrderEntity.getDailyMenu().getDate())) {
             dailyOrderEntity.setFinalised(true);
             throw new ApiException(412, "Deadline for orders passed");
         } else {
+            BigDecimal orderAmount = new BigDecimal(0);
+            for (org.bootcamp.yum.data.entity.OrderItem orderItem: dailyOrderEntity.getOrderItems()){
+                orderAmount = orderAmount.add(orderItem.getFood().getPrice().multiply(new BigDecimal(orderItem.getQuantity())));
+            }
+            
+            BigDecimal balance = user.getBalance();
+            if (balance == null) {
+                balance = orderAmount;
+            } else {
+                balance = balance.add(orderAmount);
+            }
+            user.setBalance(balance);
+            Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), "Canceled Order for " + dailyMenuEntity.getDate().toString("dd/MM/yyyy"));
+            transactionRep.save(transaction);
             dailyOrderRep.delete(dailyOrderEntity);
         }
     }

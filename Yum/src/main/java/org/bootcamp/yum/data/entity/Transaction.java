@@ -66,6 +66,18 @@ public class Transaction {
     @Column(name = "order_type")
     private String orderType;
 
+    public Transaction() {
+    }
+
+    public Transaction(long userId, BigDecimal amount, BigDecimal balance, long sourceId, long orderId, String orderType) {
+        this.userId = userId;
+        this.amount = amount;
+        this.balance = balance;
+        this.sourceId = sourceId;
+        this.orderId = orderId;
+        this.orderType = orderType;
+    }
+
     public long getId() {
         return id;
     }
