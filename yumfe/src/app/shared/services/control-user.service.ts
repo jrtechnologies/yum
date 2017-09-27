@@ -19,7 +19,7 @@ export class ControlUserService {
     }
 
     this.adminApi.usersIdGet(userid).subscribe(user => {
-        console.log(user);
+        //console.log(user);
         this.controlledUser.next(user);  
       }, error => {
         console.log(error)

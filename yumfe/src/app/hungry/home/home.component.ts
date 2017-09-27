@@ -69,7 +69,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (isValid(dt)) {
         dt = addDays(dt, 1);
 
-        console.log('router dt:', dt);
+        //console.log('router dt:', dt);
         this.date = dt;
         //this.monthDate = this.date;
 
@@ -81,7 +81,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         this.getCurrentWeeklyMenu(this.buildweekYear(this.date));
       } else {
-        console.warn('invalid router date');
+        //console.warn('invalid router date');
       }
     });
     if (isToday(this.date)) {

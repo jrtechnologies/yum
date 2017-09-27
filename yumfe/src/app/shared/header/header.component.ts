@@ -30,6 +30,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
 
+    this.user = this.authenticationService.getLoggedInUser();
+    this.role = this.authenticationService.getLoggedInRole();
+
     this.router.events.subscribe((event) => { 
         if(event instanceof NavigationEnd) {
             //console.log(event);
@@ -44,10 +47,14 @@ export class HeaderComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
 
-      let userid = +params['userid'] || 0;
-      //uncomment if want to keep controlled user
-      if (!userid) return;
-      this.controlUserService.setUser(userid);
+      if(this.user && this.user.role == 'ADMIN'){
+        let userid = +params['userid'] || 0;
+
+        //comment if dont want to keep controlled user if no path query exists
+        if (!userid) return;
+
+        this.controlUserService.setUser(userid);
+      }
 
     });
 
@@ -55,8 +62,7 @@ export class HeaderComponent implements OnInit {
       this.controlUser=user;
     });
 
-    this.user = this.authenticationService.getLoggedInUser();
-    this.role = this.authenticationService.getLoggedInRole();
+
 
     this.userPicture = this.baseUrl + '/settings/picture/token?token=' + this.authenticationService.getToken();
 

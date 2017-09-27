@@ -85,7 +85,7 @@ public class OrdersApiController implements OrdersApi {
             @ApiParam(value = "dailymenu details id, version, date"  ) @RequestBody DailyMenuDetails dailyMenuDetails) {
         try {
             ordersService.ordersIdDelete(id, dailyMenuDetails);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("{}", HttpStatus.OK);
         } catch (ConcurrentDeletionException ex) {
             int exCode = ex.getCode();
             return new ResponseEntity<>(ex.getResponseDTO() ,HttpStatus.valueOf(exCode));    

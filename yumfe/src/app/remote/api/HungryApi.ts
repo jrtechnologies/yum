@@ -543,7 +543,7 @@ export class HungryApi {
         }
 
         if (dailyMenuDate !== undefined) {
-            queryParameters.set('dailyMenuDate', <any>dailyMenuDate.toISOString());
+            queryParameters.set('dailyMenuDate', <any>dailyMenuDate);
         }
 
         if (userid !== undefined) {
