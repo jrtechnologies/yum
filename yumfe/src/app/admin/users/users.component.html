@@ -13,7 +13,10 @@
         <div>Profile details</div>
       </div>
     </md-grid-tile>
-    <md-grid-tile colspan="4" class="right">
+    <md-grid-tile colspan="2" class="right">
+      <button md-raised-button color="accent" type="button" (click)="viewUserMenu()" >User menu</button>
+    </md-grid-tile>
+    <md-grid-tile colspan="2" class="right">
       <app-slide-toggle-component *ngIf="user" [user]="user" [externalAuth]=externalAuth (updateVersion)="handleUpdateVersion($event)"></app-slide-toggle-component>
     </md-grid-tile>
   </md-grid-list>

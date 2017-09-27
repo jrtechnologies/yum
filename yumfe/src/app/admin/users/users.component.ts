@@ -202,6 +202,11 @@ export class UsersComponent implements OnInit {
     this.user.lastEdit.version += 1;
   }
 
+  viewUserMenu(){
+    //this.router.navigate(['/hungry/?userid='+this.userId]);
+    this.router.navigateByUrl('/hungry?userid='+this.userId);
+  }
+
 }
 
 @Component({

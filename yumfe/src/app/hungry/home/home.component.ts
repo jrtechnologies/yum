@@ -8,6 +8,7 @@ import { DatePipe } from '@angular/common';
 import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.component';
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 import { Observable } from 'rxjs/Rx';
+import { ControlUserService } from '../../shared/services/control-user.service';
 
 @Component({
   selector: 'app-hungry-home',
@@ -28,13 +29,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   public weeklyTotalPrice = 0;
   public workingDays: number[];
 
+  //admin 
+  public controlledUser: remote.User;
+
   constructor(
     private hungryService: remote.HungryApi,
     private datePipe: DatePipe,
     private route: ActivatedRoute,
     private location: Location,
     private router: Router,
-    public globalSettingsService: GlobalSettingsService
+    public globalSettingsService: GlobalSettingsService,
+    private adminApi: remote.AdminApi,
+    private controlUserService: ControlUserService
   ) { }
 
   ngOnInit() {
@@ -50,6 +56,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public setup() {
+
+    //admin
+    this.controlUserService.getUser().subscribe(user=>{
+      this.controlledUser = user;
+    });
+ 
+
     this.sub = this.route.params.subscribe(params => {
       let dt = new Date(+params['year'], 1, 1); // (+) converts string 'year' na d 'month' to a number
       dt = setISOWeek(dt, +params['week']);
@@ -61,10 +74,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         //this.monthDate = this.date;
 
         this.weekDaysCal(startOfWeek(this.date, { weekStartsOn: 1 }));
-        if(this.weekDays.length>0){
+        if (this.weekDays.length > 0) {
           this.monthDate = new Date(this.weekDays[this.weekDays.length - 1]);
         }
-        else{this.monthDate=this.date; }
+        else { this.monthDate = this.date; }
 
         this.getCurrentWeeklyMenu(this.buildweekYear(this.date));
       } else {
@@ -99,6 +112,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     return weekTotal;
   }
   ngOnDestroy() {
+    if(this.sub)
     this.sub.unsubscribe();
   }
 
@@ -113,12 +127,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private weekDaysCal(d: Date) {
     this.weekDays = [];
-    
+
     for (let i = 0; i < 7; i++) {
-      
-      const dtStr = this.datePipe.transform(d, 'yyyy-MM-dd');     
-      
-      if(this.workingDays.includes(d.getDay())){
+
+      const dtStr = this.datePipe.transform(d, 'yyyy-MM-dd');
+
+      if (this.workingDays.includes(d.getDay())) {
         this.weekDays.push(dtStr);
       }
 

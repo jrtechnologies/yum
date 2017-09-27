@@ -12,6 +12,7 @@ import * as remote from '../../../remote';
 })
 export class DailyMenuComponent implements OnInit {
   @Input() dailyMenu: remote.DailyMenu;
+  @Input() userid: number;
   @Output() dailyTotalPrice = new EventEmitter<number>();
 
   private lastEditDailyOrder: remote.LastEdit = {};
@@ -149,7 +150,7 @@ export class DailyMenuComponent implements OnInit {
   }
   // Update order last edit, Call get order with id Api.
   private getOrderLastEdit() {
-    this.hungryService.ordersIdGet(this.dailyMenu.orderId, this.dailyMenu.id, this.dailyMenu.lastEdit.version, this.dailyMenu.date)
+    this.hungryService.ordersIdGet(this.dailyMenu.orderId, this.dailyMenu.id, this.dailyMenu.lastEdit.version, this.dailyMenu.date, this.userid)
       .subscribe(orderedMenu => {
         this.lastEditDailyOrder = orderedMenu.lastEdit;
       }, error => console.log(error));
@@ -210,7 +211,7 @@ export class DailyMenuComponent implements OnInit {
           }
           updateOrderItem.orderItems = updateOrderItems;
           // Call, order with id put API.
-          this.hungryService.ordersIdPut(this.dailyMenu.orderId, updateOrderItem)
+          this.hungryService.ordersIdPut(this.dailyMenu.orderId, this.userid, updateOrderItem)
             .subscribe(lastEdit => {
               this.lastEditDailyOrder = lastEdit;
               this.isOrderBoolean = true;
@@ -277,7 +278,7 @@ export class DailyMenuComponent implements OnInit {
           }
           order.OrderItems = newOrderItems;
           // Call, order post API.
-          this.hungryService.ordersPost(order)
+          this.hungryService.ordersPost(order, this.userid)
             .subscribe(orderedDailyMenu => {
               this.dailyMenu = orderedDailyMenu;
               this.getOrderLastEdit(); // Update order last edit.
@@ -337,7 +338,7 @@ export class DailyMenuComponent implements OnInit {
         dailyMenuDetails.dailyMenuDate = this.dailyMenu.date;
         dailyMenuDetails.dailyMenuVersion = this.dailyMenu.lastEdit.version;
         // Call delete api.
-        this.hungryService.ordersIdDelete(this.dailyMenu.orderId, dailyMenuDetails)
+        this.hungryService.ordersIdDelete(this.dailyMenu.orderId, this.userid, dailyMenuDetails)
           .subscribe(() => {
             this.isOrderBoolean = false;
             this.removeFoodMapQuantity();

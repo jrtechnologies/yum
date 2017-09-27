@@ -7,7 +7,7 @@
       "name": "GPLv3",
       "url": "http://www.gnu.org/licenses/"
     },
-    "description": "**Yum application, order food daily from the best chef in town**\n\nThis API is used by the angular.io client, and is not meant to be used otherwise.\n\nFind source code of this API [here](https://github.com/jrtdev/yum)\n\nCopyright (C) 2017 JR Technologies.\n\n  \n------------------------------------\n\n    Last edit: 22/09/2017 13:20\n\n-------------------------------------\n"
+    "description": "**Yum application, order food daily from the best chef in town**\n\nThis API is used by the angular.io client, and is not meant to be used otherwise.\n\nFind source code of this API [here](https://github.com/jrtdev/yum)\n\nCopyright (C) 2017 JR Technologies.\n\n  \n------------------------------------\n\n    Last edit: 27/09/2017 09:45\n\n-------------------------------------\n"
   },
   "basePath": "/api",
   "schemes": [
@@ -344,7 +344,7 @@
         "tags": [
           "hungry"
         ],
-        "summary": "deletes profile picture.",
+        "summary": "Deletes profile picture.",
         "responses": {
           "204": {
             "description": "Picture deleted"
@@ -360,6 +360,7 @@
         "tags": [
           "hungry"
         ],
+        "summary": "Get profile picture.",
         "description": "Get profile picture.",
         "parameters": [
           {
@@ -404,6 +405,15 @@
         ],
         "summary": "Gets weekly menus",
         "description": "Returns a list containing all menus of the week.",
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "int32"
+          }
+        ],
         "responses": {
           "200": {
             "description": "A list of daily menus",
@@ -439,6 +449,13 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "userid",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "int32"
           }
         ],
         "responses": {
@@ -472,6 +489,15 @@
         ],
         "summary": "Gets monthly menus.",
         "description": "Return a list containing all menus of the month.",
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "int32"
+          }
+        ],
         "responses": {
           "200": {
             "description": "A list of daily menus.",
@@ -507,6 +533,13 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "userid",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "int32"
           }
         ],
         "responses": {
@@ -548,6 +581,13 @@
             "schema": {
               "$ref": "#/definitions/Order"
             }
+          },
+          {
+            "name": "userid",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "int32"
           }
         ],
         "responses": {
@@ -591,7 +631,7 @@
         "tags": [
           "hungry"
         ],
-        "summary": "Modifies order for the specified day",
+        "summary": "Get order for the specified day",
         "description": "Modify the order",
         "parameters": [
           {
@@ -620,6 +660,13 @@
             "required": true,
             "type": "string",
             "format": "date"
+          },
+          {
+            "name": "userid",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "int32"
           }
         ],
         "responses": {
@@ -655,6 +702,13 @@
         "summary": "Modifies order for the specified day",
         "description": "Modify the order",
         "parameters": [
+          {
+            "name": "userid",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "int32"
+          },
           {
             "name": "id",
             "in": "path",
@@ -743,6 +797,13 @@
         "summary": "Deletes specified order",
         "description": "Deletes the order",
         "parameters": [
+          {
+            "name": "userid",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "int32"
+          },
           {
             "name": "id",
             "in": "path",

@@ -4,7 +4,11 @@
   width: 200px;
   padding: 10px;
   border-radius: 5px 5px 0 0;
+  
+}
+.dateHeader{
   margin-top: 15px;
+  align-items: flex-end;
 }
 .no-menu {
   padding: 30px;
@@ -32,3 +36,28 @@ ul{
 .header {
   padding-top:25px;
 }
+
+.warningUser{background: repeating-linear-gradient( 45deg, rgba(255, 13, 13, 0.14), rgba(243, 195, 195, 0.31) 10px, rgba(224, 224, 224, 0) 10px, rgba(255, 0, 0, 0) 20px );}
+
+.trapezoid {
+  display: inline-block; 
+  vertical-align: bottom;
+  -webkit-transform: skew(20deg);
+  -moz-transform: skew(20deg);
+  -o-transform: skew(20deg);
+  width: 40px;
+  background: white;
+  transform: skew(-45deg) translate(20px);
+  z-index: 1;
+}
+.controlledUserName{
+  background-color: #fff;
+  padding: 5px 12px 6px 10px;
+  z-index: 10;
+  color: #4e4848;
+  box-shadow: 4px 0px 3px -2px rgba(160, 160, 160, 0.25);
+}
+.stretch { align-items: stretch; border-bottom: 1px solid rgba(160, 160, 160, 0.25);
+}
+
+ 

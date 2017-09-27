@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" class="header" >
   <div >
     <app-month-nav *ngIf="monthDate" [(viewDate)]="monthDate" (monthViewDate)="onMonthNavView($event)"></app-month-nav>
-    <app-hungry-nav></app-hungry-nav>
+    <app-hungry-nav></app-hungry-nav> 
   </div>
   <div>
     <button md-raised-button color="accent" (click)="previousWeek()">Previous Week</button>
@@ -14,8 +14,13 @@
     <md-spinner class="centered" color="accent"></md-spinner>
   </md-grid-tile>
 </md-grid-list>
-<div *ngFor="let day of weekDays">
-  <div class="date">{{formattedDay(day)}}</div>
+<div *ngFor="let day of weekDays" [ngClass]="{'warningUser': controlledUser}" >
+  <div class="dateHeader is-flex"><div class="date inline">{{formattedDay(day)}}</div>
+  <div class="is-flex stretch"> 
+    <div class="trapezoid inline">&nbsp;</div>
+    <div class="controlledUserName inline" *ngIf="controlledUser">{{controlledUser.firstName+" "+controlledUser.lastName}}</div>
+  </div>
+</div>
   <md-card>
     <div class="no-menu centered" *ngIf='!dailyMenuExists(day)'>
       <div><i class="material-icons medium-size">mood_bad</i></div>
@@ -25,7 +30,7 @@
       </div>
     </div>
     <div *ngIf='dailyMenuExists(day)'>
-      <app-daily-menu (dailyTotalPrice)="handleUserUpdated($event, day)" [dailyMenu]='getDailyMenu(day)'></app-daily-menu>
+      <app-daily-menu (dailyTotalPrice)="handleUserUpdated($event, day)" [dailyMenu]='getDailyMenu(day)' [userid]="controlledUser ? controlledUser.id : null"></app-daily-menu>
     </div>
   </md-card>
 </div>
