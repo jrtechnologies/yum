@@ -64,12 +64,12 @@ public class Transaction {
     private long orderId;
 
     @Column(name = "order_type")
-    private String orderType;
+    private int orderType;
 
     public Transaction() {
     }
 
-    public Transaction(long userId, BigDecimal amount, BigDecimal balance, long sourceId, long orderId, String orderType) {
+    public Transaction(long userId, BigDecimal amount, BigDecimal balance, long sourceId, long orderId, int orderType) {
         this.userId = userId;
         this.amount = amount;
         this.balance = balance;
@@ -150,11 +150,11 @@ public class Transaction {
         this.orderId = orderId;
     }
 
-    public String getOrderType() {
+    public int getOrderType() {
         return orderType;
     }
 
-    public void setOrderType(String orderType) {
+    public void setOrderType(int orderType) {
         this.orderType = orderType;
     }
     

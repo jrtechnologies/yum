@@ -189,7 +189,7 @@ public class OrdersService {
                     }
 
                     user.setBalance(balance);
-                    Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), "Order for " + dailyMenuDate.toString("dd/MM/yyyy"));
+                    Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), 1);
                     transactionRep.save(transaction);
 
                     List<FoodWithQuantity> foodsWQ = dailyMenu.getFoods();
@@ -417,7 +417,7 @@ public class OrdersService {
                     }
 
                     user.setBalance(balance);
-                    Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), "Modified Order for " + dailyMenuEntity.getDate().toString("dd/MM/yyyy"));
+                    Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), 2);
                     transactionRep.save(transaction);
 
                     return lastEdit;
@@ -468,7 +468,7 @@ public class OrdersService {
                 balance = balance.add(orderAmount);
             }
             user.setBalance(balance);
-            Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), "Canceled Order for " + dailyMenuEntity.getDate().toString("dd/MM/yyyy"));
+            Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), 3);
             transactionRep.save(transaction);
             dailyOrderRep.delete(dailyOrderEntity);
         }
