@@ -15,7 +15,7 @@ import {
           UserDelete412DisapprovedDialog
         } from './home/user/user.component';
 import { SharedModule} from '../shared/shared.module';
-import { UsersComponent, ResetPwdDialog } from './users/users.component';
+import { UsersComponent, ResetPwdDialog, BalanceDialog } from './users/users.component';
 import { GlobalSettingsComponent } from './global-settings/global-settings.component';
 import { AdminNavComponent } from './shared/admin-nav/admin-nav.component';
 import { AdminRouteGuard } from './admin-route.guard';
@@ -37,6 +37,7 @@ import { TinymceDirective } from './tinymce.directive';
       UserDelete412Dialog,
       UserDelete412DisapprovedDialog,
       ResetPwdDialog,
+      BalanceDialog,
       UsersComponent,
       GlobalSettingsComponent,
       AdminNavComponent,
@@ -52,7 +53,8 @@ import { TinymceDirective } from './tinymce.directive';
       UserDelete409Dialog,
       UserDelete412Dialog,
       UserDelete412DisapprovedDialog,
-      ResetPwdDialog
+      ResetPwdDialog,
+      BalanceDialog
     ]
 })
 export class AdminModule { }

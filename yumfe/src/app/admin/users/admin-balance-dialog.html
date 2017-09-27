@@ -1,0 +1,13 @@
+<h1 md-dialog-title class="centered">Add to balance </h1>
+<md-dialog-content  class="centered">
+  <div>You  are going to add <span class="bold">{{data.amount | number : '1.2-2'}}<span [innerHTML]="data.currency | async"></span></span> to user's balance.</div>
+  <div>The new balance will be <span class="bold">{{data.newBalance | number : '1.2-2'}}<span [innerHTML]="data.currency | async"></span></span>.</div>
+  <div>Are you sure?</div>
+</md-dialog-content>
+<md-grid-list cols="4" rowHeight="20px">
+</md-grid-list>
+<div fxLayout="row" fxLayoutAlign="space-around center">
+  <button md-raised-button color="accent" (click)="dialogRef.close('Yes')">Yes</button>
+
+    <button md-raised-button color="accent" (click)="dialogRef.close('No')">No</button>
+</div>

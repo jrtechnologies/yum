@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
+import { MdSnackBar, MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 
 import * as remote from '../../remote';
 import { AuthenticationService } from '../../shared/authentication.service';
+import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
+import { Observable } from 'rxjs/Rx';
 
 @Component({
   selector: 'app-users',
@@ -27,14 +29,26 @@ export class UsersComponent implements OnInit {
   public change = false;
   //spinner
   public showSpinner = false;
+  public showSpinnerBalance = false;
   public invalid = false;
-  public externalAuth: Boolean = false; 
+  public externalAuth: Boolean = false;
+  public balanceGroup: FormGroup;
+  public balance: number;
+  public currency: Observable<string>;
 
-  constructor(private route: ActivatedRoute, private adminService: remote.AdminApi, private fb: FormBuilder,
-    public snackBar: MdSnackBar, public dialog: MdDialog, private router: Router,
-    private authService: AuthenticationService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private adminService: remote.AdminApi,
+    private fb: FormBuilder,
+    public snackBar: MdSnackBar,
+    public dialog: MdDialog,
+    private router: Router,
+    private authService: AuthenticationService,
+    public globalSettingsService: GlobalSettingsService
+  ) { }
 
   ngOnInit() {
+    this.currency = this.globalSettingsService.getCurrency();
     //check if id is valid
     this.sub = this.route.params.subscribe(params => {
       const id = params['id'];
@@ -56,6 +70,12 @@ export class UsersComponent implements OnInit {
       ]
     });
 
+    // Create formGroup for adding amount to balance
+    this.balanceGroup = this.fb.group({
+      amount: ['', [Validators.required, Validators.pattern('^([-]?[1-9]*[1-9][0-9]*(\.[0-9]+)?|[-]?[0]+\.[0-9]*[1-9][0-9]*)$'), Validators.pattern('^[^\,]*$')]]
+    });
+
+
     this.externalAuth = this.authService.hasExternalAuth();
   }
 
@@ -75,6 +95,7 @@ export class UsersComponent implements OnInit {
       this.profileGroup.controls.firstName.patchValue(user.firstName);
       this.profileGroup.controls.lastName.patchValue(user.lastName);
       this.profileGroup.controls.email.patchValue(user.email);
+      this.balance = user.balance;
     }, error => {
       //console.log(error)
     });
@@ -181,7 +202,7 @@ export class UsersComponent implements OnInit {
             this.openSnackBar('Successfull password reset', 'ok', 1);
           },
           error => {
-            this.openSnackBar('Password cannot be reset', 'ok', 1);
+            this.openSnackBar('Password cannot be reset', 'ok', 3);
           }
           );
       }
@@ -191,7 +212,7 @@ export class UsersComponent implements OnInit {
 
   // Callball after invalid data in form from profile component
   handleInvalidProfileForm(validFlag: string) {
-      if (validFlag === "invalid"){
+    if (validFlag === "invalid") {
       this.invalid = true;
     } else {
       this.invalid = false;
@@ -202,6 +223,38 @@ export class UsersComponent implements OnInit {
     this.user.lastEdit.version += 1;
   }
 
+  updateBalance() {
+    const amount = Number(this.balanceGroup.get('amount').value);
+    const newBalance = this.balance + amount;
+    const dialogBal = this.dialog.open(BalanceDialog, {
+      data: {
+        newBalance: newBalance,
+        amount: amount,
+        currency: this.currency
+      }
+    });
+    dialogBal.afterClosed().subscribe(result => {
+
+      if (result === 'Yes') {
+        this.showSpinnerBalance = true;
+        this.adminService.balanceIdPut(this.user.id, amount)
+          .finally(() => {
+            this.showSpinnerBalance = false;
+          })
+          .subscribe(
+          value => {
+            this.balanceGroup.reset();
+            this.balance = value;
+            this.openSnackBar('Successfull user\'s balance update', 'ok', 1);
+          },
+          error => {
+            this.openSnackBar('Usre\'s balance cannot be updated', 'ok', 3);
+          }
+          );
+      }
+    });
+  }
+
 }
 
 @Component({
@@ -210,4 +263,12 @@ export class UsersComponent implements OnInit {
 })
 export class ResetPwdDialog {
   constructor(public dialogRef: MdDialogRef<ResetPwdDialog>) { }
+}
+
+@Component({
+  selector: 'app-admin-balance-dialog',
+  templateUrl: './admin-balance-dialog.html',
+})
+export class BalanceDialog {
+  constructor(public dialogRef: MdDialogRef<BalanceDialog>, @Inject(MD_DIALOG_DATA) public data: any) { }
 }

@@ -41,6 +41,22 @@ export class AdminApi {
     }
 
     /**
+     * Update user's balance
+     * @param id
+     * @param amount
+     */
+    public balanceIdPut(id: number, amount: number, extraHttpRequestParams?: any): Observable<number> {
+        return this.balanceIdPutWithHttpInfo(id, amount, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json() || {};
+                }
+            });
+    }
+
+    /**
      *
      * get global settings
      */
@@ -240,6 +256,56 @@ export class AdminApi {
             });
     }
 
+    /**
+     *
+     * Update user&#39;s balance
+     * @param id
+     * @param amount
+     */
+    public balanceIdPutWithHttpInfo(id: number, amount: number, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + '/balance/${id}'
+                    .replace('${' + 'id' + '}', String(id));
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling balanceIdPut.');
+        }
+        // verify required parameter 'amount' is not null or undefined
+        if (amount === null || amount === undefined) {
+            throw new Error('Required parameter amount was null or undefined when calling balanceIdPut.');
+        }
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json'
+        ];
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKey) {
+            headers.set('Authorization', this.configuration.apiKey);
+        }
+
+        headers.set('Content-Type', 'application/json');
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Put,
+            headers: headers,
+            body: amount == null ? '' : JSON.stringify(amount), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            withCredentials:this.configuration.withCredentials
+        });
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
+        }
+
+        return this.http.request(path, requestOptions);
+    }
 
     /**
      *
