@@ -6,7 +6,7 @@ import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
 
 import * as remote from '../../remote';
 import { AuthenticationService } from '../../shared/authentication.service';
-
+import { ControlUserService } from '../../shared/services/control-user.service';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -32,7 +32,7 @@ export class UsersComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private adminService: remote.AdminApi, private fb: FormBuilder,
     public snackBar: MdSnackBar, public dialog: MdDialog, private router: Router,
-    private authService: AuthenticationService) { }
+    private authService: AuthenticationService, private controlUserService:ControlUserService) { }
 
   ngOnInit() {
     //check if id is valid
@@ -204,6 +204,7 @@ export class UsersComponent implements OnInit {
 
   viewUserMenu(){
     //this.router.navigate(['/hungry/?userid='+this.userId]);
+    this.controlUserService.setUser(this.userId);
     this.router.navigateByUrl('/hungry?userid='+this.userId);
   }
 

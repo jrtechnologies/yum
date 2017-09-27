@@ -287,8 +287,8 @@ paths:
         - name: userid
           in: query
           required: false
-          type: number
-          format: int32
+          type: integer
+          format: int64
       responses:
         '200':
           description: A list of daily menus
@@ -315,8 +315,8 @@ paths:
         - name: userid
           in: query
           required: false
-          type: number
-          format: int32
+          type: integer
+          format: int64
       responses:
         '200':
           description: A list of daily menus
@@ -340,8 +340,8 @@ paths:
         - name: userid
           in: query
           required: false
-          type: number
-          format: int32
+          type: integer
+          format: int64
       responses:
         '200':
           description: A list of daily menus.
@@ -368,8 +368,8 @@ paths:
         - name: userid
           in: query
           required: false
-          type: number
-          format: int32
+          type: integer
+          format: int64
       responses:
         '200':
           description: A list of daily menus.
@@ -398,8 +398,8 @@ paths:
         - name: userid
           in: query
           required: false
-          type: number
-          format: int32
+          type: integer
+          format: int64
       responses:
         '200':
           description: Order succesfully placed
@@ -450,8 +450,8 @@ paths:
         - name: userid
           in: query
           required: false
-          type: number
-          format: int32
+          type: integer
+          format: int64
       responses:
         '200':
           description: Order succesfully retrieved
@@ -476,8 +476,8 @@ paths:
         - name: userid
           in: query
           required: false
-          type: number
-          format: int32
+          type: integer
+          format: int64
         - name: id
           in: path
           required: true
@@ -538,8 +538,8 @@ paths:
         - name: userid
           in: query
           required: false
-          type: number
-          format: int32
+          type: integer
+          format: int64
         - name: id
           in: path
           required: true

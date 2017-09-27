@@ -7,8 +7,12 @@ import * as remote from '../../remote';
 import { DatePipe } from '@angular/common';
 import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.component';
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
-import { Observable } from 'rxjs/Rx';
+import { Observable, Subject } from 'rxjs/Rx';
 import { ControlUserService } from '../../shared/services/control-user.service';
+
+interface observables{
+  wdays: any, controlledUser: any
+}
 
 @Component({
   selector: 'app-hungry-home',
@@ -28,7 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public showLoadSpinner = false;
   public weeklyTotalPrice = 0;
   public workingDays: number[];
-
+  private observable: any
   //admin 
   public controlledUser: remote.User;
 
@@ -48,21 +52,32 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.deadline = this.globalSettingsService.getDeadLine();
     this.notes = this.globalSettingsService.getNotes();
 
+    // this.observable = Observable
+    // .zip(this.globalSettingsService.getWorkingDays(), this.controlUserService.getUser(), (wdays: any, controlledUser: any) => {
+    //    return { wdays: wdays, controlledUser: controlledUser } })
+    // .subscribe((r:observables) => {
+    //   this.workingDays = r.wdays; 
+    //   this.controlledUser = r.controlledUser;
+    //   console.log("Controlled user:", r.controlledUser);
+    //   this.setup();
+    // });
+
     this.globalSettingsService.getWorkingDays().subscribe(wdays => {
-      this.workingDays = wdays;
-      this.setup();
+      this.workingDays = wdays;      
+        
+        //admin
+        this.observable = this.controlUserService.getUser().subscribe(user=>{       
+          if(user){ console.log("Controlled user:", user); }
+          this.controlledUser = user;
+          this.setup();         
+      });
+
     });
 
   }
 
   public setup() {
-
-    //admin
-    this.controlUserService.getUser().subscribe(user=>{
-      this.controlledUser = user;
-    });
  
-
     this.sub = this.route.params.subscribe(params => {
       let dt = new Date(+params['year'], 1, 1); // (+) converts string 'year' na d 'month' to a number
       dt = setISOWeek(dt, +params['week']);
@@ -80,20 +95,20 @@ export class HomeComponent implements OnInit, OnDestroy {
         else { this.monthDate = this.date; }
 
         this.getCurrentWeeklyMenu(this.buildweekYear(this.date));
-      } else {
-        //console.warn('invalid router date');
-      }
+      }  
     });
+
     if (isToday(this.date)) {
       this.showLoadSpinner = true;
       this.monthDate = this.date;
-      this.weekDaysCal(startOfWeek(this.date, { weekStartsOn: 1 }));
-      this.hungryService.menusWeeklyGet().subscribe(dailymenus => {
+      this.weekDaysCal(startOfWeek(this.date, { weekStartsOn: 1 })); 
+      this.hungryService.menusWeeklyGet(this.controlledUser ? this.controlledUser.id : null).subscribe(dailymenus => { 
         this.showLoadSpinner = false;
         this.dailymenus = dailymenus;
         this.weekMenuMap();
       }, error => this.showLoadSpinner = false);
     }
+
   }
 
 
@@ -112,13 +127,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     return weekTotal;
   }
   ngOnDestroy() {
-    if(this.sub)
-    this.sub.unsubscribe();
+    if(this.sub) this.sub.unsubscribe();
+
+    if(this.observable) this.observable.unsubscribe();
   }
 
   private getCurrentWeeklyMenu(weekYear: string) {
     this.showLoadSpinner = true;
-    this.hungryService.menusWeeklyWeekGet(weekYear).subscribe(dailymenus => {
+    this.hungryService.menusWeeklyWeekGet(weekYear, this.controlledUser ? this.controlledUser.id : null).subscribe(dailymenus => {
       this.showLoadSpinner = false;
       this.dailymenus = dailymenus;
       this.weekMenuMap();
@@ -139,7 +155,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       d = addDays(d, 1);
     }
 
-    console.log(this.weekDays);
+    //console.log(this.weekDays);
   }
 
   private weekMenuMap() {
@@ -156,7 +172,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public getDailyMenu(d: any) {
-    for (const dailymenu of this.dailymenus) {
+    for (let dailymenu of this.dailymenus) {
       if (dailymenu.date === d) {
         return dailymenu;
       }
@@ -237,4 +253,5 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
   }
+
 }

@@ -410,8 +410,8 @@
             "name": "userid",
             "in": "query",
             "required": false,
-            "type": "number",
-            "format": "int32"
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "responses": {
@@ -454,8 +454,8 @@
             "name": "userid",
             "in": "query",
             "required": false,
-            "type": "number",
-            "format": "int32"
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "responses": {
@@ -494,8 +494,8 @@
             "name": "userid",
             "in": "query",
             "required": false,
-            "type": "number",
-            "format": "int32"
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "responses": {
@@ -538,8 +538,8 @@
             "name": "userid",
             "in": "query",
             "required": false,
-            "type": "number",
-            "format": "int32"
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "responses": {
@@ -586,8 +586,8 @@
             "name": "userid",
             "in": "query",
             "required": false,
-            "type": "number",
-            "format": "int32"
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "responses": {
@@ -665,8 +665,8 @@
             "name": "userid",
             "in": "query",
             "required": false,
-            "type": "number",
-            "format": "int32"
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "responses": {
@@ -706,8 +706,8 @@
             "name": "userid",
             "in": "query",
             "required": false,
-            "type": "number",
-            "format": "int32"
+            "type": "integer",
+            "format": "int64"
           },
           {
             "name": "id",
@@ -801,8 +801,8 @@
             "name": "userid",
             "in": "query",
             "required": false,
-            "type": "number",
-            "format": "int32"
+            "type": "integer",
+            "format": "int64"
           },
           {
             "name": "id",

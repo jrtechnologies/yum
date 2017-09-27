@@ -392,8 +392,7 @@ public class OrdersApiControllerTest {
         given(mockFoodRepository.findById(10L)).willReturn(mockFoodList.get(0));
         
         given(mockFoodRepository.findById(11L)).willReturn(mockFoodList.get(1));
-        given(mockSettingsRepository.findOne(1)).willReturn(mockSettings);
-       
+        given(mockSettingsRepository.findOne(1)).willReturn(mockSettings); 
         
         // We perform the API call, and check that the response status code, and the JSON response are corrects
         mockMvc.perform(put("/api/orders/{id}", 1l)

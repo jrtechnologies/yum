@@ -27,7 +27,7 @@ export class ControlUserService {
 
   }
 
-  public getUser(){
+  public getUser():BehaviorSubject<remote.User> {
     return this.controlledUser;
   }
 }

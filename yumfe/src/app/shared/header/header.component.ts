@@ -32,6 +32,10 @@ export class HeaderComponent implements OnInit {
 
     this.user = this.authenticationService.getLoggedInUser();
     this.role = this.authenticationService.getLoggedInRole();
+    
+    this.controlUserService.getUser().subscribe(user=>{
+      this.controlUser=user;
+    });
 
     this.router.events.subscribe((event) => { 
         if(event instanceof NavigationEnd) {
@@ -47,20 +51,19 @@ export class HeaderComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
 
-      if(this.user && this.user.role == 'ADMIN'){
+      if(this.user && this.user.role == 'admin'){
         let userid = +params['userid'] || 0;
 
         //comment if dont want to keep controlled user if no path query exists
         if (!userid) return;
-
-        this.controlUserService.setUser(userid);
+        if(!this.controlUser){
+          this.controlUserService.setUser(userid);
+        }
       }
 
     });
 
-    this.controlUserService.getUser().subscribe(user=>{
-      this.controlUser=user;
-    });
+
 
 
 

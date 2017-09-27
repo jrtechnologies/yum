@@ -168,12 +168,14 @@ export class DailyMenuComponent implements OnInit, OnChanges {
       this.selectCtrl.valueChanges.subscribe(status => {
           console.log(status);
          if ( this.el && this.focusMe && status.length == 0 ) {
-            console.log('blur enter');
+            //console.log('blur enter');
             this.el.nativeElement.blur();
             this.focusMe.nativeElement.focus();
             setTimeout(() => {
-              this.el.nativeElement.blur();
-              this.focusMe.nativeElement.focus();
+              if(this.el && this.focusMe){
+                this.el.nativeElement.blur();
+                this.focusMe.nativeElement.focus();
+              }
             }, 300);
         }
       });
@@ -218,11 +220,9 @@ export class DailyMenuComponent implements OnInit, OnChanges {
   addToAvailable(food: remote.Food){
        this.foodsAvailable.push(food);
        this.foodsAvailable = this.foodsService.sortArrayOfFoods(this.foodsAvailable );
-       //this.selectCtrl.setValue(""); //reset foodsAvailable
-
-
-       //this.selectCtrl = undefined;
-       //this.selectCtrl.reset();
+       //reset foodsAvailable
+       this.selectCtrl.updateValueAndValidity({ onlySelf: false, emitEvent: true });
+       
   }
 
 
