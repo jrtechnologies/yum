@@ -122,6 +122,7 @@ public class UsersService {
         userEntity.setUserRole(userRole);
         userEntity.setRegistrationDate(LocalDate.now());
         userEntity.setLastEdit(DateTime.now());
+        userEntity.setBalance(BigDecimal.ZERO);
         userRepo.save(userEntity); // Save user in database
         return userEntity;
     }

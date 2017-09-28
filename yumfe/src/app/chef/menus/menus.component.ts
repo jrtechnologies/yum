@@ -14,7 +14,7 @@ import { DailyMenuComponent } from './daily-menu/daily-menu.component';
 import { FoodsService } from '../services/foods.service';
 import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.component';
 import { ChefNavComponent } from '../shared/chef-nav/chef-nav.component';
-
+import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 
 @Component({
   selector: 'app-menus',
@@ -30,6 +30,7 @@ export class MenusComponent implements OnInit {
 
   // exclude weekends
   excludeDays: number[] = [0, 6];
+  alldays: number[] = [0, 1, 2, 3, 4, 5, 6];
   /////////////////////
 
   foods: Array<remote.Food> = [];
@@ -47,11 +48,19 @@ export class MenusComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private router: Router,
-    public snackBar: MdSnackBar
+    public snackBar: MdSnackBar,
+    public globalSettingsService: GlobalSettingsService
    ) { }
 
   ngOnInit() {
     this.viewdate = new Date( );
+
+    this.globalSettingsService.getWorkingDays().subscribe(days => {
+      this.excludeDays = this.alldays.filter(function (el) {
+        return !days.includes(el);
+      });
+
+    });
     
     this.foodsService.getFoods().subscribe( foods=>{
         this.foods = foods;        

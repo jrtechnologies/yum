@@ -14,6 +14,7 @@
  */
 package org.bootcamp.yum.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.UUID;
@@ -91,6 +92,7 @@ public class AuthService {
             user.setApproved(false);
             user.setLastEdit(DateTime.now());
             user.setRegistrationDate(LocalDate.now());
+            user.setBalance(BigDecimal.ZERO);
             userRep.save(user);
             // The email service is injected and sends emails to all admins 
 
@@ -228,6 +230,7 @@ public class AuthService {
                     user.setLastEdit(DateTime.now());
                     user.setRegistrationDate(LocalDate.now());
                     user.setLdapId(ldapId);
+                    user.setBalance(BigDecimal.ZERO);
                     userRep.save(user);
                 }
                 

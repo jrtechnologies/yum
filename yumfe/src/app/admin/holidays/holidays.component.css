@@ -1,0 +1,22 @@
+.headerText{    font-weight: bold;  }
+
+.year-calendar{ flex-wrap: wrap;     align-items: flex-start; }
+
+.yearNav{ align-items: center;
+    justify-content: flex-start; 
+}
+
+.cal-day-selected:not(.cal-out-month), .cal-day-selected:not(.cal-out-month):hover {
+      background-color: #f44336 !important;
+}
+
+.cal-month-view .cal-day-cell.cal-day-selected .cal-day-number {
+    color: white;
+    opacity: 0.9;
+}
+
+mwl-calendar-month-cell.cal-cell.cal-day-cell.cal-in-month:hover {
+    cursor: pointer;
+}
+
+.saveHolidaysButton{ margin-left: auto; }

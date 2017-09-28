@@ -16,11 +16,14 @@ package org.bootcamp.tasks;
 
 import java.util.Date;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.annotation.PostConstruct;
+import java.util.regex.Pattern; 
 import org.bootcamp.yum.data.entity.Settings;
-import org.bootcamp.yum.data.repository.SettingsRepository;
+import org.bootcamp.yum.data.repository.DailyMenuRepository;
+import org.bootcamp.yum.data.repository.HolidaysRepository;
+import org.bootcamp.yum.data.repository.SettingsRepository; 
 import org.bootcamp.yum.service.EmailService;
+import org.bootcamp.yum.service.MenusService;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
@@ -47,6 +50,15 @@ public class ReportEmail implements ApplicationListener<ApplicationReadyEvent> {
     @Autowired
     ScheduledTasks scheduledTask;
     
+    @Autowired
+    HolidaysRepository holidaysRepo;
+
+    @Autowired
+    DailyMenuRepository dailyMenuRepo;
+    
+    @Autowired
+    MenusService menusService;
+    
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     
     
@@ -65,14 +77,44 @@ public class ReportEmail implements ApplicationListener<ApplicationReadyEvent> {
         //Get deadline days
         Settings settings = settingsRepo.findById(1);
         
+        int deadlinedays = settings.getDeadlineDays();
         LocalDate day = new LocalDate();
-        day = day.minusDays(settings.getDeadlineDays());
-        this.eService.sendOrderSummary(day);
+        
+        if(this.holidaysRepo.findByIdHoliday(day) != null){
+            return;
+        }
+                 
+        LocalDate initDate = (day).plusDays(deadlinedays);
+//        while (this.holidaysRepo.findByIdHoliday(initDate) != null) {
+//            initDate = initDate.plusDays(1);
+//        }
+        
+        LocalDate maxCheckdate = (initDate).plusDays(deadlinedays);
+        while (this.holidaysRepo.findByIdHoliday(maxCheckdate) != null) {
+            maxCheckdate = maxCheckdate.plusDays(1);
+        }
+
+        int checkDays = Days.daysBetween((new LocalDate()), maxCheckdate).getDays() + deadlinedays;
+        
+        for (int i = 0; i <= checkDays; i++) { //newDeadlineDays
+            LocalDate dailyMenuDate = initDate.plusDays(i);
+            // if old deadline not passed and new deadline passed and dailyMenu not null, send report email
+            if (menusService.deadlinePassed(dailyMenuDate) ) { //&& dailyMenuRepo.findByDate(dailyMenuDate) != null
+                System.out.println(">>>>>>>>>>>>>sending email, date: " + dailyMenuDate); 
+                //eService.sendOrderSummary(dailyMenuDate);
+            }
+        }
+
     }
+    
+
+ 
+    
     
    // @PostConstruct
     public void registerSchedule(){
         
+        //Use to immediately send summary report:
         //sendAutoOrderSummary( );
         
         Settings settings = settingsRepo.findById(1);

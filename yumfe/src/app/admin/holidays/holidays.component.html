@@ -1,0 +1,51 @@
+<md-grid-list cols="8" rowHeight="100px">
+  <md-grid-tile class="left-no-pad" colspan="4" rowspan="1">
+    <h2>Holidays</h2>
+  </md-grid-tile>
+  <md-grid-tile class="right-no-pad" colspan="4" rowspan="1">
+    <app-admin-nav></app-admin-nav>
+  </md-grid-tile>
+</md-grid-list>
+ 
+<div class="fullLayer" *ngIf="showLoadSpinner">
+    <md-spinner class="centered" color="accent"></md-spinner>
+</div>
+
+
+<md-card>
+   
+    <div class="is-flex yearNav">
+      <h2>{{viewYear.getValue() | date:"y"}}</h2> 
+      <button md-icon-button (click)="prevYear()" >  <i class="material-icons md-48">keyboard_arrow_up</i> </button> 
+      <button md-icon-button (click)="nextYear()">  <i class="material-icons md-48">keyboard_arrow_down</i></button>
+      <button md-raised-button  (click)="setHolidays()" [disabled]="holidaysSaveDisabled" color='accent' class="saveHolidaysButton">Save Changes</button>
+  </div>
+</md-card>
+
+<md-card *ngIf="yearMonths && yearMonths.length==12">
+  <div class="is-flex year-calendar">
+  <!-- <div *ngFor="let yearMonth of yearMonths" >  -->
+  <div *ngFor='let key of  [0,1,2,3,4,5,6,7,8,9,10,11]' >
+    <div class="headerText">{{yearMonths[key] | date:"MMMM"}}</div>
+    <div [ngSwitch]="view">
+      <mwl-calendar-month-view
+        [viewDate]="yearMonths[key]" 
+        [cellTemplate]="calCellTemplate" 
+        [locale]="locale" 
+        [refresh]="refresh"
+        (dayClicked)="clickedDate($event.day, yearMonths[key])" 
+        (beforeViewRender)="beforeMonthViewRender($event)"
+        >
+      </mwl-calendar-month-view>
+    </div>
+  </div>
+  </div>
+ </md-card> 
+
+
+
+   <ng-template #calCellTemplate let-day="day" let-locale="locale">
+      <ng-container>
+        <app-calendar-day [day]=day.date ></app-calendar-day>
+      </ng-container>
+  </ng-template> 

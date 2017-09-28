@@ -73,7 +73,11 @@ public class Settings {
     @Column(name = "report_email")
     private String reportEmail;
 
-    public Settings(int id, LocalTime deadline, DateTime lastEdit, String currency, String notes, String tos, String policy, int version, int foods_version) {
+    @Column(name = "working_days")
+    private String workingDays;
+    
+    
+    public Settings(int id, LocalTime deadline, DateTime lastEdit, String currency, String notes, String tos, String policy, int version, int foods_version, String reportEmail, String workingDays) {
         this.id = id;
         this.deadline = deadline;
         this.lastEdit = lastEdit;
@@ -83,6 +87,8 @@ public class Settings {
         this.policy = policy;
         this.version = version;
         this.foods_version = foods_version;
+        this.reportEmail = reportEmail;
+        this.workingDays = workingDays;
     }
 
     public Settings(int id) {
@@ -176,11 +182,19 @@ public class Settings {
         this.reportEmail = reportEmail;
     }
 
-    @Override
-    public String toString() {
-        return "Settings{" + "id=" + id + ", deadline=" + deadline + ", deadline_days=" + deadlineDays + ", lastEdit=" + lastEdit + ", currency=" + currency + ", notes=" + notes + ", tos=" + tos + ", policy=" + policy + ", version=" + version + ", foods_version=" + foods_version + ", report_email=" + reportEmail + '}';
+    public String getWorkingDays() {
+        return workingDays;
     }
 
+    public void setWorkingDays(String workingDays) {
+        this.workingDays = workingDays;
+    }
+
+    @Override
+    public String toString() {
+        return "Settings{" + "id=" + id + ", deadline=" + deadline + ", deadlineDays=" + deadlineDays + ", lastEdit=" + lastEdit + ", currency=" + currency + ", notes=" + notes + ", tos=" + tos + ", policy=" + policy + ", version=" + version + ", foods_version=" + foods_version + ", reportEmail=" + reportEmail + ", workingDays=" + workingDays + '}';
+    }
+      
     public boolean deadlinePassed(LocalDate date) {
         // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
         return (date.minusDays(deadlineDays).toLocalDateTime(deadline).compareTo(LocalDateTime.now()) < 0);

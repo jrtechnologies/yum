@@ -8,14 +8,17 @@ import { NotFoundComponent } from './shared/not-found/not-found.component';
 import {AppRouteGuard} from './app-route.guard';
 import {AppExtAuthRouteGuard} from './app-extAuth-route.guard';
 import {SettingsRouteGuard} from './shared/settings/settings-route.guard';
+import {AdminRouteGuard} from './admin/admin-route.guard';
 
 const appRoutes: Routes = [
  // { path: '', canActivate: [AppRouteGuard], redirectTo: 'login', pathMatch: 'full' },
-  { path: '', canActivate: [AppRouteGuard], component: LoginComponent , pathMatch: 'full'},
+  { path: '', canActivate: [AppRouteGuard], component: LoginComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', canActivate: [AppExtAuthRouteGuard], component: RegisterComponent },
   { path: 'forgotpwd', canActivate: [AppExtAuthRouteGuard], component: ForgotpwdComponent },
-  { path: 'settings', canActivate: [SettingsRouteGuard], component: SettingsComponent },
+  //{ path: 'settings', canActivate: [SettingsRouteGuard], component: SettingsComponent },
+  { path: 'settings', canLoad: [SettingsRouteGuard], loadChildren:'./shared/settings/settings.module#SettingsModule' },
+  { path: 'admin', canLoad: [AdminRouteGuard], loadChildren:'./admin/admin.module#AdminModule' },
   { path: 'resetpwd/:token', component: ResetpwdComponent },
  // { path: 'hungry', loadChildren: './hungry/hungry.module' },
   { path: '**', component: NotFoundComponent }, //always last

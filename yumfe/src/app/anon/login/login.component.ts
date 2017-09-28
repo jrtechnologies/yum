@@ -4,6 +4,12 @@ import { AuthenticationService } from '../../shared/authentication.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MdSnackBar, MdSnackBarConfig } from '@angular/material';
 import { ViewContainerRef } from '@angular/core';
+import { QuotesService } from './../services/quotes.service';
+
+interface Quote {
+  quote: string;
+  author: string;
+}
 
 @Component({
   moduleId: module.id,
@@ -24,6 +30,7 @@ export class LoginComponent implements OnInit {
 
   public externalAuth: Boolean = true;
   public config: MdSnackBarConfig;
+  public quote: Quote;
 
   constructor(
     private fb: FormBuilder,
@@ -32,10 +39,11 @@ export class LoginComponent implements OnInit {
     private authService: AuthenticationService,
     private elRef: ElementRef,
     private renderer: Renderer2,
-    public viewContainerRef: ViewContainerRef
+    public viewContainerRef: ViewContainerRef,
+    private quoteService: QuotesService
   ) {
     this.config = new MdSnackBarConfig();
-   }
+  }
 
   ngOnInit() {
     // Create Form group, form controls, validators.
@@ -88,30 +96,30 @@ export class LoginComponent implements OnInit {
           .distinctUntilChanged()
           .subscribe(c => {
 
-            if(c !== null){
-              passwordListener.unsubscribe(); 
+            if (c !== null) {
+              passwordListener.unsubscribe();
               return;
             }
 
             let el = this.elRef.nativeElement.querySelector('input[type=password]:-webkit-autofill');
             if (el && c === null) {
-              this.loginForm.get('password').setValidators([]);              
+              this.loginForm.get('password').setValidators([]);
             }
-            else if (value === 'ldap'){
-              this.loginForm.get('password').setValidators([Validators.required]);              
+            else if (value === 'ldap') {
+              this.loginForm.get('password').setValidators([Validators.required]);
             }
-            else{
-              this.loginForm.get('password').setValidators([Validators.required, Validators.minLength(6)]);              
+            else {
+              this.loginForm.get('password').setValidators([Validators.required, Validators.minLength(6)]);
             }
 
             this.loginForm.get('password').updateValueAndValidity();
           });
 
-          
+
       });
 
 
-
+    this.getRandomQuote();
 
   }
 
@@ -164,16 +172,29 @@ export class LoginComponent implements OnInit {
   // status -> 1:success , 3:error
   private openSnackBar(message: string, action: string, status: number) {
     //this.snackBar.dismiss();
-    
+
     this.config.duration = 3000;
-    switch (status) {      
-      case 1:        
-        this.config.extraClasses = ['success-snack-bar'];        
+    switch (status) {
+      case 1:
+        this.config.extraClasses = ['success-snack-bar'];
         break;
       case 2:
         this.config.extraClasses = ['error-snack-bar'];
         break;
     }
-      this.snackBar.open(message, action, this.config );
+    this.snackBar.open(message, action, this.config);
+  }
+
+  private getRandomQuote() {
+
+    this.quoteService.getQuote<any>().subscribe(data => {
+      if (data && data.success) {
+        this.quote = data.contents.quotes[0];
+        console.log(data);
+      }
+
+    }, err => {
+      console.log('Get quote failed!', err);
+    });
   }
 }

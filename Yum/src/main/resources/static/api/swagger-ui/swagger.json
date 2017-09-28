@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.2.7",
+    "version": "1.2.8",
     "title": "Yum Food Orders",
     "license": {
       "name": "GPLv3",
@@ -1925,6 +1925,89 @@
         }
       }
     },
+    "/globalsettings/holidays/{year}": {
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "admin"
+        ],
+        "description": "get holidays by year",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "year",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "minimum": 2000,
+            "maximum": 2100
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "schema": {
+              "$ref": "#/definitions/Holidays"
+            }
+          },
+          "500": {
+            "$ref": "#/responses/Error"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "admin"
+        ],
+        "description": "set holidays by year",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "year",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "minimum": 2000,
+            "maximum": 2100
+          },
+          {
+            "name": "holidays",
+            "in": "body",
+            "description": "The holidays to set",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Holidays"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "holidays saved"
+          },
+          "400": {
+            "$ref": "#/responses/Error"
+          },
+          "409": {
+            "description": "Concurrent modification error",
+            "schema": {
+              "$ref": "#/definitions/Holidays"
+            }
+          },
+          "500": {
+            "$ref": "#/responses/Error"
+          }
+        }
+      }
+    },
     "/balance/{id}": {
       "get": {
         "security": [
@@ -2525,9 +2608,20 @@
         "reportEmail": {
           "type": "string"
         },
+        "workingDays": {
+          "type": "string"
+        },
         "lastEdit": {
           "$ref": "#/definitions/LastEdit"
         }
+      }
+    },
+    "Holidays": {
+      "type": "array",
+      "description": "Bank holidays",
+      "items": {
+        "type": "string",
+        "format": "date"
       }
     },
     "Info": {

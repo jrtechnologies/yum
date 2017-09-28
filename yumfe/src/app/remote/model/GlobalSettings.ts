@@ -30,6 +30,8 @@ export interface GlobalSettings {
 
     reportEmail?: string;
 
+    workingDays?: string;
+
     lastEdit?: models.LastEdit;
 
 }

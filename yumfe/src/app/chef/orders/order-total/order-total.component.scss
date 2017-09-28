@@ -25,7 +25,7 @@
    grid-row-gap: 3px;
 
    display: -ms-grid;  
-   -ms-grid-columns: 2fr 6fr 1fr;
+   -ms-grid-columns: 2fr 6fr auto;
    -ms-grid-rows: auto;
    -ms-grid-row-gap: 3px;
 
@@ -45,5 +45,5 @@
 }
 
  
-
+.mat-form-field{ width: auto!important;}
  
