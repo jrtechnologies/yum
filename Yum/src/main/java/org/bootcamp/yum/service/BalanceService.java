@@ -73,22 +73,21 @@ public class BalanceService {
             throw new ApiException(404, "User not found");
         }
         // If balance is already modified return the new balance
-        BigDecimal userBalance = user.getBalance();
-        if (userBalance.compareTo(deposit.getBalance())!=0){
-            throw new ConcurrentModificationException(409, "Concurrent modification error.", userBalance);
+        BigDecimal balance = user.getBalance();
+        if (balance == null) {
+            balance=new BigDecimal(0);
+        }
+        if (balance.compareTo(deposit.getBalance())!=0){
+            throw new ConcurrentModificationException(409, "Concurrent modification error.", balance);
         }
         Transaction transaction = new Transaction();
         transaction.setUserId(id);
         transaction.setAmount(amount);
-        BigDecimal balance = user.getBalance();
-        if (balance == null) {
-            transaction.setBalance(amount);
-            user.setBalance(balance);
-        } else {
-            balance = balance.add(amount);
-            transaction.setBalance(balance);
-            user.setBalance(balance);
-        }
+        
+        balance = balance.add(amount);
+        transaction.setBalance(balance);
+        user.setBalance(balance);
+        
         
          //Retrieves source user id form token
         transaction.setSourceId((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
