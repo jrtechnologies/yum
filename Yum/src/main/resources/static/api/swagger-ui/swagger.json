@@ -295,6 +295,9 @@
               "$ref": "#/definitions/User"
             }
           },
+          "412": {
+            "description": "User email exists"
+          },
           "500": {
             "$ref": "#/responses/Error"
           }

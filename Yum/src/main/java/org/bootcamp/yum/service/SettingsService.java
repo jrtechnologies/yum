@@ -122,6 +122,9 @@ public class SettingsService {
             }
 
             if (upUser.getEmail() != null && !upUser.getEmail().trim().equals(userDAO.getEmail())) {
+                if (userRepo.findByEmail(upUser.getEmail()) != null) {
+                        throw new ApiException(412, "User email already exists");
+                    }
                 userDAO.setEmail(upUser.getEmail());
             }
         }
