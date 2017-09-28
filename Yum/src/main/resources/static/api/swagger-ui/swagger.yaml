@@ -21,7 +21,7 @@ info:
       
     ------------------------------------
 
-        Last edit: 26/09/2017 10:50
+        Last edit: 28/09/2017 10:00
 
     -------------------------------------
 basePath: /api
@@ -1279,11 +1279,10 @@ paths:
           type: integer
           format: int64
         - in: body
-          name: amount
+          name: deposit
           required: true
           schema:
-            type: number
-            format: int64
+            $ref: '#/definitions/Deposit'
       responses:
         '200':
           description: ok
@@ -1294,6 +1293,11 @@ paths:
           description: Bad request
         '404':
           description: Not found
+        '409':
+          description: Balance already modified
+          schema:
+            type: number
+            format: int64
         '500':
           $ref: '#/responses/Error'
 definitions:
@@ -1676,6 +1680,16 @@ definitions:
         $ref: '#/definitions/Error'
       dailyMenu:
         $ref: '#/definitions/DailyMenu'
+  Deposit:
+    type: object
+    description: Deposit amount and balance
+    properties:
+      amount:
+        type: number
+        format: int64
+      balance:
+        type: number
+        format: int64
 responses:
   Error:
     description: An unexpected error occured.

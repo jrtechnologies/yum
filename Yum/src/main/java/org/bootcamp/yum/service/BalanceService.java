@@ -18,6 +18,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import javax.transaction.Transactional;
 import org.bootcamp.yum.api.ApiException;
+import org.bootcamp.yum.api.ConcurrentModificationException;
+import org.bootcamp.yum.api.model.Deposit;
 import org.bootcamp.yum.data.entity.Transaction;
 import org.bootcamp.yum.data.entity.User;
 import org.bootcamp.yum.data.repository.UserRepository;
@@ -60,8 +62,9 @@ public class BalanceService {
     }
 
     @Transactional
-    public BigDecimal balanceIdPut(Long id, BigDecimal amount) throws ApiException {
+    public BigDecimal balanceIdPut(Long id, Deposit deposit) throws ApiException {
         
+        BigDecimal amount = deposit.getAmount();
         if (id==null || amount==null) {
             throw new ApiException(400, "Bad request");
         }
@@ -69,7 +72,11 @@ public class BalanceService {
         if (user==null) {
             throw new ApiException(404, "User not found");
         }
-        
+        // If balance is already modified return the new balance
+        BigDecimal userBalance = user.getBalance();
+        if (userBalance.compareTo(deposit.getBalance())!=0){
+            throw new ConcurrentModificationException(409, "Concurrent modification error.", userBalance);
+        }
         Transaction transaction = new Transaction();
         transaction.setUserId(id);
         transaction.setAmount(amount);

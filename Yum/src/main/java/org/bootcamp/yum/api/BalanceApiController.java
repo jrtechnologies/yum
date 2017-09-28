@@ -15,6 +15,7 @@
 package org.bootcamp.yum.api;
 
 import java.math.BigDecimal;
+import org.bootcamp.yum.api.model.Deposit;
 import org.bootcamp.yum.api.model.Error;
 
 import io.swagger.annotations.*;
@@ -61,9 +62,12 @@ public class BalanceApiController implements BalanceApi {
     
     @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<Object> balanceIdPut(@ApiParam(value = "",required=true ) @PathVariable("id") Long id,
-        @ApiParam(value = "" ,required=true )  @Valid @RequestBody BigDecimal amount) throws ApiException {
+        @ApiParam(value = "" ,required=true )  @Valid @RequestBody Deposit deposit) throws ApiException {
         try {
-            return new ResponseEntity<>(balanceService.balanceIdPut(id, amount),HttpStatus.OK);
+            return new ResponseEntity<>(balanceService.balanceIdPut(id, deposit),HttpStatus.OK);     
+        } catch (ConcurrentModificationException ex) {
+            int exCode = ex.getCode();
+            return new ResponseEntity<>(ex.getResponseDTO(), HttpStatus.valueOf(exCode));        
         } catch (ApiException ex) {
             int exCode = ex.getCode();
             return new ResponseEntity<>(HttpStatus.valueOf(exCode));

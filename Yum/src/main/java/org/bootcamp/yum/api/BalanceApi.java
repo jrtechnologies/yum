@@ -16,6 +16,7 @@
 package org.bootcamp.yum.api;
 
 import java.math.BigDecimal;
+import org.bootcamp.yum.api.model.Deposit;
 import org.bootcamp.yum.api.model.Error;
 
 import io.swagger.annotations.*;
@@ -62,12 +63,13 @@ public interface BalanceApi {
         @ApiResponse(code = 200, message = "ok", response = BigDecimal.class),
         @ApiResponse(code = 400, message = "Bad request", response = Void.class),
         @ApiResponse(code = 404, message = "Not found", response = Void.class),
+        @ApiResponse(code = 409, message = "Balance already modified", response = BigDecimal.class),
         @ApiResponse(code = 500, message = "An unexpected error occured.", response = Error.class) })
     
     @RequestMapping(value = "/balance/{id}",
         produces = { "application/json" }, 
         method = RequestMethod.PUT)
     @CrossOrigin        
-    ResponseEntity<Object> balanceIdPut(@ApiParam(value = "",required=true ) @PathVariable("id") Long id,@ApiParam(value = "" ,required=true )  @Valid @RequestBody BigDecimal amount)throws ApiException;
+    ResponseEntity<Object> balanceIdPut(@ApiParam(value = "",required=true ) @PathVariable("id") Long id,@ApiParam(value = "" ,required=true )  @Valid @RequestBody Deposit deposit)throws ApiException;
 
 }
