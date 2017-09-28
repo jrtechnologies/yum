@@ -408,7 +408,6 @@ public class OrdersService {
                         emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
                     }
 
-                    dailyOrderRep.save(dailyOrderEntity);
                     BigDecimal balance = user.getBalance();
                     if (balance == null) {
                         balance = orderAmount.negate();
