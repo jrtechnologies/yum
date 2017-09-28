@@ -95,7 +95,12 @@ export class UsersComponent implements OnInit {
       this.profileGroup.controls.firstName.patchValue(user.firstName);
       this.profileGroup.controls.lastName.patchValue(user.lastName);
       this.profileGroup.controls.email.patchValue(user.email);
-      this.balance = user.balance;
+      console.log('user.balance', user.balance);
+      if (user.balance == null) {
+        this.balance =  0;
+      } else {
+        this.balance = user.balance;
+      }
     }, error => {
       //console.log(error)
     });
@@ -264,7 +269,7 @@ export class UsersComponent implements OnInit {
                 this.openSnackBar('No Transaction! Balance was modified by someone else. The right balance is now displayed.', 'ok', 2);
                 break;
               case 500:
-                this.openSnackBar('Server error try again later.', 'ok', 2);
+                this.openSnackBar('Server error try again later.', 'ok', 3);
                 break;
             }
           }

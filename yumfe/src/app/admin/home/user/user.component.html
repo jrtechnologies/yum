@@ -45,26 +45,16 @@
     <div class="bold user-details-header">
       Balance
     </div>
-
-     <div fxLayout="row" fxLayoutAlign="space-around center" class="balance">
-      <div fxFlex="70">
-        {{getUser().balance | number : '1.2-2'}}<span [innerHTML]="currency | async"></span>
-      </div>
-      <div fxFlex="30"  fxFlexAlign="end">
-        <a  title="Edit balance and view transactions!" class="f-right"><i class="material-icons">account_balance_wallet</i></a>
-      </div>
+    <div class="user-details">
+        {{balance | number : '1.2-2'}}<span [innerHTML]="currency | async"></span>
     </div>
   </div>
 
   <div fxFlex="2">
-
   </div>
 
-
   <div fxFlex="17">
-
     <app-slide-toggle-component [user]="user" [externalAuth]=externalAuth></app-slide-toggle-component>
-
   </div>
   <div fxFlex="7">
     <a [routerLink]="editRouterLink" routerLinkActive="active" md-fab color="accent" title="Edit user!"><i class="material-icons">edit</i></a>
