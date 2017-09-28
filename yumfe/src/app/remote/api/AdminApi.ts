@@ -45,8 +45,8 @@ export class AdminApi {
      * @param id
      * @param amount
      */
-    public balanceIdPut(id: number, amount: number, extraHttpRequestParams?: any): Observable<number> {
-        return this.balanceIdPutWithHttpInfo(id, amount, extraHttpRequestParams)
+    public balanceIdPut(id: number, deposit: models.Deposit, extraHttpRequestParams?: any): Observable<number> {
+        return this.balanceIdPutWithHttpInfo(id, deposit, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -262,7 +262,7 @@ export class AdminApi {
      * @param id
      * @param amount
      */
-    public balanceIdPutWithHttpInfo(id: number, amount: number, extraHttpRequestParams?: any): Observable<Response> {
+    public balanceIdPutWithHttpInfo(id: number, deposit: models.Deposit, extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + '/balance/${id}'
                     .replace('${' + 'id' + '}', String(id));
 
@@ -272,9 +272,9 @@ export class AdminApi {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling balanceIdPut.');
         }
-        // verify required parameter 'amount' is not null or undefined
-        if (amount === null || amount === undefined) {
-            throw new Error('Required parameter amount was null or undefined when calling balanceIdPut.');
+        // verify required parameter 'deposit' is not null or undefined
+        if (deposit === null || deposit === undefined) {
+            throw new Error('Required parameter deposit was null or undefined when calling balanceIdPut.');
         }
         // to determine the Content-Type header
         let consumes: string[] = [
@@ -295,7 +295,7 @@ export class AdminApi {
         let requestOptions: RequestOptionsArgs = new RequestOptions({
             method: RequestMethod.Put,
             headers: headers,
-            body: amount == null ? '' : JSON.stringify(amount), // https://github.com/angular/angular/issues/10612
+            body: deposit == null ? '' : JSON.stringify(deposit), // https://github.com/angular/angular/issues/10612
             search: queryParameters,
             withCredentials:this.configuration.withCredentials
         });
@@ -306,6 +306,7 @@ export class AdminApi {
 
         return this.http.request(path, requestOptions);
     }
+
 
     /**
      *

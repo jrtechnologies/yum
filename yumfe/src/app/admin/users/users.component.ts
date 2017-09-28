@@ -237,7 +237,10 @@ export class UsersComponent implements OnInit {
 
       if (result === 'Yes') {
         this.showSpinnerBalance = true;
-        this.adminService.balanceIdPut(this.user.id, amount)
+        const deposit: remote.Deposit = {};
+        deposit.amount = amount;
+        deposit.balance = this.balance;
+        this.adminService.balanceIdPut(this.user.id, deposit)
           .finally(() => {
             this.showSpinnerBalance = false;
           })
@@ -248,7 +251,22 @@ export class UsersComponent implements OnInit {
             this.openSnackBar('Successfull user\'s balance update', 'ok', 1);
           },
           error => {
-            this.openSnackBar('Usre\'s balance cannot be updated', 'ok', 3);
+            switch (error.status) {
+              case 400:
+                this.openSnackBar('Bad request.', 'ok', 3);
+                break;
+              case 404:
+                this.openSnackBar('User not found.', 'ok', 3);
+                break;
+              case 409:
+              const balance = JSON.parse(error._body);
+              this.balance = balance;
+                this.openSnackBar('No Transaction! Balance was modified by someone else. The right balance is now displayed.', 'ok', 2);
+                break;
+              case 500:
+                this.openSnackBar('Server error try again later.', 'ok', 2);
+                break;
+            }
           }
           );
       }

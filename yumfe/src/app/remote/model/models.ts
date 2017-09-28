@@ -6,6 +6,7 @@ export * from './DailyMenuOrder';
 export * from './DailyMenusFoods';
 export * from './DailyOrder';
 export * from './DailyOrderSummary';
+export * from './Deposit';
 export * from './EditedFood';
 export * from './Food';
 export * from './FoodDetails';
