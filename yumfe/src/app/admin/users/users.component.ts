@@ -6,7 +6,6 @@ import { MdSnackBar, MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/mate
 
 import * as remote from '../../remote';
 import { AuthenticationService } from '../../shared/authentication.service';
-import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 import { Observable } from 'rxjs/Rx';
 
 @Component({
@@ -29,12 +28,10 @@ export class UsersComponent implements OnInit {
   public change = false;
   //spinner
   public showSpinner = false;
-  public showSpinnerBalance = false;
   public invalid = false;
   public externalAuth: Boolean = false;
   public balanceGroup: FormGroup;
   public balance: number;
-  public currency: Observable<string>;
 
   constructor(
     private route: ActivatedRoute,
@@ -44,11 +41,9 @@ export class UsersComponent implements OnInit {
     public dialog: MdDialog,
     private router: Router,
     private authService: AuthenticationService,
-    public globalSettingsService: GlobalSettingsService
   ) { }
 
   ngOnInit() {
-    this.currency = this.globalSettingsService.getCurrency();
     //check if id is valid
     this.sub = this.route.params.subscribe(params => {
       const id = params['id'];
@@ -70,12 +65,6 @@ export class UsersComponent implements OnInit {
       ]
     });
 
-    // Create formGroup for adding amount to balance
-    this.balanceGroup = this.fb.group({
-      amount: ['', [Validators.required, Validators.pattern('^([-]?[1-9]*[1-9][0-9]*(\.[0-9]+)?|[-]?[0]+\.[0-9]*[1-9][0-9]*)$'), Validators.pattern('^[^\,]*$')]]
-    });
-
-
     this.externalAuth = this.authService.hasExternalAuth();
   }
 
@@ -95,12 +84,6 @@ export class UsersComponent implements OnInit {
       this.profileGroup.controls.firstName.patchValue(user.firstName);
       this.profileGroup.controls.lastName.patchValue(user.lastName);
       this.profileGroup.controls.email.patchValue(user.email);
-      console.log('user.balance', user.balance);
-      if (user.balance == null) {
-        this.balance =  0;
-      } else {
-        this.balance = user.balance;
-      }
     }, error => {
       //console.log(error)
     });
@@ -228,55 +211,6 @@ export class UsersComponent implements OnInit {
     this.user.lastEdit.version += 1;
   }
 
-  updateBalance() {
-    const amount = Number(this.balanceGroup.get('amount').value);
-    const newBalance = this.balance + amount;
-    const dialogBal = this.dialog.open(BalanceDialog, {
-      data: {
-        newBalance: newBalance,
-        amount: amount,
-        currency: this.currency
-      }
-    });
-    dialogBal.afterClosed().subscribe(result => {
-
-      if (result === 'Yes') {
-        this.showSpinnerBalance = true;
-        const deposit: remote.Deposit = {};
-        deposit.amount = amount;
-        deposit.balance = this.balance;
-        this.adminService.balanceIdPut(this.user.id, deposit)
-          .finally(() => {
-            this.showSpinnerBalance = false;
-          })
-          .subscribe(
-          value => {
-            this.balanceGroup.reset();
-            this.balance = value;
-            this.openSnackBar('Successfull user\'s balance update', 'ok', 1);
-          },
-          error => {
-            switch (error.status) {
-              case 400:
-                this.openSnackBar('Bad request.', 'ok', 3);
-                break;
-              case 404:
-                this.openSnackBar('User not found.', 'ok', 3);
-                break;
-              case 409:
-              const balance = JSON.parse(error._body);
-              this.balance = balance;
-                this.openSnackBar('No Transaction! Balance was modified by someone else. The right balance is now displayed.', 'ok', 2);
-                break;
-              case 500:
-                this.openSnackBar('Server error try again later.', 'ok', 3);
-                break;
-            }
-          }
-          );
-      }
-    });
-  }
 
 }
 
@@ -286,12 +220,4 @@ export class UsersComponent implements OnInit {
 })
 export class ResetPwdDialog {
   constructor(public dialogRef: MdDialogRef<ResetPwdDialog>) { }
-}
-
-@Component({
-  selector: 'app-admin-balance-dialog',
-  templateUrl: './admin-balance-dialog.html',
-})
-export class BalanceDialog {
-  constructor(public dialogRef: MdDialogRef<BalanceDialog>, @Inject(MD_DIALOG_DATA) public data: any) { }
 }

@@ -17,7 +17,7 @@ import {
   UserDelete412DisapprovedDialog
 } from './home/user/user.component';
 import { SharedMaterialModule } from '../shared/shared-material.module';
-import { UsersComponent, ResetPwdDialog, BalanceDialog } from './users/users.component';
+import { UsersComponent, ResetPwdDialog } from './users/users.component';
 import { GlobalSettingsComponent } from './global-settings/global-settings.component';
 import { AdminNavComponent } from './shared/admin-nav/admin-nav.component';
 import { AdminRouteGuard } from './admin-route.guard';
@@ -32,6 +32,7 @@ import { HolidaysComponent } from './holidays/holidays.component';
 import { CalendarDayComponent } from './holidays/calendar-day/calendar-day.component';
 import { CalendarModule } from 'angular-calendar';
 import { RouterModule } from '@angular/router';
+import { BalanceModule } from '../shared/balance/balance.module'
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { RouterModule } from '@angular/router';
     PaginationModule,
     LoggedModule,
     FlexLayoutModule,
-    CalendarModule
+    CalendarModule,
+    BalanceModule
   ],
   declarations: [
     HomeComponent,
@@ -57,7 +59,6 @@ import { RouterModule } from '@angular/router';
     UserDelete412Dialog,
     UserDelete412DisapprovedDialog,
     ResetPwdDialog,
-    BalanceDialog,
     UsersComponent,
     GlobalSettingsComponent,
     AdminNavComponent,
@@ -77,8 +78,7 @@ import { RouterModule } from '@angular/router';
     UserDelete409Dialog,
     UserDelete412Dialog,
     UserDelete412DisapprovedDialog,
-    ResetPwdDialog,
-    BalanceDialog
+    ResetPwdDialog
   ],
   exports: []
 })
