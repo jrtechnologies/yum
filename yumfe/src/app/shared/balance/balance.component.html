@@ -9,27 +9,28 @@
       <div class="bold" *ngIf='user != null'> {{balance | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
     </md-grid-tile>
   </md-grid-list>
-
-  <div fxLayout="row" fxLayoutAlign="space-between center" class="card-pad">
-    <div fxFlex="30">
-      <form novalidate [formGroup]="balanceGroup" autocomplete="off">
-        <md-form-field>
-          <input mdInput placeholder="Amount" formControlName="amount">
-          <md-error *ngIf="balanceGroup.get('amount').touched && balanceGroup.get('amount').hasError('required')">
-            Amount is required
-          </md-error>
-          <md-error *ngIf="balanceGroup.get('amount').touched && balanceGroup.get('amount').hasError('pattern')">
-            Invalid amount
-          </md-error>
-        </md-form-field>
-      </form>
+  <div *ngIf="admin">
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="card-pad">
+      <div fxFlex="30">
+        <form novalidate [formGroup]="balanceGroup" autocomplete="off">
+          <md-form-field>
+            <input mdInput placeholder="Amount" formControlName="amount">
+            <md-error *ngIf="balanceGroup.get('amount').touched && balanceGroup.get('amount').hasError('required')">
+              Amount is required
+            </md-error>
+            <md-error *ngIf="balanceGroup.get('amount').touched && balanceGroup.get('amount').hasError('pattern')">
+              Invalid amount
+            </md-error>
+          </md-form-field>
+        </form>
+      </div>
+      <div fxFlex="70">
+        <button md-raised-button color="accent" type="button" (click)="updateBalance()" [disabled]="balanceGroup.invalid || showSpinnerBalance">Add to balance</button>
+        <img *ngIf="showSpinnerBalance" src="../../../assets/img/spinner.gif">
+      </div>
     </div>
-    <div fxFlex="70">
-      <button md-raised-button color="accent" type="button" (click)="updateBalance()" [disabled]="balanceGroup.invalid || showSpinnerBalance">Add to balance</button>
-      <img *ngIf="showSpinnerBalance" src="../../../assets/img/spinner.gif">
+    <div class="amount-rules">
+      In case of money return, type a negative amount.
     </div>
-  </div>
-  <div class="amount-rules">
-    In case of money return, type a negative amount.
   </div>
 </md-card>
