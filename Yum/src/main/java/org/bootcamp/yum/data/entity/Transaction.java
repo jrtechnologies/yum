@@ -64,7 +64,7 @@ public class Transaction {
     private long orderId;
 
     @Column(name = "order_type")
-    private int orderType;
+    private Integer orderType;
 
     public Transaction() {
     }
@@ -150,12 +150,14 @@ public class Transaction {
         this.orderId = orderId;
     }
 
-    public int getOrderType() {
+    public Integer getOrderType() {
         return orderType;
     }
 
-    public void setOrderType(int orderType) {
+    public void setOrderType(Integer orderType) {
         this.orderType = orderType;
     }
+
+    
     
 }

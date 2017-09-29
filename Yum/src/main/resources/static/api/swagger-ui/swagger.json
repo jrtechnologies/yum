@@ -2100,6 +2100,48 @@
           }
         }
       }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "hungry"
+        ],
+        "description": "Get user's transactions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Transaction"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "$ref": "#/responses/Error"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -2684,6 +2726,37 @@
         "balance": {
           "type": "number",
           "format": "int64"
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "description": "Transaction with balance",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "format": "int64"
+        },
+        "balance": {
+          "type": "number",
+          "format": "int64"
+        },
+        "datetime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "menuDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "orderType": {
+          "type": "string"
         }
       }
     }

@@ -49,7 +49,7 @@ public class User {
     private List<DailyOrder> dailyOrders;
     
     @OneToMany(mappedBy = "user")
-    private List<Transaction> transaction;
+    private List<Transaction> transactions;
 
     @Column(name = "last_name")
     private String lastName;
@@ -316,12 +316,12 @@ public class User {
         this.balance = balance;
     }
 
-    public List<Transaction> getTransaction() {
-        return transaction;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setTransaction(List<Transaction> transaction) {
-        this.transaction = transaction;
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
     
     
