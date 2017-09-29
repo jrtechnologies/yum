@@ -25,7 +25,7 @@
   </app-profile>
   <md-grid-list cols="8" rowHeight="80px">
     <md-grid-tile colspan="4" class="left">
-      <button [disabled]="user==null || !user.approved" md-raised-button color="accent" (click)="resetPwd()">Reset Password</button>
+      <button *ngIf="!externalAuth || (user && user.id===1)" [disabled]="user==null || !user.approved" md-raised-button color="accent" (click)="resetPwd()">Reset Password</button>
     </md-grid-tile>
     <md-grid-tile colspan="4" class="right">
       <form (ngSubmit)="updateUser(profileGroup)" [formGroup]="profileGroup" autocomplete="off">
