@@ -1,0 +1,49 @@
+<md-card>
+
+  <div class="heading">
+    Transactions
+  </div>
+
+  <md-table *ngIf="transactions != null" #table [dataSource]="dataSource" class= "centered">
+
+
+
+    <ng-container mdColumnDef="amount">
+      <md-header-cell *mdHeaderCellDef>Amount </md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.amount | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></md-cell>
+    </ng-container>
+
+
+    <ng-container mdColumnDef="balance">
+      <md-header-cell *mdHeaderCellDef> Balance </md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.balance | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="datetime">
+      <md-header-cell *mdHeaderCellDef> Date/Time </md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.datetime | date: 'dd-MM/yyyy HH:mm'}}</md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="lastName">
+      <md-header-cell *mdHeaderCellDef> Created By </md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.lastName}} {{element.firstName}}</md-cell>
+    </ng-container>
+
+
+
+
+    <ng-container mdColumnDef="menuDate">
+      <md-header-cell *mdHeaderCellDef> Menu Date </md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.menuDate}}</md-cell>
+    </ng-container>
+
+
+    <ng-container mdColumnDef="orderType">
+      <md-header-cell *mdHeaderCellDef> Order type </md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.orderType}}</md-cell>
+    </ng-container>
+
+    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+  </md-table>
+</md-card>

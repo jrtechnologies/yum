@@ -74,5 +74,8 @@
   </md-card>
   <app-balance *ngIf="user" [(user)]="user" [admin]="false">
   </app-balance>
+  <app-transactions *ngIf="userId" [(userId)]="userId">
+  </app-transactions>
+
   <app-footer></app-footer>
 </div>

@@ -10,10 +10,11 @@ import { HeaderModule } from '../header/header.module';
 import { FooterModule } from '../footer/footer.module';
 import { ProfileModule } from '../profile/profile.module';
 import { BalanceModule } from '../../shared/balance/balance.module'
+import { TransactionsModule } from '../../shared/transactions/transactions.module'
 //import { AuthenticationService } from '../authentication.service';
 
 @NgModule({
-  imports: [CommonModule, routing, HeaderModule, FooterModule, MdGridListModule, MdSelectModule, FormsModule, ReactiveFormsModule, ProfileModule, MdButtonModule, MdInputModule, MdCardModule, BalanceModule ],
+  imports: [CommonModule, routing, HeaderModule, FooterModule, MdGridListModule, MdSelectModule, FormsModule, ReactiveFormsModule, ProfileModule, MdButtonModule, MdInputModule, MdCardModule, BalanceModule, TransactionsModule ],
   declarations: [SettingsComponent],
   providers:  [ SettingsRouteGuard],
   exports: [MdButtonModule, MdInputModule]

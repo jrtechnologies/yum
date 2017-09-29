@@ -16,7 +16,7 @@ import { Observable } from 'rxjs/Rx';
 export class UsersComponent implements OnInit {
 
   private sub: any;
-  private userId = 0;
+  public userId = 0;
   public user: remote.User;
   public profileGroup: FormGroup;
   //copy initial input values for enabling/disabling submit button
