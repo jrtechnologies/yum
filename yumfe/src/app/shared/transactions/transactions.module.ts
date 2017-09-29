@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MdButtonModule, MdInputModule, MdCardModule, MdTableModule } from '@angular/material';
+import { MdCardModule, MdTableModule, MdPaginatorModule } from '@angular/material';
 import { TransactionsComponent } from './transactions.component'
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -9,11 +9,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 @NgModule({
   imports: [
     CommonModule,
-    //MdGridListModule,
-    //MdButtonModule,
-    //MdInputModule,
     MdCardModule,
     MdTableModule,
+    MdPaginatorModule,
     FlexLayoutModule
   ],
   declarations: [ TransactionsComponent],

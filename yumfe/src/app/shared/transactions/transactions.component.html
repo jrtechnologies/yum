@@ -4,9 +4,36 @@
     Transactions
   </div>
 
+  <!-- <md-paginator  #paginator *ngIf="transactions != null"
+              [length]="transactions.length"
+              [pageIndex]="0"
+              [pageSize]="5"
+              [pageSizeOptions]="[5, 10, 25, 100]">
+  </md-paginator> -->
+
+   <md-paginator  #paginator
+              [pageIndex]="0"
+              [pageSize]="10"
+              [pageSizeOptions]="[5, 10, 25, 100]">
+  </md-paginator>
+
+
   <md-table *ngIf="transactions != null" #table [dataSource]="dataSource" class= "centered">
 
+     <ng-container mdColumnDef="datetime">
+      <md-header-cell *mdHeaderCellDef> Date/Time </md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.datetime | date: 'dd-MM/yyyy HH:mm:ss'}}</md-cell>
+    </ng-container>
 
+    <ng-container mdColumnDef="transactionType">
+      <md-header-cell *mdHeaderCellDef> Transaction Type </md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.orderType}}</md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="menuDate">
+      <md-header-cell *mdHeaderCellDef> Menu Date </md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.menuDate}}</md-cell>
+    </ng-container>
 
     <ng-container mdColumnDef="amount">
       <md-header-cell *mdHeaderCellDef>Amount </md-header-cell>
@@ -19,12 +46,9 @@
       <md-cell *mdCellDef="let element">{{element.balance | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></md-cell>
     </ng-container>
 
-    <ng-container mdColumnDef="datetime">
-      <md-header-cell *mdHeaderCellDef> Date/Time </md-header-cell>
-      <md-cell *mdCellDef="let element">{{element.datetime | date: 'dd-MM/yyyy HH:mm'}}</md-cell>
-    </ng-container>
 
-    <ng-container mdColumnDef="lastName">
+
+    <ng-container mdColumnDef="name">
       <md-header-cell *mdHeaderCellDef> Created By </md-header-cell>
       <md-cell *mdCellDef="let element">{{element.lastName}} {{element.firstName}}</md-cell>
     </ng-container>
@@ -32,16 +56,10 @@
 
 
 
-    <ng-container mdColumnDef="menuDate">
-      <md-header-cell *mdHeaderCellDef> Menu Date </md-header-cell>
-      <md-cell *mdCellDef="let element">{{element.menuDate}}</md-cell>
-    </ng-container>
 
 
-    <ng-container mdColumnDef="orderType">
-      <md-header-cell *mdHeaderCellDef> Order type </md-header-cell>
-      <md-cell *mdCellDef="let element">{{element.orderType}}</md-cell>
-    </ng-container>
+
+
 
     <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
     <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
