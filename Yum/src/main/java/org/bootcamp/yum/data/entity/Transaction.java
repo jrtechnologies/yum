@@ -76,12 +76,13 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(long userId, BigDecimal amount, BigDecimal balance, long sourceId, long orderId, int orderType) {
+    public Transaction(long userId, BigDecimal amount, BigDecimal balance, long sourceId, Long orderId, Long menuId, int orderType) {
         this.userId = userId;
         this.amount = amount;
         this.balance = balance;
         this.sourceId = sourceId;
         this.orderId = orderId;
+        this.menuId = menuId;
         this.orderType = orderType;
     }
 

@@ -66,17 +66,7 @@ public class OrdersService {
     @Autowired
     private TransactionRepository transactionRep;
 
-//    private void createTransaction(Long userId, BigDecimal amount, BigDecimal balance, Long orderId, String orderType) {
-//        Transaction transaction = new Transaction();
-//        transaction.setUserId(userId);
-//        transaction.setAmount(amount);     
-//        transaction.setBalance(balance);
-//        //Retrieves source user id form token
-//        transaction.setSourceId((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-//        transaction.setOrderId(0);
-//        transactionRep.save(transaction);
-//
-//    }
+    
     @Transactional
     public DailyMenu ordersPost(Order order) throws ApiException {
 
@@ -189,7 +179,7 @@ public class OrdersService {
                     }
 
                     user.setBalance(balance);
-                    Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), 1);
+                    Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(),dailyMenuId, 1);
                     transactionRep.save(transaction);
 
                     List<FoodWithQuantity> foodsWQ = dailyMenu.getFoods();
@@ -416,7 +406,7 @@ public class OrdersService {
                     }
 
                     user.setBalance(balance);
-                    Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), 2);
+                    Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 2);
                     transactionRep.save(transaction);
 
                     return lastEdit;
@@ -467,7 +457,7 @@ public class OrdersService {
                 balance = balance.add(orderAmount);
             }
             user.setBalance(balance);
-            Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), 3);
+            Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 3);
             transactionRep.save(transaction);
             dailyOrderRep.delete(dailyOrderEntity);
         }
