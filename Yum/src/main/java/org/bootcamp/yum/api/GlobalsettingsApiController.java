@@ -78,6 +78,7 @@ public class GlobalsettingsApiController implements GlobalsettingsApi {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<Object> globalsettingsHolidaysYearPost( @Min(2000) @Max(2100)@ApiParam(value = "",required=true ) @PathVariable("year") Integer year,
         @ApiParam(value = "The holidays to set" ,required=true )  @Valid @RequestBody Holidays holidays)  throws ApiException {
         try {

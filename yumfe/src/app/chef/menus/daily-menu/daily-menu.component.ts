@@ -27,7 +27,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
   @Input() day;
   @Input() viewdate;
   @Input() menu: remote.DailyMenuChef;
-
+  @Input() holidays: string[];
   @Output() snackMessage = new EventEmitter<models.SnackMessage>();
 
   @ViewChild( MdAutocompleteTrigger ) mdAutoCompleteTrigger: MdAutocompleteTrigger; //
@@ -117,6 +117,11 @@ export class DailyMenuComponent implements OnInit, OnChanges {
               menuDate.setHours(0,0,0,0);
               //console.log("menu date", menuDate);
               menuDate = subDays(menuDate, deadline.dDays);
+
+              while(this.holidays && this.holidays.includes(this.datePipe.transform(menuDate, 'yyyy-MM-dd'))){
+                menuDate = subDays(menuDate, 1);
+              }
+
               let deadlineTime: Date = deadline.dTime;
               menuDate.setHours(getHours(deadlineTime), getMinutes(deadlineTime), getSeconds(deadlineTime));
 

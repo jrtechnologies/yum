@@ -25,6 +25,7 @@ import org.bootcamp.yum.data.entity.Settings;
 import org.bootcamp.yum.data.enums.FoodType;
 import org.bootcamp.yum.data.repository.DailyMenuRepository;
 import org.bootcamp.yum.data.repository.FoodRepository;
+import org.bootcamp.yum.data.repository.HolidaysRepository;
 import org.bootcamp.yum.data.repository.OrderItemRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
 import org.bootcamp.yum.service.DailyMenuService;
@@ -78,6 +79,8 @@ public class DailyMenusApiControllerTest
     @Mock
     private SettingsRepository mockSettingsRepository;
 
+    @Mock
+    private HolidaysRepository mockHolidaysRepository;
 
     private MockMvc mockMvc;
 
@@ -173,11 +176,13 @@ public class DailyMenusApiControllerTest
         given(mockFoodRepository.findAll()).willReturn(mockFoodList);
         given(mockFoodRepository.findById(1)).willReturn(mockFood1);
         given(mockFoodRepository.findById(2)).willReturn(mockFood2);
+        given(mockHolidaysRepository.findByIdHoliday(new LocalDate(2017,04,28))).willReturn(null);
         
         LocalTime deadline = new LocalTime(0, 0);
         Settings sets = new Settings(1, deadline, null, "€", "notes", "tos", "policy", 0, 0, "", "");
         given(mockSettingsRepository.findOne(1)).willReturn(sets);
-
+        given(mockHolidaysRepository.findByIdHoliday(new LocalDate(2017,04,28))).willReturn(null);
+        
         mockMvc.perform(put("/api/dailyMenus/{id}", "6")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\n"
@@ -215,7 +220,8 @@ public class DailyMenusApiControllerTest
         given(mockSettingsRepository.findOne(1)).willReturn(sets);
         
         given(mockDailyMenuRepository.findById(6)).willReturn(mockDailyMenu);
-
+        //given(mockHolidaysRepository.findByIdHoliday(new LocalDate(2017,04,28))).willReturn(null);
+        
         mockMvc.perform(put("/api/dailyMenus/{id}", "6")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("{}")

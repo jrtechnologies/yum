@@ -33,14 +33,17 @@ import org.bootcamp.yum.api.model.Order;
 import org.bootcamp.yum.api.model.OrderItem;
 import org.bootcamp.yum.api.model.UpdateOrderItems;
 import org.bootcamp.yum.data.entity.OrderItemId;
+import org.bootcamp.yum.data.entity.Settings;
 import org.bootcamp.yum.data.repository.DailyMenuRepository;
 import org.bootcamp.yum.data.repository.DailyOrderRepository;
 import org.bootcamp.yum.data.repository.FoodRepository;
+import org.bootcamp.yum.data.repository.HolidaysRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
 import org.bootcamp.yum.data.repository.UserRepository;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -60,7 +63,9 @@ public class OrdersService {
     private SettingsRepository settingsRep;
     @Autowired
     private EmailService emailService;
-
+    @Autowired
+    HolidaysRepository holidaysRepo;
+    
     @Transactional
     public DailyMenu ordersPost(Order order, Long reqUserId) throws ApiException {
         
@@ -115,7 +120,7 @@ public class OrdersService {
 
                 LocalDate dailyMenuDate = dailyMenuEntity.getDate();
                 // Check for deadline
-                if (settingsRep.findOne(1).deadlinePassed(dailyMenuDate) && !allowTodayAdminChangeOrder(sourceUser, dailyMenuDate, reqUserId)) {
+                if (deadlinePassed(dailyMenuDate) && !allowAdminAfterTodayChangeOrder(sourceUser, dailyMenuDate, reqUserId)) {
                     throw new ApiException(412, "Deadline passed");
 
                     // Passes Validation
@@ -286,7 +291,7 @@ public class OrdersService {
                 //return dailyOrder;
                 throw new ConcurrentModificationException(409, "Concurrent modification error.", dailyOrder);
 
-            } else if (settingsRep.findOne(1).deadlinePassed(dailyOrderEntity.getDailyMenu().getDate()) && !allowTodayAdminChangeOrder(sourceUser, dailyOrderEntity.getDailyMenu().getDate(), reqUserId)) {
+            } else if (deadlinePassed(dailyOrderEntity.getDailyMenu().getDate()) && !allowAdminAfterTodayChangeOrder(sourceUser, dailyOrderEntity.getDailyMenu().getDate(), reqUserId)) {
                 dailyOrderEntity.setFinalised(true);
                 throw new ApiException(412, "Deadline for orders passed");
             } else {
@@ -399,7 +404,7 @@ public class OrdersService {
         if ((dailyMenuEntity == null) || user.getId() != dailyOrderEntity.getUserId()) {
             throw new ApiException(400, "Order couldn't be deleted.");
             // Check for deadline             
-        } else if (settingsRep.findOne(1).deadlinePassed(dailyOrderEntity.getDailyMenu().getDate()) && !allowTodayAdminChangeOrder(sourceUser, dailyMenuEntity.getDate(), reqUserId)) {
+        } else if (deadlinePassed(dailyOrderEntity.getDailyMenu().getDate()) && !allowAdminAfterTodayChangeOrder(sourceUser, dailyMenuEntity.getDate(), reqUserId)) {
             dailyOrderEntity.setFinalised(true);
             throw new ApiException(412, "Deadline for orders passed");
         } else {
@@ -489,11 +494,25 @@ public class OrdersService {
 
     }
     
-    private Boolean allowTodayAdminChangeOrder(org.bootcamp.yum.data.entity.User sourceUser, LocalDate menuDate, Long userId){
-        if (userId != 0 && sourceUser.getUserRole().toString().equalsIgnoreCase("admin") && menuDate.isEqual(new LocalDate())) {
+    private Boolean allowAdminAfterTodayChangeOrder(org.bootcamp.yum.data.entity.User sourceUser, LocalDate menuDate, Long userId){
+        if (userId != 0 && sourceUser.getUserRole().toString().equalsIgnoreCase("admin") && (menuDate.isEqual(new LocalDate()) || menuDate.isAfter(new LocalDate()))) {
             return true;
         }
         return false;
     }
-
+    
+    public boolean deadlinePassed(LocalDate date) {
+        Settings settings = settingsRep.findOne(1);
+        int deadlineDays = settings.getDeadlineDays();
+        LocalTime deadlineTime = settings.getDeadline();
+         
+        date = date.minusDays(deadlineDays);
+        
+        while (this.holidaysRepo.findByIdHoliday(date) != null) {
+             date = date.minusDays(1);
+        }        
+        
+        // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
+        return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
+    }
 }

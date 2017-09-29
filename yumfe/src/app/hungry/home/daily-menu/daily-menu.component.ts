@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Observable } from 'rxjs/Rx';
-import {  isToday  } from 'date-fns';
+import {  isToday, isAfter  } from 'date-fns';
 import { GlobalSettingsService } from './../../../shared/services/global-settings-service.service';
 import { AuthenticationService } from './../../../shared/authentication.service';
 import * as remote from '../../../remote';
@@ -89,7 +89,8 @@ export class DailyMenuComponent implements OnInit {
     });
   }
   public isFinalised() {
-    if(this.controlledUser && isToday(this.dailyMenu.date)) { 
+   // if(this.controlledUser && isToday(this.dailyMenu.date)) { 
+    if(this.controlledUser && (isToday(this.dailyMenu.date) || isAfter(this.dailyMenu.date, new Date()))) { 
       return false;
     }
     return this.dailyMenu.isFinal;

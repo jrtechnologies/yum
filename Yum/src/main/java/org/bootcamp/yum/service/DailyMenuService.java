@@ -62,7 +62,8 @@ public class DailyMenuService
     FoodRepository foodRep;
     @Autowired
     private SettingsRepository settingsRepo;
-
+    @Autowired
+    HolidaysRepository holidaysRepo;
 
     FoodTypeConverter fooodTypeConverter = new FoodTypeConverter();
     /**
@@ -91,7 +92,8 @@ public class DailyMenuService
         }
         
         //If the deadline passed, chef can't modify the menu
-        if (settingsRepo.findOne(1).deadlinePassed(dailyMenuEntity.getDate())) {
+        //if (settingsRepo.findOne(1).deadlinePassed(dailyMenuEntity.getDate())) {
+        if (deadlinePassed(dailyMenuEntity.getDate())) {
             dailyMenuEntity.setFinalised(true);
             throw new ApiException(412, "Can't modify menu, deadline time has passed");
         }    
@@ -357,4 +359,19 @@ public class DailyMenuService
         return foodDTO;
     }
 
+    
+    public boolean deadlinePassed(LocalDate date) {
+        Settings settings = settingsRepo.findOne(1);
+        int deadlineDays = settings.getDeadlineDays();
+        LocalTime deadlineTime = settings.getDeadline();
+         
+        date = date.minusDays(deadlineDays);
+        
+        while (this.holidaysRepo.findByIdHoliday(date) != null) {
+             date = date.minusDays(1);
+        }        
+        
+        // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
+        return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
+    }
 }

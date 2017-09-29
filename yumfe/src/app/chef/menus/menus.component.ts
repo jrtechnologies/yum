@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { Router, ActivatedRoute, Params  } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { CalendarEvent , CalendarEventAction,  CalendarEventTimesChangedEvent } from 'angular-calendar';
+import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { subDays, addDays, startOfMonth, endOfMonth, getMonth, getYear, isToday, isValid } from 'date-fns';
 
-import { MdSnackBar, MdProgressBar  } from '@angular/material';
+import { MdSnackBar, MdProgressBar } from '@angular/material';
 
 import * as models from './../../shared/models';
 import * as remote from '../../remote';
@@ -15,6 +15,7 @@ import { FoodsService } from '../services/foods.service';
 import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.component';
 import { ChefNavComponent } from '../shared/chef-nav/chef-nav.component';
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
+import { AdminApi } from '../../remote';
 
 @Component({
   selector: 'app-menus',
@@ -41,19 +42,21 @@ export class MenusComponent implements OnInit {
   private sub: any;
   private remote: any;
   public showSpinner: boolean = true;
+  public holidays: string[];
 
-  constructor( private foodsService: FoodsService,
+  constructor(private foodsService: FoodsService,
     private chefService: remote.ChefApi,
     private datePipe: DatePipe,
     private route: ActivatedRoute,
     private location: Location,
     private router: Router,
     public snackBar: MdSnackBar,
-    public globalSettingsService: GlobalSettingsService
-   ) { }
+    public globalSettingsService: GlobalSettingsService,
+    private adminService: AdminApi
+  ) { }
 
   ngOnInit() {
-    this.viewdate = new Date( );
+    this.viewdate = new Date();
 
     this.globalSettingsService.getWorkingDays().subscribe(days => {
       this.excludeDays = this.alldays.filter(function (el) {
@@ -61,94 +64,116 @@ export class MenusComponent implements OnInit {
       });
 
     });
-    
-    this.foodsService.getFoods().subscribe( foods=>{
-        this.foods = foods;        
-     });
+
+    this.foodsService.getFoods().subscribe(foods => {
+      this.foods = foods;
+    });
 
 
     this.sub = this.route.params.subscribe(params => {
-       //this.foods = this.foodsService.getFoods();
+      //this.foods = this.foodsService.getFoods();
 
-       let dt = new Date(+params['year'], +params['month'] - 1, 1, 0, 0, 0) ; // (+) converts string 'year' and 'month' to a number
+      let dt = new Date(+params['year'], +params['month'] - 1, 1, 0, 0, 0); // (+) converts string 'year' and 'month' to a number
 
-       if (isValid(dt)) {
-          console.log("router date:"+dt);
-          this.viewdate  = dt;
-          this.getRemoteMenus(this.buildMonthYear(this.viewdate));
-       }
+      if (isValid(dt)) {
+        console.log("router date:" + dt);
+        this.viewdate = dt;
+        this.getRemoteMenus(this.buildMonthYear(this.viewdate));
+        this.getHolidays();
+      }
 
     });
 
     this.getThisMonthMenus();
+    this.getHolidays();
+  }
+
+  private getHolidays() {
+    let year = this.viewdate.getFullYear();
+
+    if (this.holidays && this.holidays[0] == year.toString()) {
+      return;
+    }
+    
+    console.log("getHolidays");
+    this.adminService.globalsettingsHolidaysYearGet(year).subscribe(holidays => {
+      this.holidays = [year.toString()];
+      for (let holiday of holidays) {
+        let dtStr = this.datePipe.transform(holiday, 'yyyy-MM-dd');
+        this.holidays.push(dtStr);
+      }
+    });
+
 
   }
-  private getThisMonthMenus(){
+
+
+  private getThisMonthMenus() {
     if (isToday(this.viewdate)) {
       this.remote = this.chefService.dailyMenusMonthlyGet()
+        .finally(() => {
+          this.showSpinner = false;
+        })
+        .subscribe(menus => {
+          console.log("subscribed menus of current month");
+          this.setMenus(menus);
+        }, error => console.log(error));
+    }
+  }
+
+  private getRemoteMenus(monthYear: string) {
+
+    this.remote = this.chefService.dailyMenusMonthlyMonthyearGet(monthYear)
       .finally(() => {
         this.showSpinner = false;
       })
-      .subscribe( menus => {
-        console.log("subscribed menus of current month");
+      .subscribe(menus => {
+        this.showSpinner = false;
         this.setMenus(menus);
-      }, error => console.log(error));
-    }
-  }
-
-  private getRemoteMenus(monthYear:string){
-
-    this.remote = this.chefService.dailyMenusMonthlyMonthyearGet(monthYear)
-    .finally(() => {
-      this.showSpinner = false;
-    })
-    .subscribe( menus => {
-      this.showSpinner = false;
-      this.setMenus(menus);
-    }, error => {
-      this.showSpinner = false;
-      console.log(error);
-    });
+      }, error => {
+        this.showSpinner = false;
+        console.log(error);
+      });
 
   }
 
-  public onMonthNavChange(dt: Date){
-    if (dt.getMonth() === new Date().getMonth() && dt.getFullYear()=== new Date().getFullYear()) {
+  public onMonthNavChange(dt: Date) {
+    if (dt.getMonth() === new Date().getMonth() && dt.getFullYear() === new Date().getFullYear()) {
       this.router.navigate(['/chef/menus/']);
     }
-    else{
-       this.router.navigate(['/chef/menus/', getYear(dt), this.pad(getMonth(dt)+1, 2)]);
+    else {
+      this.router.navigate(['/chef/menus/', getYear(dt), this.pad(getMonth(dt) + 1, 2)]);
     }
 
 
   }
 
   private buildMonthYear(dt: Date) {
-     return this.pad(getMonth(dt)+1, 2) + '-' + getYear(dt);
+    return this.pad(getMonth(dt) + 1, 2) + '-' + getYear(dt);
   }
 
-  private setMenus(menus){
-      this.menus = menus;
+  private setMenus(menus) {
+    this.menus = menus;
 
-      for(let i=0;i<this.menus.length;i++){
-        let dt = new Date(this.menus[i].date);
-        dt.setHours(0,0,0,0);
-        let dtStr = this.datePipe.transform(dt, 'yyyy-MM-dd');
+    for (let i = 0; i < this.menus.length; i++) {
+      let dt = new Date(this.menus[i].date);
+      dt.setHours(0, 0, 0, 0);
+      let dtStr = this.datePipe.transform(dt, 'yyyy-MM-dd');
 
-        this.menusMap.set( dtStr, this.menus[i]);
-      }
-      console.log("menus map:", this.menusMap);
+      this.menusMap.set(dtStr, this.menus[i]);
+    }
+    console.log("menus map:", this.menusMap);
   }
 
-  private pad(num:number, size:number): string {
-      var s = num+"";
-      while (s.length < size) s = "0" + s;
-      return s;
+  private pad(num: number, size: number): string {
+    var s = num + "";
+    while (s.length < size) s = "0" + s;
+    return s;
   }
 
   // status -> 1:success , 2:warning, 3:error
   private openSnackBar(message: string, action: string, status: number) {
-    if(action===undefined){ action="ok"};
+    if (action === undefined) { action = "ok" };
     switch (status) {
       case 1:
         this.snackBar.open(message, action, {
@@ -169,11 +194,11 @@ export class MenusComponent implements OnInit {
     }
   }
 
-  public dailyMenuError(msg: models.SnackMessage){
+  public dailyMenuError(msg: models.SnackMessage) {
     this.openSnackBar(msg.message, msg.action, msg.status);
   }
 
-  public setSpinner(set: boolean){
+  public setSpinner(set: boolean) {
 
   }
 }

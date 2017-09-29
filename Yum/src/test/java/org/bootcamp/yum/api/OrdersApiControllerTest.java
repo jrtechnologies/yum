@@ -29,6 +29,7 @@ import org.bootcamp.yum.data.enums.UserRole;
 import org.bootcamp.yum.data.repository.DailyMenuRepository;
 import org.bootcamp.yum.data.repository.DailyOrderRepository;
 import org.bootcamp.yum.data.repository.FoodRepository;
+import org.bootcamp.yum.data.repository.HolidaysRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
 import org.bootcamp.yum.data.repository.UserRepository;
 import org.bootcamp.yum.service.ChefOrdersService;
@@ -80,7 +81,9 @@ public class OrdersApiControllerTest {
     private SettingsRepository mockSettingsRepository;
     @Mock
     private DailyMenuRepository mockDailyMenuRepository;
-
+    @Mock
+    private HolidaysRepository mockHolidaysRepository;
+    
     private MockMvc mockMvc;
 
     private static List<org.bootcamp.yum.data.entity.Food> mockFoodList;
@@ -293,7 +296,7 @@ public class OrdersApiControllerTest {
         
         given(mockFoodRepository.findById(11L)).willReturn(mockFoodList.get(1));
         given( mockSettingsRepository.findOne(1)).willReturn(mockSettings);
-       
+        given(mockHolidaysRepository.findByIdHoliday(new LocalDate(2017,05,22))).willReturn(null);
         
         // We perform the API call, and check that the response status code, and the JSON response are corrects
         mockMvc.perform(put("/api/orders/{id}", 1l)
@@ -342,7 +345,7 @@ public class OrdersApiControllerTest {
         
         given(mockFoodRepository.findById(11L)).willReturn(mockFoodList.get(1));
         given(mockSettingsRepository.findOne(1)).willReturn(mockSettings);
-       
+        given(mockHolidaysRepository.findByIdHoliday(new LocalDate(2017,05,22))).willReturn(null);
         
         // We perform the API call, and check that the response status code, and the JSON response are corrects
         mockMvc.perform(put("/api/orders/{id}", 1l)
@@ -478,7 +481,7 @@ public class OrdersApiControllerTest {
         
         given(mockFoodRepository.findById(11L)).willReturn(mockFoodList.get(1));
         given( mockSettingsRepository.findOne(1)).willReturn(mockSettings);
-       
+        given(mockHolidaysRepository.findByIdHoliday(new LocalDate(2017,05,22))).willReturn(null);
         
         // We perform the API call, and check that the response status code, and the JSON response are corrects
         mockMvc.perform(put("/api/orders/{id}", 2l)
@@ -519,7 +522,7 @@ public class OrdersApiControllerTest {
         
         given(mockFoodRepository.findById(11L)).willReturn(mockFoodList.get(1));
         given( mockSettingsRepository.findOne(1)).willReturn(mockSettings);
-       
+        given(mockHolidaysRepository.findByIdHoliday(new LocalDate(2017,05,22))).willReturn(null);
         
         // We perform the API call, and check that the response status code, and the JSON response are corrects
         mockMvc.perform(put("/api/orders/{id}", 4l)

@@ -177,7 +177,8 @@ public class MenusService {
             lastEdit.setTimeStamp(dailyMenuEntity.getLastEdit());
             lastEdit.setVersion(dailyMenuEntity.getVersion());
             dailyMenu.setLastEdit(lastEdit);
-            Boolean finalisedDailyOrder = settingsRepo.findOne(1).deadlinePassed(currentDay);
+            //Boolean finalisedDailyOrder = settingsRepo.findOne(1).deadlinePassed(currentDay);
+            Boolean finalisedDailyOrder = deadlinePassed(currentDay);
             dailyOrderEntity.setFinalised(finalisedDailyOrder);
             dailyMenu.setIsFinal(finalisedDailyOrder);
             
@@ -195,7 +196,8 @@ public class MenusService {
                 }
                 dailyMenu.addFoodsItem(foodWithQuantity); //Add the food in daily menu.
             }
-        } else if (!settingsRepo.findOne(1).deadlinePassed(currentDay)) {
+        //} else if (!settingsRepo.findOne(1).deadlinePassed(currentDay)) {
+        } else if (!deadlinePassed(currentDay)) {
             dailyMenuEntity.setFinalised(false);
             dailyMenu.setDate(dailyMenuEntity.getDate());
             dailyMenu.setIsFinal(false);
@@ -226,7 +228,8 @@ public class MenusService {
                 lastEdit.setTimeStamp(dailyMenuEntity.getLastEdit());
                 lastEdit.setVersion(dailyMenuEntity.getVersion());
                 dailyMenu.setLastEdit(lastEdit);
-                Boolean deadlinePassed = settingsRepo.findOne(1).deadlinePassed(currentDay);
+                //Boolean deadlinePassed = settingsRepo.findOne(1).deadlinePassed(currentDay);
+                Boolean deadlinePassed = deadlinePassed(currentDay);
                 dailyOrderEntity.setFinalised(deadlinePassed);
                 dailyMenu.setIsFinal(deadlinePassed);
                 for (org.bootcamp.yum.data.entity.Food foodEntity : dailyMenuEntity.getFoods()) {
@@ -244,7 +247,8 @@ public class MenusService {
                     dailyMenu.addFoodsItem(foodWithQuantity); //Add the food in daily menu.
                 }
             } else {//If daily menu isn't ordered from user, not set order stats.  
-                Boolean deadlinePassed = settingsRepo.findOne(1).deadlinePassed(currentDay);
+                //Boolean deadlinePassed = settingsRepo.findOne(1).deadlinePassed(currentDay);
+                Boolean deadlinePassed = deadlinePassed(currentDay);
                 dailyMenuEntity.setFinalised(deadlinePassed);
                 dailyMenu.setIsFinal(deadlinePassed);
                 LastEdit lastEdit = new LastEdit();
@@ -323,4 +327,6 @@ public class MenusService {
         return user;
         
     }
+    
+     
 }

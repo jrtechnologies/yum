@@ -51,7 +51,7 @@ export class HeaderComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
 
-      if(this.user && this.user.role == 'admin'){
+      if(this.user && this.user.role == 'ADMIN'){
         let userid = +params['userid'] || 0;
 
         //comment if dont want to keep controlled user if no path query exists
