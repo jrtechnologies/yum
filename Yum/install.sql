@@ -96,6 +96,20 @@ CREATE TABLE yum_settings (
    PRIMARY KEY (`id`)
 );
 
+CREATE TABLE transaction(
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+	amount DECIMAL(20,2) NOT NULL,
+    balance DECIMAL(20,2) NOT NULL,
+    date_time TIMESTAMP NULL  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	source_id BIGINT NOT NULL,
+    order_id BIGINT,
+    order_type TINYINT,
+    PRIMARY KEY ( id ),
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (source_id) REFERENCES user(id)
+);
+
 CREATE TABLE `yum`.`holidays` (
   `holidate` DATE NOT NULL,
   PRIMARY KEY (`holidate`));

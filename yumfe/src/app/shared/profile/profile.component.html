@@ -20,9 +20,9 @@
       <button md-icon-button color="accent" (click)="deletePicture()"><i class="material-icons">delete_forever</i></button>
     </md-grid-tile>
   </md-grid-list>
-  <md-grid-list cols="{{admin?'9':'7'}}" rowHeight="100px">
+  <md-grid-list cols="{{admin?'9':'7'}}" rowHeight="80px">
     <md-grid-tile *ngIf="admin && user.id !==1" [colspan]="2" class="left">
-      <md-select placeholder="User role" formControlName="role">
+      <md-select placeholder="User role" formControlName="role" class="bottom-pad">
         <md-option *ngFor="let role of roles" [value]="role.value">
           {{ role.viewValue }}
         </md-option>

@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
+import { MdSnackBar, MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 
 import * as remote from '../../remote';
 import { AuthenticationService } from '../../shared/authentication.service';
 import { ControlUserService } from '../../shared/services/control-user.service';
+
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -181,7 +182,7 @@ export class UsersComponent implements OnInit {
             this.openSnackBar('Successfull password reset', 'ok', 1);
           },
           error => {
-            this.openSnackBar('Password cannot be reset', 'ok', 1);
+            this.openSnackBar('Password cannot be reset', 'ok', 3);
           }
           );
       }
@@ -191,7 +192,7 @@ export class UsersComponent implements OnInit {
 
   // Callball after invalid data in form from profile component
   handleInvalidProfileForm(validFlag: string) {
-      if (validFlag === "invalid"){
+    if (validFlag === "invalid") {
       this.invalid = true;
     } else {
       this.invalid = false;

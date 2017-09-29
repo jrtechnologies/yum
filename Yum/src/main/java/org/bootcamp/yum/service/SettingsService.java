@@ -61,6 +61,7 @@ public class SettingsService {
         userDTO.setRegistrationDate(userDAO.getRegistrationDate());
         userDTO.setRole(userDAO.getUserRole().toString());
         userDTO.setHasPicture(userDAO.hasPicture());
+        userDTO.setBalance(userDAO.getBalance());
 
         return userDTO;
     }

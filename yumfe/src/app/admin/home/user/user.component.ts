@@ -21,6 +21,7 @@ export class UserComponent implements OnInit {
 
   public userId = this.authService.getLoggedInUser().id;
   public userPicture: string;
+  public balance: number;
 
   constructor(private adminService: remote.AdminApi,
               public snackBar: MdSnackBar,
@@ -39,6 +40,11 @@ export class UserComponent implements OnInit {
       this.editRouterLink = 'users/' + this.user.id;
     }
     this.userPicture = this.baseUrl + '/users/' + this.user.id + '/picture/token?token=' + this.authService.getToken() ;
+    if (this.user.balance == null) {
+      this.balance = 0;
+    } else {
+      this.balance = this.user.balance;
+    }
   }
 
   getUser() {

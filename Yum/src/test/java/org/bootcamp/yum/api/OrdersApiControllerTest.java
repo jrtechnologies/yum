@@ -23,6 +23,7 @@ import org.bootcamp.test.annotation.WithMockAuth;
 import org.bootcamp.yum.data.entity.DailyOrder;
 import org.bootcamp.yum.data.entity.OrderItemId;
 import org.bootcamp.yum.data.entity.Settings;
+import org.bootcamp.yum.data.entity.Transaction;
 import org.bootcamp.yum.data.entity.User;
 import org.bootcamp.yum.data.enums.FoodType;
 import org.bootcamp.yum.data.enums.UserRole;
@@ -31,6 +32,7 @@ import org.bootcamp.yum.data.repository.DailyOrderRepository;
 import org.bootcamp.yum.data.repository.FoodRepository;
 import org.bootcamp.yum.data.repository.HolidaysRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
+import org.bootcamp.yum.data.repository.TransactionRepository;
 import org.bootcamp.yum.data.repository.UserRepository;
 import org.bootcamp.yum.service.ChefOrdersService;
 import org.bootcamp.yum.service.OrdersService;
@@ -50,6 +52,7 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -83,7 +86,9 @@ public class OrdersApiControllerTest {
     private DailyMenuRepository mockDailyMenuRepository;
     @Mock
     private HolidaysRepository mockHolidaysRepository;
-    
+    @Mock
+    private TransactionRepository mockTransactionRepository;
+
     private MockMvc mockMvc;
 
     private static List<org.bootcamp.yum.data.entity.Food> mockFoodList;
@@ -92,6 +97,7 @@ public class OrdersApiControllerTest {
     private static Settings mockSettings;
     private static List<org.bootcamp.yum.data.entity.DailyMenu> mockDailyMenuList; 
     private static User mockUser;
+    private static Transaction mockTransaction;
 
     public OrdersApiControllerTest() {
     }
@@ -255,6 +261,7 @@ public class OrdersApiControllerTest {
         mockSettings.setDeadline(new LocalTime(11,0));
         mockSettings.setDeadlineDays(1);
 
+        mockTransaction = new Transaction();
     }
 
     @BeforeClass
