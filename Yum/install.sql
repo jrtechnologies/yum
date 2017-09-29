@@ -104,6 +104,7 @@ CREATE TABLE transaction(
     date_time TIMESTAMP NULL  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	source_id BIGINT NOT NULL,
     order_id BIGINT,
+	menu_id BIGINT,
     order_type TINYINT,
     PRIMARY KEY ( id ),
     FOREIGN KEY (user_id) REFERENCES user(id),

@@ -62,14 +62,10 @@ public class TransactionsService {
             User sourceUser = transactionEntity.getSourceUser();
             transaction.setFirstName(sourceUser.getFirstName());
             transaction.setLastName(sourceUser.getLastName());
-
-            DailyOrder dailyOrder = dailyOrderRep.findOne(transactionEntity.getOrderId());
-
-            if (dailyOrder != null) {
-                DailyMenu dailyMenu = dailyOrder.getDailyMenu();
-                if (dailyMenu != null) {
-                    transaction.setMenuDate(dailyMenu.getDate());
-                }
+            
+            DailyMenu dailyMenu = transactionEntity.getDailyMenu();
+            if (dailyMenu !=null) {
+                transaction.setMenuDate(dailyMenu.getDate());
             }
             
             Integer orderType = transactionEntity.getOrderType();
