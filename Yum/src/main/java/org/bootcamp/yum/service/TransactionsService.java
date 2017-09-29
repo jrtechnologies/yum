@@ -72,18 +72,20 @@ public class TransactionsService {
             if (orderType!=null) {
                 switch (transactionEntity.getOrderType()){
                     case 1:
-                        transaction.setOrderType("New");
+                        transaction.setOrderType("New Order");
                         break;
                     case 2:
-                        transaction.setOrderType("Modify");
+                        transaction.setOrderType("Order Modify");
                         break;    
                     case 3:
-                        transaction.setOrderType("Cancel");
+                        transaction.setOrderType("Order Cancel");
                         break;   
                     default:    
-                        transaction.setOrderType(null);
+                        transaction.setOrderType("Deposit");
 
                 }
+            } else {
+                transaction.setOrderType("Deposit");
             }
             transactions.add(transaction);
         }        

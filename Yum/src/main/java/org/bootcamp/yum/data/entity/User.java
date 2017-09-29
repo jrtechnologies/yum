@@ -27,6 +27,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import org.bootcamp.yum.data.converter.LocalDateAttributeConverter;
@@ -49,6 +50,7 @@ public class User {
     private List<DailyOrder> dailyOrders;
     
     @OneToMany(mappedBy = "user")
+    @OrderBy("id DESC")
     private List<Transaction> transactions;
 
     @Column(name = "last_name")
