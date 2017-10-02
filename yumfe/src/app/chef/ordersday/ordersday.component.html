@@ -9,11 +9,13 @@
       <h1>{{date | date:"EEEE d MMMM y" }}</h1>
       <h3>Order Summary</h3>
     </div>
-    <div fxFlex="50" fxFlexOffset="25" class="up-buttons no-print style-page-buttons">
+    <div fxFlex="50"  class="up-buttons no-print style-page-buttons">
       <div class="inline">
         <button md-raised-button color="accent" routerLink="/chef/orders" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive
-          #rla1="routerLinkActive" [disabled]='rla1.isActive' routerLinkActive="active">Back to orders</button>
-        <button md-raised-button color="accent" (click)="print()">Print page</button>
+          #rla1="routerLinkActive" [disabled]='rla1.isActive || showSpinner' routerLinkActive="active">Back to orders</button>
+        <button md-raised-button color="accent" (click)="sendEmail()" [disabled]="showSpinner">Send email</button>
+        <button md-raised-button color="accent" (click)="print()" [disabled]="showSpinner">Print page</button>
+        <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
       </div>
     </div>
   </div>
@@ -34,11 +36,13 @@
   <div fxLayout="row">
     <div fxFlex="50" class="left-no-pad">
     </div>
-    <div fxFlex="25" fxFlexOffset="75" class="down-buttons no-print style-page-buttons">
+    <div fxFlex="50" class="down-buttons no-print style-page-buttons">
       <div class="inline">
         <button md-raised-button color="accent" routerLink="/chef/orders" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive
-          #rla1="routerLinkActive" [disabled]='rla1.isActive' routerLinkActive="active">Back to orders</button>
-        <button md-raised-button color="accent" (click)="print()">Print page</button>
+          #rla1="routerLinkActive" [disabled]='rla1.isActive || showSpinner' routerLinkActive="active">Back to orders</button>
+        <button md-raised-button color="accent" (click)="sendEmail()" [disabled]="showSpinner">Send email</button>
+        <button md-raised-button color="accent" (click)="print()" [disabled]="showSpinner">Print page</button>
+        <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
       </div>
     </div>
   </div>
