@@ -33,8 +33,8 @@
   </md-grid-list>
 </md-card>
 
-<app-balance *ngIf="user" [(user)]="user" [admin]="true">
+<app-balance *ngIf="user" [(user)]="user" [admin]="true" (balanceUpdated)="handleBalanceUpdated($event)">
 </app-balance>
 
-<app-transactions *ngIf="userId" [(userId)]="userId">
+<app-transactions *ngIf="userId" [(userId)]="userId" [update]="balanceUpdate">
 </app-transactions>

@@ -32,6 +32,7 @@ export class UsersComponent implements OnInit {
   public externalAuth: Boolean = false;
   public balanceGroup: FormGroup;
   public balance: number;
+  public balanceUpdate = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -210,6 +211,14 @@ export class UsersComponent implements OnInit {
   handleUpdateVersion() {
     this.user.lastEdit.version += 1;
   }
+
+  handleBalanceUpdated() {
+    if (this.balanceUpdate) {
+      this.balanceUpdate = false;
+    } else {
+      this.balanceUpdate = true;
+    }
+   }
 
 
 }

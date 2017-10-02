@@ -15,6 +15,7 @@ import { Observable } from 'rxjs/Rx';
 export class TransactionsComponent implements OnInit {
 
   @Input() userId: number;
+  @Input() update: boolean;
   public currency: Observable<string>;
   public transactions: Array<remote.Transaction>;
 
@@ -28,8 +29,17 @@ export class TransactionsComponent implements OnInit {
     private hungryService: remote.HungryApi,
   ) { }
 
-  ngOnInit() {
+   ngOnInit() {
     this.currency = this.globalSettingsService.getCurrency();
+    this.getTransactions();
+  }
+
+  ngOnChanges() {
+
+    this.getTransactions();
+  }
+
+  getTransactions() {
     this.hungryService.transactionsIdGet(this.userId).subscribe(transactions => {
       this.transactions = transactions;
       this.dataSource = new TransactionsDataSource(transactions, this.paginator);
@@ -37,6 +47,7 @@ export class TransactionsComponent implements OnInit {
     });
 
   }
+
 
 }
 
