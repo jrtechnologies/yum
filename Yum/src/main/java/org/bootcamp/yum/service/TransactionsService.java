@@ -14,15 +14,12 @@
  */
 package org.bootcamp.yum.service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.bootcamp.yum.api.ApiException;
 import org.bootcamp.yum.api.model.Transaction;
-import org.bootcamp.yum.data.entity.DailyOrder;
 import org.bootcamp.yum.data.entity.User;
 import org.bootcamp.yum.data.entity.DailyMenu;
-import org.bootcamp.yum.data.repository.DailyOrderRepository;
 import org.bootcamp.yum.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -34,8 +31,6 @@ public class TransactionsService {
     
     @Autowired
     private UserRepository userRep;
-    @Autowired
-    private DailyOrderRepository dailyOrderRep;
     
     public List<Transaction> transactionsIdGet(Long id) throws ApiException {
         
