@@ -1427,6 +1427,41 @@
         }
       }
     },
+    "/report/{day}": {
+      "post": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "chef"
+        ],
+        "summary": "Send email with daily summary",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "day",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Email sent"
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "500": {
+            "$ref": "#/responses/Error"
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "security": [
