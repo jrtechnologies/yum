@@ -76,9 +76,10 @@ public class UsersApiController implements UsersApi {
          @ApiParam(value = "Request pagination page") @RequestParam(value = "page", required = false) String page,
          @ApiParam(value = "Request pagination size / num of users") @RequestParam(value = "size", required = false) String size,
          @ApiParam(value = "Request orderBy filter") @RequestParam(value = "orderBy", required = false) String orderBy, 
-         @ApiParam(value = "Request orderBy filter") @RequestParam(value = "orderDirection", required = false) String orderDirection) throws ApiException, Exception {
+         @ApiParam(value = "Request orderBy filter") @RequestParam(value = "orderDirection", required = false) String orderDirection,
+         @ApiParam(value = "Request search term") @RequestParam(value = "lastName", required = false) String lastName) throws ApiException, Exception {
         //Call method to return all users from database, from class UsersService.
-        return new ResponseEntity<>(userService.usersGet(   page, size, orderBy, orderDirection), HttpStatus.OK);
+        return new ResponseEntity<>(userService.usersGet(   page, size, orderBy, orderDirection, lastName), HttpStatus.OK);
     }
 
     @Override

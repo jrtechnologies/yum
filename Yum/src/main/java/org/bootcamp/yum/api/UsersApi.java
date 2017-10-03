@@ -54,7 +54,8 @@ public interface UsersApi {
          @ApiParam(value = "Request pagination page") @RequestParam(value = "page", required = false) String page,
          @ApiParam(value = "Request pagination size / num of users") @RequestParam(value = "size", required = false) String size,
          @ApiParam(value = "Request orderBy filter") @RequestParam(value = "orderBy", required = false) String orderBy,
-         @ApiParam(value = "Request orderBy filter") @RequestParam(value = "orderDirection", required = false) String orderDirection) throws ApiException, Exception;
+         @ApiParam(value = "Request orderBy filter") @RequestParam(value = "orderDirection", required = false) String orderDirection,
+         @ApiParam(value = "Request search term") @RequestParam(value = "lastName", required = false) String lastName) throws ApiException, Exception;
 
     @ApiOperation(value = "", notes = "Change approve status of user", response = Void.class, authorizations = {
         @Authorization(value = "Bearer")

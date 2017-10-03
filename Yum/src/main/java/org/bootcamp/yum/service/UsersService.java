@@ -222,7 +222,7 @@ public class UsersService {
     }
 
     @Transactional
-    public UsersPage usersGet(String pageStr, String sizeStr, String orderBy, String orderDirection) throws ApiException, Exception {
+    public UsersPage usersGet(String pageStr, String sizeStr, String orderBy, String orderDirection, String lastName) throws ApiException, Exception {
 
         UsersPage usersPage = new UsersPage();
         List<String> validOrderBy = Arrays.asList("registrationDate", "lastName", "userRole", "approved");
@@ -269,10 +269,13 @@ public class UsersService {
                 break;
         }
 
-//        System.out.println(pr);
-        //Iterable<org.bootcamp.yum.data.entity.User> usersPageable = userRepo.findAll();
-        Page<org.bootcamp.yum.data.entity.User> usersPageable = userRepo.findAll(pr);
-        //totalPages = 
+        Page<org.bootcamp.yum.data.entity.User> usersPageable;
+        if (lastName == null){
+            usersPageable = userRepo.findAll(pr);
+        } else {
+            usersPageable = userRepo.findByLastNameStartingWith(pr,lastName);
+        }
+       
         totalPages = usersPageable.getTotalPages();
         totalElements = usersPageable.getTotalElements();
 
