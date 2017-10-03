@@ -126,7 +126,7 @@ export class LoginComponent implements OnInit {
   public login() {
     this.showSpinner = true;
     this.disableBtn = true;
-    this.authService.login(this.loginForm.value.email, this.loginForm.value.password, this.loginForm.value.username)
+    this.authService.login(this.loginForm.get('email').value, this.loginForm.get('password').value, this.loginForm.get('username').value)
       .finally(() => {
         this.showSpinner = false;
         this.disableBtn = false;

@@ -967,6 +967,9 @@
                 "price": {
                   "type": "number",
                   "format": "double"
+                },
+                "standard": {
+                  "type": "boolean"
                 }
               }
             }
@@ -2436,6 +2439,9 @@
           "type": "number",
           "format": "double"
         },
+        "standard": {
+          "type": "boolean"
+        },
         "lastEdit": {
           "$ref": "#/definitions/LastEdit"
         }
@@ -2466,6 +2472,9 @@
           "format": "double"
         },
         "archived": {
+          "type": "boolean"
+        },
+        "standard": {
           "type": "boolean"
         }
       }

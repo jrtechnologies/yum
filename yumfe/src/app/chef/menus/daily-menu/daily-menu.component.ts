@@ -45,6 +45,8 @@ export class DailyMenuComponent implements OnInit, OnChanges {
   menuCanBeDiscarded: Boolean = false;
   menuCanBeUpdated: Boolean = false;
   menuCanBeEdited: Boolean = false;
+  menuHasAllStandards: Boolean = false;
+  private quantityOfStandards: number=0;
 
   checkUserChanges: Boolean = false;
 
@@ -91,6 +93,9 @@ export class DailyMenuComponent implements OnInit, OnChanges {
     for(let food of this.foods){
         if(!food.archived){
           this.foodsAvailable.push(food);
+          if(food.standard) {
+            this.quantityOfStandards++;
+          }
         }
     }
   }
@@ -212,6 +217,15 @@ export class DailyMenuComponent implements OnInit, OnChanges {
     this.displayList();
   }
 
+  addAllStandards(){
+    for(let food of this.foodsAvailable ){
+      if(food.standard){
+        this.addMenuFood(food);
+      }
+    }
+    this.selectCtrl.updateValueAndValidity({ onlySelf: false, emitEvent: true });
+  }
+
   removeMenuFood(food: remote.Food) {
     this.addToAvailable(food);
     this.foodsSelectedMap.delete(food.id);
@@ -219,7 +233,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
   }
 
   removeFromAvailable(foodRemove: remote.Food){
-      this.foodsAvailable = this.foodsAvailable.filter(food => food.id !== foodRemove.id);
+      this.foodsAvailable = this.foodsAvailable.filter(food => food.id !== foodRemove.id); 
   }
 
   addToAvailable(food: remote.Food){
@@ -413,6 +427,8 @@ export class DailyMenuComponent implements OnInit, OnChanges {
   }
 
   checkChanges(){
+
+    // Check for menu changes
     if(this.checkUserChanges && this.initfoodsSelected != this.foodsSelected && (this.foodsSelected.length>0 || this.initfoodsSelected.length>0) ){
       this.menuCanBeDiscarded = true;
       this.menuCanBeUpdated = true;
@@ -421,6 +437,14 @@ export class DailyMenuComponent implements OnInit, OnChanges {
       this.menuCanBeDiscarded = false;
       this.menuCanBeUpdated = false;
     }
+
+    //Check if all standards in menu
+    let count=0;
+    for( let food of this.foodsSelected){
+      if(food.standard) count++;
+    }
+    this.menuHasAllStandards = (count==this.quantityOfStandards);
+    console.log(this.quantityOfStandards);
   }
 
 

@@ -68,6 +68,10 @@ public class Food {
     @Convert(converter = BooleanConverter.class)
     private boolean archived;
     
+    @Column(name="standard")
+    @Convert(converter = BooleanConverter.class)
+    private boolean standard;
+    
     //@Version
     @Column(name="last_edit", updatable=false, insertable=false)
     @Convert(converter = LocalDateTimeAttributeConverter.class)
@@ -194,31 +198,37 @@ public class Food {
         this.orderedQuantity = orderedQuantity;
     }
 
+    public boolean isStandard() {
+        return standard;
+    }
+
+    public void setStandard(boolean standard) {
+        this.standard = standard;
+    }
+
     // The equals method is useful for the assertEquals
     @Override
     public boolean equals(Object obj) {
         return obj.hashCode() == hashCode();
     }
- 
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 17 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 17 * hash + Objects.hashCode(this.name);
-        hash = 17 * hash + Objects.hashCode(this.orderItems);
-        hash = 17 * hash + Objects.hashCode(this.foodType);
-        hash = 17 * hash + Objects.hashCode(this.description);
-        hash = 17 * hash + Objects.hashCode(this.price);
-        hash = 17 * hash + (this.archived ? 1 : 0);
-        hash = 17 * hash + Objects.hashCode(this.lastEdit);
-        hash = 17 * hash + this.version;
+        hash = 61 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 61 * hash + Objects.hashCode(this.name);
+        hash = 61 * hash + Objects.hashCode(this.orderItems);
+        hash = 61 * hash + Objects.hashCode(this.foodType);
+        hash = 61 * hash + Objects.hashCode(this.description);
+        hash = 61 * hash + Objects.hashCode(this.price);
+        hash = 61 * hash + (this.archived ? 1 : 0);
+        hash = 61 * hash + (this.standard ? 1 : 0);
+        hash = 61 * hash + Objects.hashCode(this.lastEdit);
+        hash = 61 * hash + this.version;
+        hash = 61 * hash + this.orderedQuantity;
         return hash;
     }
  
- 
- 
-
  
     @Override
     public String toString() {
@@ -235,6 +245,7 @@ public class Food {
         dto.setFoodType(getFoodType().toString());
         dto.setId(getId());
         dto.setPrice(getPrice().doubleValue());
+        dto.setStandard(isStandard());
         
         return dto;
     }

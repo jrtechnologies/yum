@@ -13,7 +13,7 @@ info:
     otherwise.
 
 
-    Find source code of this API [here](https://github.com/jrtdev/yum)
+    Find source code of this API [here](https://github.com/jrtechnologies/yum)
 
 
     Copyright (C) 2017 JR Technologies.
@@ -649,6 +649,8 @@ paths:
               price:
                 type: number
                 format: double
+              standard:
+                type: boolean
       responses:
         '204':
           description: Food succesfully created
@@ -1582,6 +1584,8 @@ definitions:
       price:
         type: number
         format: double
+      standard:
+        type: boolean
       lastEdit:
         $ref: '#/definitions/LastEdit'
   Food:
@@ -1603,6 +1607,8 @@ definitions:
         type: number
         format: double
       archived:
+        type: boolean
+      standard:
         type: boolean
   DailyMenu:
     type: object

@@ -1,3 +1,5 @@
+# From mysql command line: source install.sql
+
 drop schema if exists yum;
 CREATE SCHEMA IF NOT EXISTS yum DEFAULT CHARACTER SET utf8;
 USE yum;
@@ -29,6 +31,7 @@ CREATE TABLE food (
     description VARCHAR(250) NULL DEFAULT NULL,
     price DOUBLE NULL DEFAULT NULL,
     archived BOOLEAN,
+	standard BOOLEAN DEFAULT FALSE,
 	last_edit TIMESTAMP NULL  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	version INT NOT NULL  DEFAULT 0,
     PRIMARY KEY (food_id)

@@ -1,34 +1,23 @@
-/*
- * Copyright (C) 2017 JR Technologies.
- * This file is part of Yum.
- * 
- * Yum is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * 
- * Yum is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with Yum. 
- * If not, see <http://www.gnu.org/licenses/>.
- */
-
 package org.bootcamp.yum.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
+
 /**
  * FoodDetails
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-04-20T10:12:43.892+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-10-03T11:34:42.640+03:00")
 
 public class FoodDetails   {
   @NotNull
   @JsonProperty("foodName")
   private String foodName = null;
-  
+
   @NotNull
   @JsonProperty("foodType")
   private String foodType = null;
@@ -40,6 +29,10 @@ public class FoodDetails   {
   @JsonProperty("price")
   private Double price = null;
 
+  @NotNull
+  @JsonProperty("standard")
+  private Boolean standard = null;
+
   public FoodDetails foodName(String foodName) {
     this.foodName = foodName;
     return this;
@@ -50,6 +43,8 @@ public class FoodDetails   {
    * @return foodName
   **/
   @ApiModelProperty(value = "")
+
+
   public String getFoodName() {
     return foodName;
   }
@@ -68,6 +63,8 @@ public class FoodDetails   {
    * @return foodType
   **/
   @ApiModelProperty(value = "")
+
+
   public String getFoodType() {
     return foodType;
   }
@@ -86,6 +83,8 @@ public class FoodDetails   {
    * @return description
   **/
   @ApiModelProperty(value = "")
+
+
   public String getDescription() {
     return description;
   }
@@ -104,12 +103,34 @@ public class FoodDetails   {
    * @return price
   **/
   @ApiModelProperty(value = "")
+
+
   public Double getPrice() {
     return price;
   }
 
   public void setPrice(Double price) {
     this.price = price;
+  }
+
+  public FoodDetails standard(Boolean standard) {
+    this.standard = standard;
+    return this;
+  }
+
+   /**
+   * Get standard
+   * @return standard
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Boolean getStandard() {
+    return standard;
+  }
+
+  public void setStandard(Boolean standard) {
+    this.standard = standard;
   }
 
 
@@ -125,12 +146,13 @@ public class FoodDetails   {
     return Objects.equals(this.foodName, foodDetails.foodName) &&
         Objects.equals(this.foodType, foodDetails.foodType) &&
         Objects.equals(this.description, foodDetails.description) &&
-        Objects.equals(this.price, foodDetails.price);
+        Objects.equals(this.price, foodDetails.price) &&
+        Objects.equals(this.standard, foodDetails.standard);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(foodName, foodType, description, price);
+    return Objects.hash(foodName, foodType, description, price, standard);
   }
 
   @Override
@@ -142,6 +164,7 @@ public class FoodDetails   {
     sb.append("    foodType: ").append(toIndentedString(foodType)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    price: ").append(toIndentedString(price)).append("\n");
+    sb.append("    standard: ").append(toIndentedString(standard)).append("\n");
     sb.append("}");
     return sb.toString();
   }

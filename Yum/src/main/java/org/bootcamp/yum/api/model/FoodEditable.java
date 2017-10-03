@@ -1,33 +1,22 @@
-/*
- * Copyright (C) 2017 JR Technologies.
- * This file is part of Yum.
- * 
- * Yum is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * 
- * Yum is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with Yum. 
- * If not, see <http://www.gnu.org/licenses/>.
- */
-
 package org.bootcamp.yum.api.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Objects;
+import org.bootcamp.yum.api.model.Food;
+import org.bootcamp.yum.api.model.LastEdit;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
+
 /**
  * Food,  checked if editable
  */
 @ApiModel(description = "Food,  checked if editable")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-04-20T16:58:58.888+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-10-03T11:34:42.640+03:00")
 
 public class FoodEditable   {
-    
   @NotNull
   @JsonProperty("foodItem")
   private Food foodItem = null;
@@ -49,6 +38,9 @@ public class FoodEditable   {
    * @return foodItem
   **/
   @ApiModelProperty(value = "")
+
+  @Valid
+
   public Food getFoodItem() {
     return foodItem;
   }
@@ -67,6 +59,8 @@ public class FoodEditable   {
    * @return editable
   **/
   @ApiModelProperty(value = "")
+
+
   public Boolean getEditable() {
     return editable;
   }
@@ -85,6 +79,9 @@ public class FoodEditable   {
    * @return lastEdit
   **/
   @ApiModelProperty(value = "")
+
+  @Valid
+
   public LastEdit getLastEdit() {
     return lastEdit;
   }

@@ -1,36 +1,22 @@
-/*
- * Copyright (C) 2017 JR Technologies.
- * This file is part of Yum.
- * 
- * Yum is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * 
- * Yum is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with Yum. 
- * If not, see <http://www.gnu.org/licenses/>.
- */
-
 package org.bootcamp.yum.api.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
+
 /**
  * Food DTO
  */
 @ApiModel(description = "Food DTO")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-04-20T10:12:43.892+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-10-02T13:37:57.265+03:00")
 
 public class Food   {
-  
   @NotNull
   @Digits( integer=9,  fraction=0 )
-  
   @JsonProperty("id")
   private Long id = null;
 
@@ -52,6 +38,9 @@ public class Food   {
   @JsonProperty("archived")
   private Boolean archived = null;
 
+  @JsonProperty("standard")
+  private Boolean standard = null;
+
   public Food id(Long id) {
     this.id = id;
     return this;
@@ -63,6 +52,8 @@ public class Food   {
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
+
+
   public Long getId() {
     return id;
   }
@@ -81,6 +72,8 @@ public class Food   {
    * @return foodName
   **/
   @ApiModelProperty(value = "")
+
+
   public String getFoodName() {
     return foodName;
   }
@@ -99,6 +92,8 @@ public class Food   {
    * @return foodType
   **/
   @ApiModelProperty(value = "")
+
+
   public String getFoodType() {
     return foodType;
   }
@@ -117,6 +112,8 @@ public class Food   {
    * @return description
   **/
   @ApiModelProperty(value = "")
+
+
   public String getDescription() {
     return description;
   }
@@ -135,6 +132,8 @@ public class Food   {
    * @return price
   **/
   @ApiModelProperty(value = "")
+
+
   public Double getPrice() {
     return price;
   }
@@ -153,12 +152,34 @@ public class Food   {
    * @return archived
   **/
   @ApiModelProperty(value = "")
+
+
   public Boolean getArchived() {
     return archived;
   }
 
   public void setArchived(Boolean archived) {
     this.archived = archived;
+  }
+
+  public Food standard(Boolean standard) {
+    this.standard = standard;
+    return this;
+  }
+
+   /**
+   * Get standard
+   * @return standard
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Boolean getStandard() {
+    return standard;
+  }
+
+  public void setStandard(Boolean standard) {
+    this.standard = standard;
   }
 
 
@@ -176,12 +197,13 @@ public class Food   {
         Objects.equals(this.foodType, food.foodType) &&
         Objects.equals(this.description, food.description) &&
         Objects.equals(this.price, food.price) &&
-        Objects.equals(this.archived, food.archived);
+        Objects.equals(this.archived, food.archived) &&
+        Objects.equals(this.standard, food.standard);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, foodName, foodType, description, price, archived);
+    return Objects.hash(id, foodName, foodType, description, price, archived, standard);
   }
 
   @Override
@@ -195,6 +217,7 @@ public class Food   {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    price: ").append(toIndentedString(price)).append("\n");
     sb.append("    archived: ").append(toIndentedString(archived)).append("\n");
+    sb.append("    standard: ").append(toIndentedString(standard)).append("\n");
     sb.append("}");
     return sb.toString();
   }

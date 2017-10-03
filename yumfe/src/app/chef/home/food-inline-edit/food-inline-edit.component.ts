@@ -103,8 +103,10 @@ export class FoodInlineEditComponent implements OnInit {
       value.foodName = this.foodEditable.foodItem.foodName;
       value.foodType = this.foodEditable.foodItem.foodType;
       value.price = this.foodEditable.foodItem.price;
+      
     }
-
+    value.standard = this.foodEditable.foodItem.standard;
+    
     this.chefService.foodsFoodIdPut(this.food.foodItem.id, value, this.clone).subscribe(foodDetails => {
       this.openSnackBar('Food succefully edited!', 'ok', 1);
     }, error => {

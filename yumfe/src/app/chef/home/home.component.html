@@ -47,11 +47,15 @@
       </md-select>
     </div>
 
-    <div fxFlex="15">
+    <div fxFlex="17" class="is-flex">
       <md-checkbox color='accent' [(ngModel)]="checked" (ngModelChange)="viewArchived()">View archived items</md-checkbox>
     </div>
 
-    <div fxFlex="40">
+    <div fxFlex="8" class="is-flex standardFood">
+         <!-- Standard menu -->
+      </div>
+
+    <div fxFlex="30">
       <app-pagination (changePage)="handleChangePage($event)" [totalItems]="totalFoods" [currentPage]="page" [pageSize]="pageSize"></app-pagination>
     </div>
 

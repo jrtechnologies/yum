@@ -28,4 +28,5 @@ export interface Food {
 
     archived?: boolean;
 
+    standard?: boolean;
 }
