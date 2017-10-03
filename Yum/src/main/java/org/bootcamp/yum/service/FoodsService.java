@@ -345,7 +345,7 @@ public class FoodsService {
                     foodEntity.setFoodType(foodTypeConverter.convertToEntityAttribute(food.getFoodType()));
                 }
                 if (food.getStandard() != foodEntity.isStandard() ) {
-                    foodEntity.setStandard(food.getStandard();
+                    foodEntity.setStandard(food.getStandard());
                 }
             }
 

@@ -95,7 +95,7 @@ public class Food {
     public Food(){}
  
     //Use for mockups
-    public Food(long id, String name, List<OrderItem> orderItems, FoodType foodType, String description, BigDecimal price, boolean archived, DateTime lastEdit) {
+    public Food(long id, String name, List<OrderItem> orderItems, FoodType foodType, String description, BigDecimal price, boolean archived, DateTime lastEdit, boolean standard) {
         this.id = id;
         this.name = name;
         this.orderItems = orderItems;
@@ -104,6 +104,7 @@ public class Food {
         this.price = price;
         this.archived = archived;
         this.lastEdit = lastEdit;
+        this.standard = standard;
     }
        
     
