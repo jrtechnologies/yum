@@ -64,7 +64,6 @@ export class TransactionsDataSource extends DataSource<any> {
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<Element[]> {
-    //return Observable.of( this.transactions);
     const displayTransactions = [
       this.transactions,
       this.paginator.page

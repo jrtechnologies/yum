@@ -189,6 +189,9 @@ export class SettingsComponent implements OnInit {
           case 400:
             this.openSnackBar('User can not be modified! Some data are invalid', 'ok', 3);
             break;
+          case 412:
+            this.openSnackBar('User email already exists', 'ok', 3);
+            break;
           // User has only non-final orders. Can be force deleted
           case 409:
             const newUserVersion = JSON.parse(error._body);

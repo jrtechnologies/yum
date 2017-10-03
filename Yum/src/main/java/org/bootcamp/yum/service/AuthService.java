@@ -230,6 +230,7 @@ public class AuthService {
                     user.setLastEdit(DateTime.now());
                     user.setRegistrationDate(LocalDate.now());
                     user.setLdapId(ldapId);
+                    user.setPassword(BCrypt.hashpw("123456", BCrypt.gensalt()));
                     user.setBalance(BigDecimal.ZERO);
                     userRep.save(user);
                 }

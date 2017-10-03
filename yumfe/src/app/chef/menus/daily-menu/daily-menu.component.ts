@@ -27,7 +27,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
   @Input() day;
   @Input() viewdate;
   @Input() menu: remote.DailyMenuChef;
-
+  @Input() holidays: string[];
   @Output() snackMessage = new EventEmitter<models.SnackMessage>();
 
   @ViewChild( MdAutocompleteTrigger ) mdAutoCompleteTrigger: MdAutocompleteTrigger; //
@@ -117,6 +117,11 @@ export class DailyMenuComponent implements OnInit, OnChanges {
               menuDate.setHours(0,0,0,0);
               //console.log("menu date", menuDate);
               menuDate = subDays(menuDate, deadline.dDays);
+
+              while(this.holidays && this.holidays.includes(this.datePipe.transform(menuDate, 'yyyy-MM-dd'))){
+                menuDate = subDays(menuDate, 1);
+              }
+
               let deadlineTime: Date = deadline.dTime;
               menuDate.setHours(getHours(deadlineTime), getMinutes(deadlineTime), getSeconds(deadlineTime));
 
@@ -168,12 +173,14 @@ export class DailyMenuComponent implements OnInit, OnChanges {
       this.selectCtrl.valueChanges.subscribe(status => {
           console.log(status);
          if ( this.el && this.focusMe && status.length == 0 ) {
-            console.log('blur enter');
+            //console.log('blur enter');
             this.el.nativeElement.blur();
             this.focusMe.nativeElement.focus();
             setTimeout(() => {
-              this.el.nativeElement.blur();
-              this.focusMe.nativeElement.focus();
+              if(this.el && this.focusMe){
+                this.el.nativeElement.blur();
+                this.focusMe.nativeElement.focus();
+              }
             }, 300);
         }
       });
@@ -218,11 +225,9 @@ export class DailyMenuComponent implements OnInit, OnChanges {
   addToAvailable(food: remote.Food){
        this.foodsAvailable.push(food);
        this.foodsAvailable = this.foodsService.sortArrayOfFoods(this.foodsAvailable );
-       //this.selectCtrl.setValue(""); //reset foodsAvailable
-
-
-       //this.selectCtrl = undefined;
-       //this.selectCtrl.reset();
+       //reset foodsAvailable
+       this.selectCtrl.updateValueAndValidity({ onlySelf: false, emitEvent: true });
+       
   }
 
 

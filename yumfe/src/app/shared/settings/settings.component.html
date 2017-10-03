@@ -29,10 +29,11 @@
       (updateVersion)="handleUpdateVersion($event)">
     </app-profile>
     <div class="divider heading sec">
-      <div class="heading">Change Password <small>(Leave it empty if you don't want to change your password)</small></div>
+      <div *ngIf="!externalAuth || (user && user.id == 1)" class="heading">Change Password <small>(Leave it empty if you don't want to change your password)</small></div>
     </div>
     <form [formGroup]="profileGroup" autocomplete="off">
       <md-grid-list cols="6" rowHeight="160px">
+
         <div *ngIf="externalAuth && user && user.id !== 1; then thenBlock else elseBlock"> </div>
         <ng-template #thenBlock>
           <md-grid-tile colspan="4" class="left"></md-grid-tile>

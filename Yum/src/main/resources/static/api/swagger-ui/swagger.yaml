@@ -216,6 +216,8 @@ paths:
           description: Concurrent modification error
           schema:
             $ref: '#/definitions/User'
+        '412':
+          description: User email exists
         '500':
           $ref: '#/responses/Error'
   /settings/picture:
@@ -244,7 +246,7 @@ paths:
         - Bearer: []
       tags:
         - hungry
-      summary: deletes profile picture.
+      summary: Deletes profile picture.
       responses:
         '204':
           description: Picture deleted
@@ -254,6 +256,7 @@ paths:
     get:
       tags:
         - hungry
+      summary: Get profile picture.
       description: Get profile picture.
       parameters:
         - name: token
@@ -282,6 +285,12 @@ paths:
         - hungry
       summary: Gets weekly menus
       description: Returns a list containing all menus of the week.
+      parameters:
+        - name: userid
+          in: query
+          required: false
+          type: integer
+          format: int64
       responses:
         '200':
           description: A list of daily menus
@@ -305,6 +314,11 @@ paths:
           in: path
           required: true
           type: string
+        - name: userid
+          in: query
+          required: false
+          type: integer
+          format: int64
       responses:
         '200':
           description: A list of daily menus
@@ -324,6 +338,12 @@ paths:
         - hungry
       summary: Gets monthly menus.
       description: Return a list containing all menus of the month.
+      parameters:
+        - name: userid
+          in: query
+          required: false
+          type: integer
+          format: int64
       responses:
         '200':
           description: A list of daily menus.
@@ -347,6 +367,11 @@ paths:
           in: path
           required: true
           type: string
+        - name: userid
+          in: query
+          required: false
+          type: integer
+          format: int64
       responses:
         '200':
           description: A list of daily menus.
@@ -372,6 +397,11 @@ paths:
           description: The order to place
           schema:
             $ref: '#/definitions/Order'
+        - name: userid
+          in: query
+          required: false
+          type: integer
+          format: int64
       responses:
         '200':
           description: Order succesfully placed
@@ -397,7 +427,7 @@ paths:
         - Bearer: []
       tags:
         - hungry
-      summary: Modifies order for the specified day
+      summary: Get order for the specified day
       description: Modify the order
       parameters:
         - name: id
@@ -419,6 +449,11 @@ paths:
           required: true
           type: string
           format: date
+        - name: userid
+          in: query
+          required: false
+          type: integer
+          format: int64
       responses:
         '200':
           description: Order succesfully retrieved
@@ -440,6 +475,11 @@ paths:
       summary: Modifies order for the specified day
       description: Modify the order
       parameters:
+        - name: userid
+          in: query
+          required: false
+          type: integer
+          format: int64
         - name: id
           in: path
           required: true
@@ -497,6 +537,11 @@ paths:
       summary: Deletes specified order
       description: Deletes the order
       parameters:
+        - name: userid
+          in: query
+          required: false
+          type: integer
+          format: int64
         - name: id
           in: path
           required: true

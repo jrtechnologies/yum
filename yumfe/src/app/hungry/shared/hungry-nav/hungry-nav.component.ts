@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-hungry-nav',
@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HungryNavComponent implements OnInit {
 
+  @Input() userid: number;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  public getQueryParams(): any{ 
+      return this.userid? {userid: this.userid} : {};     
+  }
 }

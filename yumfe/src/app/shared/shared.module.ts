@@ -13,6 +13,7 @@ import { MonthNavComponent } from './header/month-nav/month-nav.component';
 import { PaginationModule } from './pagination/pagination.module'; 
 import { GlobalSettingsService } from './services/global-settings-service.service'; 
 import {SharedMaterialModule} from './shared-material.module';
+import { ControlUserService } from './services/control-user.service';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import {SharedMaterialModule} from './shared-material.module';
     DecimalPipe,
     DatePipe,
     GlobalSettingsService,
-    LowerCasePipe
+    LowerCasePipe,
+    ControlUserService
   ],
   entryComponents: [ 
   ]

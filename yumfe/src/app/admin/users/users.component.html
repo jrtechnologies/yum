@@ -13,7 +13,10 @@
         <div>Profile details</div>
       </div>
     </md-grid-tile>
-    <md-grid-tile colspan="4" class="right">
+    <md-grid-tile colspan="2" class="right">
+      <button md-raised-button color="accent" type="button" (click)="viewUserMenu()" >Edit user orders</button>
+    </md-grid-tile>
+    <md-grid-tile colspan="2" class="right">
       <app-slide-toggle-component *ngIf="user" [user]="user" [externalAuth]=externalAuth (updateVersion)="handleUpdateVersion($event)"></app-slide-toggle-component>
     </md-grid-tile>
   </md-grid-list>
@@ -22,7 +25,7 @@
   </app-profile>
   <md-grid-list cols="8" rowHeight="80px">
     <md-grid-tile colspan="4" class="left">
-      <button [disabled]="user==null || !user.approved" md-raised-button color="accent" (click)="resetPwd()">Reset Password</button>
+      <button *ngIf="!externalAuth || (user && user.id===1)" [disabled]="user==null || !user.approved" md-raised-button color="accent" (click)="resetPwd()">Reset Password</button>
     </md-grid-tile>
     <md-grid-tile colspan="4" class="right">
       <form (ngSubmit)="updateUser(profileGroup)" [formGroup]="profileGroup" autocomplete="off">

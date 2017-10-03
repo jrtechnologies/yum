@@ -6,7 +6,7 @@ import { MdSnackBar, MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/mate
 
 import * as remote from '../../remote';
 import { AuthenticationService } from '../../shared/authentication.service';
-import { Observable } from 'rxjs/Rx';
+import { ControlUserService } from '../../shared/services/control-user.service';
 
 @Component({
   selector: 'app-users',
@@ -42,7 +42,9 @@ export class UsersComponent implements OnInit {
     public dialog: MdDialog,
     private router: Router,
     private authService: AuthenticationService,
+    private controlUserService:ControlUserService
   ) { }
+
 
   ngOnInit() {
     //check if id is valid
@@ -220,6 +222,11 @@ export class UsersComponent implements OnInit {
     }
    }
 
+  viewUserMenu(){
+    //this.router.navigate(['/hungry/?userid='+this.userId]);
+    this.controlUserService.setUser(this.userId);
+    this.router.navigateByUrl('/hungry?userid='+this.userId);
+  }
 
 }
 

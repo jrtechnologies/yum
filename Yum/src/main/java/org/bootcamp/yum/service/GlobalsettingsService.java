@@ -197,9 +197,9 @@ public class GlobalsettingsService {
                     for (int i = oldDeadlineDays; i <= checkDays; i++) { //newDeadlineDays
                         LocalDate dailyMenuDate = (new LocalDate()).plusDays(i);
                         // if old deadline not passed and new deadline passed and dailyMenu not null, send report email
-                        if (!oldDeadlinePassed(dailyMenuDate, oldDeadlineDays, oldDeadlineTime) && menusService.deadlinePassed(dailyMenuDate) ) { //&& dailyMenuRepo.findByDate(dailyMenuDate) != null
-                            System.out.println(">>>>>>>>>>>>>sending email, date: " + dailyMenuDate); 
-                            //emailService.sendOrderSummary(dailyMenuDate);
+                        if (!oldDeadlinePassed(dailyMenuDate, oldDeadlineDays, oldDeadlineTime) && menusService.deadlinePassed(dailyMenuDate) && dailyMenuRepo.findByDate(dailyMenuDate) != null) { //
+                            //System.out.println(">>>>>>>>>>>>>sending email, date: " + dailyMenuDate); 
+                            emailService.sendOrderSummary(dailyMenuDate);
                         }
                     }
 

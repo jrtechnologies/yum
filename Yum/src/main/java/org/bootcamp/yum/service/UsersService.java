@@ -39,12 +39,15 @@ import org.bootcamp.yum.data.entity.Settings;
 import org.bootcamp.yum.data.entity.Transaction;
 import org.bootcamp.yum.data.enums.UserRole;
 import org.bootcamp.yum.data.repository.DailyOrderRepository;
+import org.bootcamp.yum.data.repository.HolidaysRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
 import org.bootcamp.yum.data.repository.TransactionRepository;
 import org.bootcamp.yum.data.repository.UserRepository;
 import static org.bootcamp.yum.service.FoodsService.getLineNumber;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -69,7 +72,9 @@ public class UsersService {
     private EmailService emailService;
     @Autowired
     private ApplicationProperties applicationProperties;
-
+    @Autowired
+    HolidaysRepository holidaysRepo;
+    
     private static final Logger LOGGER = Logger.getLogger(UsersService.class.getName());
 
     private void deleteDailyOrders(org.bootcamp.yum.data.entity.User user) {
@@ -79,7 +84,9 @@ public class UsersService {
         Long sourceId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         for (DailyOrder dailyOrder : dailyOrders) {
             DailyMenu dailyMenu = dailyOrder.getDailyMenu();
-            if (!settings.deadlinePassed(dailyMenu.getDate())) {
+            if (!deadlinePassed(dailyMenu.getDate())) {
+            //if (!settings.deadlinePassed(dailyOrder.getDailyMenu().getDate())) {
+
                 // Calculate order amount, add to user's balance and insert a transaction to the db
                 BigDecimal orderAmount = new BigDecimal(0);
                 for (OrderItem orderItem : dailyOrder.getOrderItems()) {
@@ -395,5 +402,19 @@ public class UsersService {
                 throw new IllegalArgumentException("Unknown value:" + role);
         }
     }
-
+    public boolean deadlinePassed(LocalDate date) {
+        Settings settings = settingsRepo.findOne(1);
+        int deadlineDays = settings.getDeadlineDays();
+        LocalTime deadlineTime = settings.getDeadline();
+         
+        date = date.minusDays(deadlineDays);
+        
+        while (this.holidaysRepo.findByIdHoliday(date) != null) {
+             date = date.minusDays(1);
+        }        
+        
+        // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
+        return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
+    }
 }
+ 

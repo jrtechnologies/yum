@@ -1,9 +1,15 @@
 <div class="is-flex topHeader ">
   <div id="logo"> <a href="/"><img src="/assets/img/Yum-logo.png" alt="logo"></a></div>
   <div class="is-flex relative">
+    <div *ngIf="controlUser"  class="is-flex">
+      <div class="controlledUserName">
+        {{controlUser.firstName+" "+controlUser.lastName}}
+      </div>
+      <button md-raised-button color="accent" type="button" (click)="exitControlUser()">Exit</button>
+    </div>
     <div>
       <div *ngIf="!user.hasPicture">
-        <i  class="material-icons face">face</i>
+        <i class="material-icons face">face</i>
       </div>
       <img *ngIf="user.hasPicture" class="img-circle smallImage " src="{{userPicture}}" />
     </div>

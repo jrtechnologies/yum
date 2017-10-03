@@ -56,7 +56,7 @@ public interface OrdersApi {
         produces = { "application/json" }, 
         method = RequestMethod.DELETE)
     @CrossOrigin
-    ResponseEntity<Object> ordersIdDelete(@ApiParam(value = "",required=true ) @PathVariable("id") Long id,
+    ResponseEntity<Object> ordersIdDelete(@ApiParam(value = "",required=true ) @PathVariable("id") Long id,@ApiParam(value = "") @RequestParam(value = "userid", required = false) Long userid,
         @ApiParam(value = "dailymenu details id, version, date"  ) @RequestBody DailyMenuDetails dailyMenuDetails);
     
     @ApiOperation(value = "Modifies order for the specified day", notes = "Modify the order", response = DailyOrder.class, authorizations = {
@@ -74,7 +74,7 @@ public interface OrdersApi {
     ResponseEntity<DailyOrder> ordersIdGet(@ApiParam(value = "",required=true ) @PathVariable("id") Long id,
          @NotNull @ApiParam(value = "", required = true) @RequestParam(value = "dailyMenuId", required = true) Long dailyMenuId,
          @NotNull @ApiParam(value = "", required = true) @RequestParam(value = "dailyMenuVersion", required = true) int dailyMenuVersion,
-         @NotNull @ApiParam(value = "", required = true) @RequestParam(value = "dailyMenuDate", required = true) LocalDate dailyMenuDate) throws ApiException;
+         @NotNull @ApiParam(value = "", required = true) @RequestParam(value = "dailyMenuDate", required = true) LocalDate dailyMenuDate,@ApiParam(value = "") @RequestParam(value = "userid", required = false) Long userid) throws ApiException;
 
 
     @ApiOperation(value = "Modifies order for the specified day", notes = "Modify the order", response = LastEdit.class, authorizations = {
@@ -93,7 +93,7 @@ public interface OrdersApi {
         produces = { "application/json" }, 
         method = RequestMethod.PUT)
     @CrossOrigin
-    ResponseEntity<Object> ordersIdPut(@ApiParam(value = "",required=true ) @PathVariable("id") Long id,
+    ResponseEntity<Object> ordersIdPut(@ApiParam(value = "",required=true ) @PathVariable("id") Long id,@ApiParam(value = "") @RequestParam(value = "userid", required = false) Long userid,
         @ApiParam(value = "The order items to modify"  ) @RequestBody UpdateOrderItems updateOrderItems, Errors errors) throws ApiException;
 
     @ApiOperation(value = "Place a new order", notes = "A new order for the specified daily menu", response = DailyMenu.class, authorizations = {
@@ -110,7 +110,7 @@ public interface OrdersApi {
         produces = { "application/json" }, 
         method = RequestMethod.POST)
     @CrossOrigin
-    ResponseEntity<Object> ordersPost(@ApiParam(value = "The order to place"  ) @RequestBody Order order, Errors errors) throws ApiException;
+    ResponseEntity<Object> ordersPost(@ApiParam(value = "The order to place"  ) @RequestBody Order order,@ApiParam(value = "") @RequestParam(value = "userid", required = false) Long userid, Errors errors) throws ApiException;
     
     /////  CHEF   /////
     

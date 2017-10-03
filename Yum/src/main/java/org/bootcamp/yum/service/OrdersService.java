@@ -34,16 +34,19 @@ import org.bootcamp.yum.api.model.Order;
 import org.bootcamp.yum.api.model.OrderItem;
 import org.bootcamp.yum.api.model.UpdateOrderItems;
 import org.bootcamp.yum.data.entity.OrderItemId;
+import org.bootcamp.yum.data.entity.Settings;
 import org.bootcamp.yum.data.entity.Transaction;
 import org.bootcamp.yum.data.repository.DailyMenuRepository;
 import org.bootcamp.yum.data.repository.DailyOrderRepository;
 import org.bootcamp.yum.data.repository.FoodRepository;
+import org.bootcamp.yum.data.repository.HolidaysRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
 import org.bootcamp.yum.data.repository.TransactionRepository;
 import org.bootcamp.yum.data.repository.UserRepository;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -64,26 +67,26 @@ public class OrdersService {
     @Autowired
     private EmailService emailService;
     @Autowired
+    HolidaysRepository holidaysRepo;
+    @Autowired
     private TransactionRepository transactionRep;
 
     
     @Transactional
-    public DailyMenu ordersPost(Order order) throws ApiException {
-
+    public DailyMenu ordersPost(Order order, Long reqUserId) throws ApiException {
+        
+        org.bootcamp.yum.data.entity.User sourceUser = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        org.bootcamp.yum.data.entity.User user = getUserOfDailyOrder(sourceUser, reqUserId);
+        
         org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity = new org.bootcamp.yum.data.entity.DailyOrder();
+
         List<org.bootcamp.yum.data.entity.OrderItem> orderItemsEntity = new ArrayList<>();
         Long dailyMenuId = order.getDailyMenuId();
         org.bootcamp.yum.data.entity.DailyMenu dailyMenuEntity = dailyMenuRep.findById(dailyMenuId);
 
         //Retrieves user id
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        org.bootcamp.yum.data.entity.User user = userRep.findById(userId);
-
-        //  Validation for user
-        if (user == null) {
-            throw new ApiException(400, "Bad request");
-            // If dailyOrder for the specified user exists   
-        }
+        //Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
+        Long userId = user.getId();
 
         //  Validation for dailyMenu
         if (dailyMenuEntity == null) {
@@ -123,7 +126,7 @@ public class OrdersService {
 
                 LocalDate dailyMenuDate = dailyMenuEntity.getDate();
                 // Check for deadline
-                if (settingsRep.findOne(1).deadlinePassed(dailyMenuDate)) {
+                if (deadlinePassed(dailyMenuDate) && !allowAdminAfterTodayChangeOrder(sourceUser, dailyMenuDate, reqUserId)) {
                     throw new ApiException(412, "Deadline passed");
 
                     // Passes Validation
@@ -179,7 +182,7 @@ public class OrdersService {
                     }
 
                     user.setBalance(balance);
-                    Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(),dailyMenuId, 1);
+                    Transaction transaction = new Transaction(userId, orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(),dailyMenuId, 1);
                     transactionRep.save(transaction);
 
                     List<FoodWithQuantity> foodsWQ = dailyMenu.getFoods();
@@ -216,7 +219,7 @@ public class OrdersService {
 
     }
 
-    private void ConcurrentOrderDeletionCheck(Long id, Long dailyMenuId, int dailyMenuVersion, LocalDate dailyMenuDate,
+    private void ConcurrentOrderDeletionCheck(Long dailyMenuId, int dailyMenuVersion, LocalDate dailyMenuDate,
             org.bootcamp.yum.data.entity.User user, org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity) throws ApiException {
 
         long userId = user.getId();
@@ -263,19 +266,18 @@ public class OrdersService {
     }
 
     @Transactional
-    public LastEdit ordersIdPut(Long id, UpdateOrderItems updateOrderItems) throws ApiException {
+    public LastEdit ordersIdPut(Long id, UpdateOrderItems updateOrderItems, Long reqUserId) throws ApiException {
         try {
-            Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            org.bootcamp.yum.data.entity.User user = userRep.findById(userId);
-            //  Validation for user
-            if (user == null) {
-                throw new ApiException(400, "Order couldn't be modified.");
-            }
+            
+            org.bootcamp.yum.data.entity.User sourceUser = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            org.bootcamp.yum.data.entity.User user = getUserOfDailyOrder(sourceUser, reqUserId);
+            
             //  Validation for daily order
             org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity = dailyOrderRep.findByDailyOrderId(id);
 
+
             // check if there is no order with this id 
-            ConcurrentOrderDeletionCheck(id, updateOrderItems.getDailyMenuId(), updateOrderItems.getDailyMenuVersion(),
+            ConcurrentOrderDeletionCheck(updateOrderItems.getDailyMenuId(), updateOrderItems.getDailyMenuVersion(),
                     updateOrderItems.getDailyMenuDate(), user, dailyOrderEntity);
 
             //  Validation for daily menu
@@ -309,7 +311,7 @@ public class OrdersService {
                 //return dailyOrder;
                 throw new ConcurrentModificationException(409, "Concurrent modification error.", dailyOrder);
 
-            } else if (settingsRep.findOne(1).deadlinePassed(dailyOrderEntity.getDailyMenu().getDate())) {
+            } else if (deadlinePassed(dailyOrderEntity.getDailyMenu().getDate()) && !allowAdminAfterTodayChangeOrder(sourceUser, dailyOrderEntity.getDailyMenu().getDate(), reqUserId)) {
                 dailyOrderEntity.setFinalised(true);
                 throw new ApiException(412, "Deadline for orders passed");
             } else {
@@ -406,7 +408,8 @@ public class OrdersService {
                     }
 
                     user.setBalance(balance);
-                    Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 2);
+
+                    Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 2);
                     transactionRep.save(transaction);
 
                     return lastEdit;
@@ -423,17 +426,16 @@ public class OrdersService {
     }
 
     @Transactional
-    public void ordersIdDelete(Long id, DailyMenuDetails dailyMenuDetails) throws ApiException {
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        org.bootcamp.yum.data.entity.User user = userRep.findById(userId);
-        //  Validation for user
-        if (user == null) {
-            throw new ApiException(400, "Order couldn't be modified.");
-        }
+    public void ordersIdDelete(Long id, DailyMenuDetails dailyMenuDetails, Long reqUserId) throws ApiException {
+        
+        org.bootcamp.yum.data.entity.User sourceUser = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        org.bootcamp.yum.data.entity.User user = getUserOfDailyOrder(sourceUser, reqUserId);
+        
         //  Validation for daily order
         org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity = dailyOrderRep.findByDailyOrderId(id);
+
         // check if there is no order with this id 
-        ConcurrentOrderDeletionCheck(id, dailyMenuDetails.getDailyMenuId(), dailyMenuDetails.getDailyMenuVersion(),
+        ConcurrentOrderDeletionCheck(dailyMenuDetails.getDailyMenuId(), dailyMenuDetails.getDailyMenuVersion(),
                 dailyMenuDetails.getDailyMenuDate(), user, dailyOrderEntity);
 
         org.bootcamp.yum.data.entity.DailyMenu dailyMenuEntity = dailyOrderEntity.getDailyMenu();
@@ -441,7 +443,7 @@ public class OrdersService {
         if ((dailyMenuEntity == null) || user.getId() != dailyOrderEntity.getUserId()) {
             throw new ApiException(400, "Order couldn't be deleted.");
             // Check for deadline             
-        } else if (settingsRep.findOne(1).deadlinePassed(dailyOrderEntity.getDailyMenu().getDate())) {
+        } else if (deadlinePassed(dailyOrderEntity.getDailyMenu().getDate()) && !allowAdminAfterTodayChangeOrder(sourceUser, dailyMenuEntity.getDate(), reqUserId)) {
             dailyOrderEntity.setFinalised(true);
             throw new ApiException(412, "Deadline for orders passed");
         } else {
@@ -457,42 +459,91 @@ public class OrdersService {
                 balance = balance.add(orderAmount);
             }
             user.setBalance(balance);
-            Transaction transaction = new Transaction(userId, orderAmount, balance, userId, dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 3);
+
+            Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 3);
             transactionRep.save(transaction);
             dailyOrderRep.delete(dailyOrderEntity);
         }
     }
 
-    public DailyOrder ordersIdGet(Long id, Long dailyMenuId, int dailyMenuVersion, LocalDate dailyMenuDate) throws ApiException {
-        org.bootcamp.yum.data.entity.User user = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    public DailyOrder ordersIdGet(Long id, Long dailyMenuId, int dailyMenuVersion, LocalDate dailyMenuDate, Long reqUserId) throws ApiException {
+        
+        org.bootcamp.yum.data.entity.User sourceUser = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        org.bootcamp.yum.data.entity.User user = getUserOfDailyOrder(sourceUser, reqUserId);
+        
+        org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity = dailyOrderRep.findByDailyOrderId(id);
 
-        //  Validation for user, 
-        if (user == null) {
-            throw new ApiException(404, "Order not found.");
-        } else {
-            long userId = user.getId();
-            org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity = dailyOrderRep.findByDailyOrderId(id);
-            // check if there is no order with this id 
-            ConcurrentOrderDeletionCheck(id, dailyMenuId, dailyMenuVersion, dailyMenuDate, user, dailyOrderEntity);
-            org.bootcamp.yum.data.entity.DailyMenu dailyMenuEntity = dailyOrderEntity.getDailyMenu();
-            DailyOrder dailyOrder = new DailyOrder();
-            dailyOrder.setDailyMenuDate(dailyMenuEntity.getDate());
-            LastEdit lastEdit = new LastEdit();
-            lastEdit.setTimeStamp(dailyOrderEntity.getLastEdit());
-            lastEdit.setVersion(dailyOrderEntity.getVersion());
-            dailyOrder.setLastEdit(lastEdit);
-            List<FoodWithQuantity> foodsWithQuantity = new ArrayList();
-            for (org.bootcamp.yum.data.entity.OrderItem orderItemEntity : dailyOrderEntity.getOrderItems()) {
-                FoodWithQuantity foodWithQuantity = new FoodWithQuantity();
-                Food food = orderItemEntity.getFood().toDtoFood();
-                foodWithQuantity.setFood(food);
-                foodWithQuantity.setQuantity(orderItemEntity.getQuantity());
-                foodsWithQuantity.add(foodWithQuantity);
-            }
-            dailyOrder.setFoods(foodsWithQuantity);
-            return dailyOrder;
 
+        //long userId = user.getId();
+        // check if there is no order with this id 
+        ConcurrentOrderDeletionCheck(dailyMenuId, dailyMenuVersion, dailyMenuDate, user, dailyOrderEntity);
+        org.bootcamp.yum.data.entity.DailyMenu dailyMenuEntity = dailyOrderEntity.getDailyMenu();
+        DailyOrder dailyOrder = new DailyOrder();
+        dailyOrder.setDailyMenuDate(dailyMenuEntity.getDate());
+        LastEdit lastEdit = new LastEdit();
+        lastEdit.setTimeStamp(dailyOrderEntity.getLastEdit());
+        lastEdit.setVersion(dailyOrderEntity.getVersion());
+        dailyOrder.setLastEdit(lastEdit);
+        List<FoodWithQuantity> foodsWithQuantity = new ArrayList<>();
+        for (org.bootcamp.yum.data.entity.OrderItem orderItemEntity : dailyOrderEntity.getOrderItems()) {
+            FoodWithQuantity foodWithQuantity = new FoodWithQuantity();
+            Food food = orderItemEntity.getFood().toDtoFood();
+            foodWithQuantity.setFood(food);
+            foodWithQuantity.setQuantity(orderItemEntity.getQuantity());
+            foodsWithQuantity.add(foodWithQuantity);
         }
+        dailyOrder.setFoods(foodsWithQuantity);
+        return dailyOrder;
+
     }
-//    }
+
+    
+    private org.bootcamp.yum.data.entity.User getUserOfDailyOrder(org.bootcamp.yum.data.entity.User sourceUser, Long userId) throws ApiException {
+
+        //org.bootcamp.yum.data.entity.User sourceUser = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        org.bootcamp.yum.data.entity.User user;
+
+        //  Validation for sourceUser, 
+        if (sourceUser == null) {
+            throw new ApiException(400, "User not found.");
+        }
+
+        if (userId != 0) {
+            if (!sourceUser.getUserRole().toString().equalsIgnoreCase("admin")) {
+                throw new ApiException(401, "Access denied.");
+            }
+
+            user = userRep.findById(userId);
+            if (user == null) {
+                throw new ApiException(400, "User not found.");
+            }
+        } else {
+            user = sourceUser;
+        }
+
+        return user;
+
+    }
+    
+    private Boolean allowAdminAfterTodayChangeOrder(org.bootcamp.yum.data.entity.User sourceUser, LocalDate menuDate, Long userId){
+        if (userId != 0 && sourceUser.getUserRole().toString().equalsIgnoreCase("admin") && (menuDate.isEqual(new LocalDate()) || menuDate.isAfter(new LocalDate()))) {
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean deadlinePassed(LocalDate date) {
+        Settings settings = settingsRep.findOne(1);
+        int deadlineDays = settings.getDeadlineDays();
+        LocalTime deadlineTime = settings.getDeadline();
+         
+        date = date.minusDays(deadlineDays);
+        
+        while (this.holidaysRepo.findByIdHoliday(date) != null) {
+             date = date.minusDays(1);
+        }        
+        
+        // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
+        return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
+    }
 }

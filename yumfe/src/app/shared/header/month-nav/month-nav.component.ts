@@ -29,8 +29,8 @@ export class MonthNavComponent implements OnInit, OnChanges {
     //Catch changes from outside component
      if(changes.viewDate!==undefined){
        if (!changes.viewDate.isFirstChange()) {
-         console.log("MonthNavComponent Changes:");
-         console.log('Outside changed month nav date:', changes.viewDate);
+        // console.log("MonthNavComponent Changes:");
+         //console.log('Outside changed month nav date:', changes.viewDate);
        }
      }
   }
@@ -39,8 +39,8 @@ export class MonthNavComponent implements OnInit, OnChanges {
      //Catch changes from inside component
     if (this.viewDate !== this.oldViewDate) {
       this.oldViewDate = this.viewDate ;
-      //this.emitDate();
-      console.log('changed month nav date:', this.viewDate);
+      // 
+      //console.log('changed month nav date:', this.viewDate);
     }
   }
 

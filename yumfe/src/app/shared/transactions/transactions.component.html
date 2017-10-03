@@ -22,7 +22,7 @@
 
      <ng-container mdColumnDef="datetime">
       <md-header-cell *mdHeaderCellDef> Date/Time </md-header-cell>
-      <md-cell *mdCellDef="let element">{{element.datetime | date: 'dd-MM/yyyy HH:mm:ss'}}</md-cell>
+      <md-cell *mdCellDef="let element">{{element.datetime | date: 'dd-MM-yyyy HH:mm:ss'}}</md-cell>
     </ng-container>
 
     <ng-container mdColumnDef="transactionType">
