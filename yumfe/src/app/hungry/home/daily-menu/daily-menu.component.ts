@@ -37,16 +37,17 @@ export class DailyMenuComponent implements OnInit {
 
   ngOnInit() {
     this.currency = this.globalSettingsService.getCurrency();
-    this.setup();
+    //this.setup();
   }
 
-  setup() {    
+  setup() {     
+    
     this.createFoodMap();
     
     if (this.dailyMenu.orderId != null) {
       this.isOrderBoolean = true;
       this.dailyTotalPrice.emit(this.getTotalPrice());
-      if (!this.dailyMenu.isFinal) {
+      if (!this.isFinalised()) {
         this.getOrderLastEdit(); // Set order lastEdit.
       }
     }
@@ -54,7 +55,7 @@ export class DailyMenuComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     //console.log("Changes:", changes);
-    if (changes.dailyMenu && !changes.dailyMenu.isFirstChange()) {
+    if (changes.dailyMenu) { //&& !changes.dailyMenu.isFirstChange() 
       this.setup();
       // console.log('Changed:', changes.total.currentValue, changes.total.previousValue);
     }
@@ -221,7 +222,7 @@ export class DailyMenuComponent implements OnInit {
             updateOrderItem.emailRequest = true;
           } else {
             updateOrderItem.emailRequest = false;
-          }
+          } 
           updateOrderItem.lastEdit = this.lastEditDailyOrder;
           for (const orderedFood of orderFoods) {
             const foodItem: remote.OrderItem = {};
@@ -233,6 +234,9 @@ export class DailyMenuComponent implements OnInit {
           // Call, order with id put API.
           this.hungryService.ordersIdPut(this.dailyMenu.orderId, this.controlledUser ? this.controlledUser.id : 0, updateOrderItem)
             .subscribe(lastEdit => {
+              if(!lastEdit){
+                console.error("No lastEdit fetched for order!");
+              }
               this.lastEditDailyOrder = lastEdit;
               this.isOrderBoolean = true;
               this.modifyChecked = false;
