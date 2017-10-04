@@ -1,0 +1,11 @@
+<h1 md-dialog-title class="centered">Order Summary Email</h1>
+<md-dialog-content  class="centered">
+  <div>Do you want to send an email report</div>
+  <div>with this day's order summary?</div>
+</md-dialog-content>
+<md-grid-list cols="4" rowHeight="20px">
+</md-grid-list>
+<div fxLayout="row" fxLayoutAlign="space-around center">
+  <button md-raised-button color="accent" (click)="dialogRef.close('Yes')">Yes</button>
+  <button md-raised-button color="accent" (click)="dialogRef.close('No')">No</button>
+</div>
