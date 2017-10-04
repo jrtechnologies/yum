@@ -3,18 +3,12 @@
 }
 
 .style-page-buttons{
-  flex: 1 2 100% !important;
-  box-sizing: border-box;
-  -webkit-box-flex: 1;
-  max-width: 50%;
-  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
-.up-buttons {
-  padding-top: 8% !important;
-}
-
-.down-buttons {
+.bottom-buttons {
   padding-bottom: 100px;
 }
 
