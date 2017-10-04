@@ -44,6 +44,10 @@ public class Transaction {
     @JoinColumn(name = "source_id", insertable = false, updatable = false)
     private User sourceUser;
     
+    @ManyToOne
+    @JoinColumn(name = "menu_id", insertable = false, updatable = false)
+    private DailyMenu dailyMenu;
+        
     @Column(name = "user_id")
     private long userId;
 
@@ -61,20 +65,24 @@ public class Transaction {
     private long sourceId;
     
     @Column(name = "order_id")
-    private long orderId;
+    private Long orderId;
+    
+    @Column(name = "menu_id")
+    private Long menuId;
 
     @Column(name = "order_type")
-    private int orderType;
+    private Integer orderType;
 
     public Transaction() {
     }
 
-    public Transaction(long userId, BigDecimal amount, BigDecimal balance, long sourceId, long orderId, int orderType) {
+    public Transaction(long userId, BigDecimal amount, BigDecimal balance, long sourceId, Long orderId, Long menuId, int orderType) {
         this.userId = userId;
         this.amount = amount;
         this.balance = balance;
         this.sourceId = sourceId;
         this.orderId = orderId;
+        this.menuId = menuId;
         this.orderType = orderType;
     }
 
@@ -102,6 +110,24 @@ public class Transaction {
         this.sourceUser = sourceUser;
     }
 
+    public DailyMenu getDailyMenu() {
+        return dailyMenu;
+    }
+
+    public void setDailyMenu(DailyMenu dailyMenu) {
+        this.dailyMenu = dailyMenu;
+    }
+
+    public Long getMenuId() {
+        return menuId;
+    }
+
+    public void setMenuId(Long menuId) {
+        this.menuId = menuId;
+    }
+
+    
+    
     public long getUserId() {
         return userId;
     }
@@ -142,20 +168,22 @@ public class Transaction {
         this.sourceId = sourceId;
     }
 
-    public long getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(long orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 
-    public int getOrderType() {
+    public Integer getOrderType() {
         return orderType;
     }
 
-    public void setOrderType(int orderType) {
+    public void setOrderType(Integer orderType) {
         this.orderType = orderType;
     }
+
+    
     
 }

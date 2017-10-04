@@ -27,6 +27,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import org.bootcamp.yum.data.converter.LocalDateAttributeConverter;
@@ -49,7 +50,8 @@ public class User {
     private List<DailyOrder> dailyOrders;
     
     @OneToMany(mappedBy = "user")
-    private List<Transaction> transaction;
+    @OrderBy("id DESC")
+    private List<Transaction> transactions;
 
     @Column(name = "last_name")
     private String lastName;
@@ -316,12 +318,12 @@ public class User {
         this.balance = balance;
     }
 
-    public List<Transaction> getTransaction() {
-        return transaction;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setTransaction(List<Transaction> transaction) {
-        this.transaction = transaction;
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
     
     

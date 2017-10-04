@@ -26,6 +26,7 @@ export * from './ResetPwd';
 export * from './Settings';
 export * from './Statistic';
 export * from './Token';
+export * from './Transaction';
 export * from './UpdateOrderItems';
 export * from './User';
 export * from './UserOrder';

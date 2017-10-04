@@ -71,17 +71,7 @@ public class OrdersService {
     @Autowired
     private TransactionRepository transactionRep;
 
-//    private void createTransaction(Long userId, BigDecimal amount, BigDecimal balance, Long orderId, String orderType) {
-//        Transaction transaction = new Transaction();
-//        transaction.setUserId(userId);
-//        transaction.setAmount(amount);     
-//        transaction.setBalance(balance);
-//        //Retrieves source user id form token
-//        transaction.setSourceId((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-//        transaction.setOrderId(0);
-//        transactionRep.save(transaction);
-//
-//    }
+    
     @Transactional
     public DailyMenu ordersPost(Order order, Long reqUserId) throws ApiException {
         
@@ -192,7 +182,7 @@ public class OrdersService {
                     }
 
                     user.setBalance(balance);
-                    Transaction transaction = new Transaction(userId, orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), 1);
+                    Transaction transaction = new Transaction(userId, orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(),dailyMenuId, 1);
                     transactionRep.save(transaction);
 
                     List<FoodWithQuantity> foodsWQ = dailyMenu.getFoods();
@@ -229,7 +219,7 @@ public class OrdersService {
 
     }
 
-    private void ConcurrentOrderDeletionCheck(Long id, Long dailyMenuId, int dailyMenuVersion, LocalDate dailyMenuDate,
+    private void ConcurrentOrderDeletionCheck(Long dailyMenuId, int dailyMenuVersion, LocalDate dailyMenuDate,
             org.bootcamp.yum.data.entity.User user, org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity) throws ApiException {
 
         long userId = user.getId();
@@ -287,7 +277,7 @@ public class OrdersService {
 
 
             // check if there is no order with this id 
-            ConcurrentOrderDeletionCheck(id, updateOrderItems.getDailyMenuId(), updateOrderItems.getDailyMenuVersion(),
+            ConcurrentOrderDeletionCheck(updateOrderItems.getDailyMenuId(), updateOrderItems.getDailyMenuVersion(),
                     updateOrderItems.getDailyMenuDate(), user, dailyOrderEntity);
 
             //  Validation for daily menu
@@ -418,7 +408,8 @@ public class OrdersService {
                     }
 
                     user.setBalance(balance);
-                    Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), 2);
+
+                    Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 2);
                     transactionRep.save(transaction);
 
                     return lastEdit;
@@ -444,7 +435,7 @@ public class OrdersService {
         org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity = dailyOrderRep.findByDailyOrderId(id);
 
         // check if there is no order with this id 
-        ConcurrentOrderDeletionCheck(id, dailyMenuDetails.getDailyMenuId(), dailyMenuDetails.getDailyMenuVersion(),
+        ConcurrentOrderDeletionCheck(dailyMenuDetails.getDailyMenuId(), dailyMenuDetails.getDailyMenuVersion(),
                 dailyMenuDetails.getDailyMenuDate(), user, dailyOrderEntity);
 
         org.bootcamp.yum.data.entity.DailyMenu dailyMenuEntity = dailyOrderEntity.getDailyMenu();
@@ -468,7 +459,8 @@ public class OrdersService {
                 balance = balance.add(orderAmount);
             }
             user.setBalance(balance);
-            Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), 3);
+
+            Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 3);
             transactionRep.save(transaction);
             dailyOrderRep.delete(dailyOrderEntity);
         }
@@ -484,7 +476,7 @@ public class OrdersService {
 
         //long userId = user.getId();
         // check if there is no order with this id 
-        ConcurrentOrderDeletionCheck(id, dailyMenuId, dailyMenuVersion, dailyMenuDate, user, dailyOrderEntity);
+        ConcurrentOrderDeletionCheck(dailyMenuId, dailyMenuVersion, dailyMenuDate, user, dailyOrderEntity);
         org.bootcamp.yum.data.entity.DailyMenu dailyMenuEntity = dailyOrderEntity.getDailyMenu();
         DailyOrder dailyOrder = new DailyOrder();
         dailyOrder.setDailyMenuDate(dailyMenuEntity.getDate());
@@ -505,29 +497,6 @@ public class OrdersService {
 
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     private org.bootcamp.yum.data.entity.User getUserOfDailyOrder(org.bootcamp.yum.data.entity.User sourceUser, Long userId) throws ApiException {
 

@@ -6,7 +6,6 @@ import { BalanceComponent, BalanceDialog } from './balance.component'
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 
-
 @NgModule({
   imports: [
     CommonModule,

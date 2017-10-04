@@ -11,7 +11,7 @@ import { FoodsService } from './services/foods.service';
 import { ChefNavComponent } from './shared/chef-nav/chef-nav.component';
 import { MenusComponent } from './menus/menus.component';
 import { OrdersComponent } from './orders/orders.component';
-import { OrdersdayComponent } from './ordersday/ordersday.component';
+import { OrdersdayComponent, ReportEmailDialog } from './ordersday/ordersday.component';
 import { DailyMenuComponent } from './menus/daily-menu/daily-menu.component';
 import { FormsModule } from '@angular/forms';
 import { OrderTotalComponent } from './orders/order-total/order-total.component';
@@ -35,6 +35,7 @@ import {ChefRouteGuard} from './chef-route.guard';
      MenusComponent,
      OrdersComponent,
      OrdersdayComponent,
+     ReportEmailDialog,
      DailyMenuComponent,
      DeleteAskDialogComponent,
      OrderTotalComponent,
@@ -43,6 +44,6 @@ import {ChefRouteGuard} from './chef-route.guard';
 
 
   providers: [ChefApi, FoodsService, ChefRouteGuard],
-  entryComponents: [EditCloneDialogComponent, DeleteDialogComponent, DeleteAskDialogComponent]
+  entryComponents: [EditCloneDialogComponent, DeleteDialogComponent, DeleteAskDialogComponent, ReportEmailDialog]
 })
 export class ChefModule { }

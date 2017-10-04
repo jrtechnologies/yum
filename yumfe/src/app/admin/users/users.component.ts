@@ -16,7 +16,7 @@ import { ControlUserService } from '../../shared/services/control-user.service';
 export class UsersComponent implements OnInit {
 
   private sub: any;
-  private userId = 0;
+  public userId = 0;
   public user: remote.User;
   public profileGroup: FormGroup;
   //copy initial input values for enabling/disabling submit button
@@ -29,11 +29,22 @@ export class UsersComponent implements OnInit {
   //spinner
   public showSpinner = false;
   public invalid = false;
-  public externalAuth: Boolean = false; 
+  public externalAuth: Boolean = false;
+  public balanceGroup: FormGroup;
+  public balance: number;
+  public balanceUpdate = false;
 
-  constructor(private route: ActivatedRoute, private adminService: remote.AdminApi, private fb: FormBuilder,
-    public snackBar: MdSnackBar, public dialog: MdDialog, private router: Router,
-    private authService: AuthenticationService, private controlUserService:ControlUserService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private adminService: remote.AdminApi,
+    private fb: FormBuilder,
+    public snackBar: MdSnackBar,
+    public dialog: MdDialog,
+    private router: Router,
+    private authService: AuthenticationService,
+    private controlUserService:ControlUserService
+  ) { }
+
 
   ngOnInit() {
     //check if id is valid
@@ -202,6 +213,14 @@ export class UsersComponent implements OnInit {
   handleUpdateVersion() {
     this.user.lastEdit.version += 1;
   }
+
+  handleBalanceUpdated() {
+    if (this.balanceUpdate) {
+      this.balanceUpdate = false;
+    } else {
+      this.balanceUpdate = true;
+    }
+   }
 
   viewUserMenu(){
     //this.router.navigate(['/hungry/?userid='+this.userId]);

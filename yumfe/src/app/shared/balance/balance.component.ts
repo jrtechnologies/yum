@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MdSnackBar, MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
@@ -15,6 +15,7 @@ export class BalanceComponent implements OnInit {
 
   @Input() user: remote.User;
   @Input() admin = false;
+  @Output() balanceUpdated = new EventEmitter();
   public balanceGroup: FormGroup;
   public balance: number;
   public currency: Observable<string>;
@@ -94,6 +95,7 @@ export class BalanceComponent implements OnInit {
           value => {
             this.balanceGroup.reset();
             this.balance = value;
+            this.balanceUpdated.emit();
             this.openSnackBar('Successfull user\'s balance update', 'ok', 1);
           },
           error => {

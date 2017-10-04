@@ -265,6 +265,21 @@ export class ChefApi {
             });
     }
 
+    /**
+     *
+     * @summary Send email with daily summary
+     * @param day
+     */
+    public reportDayPost(day: string, extraHttpRequestParams?: any): Observable<{}> {
+        return this.reportDayPostWithHttpInfo(day, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json() || {};
+                }
+            });
+    }
 
     /**
      * Put Food/Foods in a dailyMenu
@@ -861,6 +876,49 @@ export class ChefApi {
             search: queryParameters
         });
 
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
+        }
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * Send email with daily summary
+     *
+     * @param day
+     */
+    public reportDayPostWithHttpInfo(day: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + '/report/${day}'
+                    .replace('${' + 'day' + '}', String(day));
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'day' is not null or undefined
+        if (day === null || day === undefined) {
+            throw new Error('Required parameter day was null or undefined when calling reportDayPost.');
+        }
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json'
+        ];
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKey) {
+            headers.set('Authorization', this.configuration.apiKey);
+        }
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Post,
+            headers: headers,
+            search: queryParameters,
+            withCredentials:this.configuration.withCredentials
+        });
         // https://github.com/swagger-api/swagger-codegen/issues/4037
         if (extraHttpRequestParams) {
             requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);

@@ -1,4 +1,4 @@
-<md-grid-list cols="8" rowHeight="30px" class= "adm-header">
+<md-grid-list cols="8" rowHeight="30px" class="adm-header">
   <md-grid-tile colspan="4" rowspan="1" class="left-no-pad">
     <div class="adm-header-title">
       Welcome administrator!
@@ -102,22 +102,22 @@
   <div class="adm-user-list">User List</div>
 </div>
 
-<md-grid-list cols="18" rowHeight="80px">
-  <md-grid-tile colspan="3" class="left-no-pad">
-    <md-select [ngModel]="pageSize" (ngModelChange)="changePageSize($event)" placeholder="Show" name="show">
+<md-grid-list cols="100" rowHeight="80px">
+  <md-grid-tile colspan="9" class="left-no-pad">
+    <md-select [ngModel]="pageSize" (ngModelChange)="changePageSize($event)" placeholder="Show" name="show" class="smallerSelect">
       <md-option *ngFor="let pageSizeOption of pageSizes" [value]="pageSizeOption.value">
         {{ pageSizeOption.viewValue }}
       </md-option>
     </md-select>
   </md-grid-tile>
-  <md-grid-tile colspan="3" class="left-no-pad">
-    <md-select [ngModel]="orderBy" (ngModelChange)="changeOrderBy($event)" placeholder="Order by" name="order" class="largerSelect">
+  <md-grid-tile colspan="15" class="left-no-pad">
+    <md-select [ngModel]="orderBy" (ngModelChange)="changeOrderBy($event)" placeholder="Order by" name="order" class="mediumSelect">
       <md-option *ngFor="let orderByOption of orderByOptions" [value]="orderByOption.value">
         {{ orderByOption.viewValue }}
       </md-option>
     </md-select>
   </md-grid-tile>
-  <md-grid-tile colspan="2" class="direction-title left-no-pad">
+  <md-grid-tile colspan="9" class="direction-title left-no-pad">
     <div>
       <div class="direction">Desc</div>
       <div>
@@ -131,7 +131,18 @@
       </div>
     </div>
   </md-grid-tile>
-  <md-grid-tile colspan="10" class="right-no-pad">
+  <md-grid-tile colspan="11" class="left-no-pad">
+    <form novalidate [formGroup]="searchGroup" autocomplete="off">
+      <md-form-field class="top-pad">
+        <md-placeholder>
+          Last name  <md-icon class="material-icons">search</md-icon>
+        </md-placeholder>
+        <input mdInput type="text" formControlName="lastName" (keyup)="searchUsers()">
+         <md-hint *ngIf="searchGroup.get('lastName').value===null || searchGroup.get('lastName').value.length<3">At least 3 first chars </md-hint>
+      </md-form-field>
+    </form>
+  </md-grid-tile>
+  <md-grid-tile colspan="56" class="right-no-pad">
     <app-pagination (changePage)="handlechangePage($event)" [totalItems]="totalUsers" [currentPage]="page" [pageSize]="pageSize"></app-pagination>
   </md-grid-tile>
 </md-grid-list>

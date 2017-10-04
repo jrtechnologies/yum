@@ -32,6 +32,7 @@ import org.bootcamp.yum.api.model.UserReg;
 import org.bootcamp.yum.api.model.UserSettings;
 import org.bootcamp.yum.api.model.UsersPage;
 import org.bootcamp.yum.data.converter.UserRoleConverter;
+import org.bootcamp.yum.data.entity.DailyMenu;
 import org.bootcamp.yum.data.entity.DailyOrder;
 import org.bootcamp.yum.data.entity.OrderItem;
 import org.bootcamp.yum.data.entity.Settings;
@@ -82,8 +83,10 @@ public class UsersService {
         // retrieve admin's id
         Long sourceId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         for (DailyOrder dailyOrder : dailyOrders) {
-            if (!deadlinePassed(dailyOrder.getDailyMenu().getDate())) {
+            DailyMenu dailyMenu = dailyOrder.getDailyMenu();
+            if (!deadlinePassed(dailyMenu.getDate())) {
             //if (!settings.deadlinePassed(dailyOrder.getDailyMenu().getDate())) {
+
                 // Calculate order amount, add to user's balance and insert a transaction to the db
                 BigDecimal orderAmount = new BigDecimal(0);
                 for (OrderItem orderItem : dailyOrder.getOrderItems()) {
@@ -96,7 +99,7 @@ public class UsersService {
                     balance = balance.add(orderAmount);
                 }
                 user.setBalance(balance);
-                Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceId, dailyOrder.getDailyOrderId(), 3);
+                Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceId, dailyOrder.getDailyOrderId(), dailyMenu.getId(), 3);
                 transactionRepo.save(transaction);
                 dailyOrderRepo.delete(dailyOrder);
             } else {
@@ -219,7 +222,7 @@ public class UsersService {
     }
 
     @Transactional
-    public UsersPage usersGet(String pageStr, String sizeStr, String orderBy, String orderDirection) throws ApiException, Exception {
+    public UsersPage usersGet(String pageStr, String sizeStr, String orderBy, String orderDirection, String lastName) throws ApiException, Exception {
 
         UsersPage usersPage = new UsersPage();
         List<String> validOrderBy = Arrays.asList("registrationDate", "lastName", "userRole", "approved");
@@ -266,10 +269,13 @@ public class UsersService {
                 break;
         }
 
-//        System.out.println(pr);
-        //Iterable<org.bootcamp.yum.data.entity.User> usersPageable = userRepo.findAll();
-        Page<org.bootcamp.yum.data.entity.User> usersPageable = userRepo.findAll(pr);
-        //totalPages = 
+        Page<org.bootcamp.yum.data.entity.User> usersPageable;
+        if (lastName == null){
+            usersPageable = userRepo.findAll(pr);
+        } else {
+            usersPageable = userRepo.findByLastNameStartingWith(pr,lastName);
+        }
+       
         totalPages = usersPageable.getTotalPages();
         totalElements = usersPageable.getTotalElements();
 

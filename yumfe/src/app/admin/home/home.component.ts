@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
   private totalpages: number;
   public showLoadSpinner = false;
   public externalAuth: Boolean = false;
+  private searchTerm: string= null;
 
   // Options for pageSize Select
   public pageSizes = [
@@ -37,8 +38,9 @@ export class HomeComponent implements OnInit {
     { value: 'approved', viewValue: 'Approval status' }
   ];
 
-  //form
+  // forms
   public userGroup: FormGroup;
+  public searchGroup: FormGroup;
 
   // create user spinner
   public showSpinner = false;
@@ -100,16 +102,20 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     // Create Form group, form controls, validators
     this.userGroup = this.buildForm();
-    this.loadUsers(this.page); 
+    this.loadUsers(this.page);
     this.externalAuth = this.authService.hasExternalAuth();
-     
+
+    this.searchGroup = this.fb.group({
+       lastName: [''],
+    });
+
   }
 
 
   // load users of specific page
   private loadUsers(page: number) {
     this.showLoadSpinner = true;
-    this.adminService.usersGet((page - 1).toString(), this.pageSize.toString(), this.orderBy, this.direction).subscribe(usersPage => {
+    this.adminService.usersGet((page - 1).toString(), this.pageSize.toString(), this.orderBy, this.direction, this.searchTerm).subscribe(usersPage => {
       this.users = usersPage.users;
       this.totalUsers = usersPage.totalElements;
       this.totalpages = usersPage.totalPages;
@@ -212,6 +218,18 @@ export class HomeComponent implements OnInit {
   handlechangePage(page) {
     this.page = page;
     this.loadUsers(page);
+  }
+
+  searchUsers() {
+
+    const inputSearchTerm = this.searchGroup.get('lastName').value;
+    if (inputSearchTerm.length > 2) {
+      this.searchTerm = inputSearchTerm;
+      this.loadUsers(1);
+    } else if (inputSearchTerm.length === 0) {
+      this.searchTerm = null;
+      this.loadUsers(1);
+    }
   }
 
 }

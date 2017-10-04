@@ -13,7 +13,7 @@ info:
     otherwise.
 
 
-    Find source code of this API [here](https://github.com/jrtechnologies/yum)
+    Find source code of this API [here](https://github.com/jrtdev/yum)
 
 
     Copyright (C) 2017 JR Technologies.
@@ -21,7 +21,7 @@ info:
       
     ------------------------------------
 
-        Last edit: 04/10/2017 10:00
+        Last edit: 28/09/2017 10:00
 
     -------------------------------------
 basePath: /api
@@ -216,8 +216,6 @@ paths:
           description: Concurrent modification error
           schema:
             $ref: '#/definitions/User'
-        '412':
-          description: User email exists
         '500':
           $ref: '#/responses/Error'
   /settings/picture:
@@ -246,7 +244,7 @@ paths:
         - Bearer: []
       tags:
         - hungry
-      summary: Deletes profile picture.
+      summary: deletes profile picture.
       responses:
         '204':
           description: Picture deleted
@@ -256,7 +254,6 @@ paths:
     get:
       tags:
         - hungry
-      summary: Get profile picture.
       description: Get profile picture.
       parameters:
         - name: token
@@ -367,11 +364,6 @@ paths:
           in: path
           required: true
           type: string
-        - name: userid
-          in: query
-          required: false
-          type: integer
-          format: int64
       responses:
         '200':
           description: A list of daily menus.
@@ -973,6 +965,27 @@ paths:
           description: bad request
         '500':
           $ref: '#/responses/Error'
+  '/report/{day}':
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - chef
+      summary: Send email with daily summary
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: day
+          required: true
+          type: string
+      responses:
+        '204':
+          description: Email sent
+        '400':
+          description: bad request
+        '500':
+          $ref: '#/responses/Error'
   /users:
     get:
       security:
@@ -1001,6 +1014,11 @@ paths:
         - name: orderDirection
           in: query
           description: Request orderBy filter
+          required: false
+          type: string
+        - name: lastName
+          in: query
+          description: Request search term
           required: false
           type: string
       responses:
@@ -1398,6 +1416,32 @@ paths:
           schema:
             type: number
             format: int64
+        '500':
+          $ref: '#/responses/Error'
+  '/transactions/{id}':
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - hungry
+      description: Get user's transactions
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: ok
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
         '500':
           $ref: '#/responses/Error'
 definitions:
@@ -1802,6 +1846,28 @@ definitions:
       balance:
         type: number
         format: int64
+  Transaction:
+    type: object
+    description: Transaction with balance
+    properties:
+      amount:
+        type: number
+        format: int64
+      balance:
+        type: number
+        format: int64
+      datetime:
+        type: string
+        format: date-time
+      firstName:
+        type: string
+      lastName:
+        type: string
+      menuDate:
+        type: string
+        format: date
+      orderType:
+        type: string
 responses:
   Error:
     description: An unexpected error occured.

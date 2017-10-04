@@ -7,7 +7,7 @@
       "name": "GPLv3",
       "url": "http://www.gnu.org/licenses/"
     },
-    "description": "**Yum application, order food daily from the best chef in town**\n\nThis API is used by the angular.io client, and is not meant to be used otherwise.\n\nFind source code of this API [here](https://github.com/jrtechnologies/yum)\n\nCopyright (C) 2017 JR Technologies.\n\n  \n------------------------------------\n\n    Last edit: 04/10/2017 10:00\n\n-------------------------------------\n"
+    "description": "**Yum application, order food daily from the best chef in town**\n\nThis API is used by the angular.io client, and is not meant to be used otherwise.\n\nFind source code of this API [here](https://github.com/jrtdev/yum)\n\nCopyright (C) 2017 JR Technologies.\n\n  \n------------------------------------\n\n    Last edit: 28/09/2017 10:00\n\n-------------------------------------\n"
   },
   "basePath": "/api",
   "schemes": [
@@ -295,9 +295,6 @@
               "$ref": "#/definitions/User"
             }
           },
-          "412": {
-            "description": "User email exists"
-          },
           "500": {
             "$ref": "#/responses/Error"
           }
@@ -347,7 +344,7 @@
         "tags": [
           "hungry"
         ],
-        "summary": "Deletes profile picture.",
+        "summary": "deletes profile picture.",
         "responses": {
           "204": {
             "description": "Picture deleted"
@@ -363,7 +360,6 @@
         "tags": [
           "hungry"
         ],
-        "summary": "Get profile picture.",
         "description": "Get profile picture.",
         "parameters": [
           {
@@ -536,13 +532,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "userid",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64"
           }
         ],
         "responses": {
@@ -1494,6 +1483,41 @@
         }
       }
     },
+    "/report/{day}": {
+      "post": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "chef"
+        ],
+        "summary": "Send email with daily summary",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "day",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Email sent"
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "500": {
+            "$ref": "#/responses/Error"
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "security": [
@@ -1534,6 +1558,13 @@
             "name": "orderDirection",
             "in": "query",
             "description": "Request orderBy filter",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "lastName",
+            "in": "query",
+            "description": "Request search term",
             "required": false,
             "type": "string"
           }
@@ -2167,6 +2198,48 @@
           }
         }
       }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "hungry"
+        ],
+        "description": "Get user's transactions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Transaction"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "$ref": "#/responses/Error"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -2757,6 +2830,37 @@
         "balance": {
           "type": "number",
           "format": "int64"
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "description": "Transaction with balance",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "format": "int64"
+        },
+        "balance": {
+          "type": "number",
+          "format": "int64"
+        },
+        "datetime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "menuDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "orderType": {
+          "type": "string"
         }
       }
     }
