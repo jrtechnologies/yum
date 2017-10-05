@@ -107,8 +107,8 @@ public class FoodsApiControllerTest {
     @WithMockAuth(id="1")
     public void testFoodsGetOk() throws Exception {
         
-        Food mockFoodOk = new Food(10, "Pastitsio", new ArrayList<>(), FoodType.MAIN, "test Pastitsio", new BigDecimal("5.65"), false, null);
-        Food mockFoodOk2 = new Food(11, "Pastitsio2", new ArrayList<>(), FoodType.MAIN, "test Pastitsio2", new BigDecimal("5.65"), false, null);
+        Food mockFoodOk = new Food(10, "Pastitsio", new ArrayList<>(), FoodType.MAIN, "test Pastitsio", new BigDecimal("5.65"), false, null, false);
+        Food mockFoodOk2 = new Food(11, "Pastitsio2", new ArrayList<>(), FoodType.MAIN, "test Pastitsio2", new BigDecimal("5.65"), false, null, false);
         // Mock List of Foods
         List<Food> mockFoodList = new ArrayList<>();
         // Adding an ok mock Food instance
@@ -153,7 +153,7 @@ public class FoodsApiControllerTest {
     @Test
     @WithMockAuth(id="1")
     public void testFoodsPutOk() throws Exception {
-        Food mockFoodOk = new Food(10, "Pastitsio", new ArrayList<>(), FoodType.MAIN, "test Pastitsio", new BigDecimal("5.65"), false, newLastEdit("01/01/2017 00:00:00"));
+        Food mockFoodOk = new Food(10, "Pastitsio", new ArrayList<>(), FoodType.MAIN, "test Pastitsio", new BigDecimal("5.65"), false, newLastEdit("01/01/2017 00:00:00"), false);
    
         Settings global_settings = new Settings(1, LocalTime.MIDNIGHT,  DateTime.now(), "", "", "", "", 0, 1,"","");
         
@@ -166,6 +166,7 @@ public class FoodsApiControllerTest {
         "  \"foodType\": \"Drink\",\n" +
         "  \"description\": \"string\",\n" +
         "  \"price\": 10,\n" +
+        "  \"standard\": \"false\",\n" +
         "  \"lastEdit\": {\n" +
         "    \"timeStamp\": \"2017-01-01T00:00:00.000Z\"\n" +
         "  }\n" +
@@ -183,7 +184,7 @@ public class FoodsApiControllerTest {
     @WithMockAuth(id="1")
     public void testFoodsPostOk() throws Exception {
         
-        Food mockFoodOk = new Food(0, "Pastitsio", new ArrayList<>(), FoodType.MAIN, "test Pastitsio", new BigDecimal("5.65"), false, null);         
+        Food mockFoodOk = new Food(0, "Pastitsio", new ArrayList<>(), FoodType.MAIN, "test Pastitsio", new BigDecimal("5.65"), false, null, true);         
         Settings global_settings = new Settings(1, LocalTime.MIDNIGHT,  DateTime.now(), "", "", "", "", 0, 1, "", "");
         
         
@@ -195,6 +196,7 @@ public class FoodsApiControllerTest {
         "  \"foodName\": \""+mockFoodOk.getName()+"\",\n" +
         "  \"foodType\": \""+foodType.convertToDatabaseColumn(mockFoodOk.getFoodType())+"\",\n" +
         "  \"description\": \""+mockFoodOk.getDescription()+"\",\n" +
+        "  \"standard\": \""+mockFoodOk.isStandard()+"\",\n" +
         "  \"price\": "+mockFoodOk.getPrice()+"\n" +
        
         "}"
@@ -212,7 +214,7 @@ public class FoodsApiControllerTest {
     @WithMockAuth(id="1")
     public void testFoodsPostSameName() throws Exception {
         
-        Food mockFoodOk = new Food(0, "Pastitsio", new ArrayList<>(), FoodType.MAIN, "test Pastitsio", new BigDecimal("5.65"), false, null);   
+        Food mockFoodOk = new Food(0, "Pastitsio", new ArrayList<>(), FoodType.MAIN, "test Pastitsio", new BigDecimal("5.65"), false, null, false);   
         List<Food> mockFoodList = new ArrayList<>();
         mockFoodList.add(mockFoodOk);
         
@@ -239,7 +241,7 @@ public class FoodsApiControllerTest {
     @Test
     @WithMockAuth(id="1")
     public void testFoodsPutArchived() throws Exception {
-        Food mockFoodOk = new Food(1, "Pastitsio", new ArrayList<>(), FoodType.MAIN, "test Pastitsio", new BigDecimal("5.65"), true, newLastEdit("01/01/2017 00:00:00"));
+        Food mockFoodOk = new Food(1, "Pastitsio", new ArrayList<>(), FoodType.MAIN, "test Pastitsio", new BigDecimal("5.65"), true, newLastEdit("01/01/2017 00:00:00"), false);
    
         given(mockFoodRepository.findById(10)).willReturn(mockFoodOk);
         

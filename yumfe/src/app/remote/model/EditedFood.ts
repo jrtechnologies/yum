@@ -23,4 +23,5 @@ export interface EditedFood {
 
     lastEdit?: models.LastEdit;
 
+    standard?: boolean;
 }

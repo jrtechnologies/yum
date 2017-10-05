@@ -404,6 +404,15 @@
         ],
         "summary": "Gets weekly menus",
         "description": "Returns a list containing all menus of the week.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "userid",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
         "responses": {
           "200": {
             "description": "A list of daily menus",
@@ -433,6 +442,13 @@
         "summary": "Gets weekly menu of the specified week",
         "description": "Returns a list containing all menus of the week.",
         "parameters": [
+          {
+            "name": "userid",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
           {
             "name": "week",
             "description": "ex. 02-2017",
@@ -472,6 +488,15 @@
         ],
         "summary": "Gets monthly menus.",
         "description": "Return a list containing all menus of the month.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "userid",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
         "responses": {
           "200": {
             "description": "A list of daily menus.",
@@ -542,6 +567,13 @@
         "description": "A new order for the specified daily menu",
         "parameters": [
           {
+            "in": "query",
+            "name": "userid",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
             "name": "order",
             "in": "body",
             "description": "The order to place",
@@ -591,9 +623,16 @@
         "tags": [
           "hungry"
         ],
-        "summary": "Modifies order for the specified day",
         "description": "Modify the order",
+        "summary": "Get order for the specified day",
         "parameters": [
+          {
+            "in": "query",
+            "name": "userid",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
           {
             "name": "id",
             "in": "path",
@@ -659,6 +698,13 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "query",
+            "name": "userid",
+            "required": false,
             "type": "integer",
             "format": "int64"
           },
@@ -747,6 +793,13 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "query",
+            "name": "userid",
+            "required": false,
             "type": "integer",
             "format": "int64"
           },
@@ -903,6 +956,9 @@
                 "price": {
                   "type": "number",
                   "format": "double"
+                },
+                "standard": {
+                  "type": "boolean"
                 }
               }
             }
@@ -2456,6 +2512,9 @@
           "type": "number",
           "format": "double"
         },
+        "standard": {
+          "type": "boolean"
+        },
         "lastEdit": {
           "$ref": "#/definitions/LastEdit"
         }
@@ -2486,6 +2545,9 @@
           "format": "double"
         },
         "archived": {
+          "type": "boolean"
+        },
+        "standard": {
           "type": "boolean"
         }
       }

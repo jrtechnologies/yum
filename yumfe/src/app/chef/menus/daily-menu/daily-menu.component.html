@@ -5,6 +5,7 @@
     <div class="cal-cell-top is-flex">
       <span class="cal-day-number flexItemLeft">{{ day | date:"d" }}</span>
       <ng-container *ngIf="menuCanBeEdited">
+          <button md-icon-button color="accent" title="Add standard menu foods" (click)="addAllStandards()" [disabled]="menuHasAllStandards"><i class="material-icons">system_update_alt</i></button><!-- system_update_alt is bad!!-->
         <button md-icon-button color="accent" title="Discard changes" (click)="discardChanges()" [disabled]="!menuCanBeDiscarded"><i class="material-icons">cancel</i></button>
         <button md-icon-button color="accent"  title="Save"(click)="updateMenu()" [disabled]="!menuCanBeUpdated"><i class="material-icons">check</i></button>
       </ng-container>

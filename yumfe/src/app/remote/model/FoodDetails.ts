@@ -21,4 +21,5 @@ export interface FoodDetails {
 
     price?: number;
 
+    standard?: boolean;
 }

@@ -19,8 +19,16 @@
         {{food.foodItem.price | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
     </div>
 
+    <!--Standard -->
+    <div fxFlex="12" class="is-flex-column flex-centered">
+      <div class="header">Standard</div>
+      <md-slide-toggle class="example-margin" [color]="accent" [checked]="food.foodItem.standard" (click)="setFoodAsStandard($event)">
+      </md-slide-toggle>
+    </div>
+
+
     <!--Edit icon-->
-    <div fxFlex="20">
+    <div fxFlex="15">
       <div class="align-center">
         <button md-fab color='accent' (click)="edit()" title="Edit food!">
       <i class="material-icons">edit</i>
@@ -29,7 +37,7 @@
     </div>
 
     <!--Delete icon-->
-    <div fxFlex="20">
+    <div fxFlex="12" class="is-flex-centered">
       <div *ngIf="!food.foodItem.archived" class="align-center">
         <button md-icon-button type='butoon' color='accent' (click)='delete()' title="Delete food!">
       <i class="material-icons bigger-button">delete_forever</i>

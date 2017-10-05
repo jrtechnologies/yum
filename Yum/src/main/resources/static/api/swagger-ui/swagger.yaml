@@ -282,6 +282,12 @@ paths:
         - hungry
       summary: Gets weekly menus
       description: Returns a list containing all menus of the week.
+      parameters:
+        - in: query
+          name: userid
+          required: false
+          type: integer
+          format: int64
       responses:
         '200':
           description: A list of daily menus
@@ -300,6 +306,11 @@ paths:
       summary: Gets weekly menu of the specified week
       description: Returns a list containing all menus of the week.
       parameters:
+        - name: userid
+          in: query
+          required: false
+          type: integer
+          format: int64
         - name: week
           description: ex. 02-2017
           in: path
@@ -324,6 +335,12 @@ paths:
         - hungry
       summary: Gets monthly menus.
       description: Return a list containing all menus of the month.
+      parameters:
+        - in: query
+          name: userid
+          required: false
+          type: integer
+          format: int64
       responses:
         '200':
           description: A list of daily menus.
@@ -367,6 +384,11 @@ paths:
       summary: Place a new order
       description: A new order for the specified daily menu
       parameters:
+        - in: query
+          name: userid
+          required: false
+          type: integer
+          format: int64
         - name: order
           in: body
           description: The order to place
@@ -397,9 +419,14 @@ paths:
         - Bearer: []
       tags:
         - hungry
-      summary: Modifies order for the specified day
       description: Modify the order
+      summary: Get order for the specified day
       parameters:
+        - in: query
+          name: userid
+          required: false
+          type: integer
+          format: int64
         - name: id
           in: path
           required: true
@@ -443,6 +470,11 @@ paths:
         - name: id
           in: path
           required: true
+          type: integer
+          format: int64
+        - in: query
+          name: userid
+          required: false
           type: integer
           format: int64
         - name: UpdateOrderItems
@@ -500,6 +532,11 @@ paths:
         - name: id
           in: path
           required: true
+          type: integer
+          format: int64
+        - in: query
+          name: userid
+          required: false
           type: integer
           format: int64
         - name: DailyMenuDetails
@@ -604,6 +641,8 @@ paths:
               price:
                 type: number
                 format: double
+              standard:
+                type: boolean
       responses:
         '204':
           description: Food succesfully created
@@ -1589,6 +1628,8 @@ definitions:
       price:
         type: number
         format: double
+      standard:
+        type: boolean
       lastEdit:
         $ref: '#/definitions/LastEdit'
   Food:
@@ -1610,6 +1651,8 @@ definitions:
         type: number
         format: double
       archived:
+        type: boolean
+      standard:
         type: boolean
   DailyMenu:
     type: object

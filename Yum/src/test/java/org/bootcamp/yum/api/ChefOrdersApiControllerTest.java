@@ -93,9 +93,9 @@ public class ChefOrdersApiControllerTest {
         User user2 = new User(1, null, "Second user", "2nd First Name", "email", UserRole.CHEF, "password", new LocalDate("1745-02-02"), true, null, 0);     
         
         List<Food> foods = new ArrayList<>();
-        Food food1 = new Food(1, "test food 1", new ArrayList<>(), FoodType.DRINK, "description", new BigDecimal("10"), false, new DateTime());
-        Food food2 = new Food(2, "test food 2", new ArrayList<>(), FoodType.MAIN, "description", new BigDecimal("5.65"), false, new DateTime());   
-        Food food3 = new Food(3, "test food 3", new ArrayList<>(), FoodType.SALAD, "description", new BigDecimal("5.65"), false, new DateTime()); 
+        Food food1 = new Food(1, "test food 1", new ArrayList<>(), FoodType.DRINK, "description", new BigDecimal("10"), false, new DateTime(), false);
+        Food food2 = new Food(2, "test food 2", new ArrayList<>(), FoodType.MAIN, "description", new BigDecimal("5.65"), false, new DateTime(), false);   
+        Food food3 = new Food(3, "test food 3", new ArrayList<>(), FoodType.SALAD, "description", new BigDecimal("5.65"), false, new DateTime(), false); 
         foods.add(food1);
         foods.add(food2);  
         foods.add(food3);  
@@ -139,8 +139,8 @@ public class ChefOrdersApiControllerTest {
         User user1 = new User(1, null, "Last Name", "First Name", "email", UserRole.HUNGRY, "password", new LocalDate("1745-02-02"), true, null, 0);
                 
         List<Food> foods = new ArrayList<>();
-        Food food1 = new Food(1, "test food 1", new ArrayList<>(), FoodType.DRINK, "description", new BigDecimal("10"), false, new DateTime());
-        Food food2 = new Food(2, "test food 2", new ArrayList<>(), FoodType.MAIN, "description", new BigDecimal("5.65"), false, new DateTime());   
+        Food food1 = new Food(1, "test food 1", new ArrayList<>(), FoodType.DRINK, "description", new BigDecimal("10"), false, new DateTime(), false);
+        Food food2 = new Food(2, "test food 2", new ArrayList<>(), FoodType.MAIN, "description", new BigDecimal("5.65"), false, new DateTime(), false);   
         foods.add(food1);
         foods.add(food2);  
         
