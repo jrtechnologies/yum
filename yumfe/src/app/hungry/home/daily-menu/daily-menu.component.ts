@@ -40,10 +40,10 @@ export class DailyMenuComponent implements OnInit {
     //this.setup();
   }
 
-  setup() {     
-    
+  setup() {
+
     this.createFoodMap();
-    
+
     if (this.dailyMenu.orderId != null) {
       this.isOrderBoolean = true;
       this.dailyTotalPrice.emit(this.getTotalPrice());
@@ -55,7 +55,7 @@ export class DailyMenuComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     //console.log("Changes:", changes);
-    if (changes.dailyMenu) { //&& !changes.dailyMenu.isFirstChange() 
+    if (changes.dailyMenu) { //&& !changes.dailyMenu.isFirstChange()
       this.setup();
       // console.log('Changed:', changes.total.currentValue, changes.total.previousValue);
     }
@@ -90,8 +90,8 @@ export class DailyMenuComponent implements OnInit {
     });
   }
   public isFinalised() {
-   // if(this.controlledUser && isToday(this.dailyMenu.date)) { 
-    if(this.controlledUser && (isToday(this.dailyMenu.date) || isAfter(this.dailyMenu.date, new Date()))) { 
+   // if(this.controlledUser && isToday(this.dailyMenu.date)) {
+    if(this.controlledUser && (isToday(this.dailyMenu.date) || isAfter(this.dailyMenu.date, new Date()))) {
       return false;
     }
     return this.dailyMenu.isFinal;
@@ -222,7 +222,7 @@ export class DailyMenuComponent implements OnInit {
             updateOrderItem.emailRequest = true;
           } else {
             updateOrderItem.emailRequest = false;
-          } 
+          }
           updateOrderItem.lastEdit = this.lastEditDailyOrder;
           for (const orderedFood of orderFoods) {
             const foodItem: remote.OrderItem = {};
@@ -253,6 +253,9 @@ export class DailyMenuComponent implements OnInit {
                   break;
                 case 400:
                   this.openSnackBar('Order couldnot be modified.', 'ok', 3);
+                  break;
+                case 402:
+                  this.openSnackBar('Your balance is not enough for this order!', 'ok', 3);
                   break;
                 case 404:
                   this.openSnackBar('Order not found', 'ok', 3);
@@ -317,6 +320,9 @@ export class DailyMenuComponent implements OnInit {
               switch (error.status) {
                 case 400:
                   this.openSnackBar('Order couldnot be placed.', 'ok', 3);
+                  break;
+                case 402:
+                  this.openSnackBar('Your balance is not enough for this order!', 'ok', 3);
                   break;
                 case 409:
                   this.dailyMenu = JSON.parse(error._body);
