@@ -12,7 +12,6 @@
  * You should have received a copy of the GNU General Public License along with Yum. 
  * If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.bootcamp.yum.service;
 
 import java.math.BigDecimal;
@@ -33,20 +32,28 @@ import org.bootcamp.yum.api.model.UserReg;
 import org.bootcamp.yum.api.model.UserSettings;
 import org.bootcamp.yum.api.model.UsersPage;
 import org.bootcamp.yum.data.converter.UserRoleConverter;
+import org.bootcamp.yum.data.entity.DailyMenu;
 import org.bootcamp.yum.data.entity.DailyOrder;
+import org.bootcamp.yum.data.entity.OrderItem;
 import org.bootcamp.yum.data.entity.Settings;
+import org.bootcamp.yum.data.entity.Transaction;
 import org.bootcamp.yum.data.enums.UserRole;
 import org.bootcamp.yum.data.repository.DailyOrderRepository;
+import org.bootcamp.yum.data.repository.HolidaysRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
+import org.bootcamp.yum.data.repository.TransactionRepository;
 import org.bootcamp.yum.data.repository.UserRepository;
 import static org.bootcamp.yum.service.FoodsService.getLineNumber;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
@@ -60,16 +67,40 @@ public class UsersService {
     @Autowired
     SettingsRepository settingsRepo;
     @Autowired
+    TransactionRepository transactionRepo;
+    @Autowired
     private EmailService emailService;
     @Autowired
     private ApplicationProperties applicationProperties;
-
+    @Autowired
+    HolidaysRepository holidaysRepo;
+    
     private static final Logger LOGGER = Logger.getLogger(UsersService.class.getName());
 
-    private void deleteDailyOrders(List<DailyOrder> dailyOrders) {
+    private void deleteDailyOrders(org.bootcamp.yum.data.entity.User user) {
+        List<DailyOrder> dailyOrders = user.getDailyOrders();
         Settings settings = settingsRepo.findOne(1);
+        // retrieve admin's id
+        Long sourceId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         for (DailyOrder dailyOrder : dailyOrders) {
-            if (!settings.deadlinePassed(dailyOrder.getDailyMenu().getDate())) {
+            DailyMenu dailyMenu = dailyOrder.getDailyMenu();
+            if (!deadlinePassed(dailyMenu.getDate())) {
+            //if (!settings.deadlinePassed(dailyOrder.getDailyMenu().getDate())) {
+
+                // Calculate order amount, add to user's balance and insert a transaction to the db
+                BigDecimal orderAmount = new BigDecimal(0);
+                for (OrderItem orderItem : dailyOrder.getOrderItems()) {
+                    orderAmount = orderAmount.add(orderItem.getFood().getPrice().multiply(new BigDecimal(orderItem.getQuantity())));
+                }
+                BigDecimal balance = user.getBalance();
+                if (balance == null) {
+                    balance = orderAmount;
+                } else {
+                    balance = balance.add(orderAmount);
+                }
+                user.setBalance(balance);
+                Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceId, dailyOrder.getDailyOrderId(), dailyMenu.getId(), 3);
+                transactionRepo.save(transaction);
                 dailyOrderRepo.delete(dailyOrder);
             } else {
                 dailyOrder.setFinalised(true);
@@ -108,10 +139,10 @@ public class UsersService {
     @Transactional
     public void usersIdApprovePut(Long id, Boolean approve, Boolean force) throws ApiException {
 
-        if(applicationProperties.getLdap().isEnabled()){ 
+        if (applicationProperties.getLdap().isEnabled()) {
             throw new ApiException(404, "Disabled");
         }
-        
+
         org.bootcamp.yum.data.entity.User user = userRepo.findById(id);
         if (user == null) {
             throw new ApiException(404, "User not found");
@@ -132,15 +163,15 @@ public class UsersService {
             if (force == null) {
                 throw new ApiException(400, "Bad request");
             } else {
-                Settings settings= settingsRepo.findOne(1);
-                Boolean notFinalOrders = user.hasNonFinalOrders(settings.getDeadline(), settings.getDeadlineDays());                
+                Settings settings = settingsRepo.findOne(1);
+                Boolean notFinalOrders = user.hasNonFinalOrders(settings.getDeadline(), settings.getDeadlineDays());
                 if (!notFinalOrders) {
                     user.setApproved(approve);
                 } else {
                     if (!force) {
                         throw new ApiException(409, "Non-final orders found");
                     } else {
-                        deleteDailyOrders(user.getDailyOrders());
+                        deleteDailyOrders(user);
                         user.setApproved(approve);
                     }
 
@@ -191,7 +222,7 @@ public class UsersService {
     }
 
     @Transactional
-    public UsersPage usersGet(String pageStr, String sizeStr, String orderBy, String orderDirection) throws ApiException, Exception {
+    public UsersPage usersGet(String pageStr, String sizeStr, String orderBy, String orderDirection, String lastName) throws ApiException, Exception {
 
         UsersPage usersPage = new UsersPage();
         List<String> validOrderBy = Arrays.asList("registrationDate", "lastName", "userRole", "approved");
@@ -238,11 +269,13 @@ public class UsersService {
                 break;
         }
 
-//        System.out.println(pr);
-        //Iterable<org.bootcamp.yum.data.entity.User> usersPageable = userRepo.findAll();
-
-        Page<org.bootcamp.yum.data.entity.User> usersPageable = userRepo.findAll(pr);
-        //totalPages = 
+        Page<org.bootcamp.yum.data.entity.User> usersPageable;
+        if (lastName == null){
+            usersPageable = userRepo.findAll(pr);
+        } else {
+            usersPageable = userRepo.findByLastNameStartingWith(pr,lastName);
+        }
+       
         totalPages = usersPageable.getTotalPages();
         totalElements = usersPageable.getTotalElements();
 
@@ -305,10 +338,10 @@ public class UsersService {
     @Transactional
     public void usersIdDelete(Long id, Boolean force) throws ApiException, Exception {
 
-        if(applicationProperties.getLdap().isEnabled()){ 
+        if (applicationProperties.getLdap().isEnabled()) {
             throw new ApiException(404, "Disabled");
-        }   
-        
+        }
+
         if (id > 0) {
             //Check if user exist.
             if (userRepo.findById(id) != null) {
@@ -327,7 +360,7 @@ public class UsersService {
                         if (force == null || !force) {
                             throw new ApiException(409, "Orders in future");
                         } else {
-                            deleteDailyOrders(userEntity.getDailyOrders());
+                            deleteDailyOrders(userEntity);
                             userRepo.delete(userEntity);
                             return;
                         }
@@ -372,5 +405,19 @@ public class UsersService {
                 throw new IllegalArgumentException("Unknown value:" + role);
         }
     }
-
+    public boolean deadlinePassed(LocalDate date) {
+        Settings settings = settingsRepo.findOne(1);
+        int deadlineDays = settings.getDeadlineDays();
+        LocalTime deadlineTime = settings.getDeadline();
+         
+        date = date.minusDays(deadlineDays);
+        
+        while (this.holidaysRepo.findByIdHoliday(date) != null) {
+             date = date.minusDays(1);
+        }        
+        
+        // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
+        return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
+    }
 }
+ 

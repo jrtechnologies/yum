@@ -31,7 +31,9 @@ import { LoggedModule } from '../shared/logged/logged.module';
 import { HolidaysComponent } from './holidays/holidays.component';
 import { CalendarDayComponent } from './holidays/calendar-day/calendar-day.component';
 import { CalendarModule } from 'angular-calendar';
-import { RouterModule } from '@angular/router'; 
+import { RouterModule } from '@angular/router';
+import { BalanceModule } from '../shared/balance/balance.module'
+import { TransactionsModule } from '../shared/transactions/transactions.module'
 
 @NgModule({
   imports: [
@@ -44,7 +46,9 @@ import { RouterModule } from '@angular/router';
     PaginationModule,
     LoggedModule,
     FlexLayoutModule,
-    CalendarModule
+    CalendarModule,
+    BalanceModule,
+    TransactionsModule
   ],
   declarations: [
     HomeComponent,

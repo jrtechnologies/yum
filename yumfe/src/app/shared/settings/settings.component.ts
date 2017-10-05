@@ -41,7 +41,7 @@ export class SettingsComponent implements OnInit {
     this.externalAuth = this.authService.hasExternalAuth();
     //console.log("settings auth:" + this.externalAuth);
 
-    
+
     this.profileGroup = this.fb.group({
       // role: [''],
       firstName: ['', [Validators.required, Validators.minLength(1)]],
@@ -51,13 +51,13 @@ export class SettingsComponent implements OnInit {
         Validators.pattern(emailPattern)
       ]
       ],
-      password: ['', [ //, disabled: this.externalAuth 
-    
+      password: ['', [ //, disabled: this.externalAuth
+
         // tslint:disable-next-line:max-line-length
         Validators.pattern(/^(?=.*[A-Za-z\d$@!%*#?&\^\-\_\=\+\<\>\(\)\{\}\[\]\\\\\/\.\,~`|])[A-Za-z\d$@!%*#?&\^\-\_\=\+\<\>\(\)\{\}\[\]\\\\\/\.\,~`|]{6,}$/)
       ]],
       confirm: ['' , [
-  
+
         // tslint:disable-next-line:max-line-length
         Validators.pattern(/^(?=.*[A-Za-z\d$@!%*#?&\^\-\_\=\+\<\>\(\)\{\}\[\]\\\\\/\.\,~`|])[A-Za-z\d$@!%*#?&\^\-\_\=\+\<\>\(\)\{\}\[\]\\\\\/\.\,~`|]{6,}$/),
         this.validateEqual
@@ -85,7 +85,7 @@ export class SettingsComponent implements OnInit {
   }
 
   private setupForm() {
-    // Check can change password 
+    // Check can change password
 
     if(this.externalAuth && this.user.id !== 1){
       this.profileGroup.get('password').disable();
@@ -188,6 +188,9 @@ export class SettingsComponent implements OnInit {
           // User has both final and non-final orders. Can be force disapproved
           case 400:
             this.openSnackBar('User can not be modified! Some data are invalid', 'ok', 3);
+            break;
+          case 412:
+            this.openSnackBar('User email already exists', 'ok', 3);
             break;
           // User has only non-final orders. Can be force deleted
           case 409:

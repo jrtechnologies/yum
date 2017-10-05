@@ -17,6 +17,8 @@ package org.bootcamp.yum.data.repository;
 import java.util.List;
 import org.bootcamp.yum.data.entity.User;
 import org.bootcamp.yum.data.enums.UserRole;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -33,6 +35,7 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long>{
     User findBySecret(String secret);
     User findByLdapId(byte[] ldapId);
     List<User> findByUserRole(UserRole userRole);
+    Page<User> findByLastNameStartingWith (Pageable pageable, String lastName);
     
     @Query(value="SELECT role FROM user WHERE id=:id  ", nativeQuery = true)
     String findRole(@Param("id") Long id);

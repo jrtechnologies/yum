@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
+import { MdSnackBar, MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 
 import * as remote from '../../remote';
 import { AuthenticationService } from '../../shared/authentication.service';
+import { ControlUserService } from '../../shared/services/control-user.service';
 
 @Component({
   selector: 'app-users',
@@ -15,7 +16,7 @@ import { AuthenticationService } from '../../shared/authentication.service';
 export class UsersComponent implements OnInit {
 
   private sub: any;
-  private userId = 0;
+  public userId = 0;
   public user: remote.User;
   public profileGroup: FormGroup;
   //copy initial input values for enabling/disabling submit button
@@ -28,11 +29,22 @@ export class UsersComponent implements OnInit {
   //spinner
   public showSpinner = false;
   public invalid = false;
-  public externalAuth: Boolean = false; 
+  public externalAuth: Boolean = false;
+  public balanceGroup: FormGroup;
+  public balance: number;
+  public balanceUpdate = false;
 
-  constructor(private route: ActivatedRoute, private adminService: remote.AdminApi, private fb: FormBuilder,
-    public snackBar: MdSnackBar, public dialog: MdDialog, private router: Router,
-    private authService: AuthenticationService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private adminService: remote.AdminApi,
+    private fb: FormBuilder,
+    public snackBar: MdSnackBar,
+    public dialog: MdDialog,
+    private router: Router,
+    private authService: AuthenticationService,
+    private controlUserService:ControlUserService
+  ) { }
+
 
   ngOnInit() {
     //check if id is valid
@@ -181,7 +193,7 @@ export class UsersComponent implements OnInit {
             this.openSnackBar('Successfull password reset', 'ok', 1);
           },
           error => {
-            this.openSnackBar('Password cannot be reset', 'ok', 1);
+            this.openSnackBar('Password cannot be reset', 'ok', 3);
           }
           );
       }
@@ -191,7 +203,7 @@ export class UsersComponent implements OnInit {
 
   // Callball after invalid data in form from profile component
   handleInvalidProfileForm(validFlag: string) {
-      if (validFlag === "invalid"){
+    if (validFlag === "invalid") {
       this.invalid = true;
     } else {
       this.invalid = false;
@@ -200,6 +212,20 @@ export class UsersComponent implements OnInit {
 
   handleUpdateVersion() {
     this.user.lastEdit.version += 1;
+  }
+
+  handleBalanceUpdated() {
+    if (this.balanceUpdate) {
+      this.balanceUpdate = false;
+    } else {
+      this.balanceUpdate = true;
+    }
+   }
+
+  viewUserMenu(){
+    //this.router.navigate(['/hungry/?userid='+this.userId]);
+    this.controlUserService.setUser(this.userId);
+    this.router.navigateByUrl('/hungry?userid='+this.userId);
   }
 
 }

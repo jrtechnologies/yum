@@ -96,6 +96,21 @@ CREATE TABLE yum_settings (
    PRIMARY KEY (`id`)
 );
 
+CREATE TABLE transaction(
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+	amount DECIMAL(20,2) NOT NULL,
+    balance DECIMAL(20,2) NOT NULL,
+    date_time TIMESTAMP NULL  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	source_id BIGINT NOT NULL,
+    order_id BIGINT,
+	menu_id BIGINT,
+    order_type TINYINT,
+    PRIMARY KEY ( id ),
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (source_id) REFERENCES user(id)
+);
+
 CREATE TABLE `yum`.`holidays` (
   `holidate` DATE NOT NULL,
   PRIMARY KEY (`holidate`));
@@ -107,3 +122,12 @@ INSERT INTO `user` VALUES (1,'admin','admin','admin@yum.com','admin','$2a$10$94R
 
 
 INSERT INTO `yum_settings` VALUES ('13:00:00', 0,'&euro;','<p>All meals include slices of bread.</p>&#10;<p>Meals are delivered in a micorwave compatible plastic box. Disposable utensils are also included.</p>&#10;<p>Delivery time is 13:30.</p>&#10;<p>Payments will be collected by the reception desk. Mind to have the exact amount.</p>','<p><strong>Lorem Ipsum</strong>&#160;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the <em>1500s</em>, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>&#10;<p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>&#10;<p>Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>','<p><strong>Contrary to popular belief</strong>,</p>&#10;<p>Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</p>&#10;<p>Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of &#34;de Finibus Bonorum et Malorum&#34; (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, &#34;Lorem ipsum dolor sit amet..&#34;, comes from a line in section 1.10.32.</p>&#10;<p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from &#34;de Finibus Bonorum et Malorum&#34; by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>','2017-05-19 14:01:29',1,0,1, NULL, "{\"days\": [1,2,3,4,5]}");
+
+SET GLOBAL event_scheduler = ON;
+
+DROP EVENT IF EXISTS AutoDeleteOldTransactions;
+
+CREATE EVENT AutoDeleteOldTransactions
+ON SCHEDULE EVERY 1 DAY
+DO 
+DELETE LOW_PRIORITY FROM yum.transaction WHERE date_time < DATE_SUB(NOW(), INTERVAL 3 MONTH);

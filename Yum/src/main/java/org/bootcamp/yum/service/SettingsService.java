@@ -61,6 +61,7 @@ public class SettingsService {
         userDTO.setRegistrationDate(userDAO.getRegistrationDate());
         userDTO.setRole(userDAO.getUserRole().toString());
         userDTO.setHasPicture(userDAO.hasPicture());
+        userDTO.setBalance(userDAO.getBalance());
 
         return userDTO;
     }
@@ -122,6 +123,9 @@ public class SettingsService {
             }
 
             if (upUser.getEmail() != null && !upUser.getEmail().trim().equals(userDAO.getEmail())) {
+                if (userRepo.findByEmail(upUser.getEmail()) != null) {
+                        throw new ApiException(412, "User email already exists");
+                    }
                 userDAO.setEmail(upUser.getEmail());
             }
         }

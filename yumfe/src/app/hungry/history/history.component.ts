@@ -14,6 +14,7 @@ import { DailyOrderHistoryComponent } from './daily-order-history/daily-order-hi
 import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.component';
 import { Observable } from 'rxjs/Rx';
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
+import { ControlUserService } from '../../shared/services/control-user.service';
 
 @Component({
   selector: 'app-hungry-history',
@@ -48,6 +49,9 @@ export class HistoryComponent implements OnInit, OnDestroy {
   totalSum: number = 0;
   public showSpinner: boolean = true;
 
+  //admin 
+  public controlledUser: remote.User;
+
   constructor(
     private hungryService: remote.HungryApi,
     private datePipe: DatePipe,
@@ -55,12 +59,16 @@ export class HistoryComponent implements OnInit, OnDestroy {
     private location: Location,
     private router: Router,
     public globalSettingsService: GlobalSettingsService,
-    public decpipe: DecimalPipe
+    public decpipe: DecimalPipe,
+    private controlUserService: ControlUserService
   ) { }
 
-  ngOnInit() {
+  ngOnInit() { 
 
-    console.log('----- on init HistoryComponent!! -----');
+    //admin
+    this.controlUserService.getUser().subscribe(user=>{
+      this.controlledUser = user;
+    });
 
     this.globalSettingsService.getWorkingDays().subscribe(days => {
       this.excludeDays = this.alldays.filter(function (el) {
@@ -75,8 +83,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
     this.sub = this.route.params.subscribe(params => {
       let dt = new Date(+params['year'], +params['month'] - 1, 1, 0, 0, 0); // (+) converts string 'year' na d 'month' to a number
 
-      if (isValid(dt)) {
-        console.log('router date:' + dt);
+      if (isValid(dt)) { 
         this.viewdate = dt;
         this.getRemoteDailyMenus(this.buildMonthYear(this.viewdate));
       }
@@ -84,14 +91,11 @@ export class HistoryComponent implements OnInit, OnDestroy {
     });
 
     if (isToday(this.viewdate)) {
-      this.remote = this.hungryService.menusMonthlyGet()
+      this.remote = this.hungryService.menusMonthlyGet(this.controlledUser? this.controlledUser.id: null)
         .finally(() => { this.showSpinner = false; })
-        .subscribe(dailymenus => {
-          console.log('subscribed orders of current month');
+        .subscribe(dailymenus => { 
           this.dailymenus = dailymenus;
-          this.setDailyMenusMap();
-          // console.log("route params:", this.route.params,this.route.params['month'] + '-' + this.route.params['year']);
-
+          this.setDailyMenusMap(); 
         }, error => console.log(error));
     }
 
@@ -104,14 +108,11 @@ export class HistoryComponent implements OnInit, OnDestroy {
 
   private getRemoteDailyMenus(monthYear: string) {
 
-    this.remote = this.hungryService.menusMonthlyMonthyearGet(monthYear)
+    this.remote = this.hungryService.menusMonthlyMonthyearGet(monthYear, this.controlledUser? this.controlledUser.id: null)
       .finally(() => { this.showSpinner = false; })
-      .subscribe(dailymenus => {
-        console.log("subscribed orders of:", monthYear);
-
+      .subscribe(dailymenus => { 
         this.dailymenus = dailymenus;
         this.setDailyMenusMap();
-
       }, error => console.log(error));
 
   }
@@ -126,8 +127,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
       let dtStr = this.datePipe.transform(dt, 'yyyy-MM-dd');
 
       this.dailymenusMap.set(dtStr, this.dailymenus[i]);
-    }
-    console.log('daily menus history map:', this.dailymenusMap);
+    } 
   }
 
   getDailyMenusMap() {

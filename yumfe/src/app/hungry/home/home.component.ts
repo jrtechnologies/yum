@@ -7,7 +7,12 @@ import * as remote from '../../remote';
 import { DatePipe } from '@angular/common';
 import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.component';
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
-import { Observable } from 'rxjs/Rx';
+import { Observable, Subject } from 'rxjs/Rx';
+import { ControlUserService } from '../../shared/services/control-user.service';
+
+interface observables{
+  wdays: any, controlledUser: any
+}
 
 @Component({
   selector: 'app-hungry-home',
@@ -27,6 +32,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   public showLoadSpinner = false;
   public weeklyTotalPrice = 0;
   public workingDays: number[];
+  private observable: any
+  //admin 
+  public controlledUser: remote.User;
 
   constructor(
     private hungryService: remote.HungryApi,
@@ -34,7 +42,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private location: Location,
     private router: Router,
-    public globalSettingsService: GlobalSettingsService
+    public globalSettingsService: GlobalSettingsService,
+    private adminApi: remote.AdminApi,
+    private controlUserService: ControlUserService
   ) { }
 
   ngOnInit() {
@@ -42,45 +52,63 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.deadline = this.globalSettingsService.getDeadLine();
     this.notes = this.globalSettingsService.getNotes();
 
+    // this.observable = Observable
+    // .zip(this.globalSettingsService.getWorkingDays(), this.controlUserService.getUser(), (wdays: any, controlledUser: any) => {
+    //    return { wdays: wdays, controlledUser: controlledUser } })
+    // .subscribe((r:observables) => {
+    //   this.workingDays = r.wdays; 
+    //   this.controlledUser = r.controlledUser;
+    //   console.log("Controlled user:", r.controlledUser);
+    //   this.setup();
+    // });
+
     this.globalSettingsService.getWorkingDays().subscribe(wdays => {
-      this.workingDays = wdays;
-      this.setup();
+      this.workingDays = wdays;      
+        
+        //admin
+        this.observable = this.controlUserService.getUser().subscribe(user=>{       
+          if(user){ console.log("Controlled user:", user); }
+          this.controlledUser = user;
+          this.setup();         
+      });
+
     });
 
   }
 
   public setup() {
+ 
     this.sub = this.route.params.subscribe(params => {
       let dt = new Date(+params['year'], 1, 1); // (+) converts string 'year' na d 'month' to a number
       dt = setISOWeek(dt, +params['week']);
       if (isValid(dt)) {
         dt = addDays(dt, 1);
 
-        console.log('router dt:', dt);
+        //console.log('router dt:', dt);
         this.date = dt;
         //this.monthDate = this.date;
 
         this.weekDaysCal(startOfWeek(this.date, { weekStartsOn: 1 }));
-        if(this.weekDays.length>0){
+        if (this.weekDays.length > 0) {
           this.monthDate = new Date(this.weekDays[this.weekDays.length - 1]);
         }
-        else{this.monthDate=this.date; }
+        else { this.monthDate = this.date; }
 
         this.getCurrentWeeklyMenu(this.buildweekYear(this.date));
-      } else {
-        console.warn('invalid router date');
-      }
+      }  
     });
+
     if (isToday(this.date)) {
       this.showLoadSpinner = true;
       this.monthDate = this.date;
-      this.weekDaysCal(startOfWeek(this.date, { weekStartsOn: 1 }));
-      this.hungryService.menusWeeklyGet().subscribe(dailymenus => {
+      this.weekDaysCal(startOfWeek(this.date, { weekStartsOn: 1 })); 
+      this.hungryService.menusWeeklyGet(this.controlledUser ? this.controlledUser.id : null).subscribe(dailymenus => { 
         this.showLoadSpinner = false;
         this.dailymenus = dailymenus;
         this.weekMenuMap();
       }, error => this.showLoadSpinner = false);
     }
+
   }
 
 
@@ -99,12 +127,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     return weekTotal;
   }
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    if(this.sub) this.sub.unsubscribe();
+
+    if(this.observable) this.observable.unsubscribe();
   }
 
   private getCurrentWeeklyMenu(weekYear: string) {
     this.showLoadSpinner = true;
-    this.hungryService.menusWeeklyWeekGet(weekYear).subscribe(dailymenus => {
+    this.hungryService.menusWeeklyWeekGet(weekYear, this.controlledUser ? this.controlledUser.id : null).subscribe(dailymenus => {
       this.showLoadSpinner = false;
       this.dailymenus = dailymenus;
       this.weekMenuMap();
@@ -113,19 +143,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private weekDaysCal(d: Date) {
     this.weekDays = [];
-    
+
     for (let i = 0; i < 7; i++) {
-      
-      const dtStr = this.datePipe.transform(d, 'yyyy-MM-dd');     
-      
-      if(this.workingDays.includes(d.getDay())){
+
+      const dtStr = this.datePipe.transform(d, 'yyyy-MM-dd');
+
+      if (this.workingDays.includes(d.getDay())) {
         this.weekDays.push(dtStr);
       }
 
       d = addDays(d, 1);
     }
 
-    console.log(this.weekDays);
+    //console.log(this.weekDays);
   }
 
   private weekMenuMap() {
@@ -142,7 +172,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public getDailyMenu(d: any) {
-    for (const dailymenu of this.dailymenus) {
+    for (let dailymenu of this.dailymenus) {
       if (dailymenu.date === d) {
         return dailymenu;
       }
@@ -223,4 +253,5 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
   }
+
 }

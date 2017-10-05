@@ -195,9 +195,9 @@ public class Settings {
         return "Settings{" + "id=" + id + ", deadline=" + deadline + ", deadlineDays=" + deadlineDays + ", lastEdit=" + lastEdit + ", currency=" + currency + ", notes=" + notes + ", tos=" + tos + ", policy=" + policy + ", version=" + version + ", foods_version=" + foods_version + ", reportEmail=" + reportEmail + ", workingDays=" + workingDays + '}';
     }
       
-    public boolean deadlinePassed(LocalDate date) {
-        // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
-        return (date.minusDays(deadlineDays).toLocalDateTime(deadline).compareTo(LocalDateTime.now()) < 0);
-    }
+//    public boolean deadlinePassed(LocalDate date) {
+//        // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
+//        return (date.minusDays(deadlineDays).toLocalDateTime(deadline).compareTo(LocalDateTime.now()) < 0);
+//    }
 
 }

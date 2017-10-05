@@ -82,10 +82,11 @@ public class OrdersApiController implements OrdersApi {
 
     @Override
     public ResponseEntity<Object> ordersIdDelete(@ApiParam(value = "", required = true) @PathVariable("id") Long id,
+            @ApiParam(value = "") @RequestParam(value = "userid", required = false, defaultValue = "0") Long userid,
             @ApiParam(value = "dailymenu details id, version, date"  ) @RequestBody DailyMenuDetails dailyMenuDetails) {
         try {
-            ordersService.ordersIdDelete(id, dailyMenuDetails);
-            return new ResponseEntity<>(HttpStatus.OK);
+            ordersService.ordersIdDelete(id, dailyMenuDetails, userid);
+            return new ResponseEntity<>("{}", HttpStatus.OK);
         } catch (ConcurrentDeletionException ex) {
             int exCode = ex.getCode();
             return new ResponseEntity<>(ex.getResponseDTO() ,HttpStatus.valueOf(exCode));    
@@ -105,25 +106,27 @@ public class OrdersApiController implements OrdersApi {
     public ResponseEntity<DailyOrder> ordersIdGet(@ApiParam(value = "", required = true) @PathVariable("id") Long id,
         @NotNull @ApiParam(value = "", required = true) @RequestParam(value = "dailyMenuId", required = true) Long dailyMenuId,
         @NotNull @ApiParam(value = "", required = true) @RequestParam(value = "dailyMenuVersion", required = true) int dailyMenuVersion,
-        @NotNull @ApiParam(value = "", required = true) @RequestParam(value = "dailyMenuDate", required = true) @DateTimeFormat(pattern = "YYYY-MM-dd") LocalDate dailyMenuDate) throws ApiException {
-        DailyOrder dailyOrder = ordersService.ordersIdGet(id, dailyMenuId, dailyMenuVersion, dailyMenuDate);
+        @NotNull @ApiParam(value = "", required = true) @RequestParam(value = "dailyMenuDate", required = true) @DateTimeFormat(pattern = "YYYY-MM-dd") LocalDate dailyMenuDate,
+        @ApiParam(value = "") @RequestParam(value = "userid", required = false, defaultValue = "0") Long userid) throws ApiException {
+        DailyOrder dailyOrder = ordersService.ordersIdGet(id, dailyMenuId, dailyMenuVersion, dailyMenuDate, userid);
         return new ResponseEntity<>(dailyOrder, HttpStatus.OK);
     }
 
     @Override
     @PreAuthorize("hasAuthority('hungry')")
     public ResponseEntity<Object> ordersIdPut(@ApiParam(value = "", required = true) @PathVariable("id") Long id,
+        @ApiParam(value = "") @RequestParam(value = "userid", required = false, defaultValue = "0") Long userid,
             @ApiParam(value = "The order items to modify") @RequestBody UpdateOrderItems updateOrderItems, Errors errors) throws ApiException {
 
         if (errors.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
-            LastEdit lastEdit = ordersService.ordersIdPut(id, updateOrderItems);
+            LastEdit lastEdit = ordersService.ordersIdPut(id, updateOrderItems, userid);
             return new ResponseEntity<>(lastEdit, HttpStatus.OK);
         } catch (OptimisticLockException ex) {
             try {
-                DailyOrder dailyOrder = ordersService.ordersIdGet(id,updateOrderItems.getDailyMenuId(),updateOrderItems.getDailyMenuVersion(), updateOrderItems.getDailyMenuDate() );
+                DailyOrder dailyOrder = ordersService.ordersIdGet(id,updateOrderItems.getDailyMenuId(),updateOrderItems.getDailyMenuVersion(), updateOrderItems.getDailyMenuDate(), userid );
                 throw new ConcurrentModificationException(409, "Concurrent modification error.", dailyOrder);
             } catch (ConcurrentDeletionException e) {
             int exCode = e.getCode();
@@ -140,7 +143,8 @@ public class OrdersApiController implements OrdersApi {
 
     @Override
     @PreAuthorize("hasAuthority('hungry')")
-    public ResponseEntity<Object> ordersPost(@ApiParam(value = "The order to place") @RequestBody Order order, Errors errors) throws ApiException {
+    public ResponseEntity<Object> ordersPost(@ApiParam(value = "The order to place") @RequestBody Order order,
+        @ApiParam(value = "") @RequestParam(value = "userid", required = false, defaultValue = "0") Long userid, Errors errors) throws ApiException {
 
         if (errors.hasErrors()) {
             Error error = new Error();
@@ -149,7 +153,7 @@ public class OrdersApiController implements OrdersApi {
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(ordersService.ordersPost(order), HttpStatus.OK);
+        return new ResponseEntity<>(ordersService.ordersPost(order, userid), HttpStatus.OK);
     }
     
     

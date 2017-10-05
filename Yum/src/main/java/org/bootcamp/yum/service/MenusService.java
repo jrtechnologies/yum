@@ -14,6 +14,7 @@
  */
 package org.bootcamp.yum.service;
 
+import io.swagger.annotations.ApiParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -38,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 public class MenusService {
@@ -57,12 +59,12 @@ public class MenusService {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(MenusService.class);
     
     @Transactional
-    public List<DailyMenu> menusWeeklyGet() throws ApiException, Exception {
+    public List<DailyMenu> menusWeeklyGet(Long userId) throws ApiException, Exception {
         LocalDate today = LocalDate.now();
         LocalDate firstDayOfWeek = today.minusDays(today.getDayOfWeek() - 1);
         List<org.bootcamp.yum.api.model.DailyMenu> weeklyMenu = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
-            DailyMenu dailymenu = createWeekDailyMenu(firstDayOfWeek.plusDays(i));
+            DailyMenu dailymenu = createWeekDailyMenu(firstDayOfWeek.plusDays(i), userId);
             if (dailymenu.getDate() != null) {
                 weeklyMenu.add(dailymenu);
             }
@@ -71,7 +73,7 @@ public class MenusService {
     }
 
     @Transactional
-    public List<DailyMenu> menusWeeklyWeekGet(String week) throws ApiException, Exception {
+    public List<DailyMenu> menusWeeklyWeekGet(String week, Long userId) throws ApiException, Exception {
          
         
         String patternString = "^\\d{2}-\\d{4}$";
@@ -99,33 +101,10 @@ public class MenusService {
             
             firstDayOfWeek = new LocalDate().withYear(year).withWeekOfWeekyear(weekNumber);
             firstDayOfWeek = firstDayOfWeek.minusDays(firstDayOfWeek.getDayOfWeek() - 1); 
-            
-            //refactor 28/5/17 k
-            /*switch (firstDayOfWeek.dayOfWeek().getAsText()){
-                case "Monday":
-                    break;
-                case "Tuesday":
-                    firstDayOfWeek = firstDayOfWeek.minusDays(1);
-                    break;
-                case "Wednesday":
-                    firstDayOfWeek = firstDayOfWeek.minusDays(2);
-                    break;
-                case "Thursday":
-                    firstDayOfWeek = firstDayOfWeek.minusDays(3);
-                    break;
-                case "Friday":
-                    firstDayOfWeek = firstDayOfWeek.minusDays(4);
-                    break;
-                case "Saturday":
-                    firstDayOfWeek = firstDayOfWeek.minusDays(5);
-                    break;
-                case "Sunday":
-                    firstDayOfWeek = firstDayOfWeek.minusDays(6);
-                    break;
-            }*/
+           
             List<org.bootcamp.yum.api.model.DailyMenu> weeklyMenu = new ArrayList<>();
             for (int i = 0; i < 7; i++) {
-                DailyMenu dailymenu = createWeekDailyMenu(firstDayOfWeek.plusDays(i));
+                DailyMenu dailymenu = createWeekDailyMenu(firstDayOfWeek.plusDays(i), userId);
                 if (dailymenu.getDate() != null) {
                     weeklyMenu.add(dailymenu);
                 }
@@ -137,13 +116,13 @@ public class MenusService {
     }
 
     @Transactional
-    public List<DailyMenu> menusMonthlyGet() throws ApiException, Exception {
+    public List<DailyMenu> menusMonthlyGet(@ApiParam(value = "") @RequestParam(value = "stats", required = false) Long userId) throws ApiException, Exception {
         LocalDate today = LocalDate.now();
         LocalDate startOfMonth = today.dayOfMonth().withMinimumValue();
         int daysOfMonth = today.dayOfMonth().withMaximumValue().getDayOfMonth();
         List<DailyMenu> monthlyMenu = new ArrayList<>();
         for (int i = 0; i < daysOfMonth; i++) {
-            DailyMenu dailymenu = createOrderedDailyMenu(startOfMonth.plusDays(i));
+            DailyMenu dailymenu = createOrderedDailyMenu(startOfMonth.plusDays(i), userId);
             if (dailymenu.getDate() != null) {
                 monthlyMenu.add(dailymenu);
             }
@@ -152,7 +131,7 @@ public class MenusService {
     }
 
     @Transactional
-    public List<DailyMenu> menusMonthlyMonthyearGet(String monthyear) throws ApiException, Exception {
+    public List<DailyMenu> menusMonthlyMonthyearGet(String monthyear, Long userId) throws ApiException, Exception {
         String patternString = "^\\d{2}-\\d{4}$";
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(patternString);
         Matcher matcher = pattern.matcher(monthyear);
@@ -167,7 +146,7 @@ public class MenusService {
             int daysOfMonth = monthYearDate.dayOfMonth().withMaximumValue().getDayOfMonth();
             List<DailyMenu> monthlyMenu = new ArrayList<>();
             for (int i = 0; i < daysOfMonth; i++) {
-                DailyMenu dailymenu = createOrderedDailyMenu(startOfMonth.plusDays(i));
+                DailyMenu dailymenu = createOrderedDailyMenu(startOfMonth.plusDays(i), userId);
                 if (dailymenu.getDate() != null) {
                     monthlyMenu.add(dailymenu);
                 }
@@ -179,9 +158,11 @@ public class MenusService {
     }
 
     //Method create one ordered Daily menu.
-    private DailyMenu createOrderedDailyMenu(LocalDate currentDay) {
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        org.bootcamp.yum.data.entity.User user = userRepo.findById(userId);
+    private DailyMenu createOrderedDailyMenu(LocalDate currentDay, Long reqUserid) throws ApiException {
+        //Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //org.bootcamp.yum.data.entity.User user = userRepo.findById(userId);
+        org.bootcamp.yum.data.entity.User user = getUserOfDailyOrder(reqUserid);
+        
         org.bootcamp.yum.data.entity.DailyMenu dailyMenuEntity = dailyMenuRepo.findByDate(currentDay);
         DailyMenu dailyMenu = new DailyMenu();
         if (dailyMenuEntity == null) {
@@ -196,7 +177,8 @@ public class MenusService {
             lastEdit.setTimeStamp(dailyMenuEntity.getLastEdit());
             lastEdit.setVersion(dailyMenuEntity.getVersion());
             dailyMenu.setLastEdit(lastEdit);
-            Boolean finalisedDailyOrder = settingsRepo.findOne(1).deadlinePassed(currentDay);
+            //Boolean finalisedDailyOrder = settingsRepo.findOne(1).deadlinePassed(currentDay);
+            Boolean finalisedDailyOrder = deadlinePassed(currentDay);
             dailyOrderEntity.setFinalised(finalisedDailyOrder);
             dailyMenu.setIsFinal(finalisedDailyOrder);
             
@@ -214,7 +196,8 @@ public class MenusService {
                 }
                 dailyMenu.addFoodsItem(foodWithQuantity); //Add the food in daily menu.
             }
-        } else if (!settingsRepo.findOne(1).deadlinePassed(currentDay)) {
+        //} else if (!settingsRepo.findOne(1).deadlinePassed(currentDay)) {
+        } else if (!deadlinePassed(currentDay)) {
             dailyMenuEntity.setFinalised(false);
             dailyMenu.setDate(dailyMenuEntity.getDate());
             dailyMenu.setIsFinal(false);
@@ -224,10 +207,13 @@ public class MenusService {
     }
 
     //Method create one Daily menu.
-    private DailyMenu createWeekDailyMenu(LocalDate currentDay) {
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        org.bootcamp.yum.data.entity.User user = userRepo.findById(userId);
-        org.bootcamp.yum.data.entity.DailyMenu dailyMenuEntity = dailyMenuRepo.findByDate(currentDay);
+    private DailyMenu createWeekDailyMenu(LocalDate currentDay, Long reqUserId) throws ApiException {
+        //Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //org.bootcamp.yum.data.entity.User user = userRepo.findById(userId);
+        org.bootcamp.yum.data.entity.User user = getUserOfDailyOrder( reqUserId );
+        org.bootcamp.yum.data.entity.DailyMenu dailyMenuEntity = dailyMenuRepo.findByDate(currentDay);      
+        
+        
         DailyMenu dailyMenu = new DailyMenu();
         //Check if exist daily menu.
         if (dailyMenuEntity != null) {
@@ -242,7 +228,8 @@ public class MenusService {
                 lastEdit.setTimeStamp(dailyMenuEntity.getLastEdit());
                 lastEdit.setVersion(dailyMenuEntity.getVersion());
                 dailyMenu.setLastEdit(lastEdit);
-                Boolean deadlinePassed = settingsRepo.findOne(1).deadlinePassed(currentDay);
+                //Boolean deadlinePassed = settingsRepo.findOne(1).deadlinePassed(currentDay);
+                Boolean deadlinePassed = deadlinePassed(currentDay);
                 dailyOrderEntity.setFinalised(deadlinePassed);
                 dailyMenu.setIsFinal(deadlinePassed);
                 for (org.bootcamp.yum.data.entity.Food foodEntity : dailyMenuEntity.getFoods()) {
@@ -260,7 +247,8 @@ public class MenusService {
                     dailyMenu.addFoodsItem(foodWithQuantity); //Add the food in daily menu.
                 }
             } else {//If daily menu isn't ordered from user, not set order stats.  
-                Boolean deadlinePassed = settingsRepo.findOne(1).deadlinePassed(currentDay);
+                //Boolean deadlinePassed = settingsRepo.findOne(1).deadlinePassed(currentDay);
+                Boolean deadlinePassed = deadlinePassed(currentDay);
                 dailyMenuEntity.setFinalised(deadlinePassed);
                 dailyMenu.setIsFinal(deadlinePassed);
                 LastEdit lastEdit = new LastEdit();
@@ -312,4 +300,33 @@ public class MenusService {
         // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
         return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
     }
+    
+    private org.bootcamp.yum.data.entity.User getUserOfDailyOrder(Long userId) throws ApiException{
+        
+        org.bootcamp.yum.data.entity.User sourceUser = userRepo.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        org.bootcamp.yum.data.entity.User user;
+        
+        //  Validation for sourceUser, 
+        if (sourceUser == null) {
+            throw new ApiException(404, "User not found.");
+        }
+        
+        if (userId != 0) {
+            if (!sourceUser.getUserRole().toString().equalsIgnoreCase("admin")) { 
+                throw new ApiException(401, "Access denied."); 
+            }
+
+            user = userRepo.findById(userId);
+            if (user == null) {
+                throw new ApiException(404, "User not found.");
+            }
+        } else {
+            user = sourceUser;
+        }
+        
+        return user;
+        
+    }
+    
+     
 }

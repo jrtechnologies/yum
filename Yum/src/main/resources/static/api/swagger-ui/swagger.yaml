@@ -21,7 +21,7 @@ info:
       
     ------------------------------------
 
-        Last edit: 22/09/2017 13:20
+        Last edit: 28/09/2017 10:00
 
     -------------------------------------
 basePath: /api
@@ -926,6 +926,27 @@ paths:
           description: bad request
         '500':
           $ref: '#/responses/Error'
+  '/report/{day}':
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - chef
+      summary: Send email with daily summary
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: day
+          required: true
+          type: string
+      responses:
+        '204':
+          description: Email sent
+        '400':
+          description: bad request
+        '500':
+          $ref: '#/responses/Error'
   /users:
     get:
       security:
@@ -954,6 +975,11 @@ paths:
         - name: orderDirection
           in: query
           description: Request orderBy filter
+          required: false
+          type: string
+        - name: lastName
+          in: query
+          description: Request search term
           required: false
           type: string
       responses:
@@ -1292,6 +1318,91 @@ paths:
           description: Concurrent modification error
           schema:
             $ref: '#/definitions/Holidays'
+        '500':
+          $ref: '#/responses/Error'
+  '/balance/{id}':
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - hungry
+      description: Get user's balance
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: ok
+          schema:
+            type: number
+            format: int64
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          $ref: '#/responses/Error'
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - admin
+      description: Update user's balance
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          format: int64
+        - in: body
+          name: deposit
+          required: true
+          schema:
+            $ref: '#/definitions/Deposit'
+      responses:
+        '200':
+          description: ok
+          schema:
+            type: number
+            format: int64
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '409':
+          description: Balance already modified
+          schema:
+            type: number
+            format: int64
+        '500':
+          $ref: '#/responses/Error'
+  '/transactions/{id}':
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - hungry
+      description: Get user's transactions
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: ok
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
         '500':
           $ref: '#/responses/Error'
 definitions:
@@ -1682,6 +1793,38 @@ definitions:
         $ref: '#/definitions/Error'
       dailyMenu:
         $ref: '#/definitions/DailyMenu'
+  Deposit:
+    type: object
+    description: Deposit amount and balance
+    properties:
+      amount:
+        type: number
+        format: int64
+      balance:
+        type: number
+        format: int64
+  Transaction:
+    type: object
+    description: Transaction with balance
+    properties:
+      amount:
+        type: number
+        format: int64
+      balance:
+        type: number
+        format: int64
+      datetime:
+        type: string
+        format: date-time
+      firstName:
+        type: string
+      lastName:
+        type: string
+      menuDate:
+        type: string
+        format: date
+      orderType:
+        type: string
 responses:
   Error:
     description: An unexpected error occured.

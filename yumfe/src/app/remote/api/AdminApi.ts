@@ -41,6 +41,22 @@ export class AdminApi {
     }
 
     /**
+     * Update user's balance
+     * @param id
+     * @param amount
+     */
+    public balanceIdPut(id: number, deposit: models.Deposit, extraHttpRequestParams?: any): Observable<number> {
+        return this.balanceIdPutWithHttpInfo(id, deposit, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json() || {};
+                }
+            });
+    }
+
+    /**
      *
      * get global settings
      */
@@ -78,14 +94,15 @@ export class AdminApi {
      * @param size Request pagination size / num of users
      * @param orderBy Request orderBy filter
      * @param orderDirection Request orderBy filter
+     * @param lastName Request search term
      */
-    public usersGet(page?: string, size?: string, orderBy?: string, orderDirection?: string, extraHttpRequestParams?: any): Observable<models.UsersPage> {
-        return this.usersGetWithHttpInfo(page, size, orderBy, orderDirection, extraHttpRequestParams)
+    public usersGet(page?: string, size?: string, orderBy?: string, orderDirection?: string, lastName?: string, extraHttpRequestParams?: any): Observable<models.UsersPage> {
+        return this.usersGetWithHttpInfo(page, size, orderBy, orderDirection, lastName, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
                 } else {
-                    return response.json();
+                    return response.json() || {};
                 }
             });
     }
@@ -240,6 +257,57 @@ export class AdminApi {
             });
     }
 
+    /**
+     *
+     * Update user&#39;s balance
+     * @param id
+     * @param amount
+     */
+    public balanceIdPutWithHttpInfo(id: number, deposit: models.Deposit, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + '/balance/${id}'
+                    .replace('${' + 'id' + '}', String(id));
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling balanceIdPut.');
+        }
+        // verify required parameter 'deposit' is not null or undefined
+        if (deposit === null || deposit === undefined) {
+            throw new Error('Required parameter deposit was null or undefined when calling balanceIdPut.');
+        }
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json'
+        ];
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKey) {
+            headers.set('Authorization', this.configuration.apiKey);
+        }
+
+        headers.set('Content-Type', 'application/json');
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Put,
+            headers: headers,
+            body: deposit == null ? '' : JSON.stringify(deposit), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            withCredentials:this.configuration.withCredentials
+        });
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
+        }
+
+        return this.http.request(path, requestOptions);
+    }
+
 
     /**
      *
@@ -331,33 +399,29 @@ export class AdminApi {
      * @param orderBy Request orderBy filter
      * @param orderDirection Request orderBy filter
      */
-    public usersGetWithHttpInfo(page?: string, size?: string, orderBy?: string, orderDirection?: string, extraHttpRequestParams?: any): Observable<Response> {
-        const path = this.basePath + `/users`;
+    public usersGetWithHttpInfo(page?: string, size?: string, orderBy?: string, orderDirection?: string, lastName?: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + '/users';
 
         let queryParameters = new URLSearchParams();
         let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
         if (page !== undefined) {
-
             queryParameters.set('page', <any>page);
-
         }
 
         if (size !== undefined) {
-
             queryParameters.set('size', <any>size);
-
         }
 
         if (orderBy !== undefined) {
-
             queryParameters.set('orderBy', <any>orderBy);
-
         }
 
         if (orderDirection !== undefined) {
-
             queryParameters.set('orderDirection', <any>orderDirection);
+        }
 
+        if (lastName !== undefined) {
+            queryParameters.set('lastName', <any>lastName);
         }
 
         // to determine the Content-Type header
@@ -377,9 +441,9 @@ export class AdminApi {
         let requestOptions: RequestOptionsArgs = new RequestOptions({
             method: RequestMethod.Get,
             headers: headers,
-            search: queryParameters
+            search: queryParameters,
+            withCredentials:this.configuration.withCredentials
         });
-
         // https://github.com/swagger-api/swagger-codegen/issues/4037
         if (extraHttpRequestParams) {
             requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
@@ -816,7 +880,7 @@ export class AdminApi {
 
     /**
      * get holidays by year
-     * @param year 
+     * @param year
      */
     public globalsettingsHolidaysYearGet(year: number, extraHttpRequestParams?: any): Observable<Date[]> {
         return this.globalsettingsHolidaysYearGetWithHttpInfo(year, extraHttpRequestParams)
@@ -831,7 +895,7 @@ export class AdminApi {
 
     /**
      * set holidays by year
-     * @param year 
+     * @param year
      * @param holidays The holidays to set
      */
     public globalsettingsHolidaysYearPost(year: number, holidays: string[], extraHttpRequestParams?: any): Observable<{}> {
@@ -847,9 +911,9 @@ export class AdminApi {
 
 
     /**
-     * 
+     *
      * get holidays by year
-     * @param year 
+     * @param year
      */
     public globalsettingsHolidaysYearGetWithHttpInfo(year: number, extraHttpRequestParams?: any): Observable<Response> {
         const path = this.basePath + '/globalsettings/holidays/${year}'
@@ -890,9 +954,9 @@ export class AdminApi {
     }
 
     /**
-     * 
+     *
      * set holidays by year
-     * @param year 
+     * @param year
      * @param holidays The holidays to set
      */
     public globalsettingsHolidaysYearPostWithHttpInfo(year: number, holidays: string[], extraHttpRequestParams?: any): Observable<Response> {
