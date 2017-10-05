@@ -20,7 +20,8 @@ import {
     MdTabsModule,
     MdDatepickerModule,
     MdNativeDateModule,
-    MdChipsModule
+    MdChipsModule,
+    MdTooltipModule
 } from '@angular/material';
 
 @NgModule({
@@ -44,7 +45,8 @@ import {
         MdTabsModule,
         MdDatepickerModule,
         MdNativeDateModule,
-        MdChipsModule
+        MdChipsModule,
+        MdTooltipModule
 
     ],
     exports: [
@@ -67,7 +69,8 @@ import {
         MdTabsModule,
         MdDatepickerModule,
         MdNativeDateModule,
-        MdChipsModule
+        MdChipsModule,
+        MdTooltipModule
 
     ],
     declarations: [],

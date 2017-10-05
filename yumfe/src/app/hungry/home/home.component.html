@@ -18,7 +18,7 @@
 
 <div *ngFor="let day of weekDays" [ngClass]="{'warningUser': controlledUser}">
   <div class="dateHeader is-flex">
-    <div class="date inline">{{formattedDay(day)}}</div>
+    <div class="date  is-flex" [ngClass]="{'cursor': getDailyMenuComment(day)}" mdTooltip='{{getDailyMenuComment(day)}}' [mdTooltipPosition]="'after'" ><div>{{formattedDay(day)}}</div>  <i *ngIf="getDailyMenuComment(day)" class="material-icons">assignment</i>  </div>
     <div class="is-flex stretch"  *ngIf="controlledUser">
       <div class="trapezoid inline">&nbsp;</div>
       <div class="controlledUserName inline">{{controlledUser.firstName+" "+controlledUser.lastName}}</div>
@@ -33,7 +33,7 @@
       </div>
     </div>
     <div *ngIf='dailyMenuExists(day)'>
-      <app-daily-menu (dailyTotalPrice)="handleUserUpdated($event, day)" [dailyMenu]='getDailyMenu(day)' [controlledUser]="controlledUser"></app-daily-menu>
+      <app-daily-menu (dailyMenuChanges)="handleUserUpdated($event, day)" [dailyMenu]='getDailyMenu(day)' [controlledUser]="controlledUser"></app-daily-menu>
     </div>
   </md-card>
 </div>

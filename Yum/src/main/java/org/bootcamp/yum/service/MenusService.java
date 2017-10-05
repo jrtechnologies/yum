@@ -224,6 +224,7 @@ public class MenusService {
             //Check if this daily menu is ordered from user.
             if (dailyOrderEntity != null) {
                 dailyMenu.setOrderId(dailyOrderEntity.getDailyOrderId());
+                dailyMenu.setComment(dailyOrderEntity.getComment());
                 LastEdit lastEdit = new LastEdit();
                 lastEdit.setTimeStamp(dailyMenuEntity.getLastEdit());
                 lastEdit.setVersion(dailyMenuEntity.getVersion());

@@ -109,8 +109,8 @@ public class ChefOrdersApiControllerTest {
         orderItems.add(orderItem3);
         
         List<DailyOrder> dailyOrders = new ArrayList<>();
-        DailyOrder dailyOrder1 = new DailyOrder(22, user1, null, orderItems, true, 0, 0, null, 0);
-        DailyOrder dailyOrder2 = new DailyOrder(22, user2, null, orderItems, true, 0, 0, null, 0);
+        DailyOrder dailyOrder1 = new DailyOrder(22, user1, null, orderItems, true, 0, 0,null, null, 0);
+        DailyOrder dailyOrder2 = new DailyOrder(22, user2, null, orderItems, true, 0, 0,null, null, 0);
         dailyOrders.add(dailyOrder1);     
         dailyOrders.add(dailyOrder2); 
         
@@ -151,7 +151,7 @@ public class ChefOrdersApiControllerTest {
         orderItems.add(orderItem2);
         
         List<DailyOrder> dailyOrders = new ArrayList<>();
-        DailyOrder dailyOrder = new DailyOrder(22, user1, null, orderItems, true, 0, 0, null, 0);
+        DailyOrder dailyOrder = new DailyOrder(22, user1, null, orderItems, true, 0, 0,null, null, 0);
         dailyOrders.add(dailyOrder);     
  
         

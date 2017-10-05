@@ -1,8 +1,8 @@
 <div fxLayout="row" class="right-align">
-    <div fxFlex="100">
-      <button class="miniBtnX" md-button (click)="dialogRef.close('No')">x</button>
-    </div>
+  <div fxFlex="100">
+    <button class="miniBtnX" md-button (click)="dialogRef.close('No')">x</button>
   </div>
+</div>
 <div class="dialog">
   <div class="order">
     <div class="centered" fxLayout="row">
@@ -13,8 +13,9 @@
     <div class="centered">
       <!--<p>Congrats,</p>-->
       <p><b>Ms/Mr {{fullName}},</b></p>
-      <p>You are about to order for<br><ng-container *ngIf="controlledUserFullName">{{controlledUserFullName}}<br></ng-container> <b>{{date|date:"EEEE d MMM y"}}</b>
-      .</p>
+      <p>You are about to order for<br>
+        <ng-container *ngIf="controlledUserFullName">{{controlledUserFullName}}<br></ng-container> <b>{{date|date:"EEEE d MMM y"}}</b> .
+      </p>
     </div>
     <div>
       <div *ngFor="let food of orderedFoods">
@@ -39,13 +40,19 @@
           <b>Total</b>
         </div>
         <div fxFlex="24">
-          &nbsp;<!--Items: {{items}}-->
+          &nbsp;
+          <!--Items: {{items}}-->
         </div>
         <div fxFlex="20" class="right-align">
           <b>{{total | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></b>
         </div>
       </div>
-    </div>
+    </div> 
+      <md-form-field class="full-width">
+        <textarea mdInput placeholder="Comments" value="" maxlength="150" class="noResize" (keyup)="countComment()"  [(ngModel)]="comment"></textarea>
+        <md-icon mdSuffix>mode_edit</md-icon>
+        <md-hint>{{characterleft}} character(s) left</md-hint>
+    </md-form-field> 
     <div class="centered email" fxLayout="row">
       <md-checkbox fxFlex="100" [checked]="isChecked" (change)="toggle()">Email me this</md-checkbox>
     </div>

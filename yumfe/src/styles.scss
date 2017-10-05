@@ -64,7 +64,7 @@ $primary: #ff5b57;
 .smallSidePad{ padding: 0 10px;}
 .width100 { width:100%; }
 .noResize{
-  resize: none;
+  resize: none!important;
 }
 
 .noMarginInput  .mat-input-wrapper { margin: 20px 0 20px 0 !important; }

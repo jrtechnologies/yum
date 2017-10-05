@@ -53,6 +53,7 @@ CREATE TABLE daily_order(
     final BIT(1) NOT NULL DEFAULT false,
     user_id BIGINT,
     dailymenu_id BIGINT,
+	comment VARCHAR(150),
 	last_edit TIMESTAMP NULL  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	version INT NOT NULL  DEFAULT 0,
     PRIMARY KEY (id)

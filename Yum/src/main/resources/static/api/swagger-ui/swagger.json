@@ -725,6 +725,10 @@
                   "type": "string",
                   "format": "date"
                 },
+                "comment": {
+                  "type": "string",
+                  "maxLength": 150
+                },
                 "orderItems": {
                   "type": "array",
                   "items": {
@@ -2257,6 +2261,10 @@
           "type": "string",
           "format": "date"
         },
+        "comment": {
+          "type": "string",
+          "maxLength": 150
+        },
         "lastEdit": {
           "$ref": "#/definitions/LastEdit"
         }
@@ -2571,6 +2579,10 @@
         "isFinal": {
           "type": "boolean"
         },
+        "comment": {
+          "type": "string",
+          "maxLength": 150
+        },
         "foods": {
           "type": "array",
           "items": {
@@ -2661,6 +2673,10 @@
           "items": {
             "$ref": "#/definitions/OrderItem"
           }
+        },
+        "comment": {
+          "type": "string",
+          "maxLength": 150
         }
       }
     },

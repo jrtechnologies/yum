@@ -1,33 +1,22 @@
-/*
- * Copyright (C) 2017 JR Technologies.
- * This file is part of Yum.
- * 
- * Yum is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * 
- * Yum is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with Yum. 
- * If not, see <http://www.gnu.org/licenses/>.
- */
-
 package org.bootcamp.yum.api.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import javax.validation.constraints.*;
+import org.bootcamp.yum.api.model.OrderItem;
 import org.joda.time.LocalDate;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+
 /**
  * An order DTO
  */
 @ApiModel(description = "An order DTO")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-05-15T10:36:20.575+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-10-05T12:37:13.367+03:00")
 
 public class Order   {
   @NotNull
@@ -44,7 +33,10 @@ public class Order   {
   private Boolean emailRequest = null;
   @NotNull
   @JsonProperty("OrderItems")
-  private List<OrderItem> orderItems = new ArrayList<OrderItem>();
+  private List<OrderItem> orderItems = null;
+
+  @JsonProperty("comment")
+  private String comment = null;
 
   public Order dailyMenuId(Long dailyMenuId) {
     this.dailyMenuId = dailyMenuId;
@@ -56,6 +48,8 @@ public class Order   {
    * @return dailyMenuId
   **/
   @ApiModelProperty(value = "")
+
+
   public Long getDailyMenuId() {
     return dailyMenuId;
   }
@@ -74,6 +68,9 @@ public class Order   {
    * @return dailyMenuDate
   **/
   @ApiModelProperty(value = "")
+
+  @Valid
+
   public LocalDate getDailyMenuDate() {
     return dailyMenuDate;
   }
@@ -92,6 +89,8 @@ public class Order   {
    * @return menuVersion
   **/
   @ApiModelProperty(value = "")
+
+
   public Integer getMenuVersion() {
     return menuVersion;
   }
@@ -110,6 +109,8 @@ public class Order   {
    * @return emailRequest
   **/
   @ApiModelProperty(value = "")
+
+
   public Boolean getEmailRequest() {
     return emailRequest;
   }
@@ -124,6 +125,9 @@ public class Order   {
   }
 
   public Order addOrderItemsItem(OrderItem orderItemsItem) {
+    if (this.orderItems == null) {
+      this.orderItems = new ArrayList<OrderItem>();
+    }
     this.orderItems.add(orderItemsItem);
     return this;
   }
@@ -133,12 +137,35 @@ public class Order   {
    * @return orderItems
   **/
   @ApiModelProperty(value = "")
+
+  @Valid
+
   public List<OrderItem> getOrderItems() {
     return orderItems;
   }
 
   public void setOrderItems(List<OrderItem> orderItems) {
     this.orderItems = orderItems;
+  }
+
+  public Order comment(String comment) {
+    this.comment = comment;
+    return this;
+  }
+
+   /**
+   * Get comment
+   * @return comment
+  **/
+  @ApiModelProperty(value = "")
+
+ @Size(max=150)
+  public String getComment() {
+    return comment;
+  }
+
+  public void setComment(String comment) {
+    this.comment = comment;
   }
 
 
@@ -155,12 +182,13 @@ public class Order   {
         Objects.equals(this.dailyMenuDate, order.dailyMenuDate) &&
         Objects.equals(this.menuVersion, order.menuVersion) &&
         Objects.equals(this.emailRequest, order.emailRequest) &&
-        Objects.equals(this.orderItems, order.orderItems);
+        Objects.equals(this.orderItems, order.orderItems) &&
+        Objects.equals(this.comment, order.comment);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dailyMenuId, dailyMenuDate, menuVersion, emailRequest, orderItems);
+    return Objects.hash(dailyMenuId, dailyMenuDate, menuVersion, emailRequest, orderItems, comment);
   }
 
   @Override
@@ -173,6 +201,7 @@ public class Order   {
     sb.append("    menuVersion: ").append(toIndentedString(menuVersion)).append("\n");
     sb.append("    emailRequest: ").append(toIndentedString(emailRequest)).append("\n");
     sb.append("    orderItems: ").append(toIndentedString(orderItems)).append("\n");
+    sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("}");
     return sb.toString();
   }

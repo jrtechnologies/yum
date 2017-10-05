@@ -490,6 +490,9 @@ paths:
               dailyMenuDate:
                 type: string
                 format: date
+              comment:
+                type: string
+                maxLength: 150
               orderItems:
                 type: array
                 items:
@@ -1456,6 +1459,9 @@ definitions:
       dailyMenuDate:
         type: string
         format: date
+      comment:
+        type: string
+        maxLength: 150
       lastEdit:
         $ref: '#/definitions/LastEdit'
   User:
@@ -1669,6 +1675,9 @@ definitions:
         format: int64
       isFinal:
         type: boolean
+      comment:
+        type: string
+        maxLength: 150
       foods:
         type: array
         items:
@@ -1730,6 +1739,9 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/OrderItem'
+      comment:
+        type: string
+        maxLength: 150
   DailyOrderSummary:
     type: object
     description: Daily order summary DTO

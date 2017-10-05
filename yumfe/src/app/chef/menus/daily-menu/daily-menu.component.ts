@@ -101,7 +101,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
   }
 
   setup() {
-      console.log("setup menu");
+      //console.log("setup menu");
 
       this.menuCanBeDiscarded = false;
       this.menuCanBeUpdated  = false;
@@ -176,7 +176,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
              .map(name => name && name !== '' ? this.filter(name) : this.foodsAvailable.slice());
 
       this.selectCtrl.valueChanges.subscribe(status => {
-          console.log(status);
+          //console.log(status);
          if ( this.el && this.focusMe && status.length == 0 ) {
             //console.log('blur enter');
             this.el.nativeElement.blur();
@@ -444,7 +444,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
       if(food.standard) count++;
     }
     this.menuHasAllStandards = (count==this.quantityOfStandards);
-    console.log(this.quantityOfStandards);
+    //console.log(this.quantityOfStandards);
   }
 
 

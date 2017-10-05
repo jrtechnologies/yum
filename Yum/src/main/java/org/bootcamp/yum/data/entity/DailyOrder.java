@@ -60,7 +60,8 @@ public class DailyOrder {
     private long userId;
     @Column(name = "dailymenu_id")
     private long dailyMenuId;
-
+    @Column(name = "comment")
+    private String comment;
     @Column(name = "last_edit")
     @Convert(converter = LocalDateTimeAttributeConverter.class)
     private DateTime lastEdit;
@@ -77,7 +78,7 @@ public class DailyOrder {
     }
 
     //Use for mockups
-    public DailyOrder(long dailyOrderId, User user, DailyMenu dailyMenu, List<OrderItem> orderItems, boolean finalised, long userId, long dailyMenuId, DateTime lastEdit, int version) {
+    public DailyOrder(long dailyOrderId, User user, DailyMenu dailyMenu, List<OrderItem> orderItems, boolean finalised, long userId, long dailyMenuId, String comment, DateTime lastEdit, int version) {
         this.dailyOrderId = dailyOrderId;
         this.user = user;
         this.dailyMenu = dailyMenu;
@@ -85,21 +86,21 @@ public class DailyOrder {
         this.finalised = finalised;
         this.userId = userId;
         this.dailyMenuId = dailyMenuId;
+        this.comment = comment;
         this.lastEdit = lastEdit;
         this.version = version;
     }
-
+ 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 53 * hash + (int) (this.dailyOrderId ^ (this.dailyOrderId >>> 32));
-        //hash = 53 * hash + Objects.hashCode(this.user);
-        //hash = 53 * hash + Objects.hashCode(this.dailyMenu);
-        hash = 53 * hash + Objects.hashCode(this.orderItems);
-        hash = 53 * hash + (this.finalised ? 1 : 0);
-        hash = 53 * hash + (int) (this.userId ^ (this.userId >>> 32));
-        hash = 53 * hash + (int) (this.dailyMenuId ^ (this.dailyMenuId >>> 32));
-        //hash = 53 * hash + Objects.hashCode(this.lastEdit);
+        int hash = 3;
+        hash = 29 * hash + (int) (this.dailyOrderId ^ (this.dailyOrderId >>> 32));
+        hash = 29 * hash + Objects.hashCode(this.orderItems);
+        hash = 29 * hash + (this.finalised ? 1 : 0);
+        hash = 29 * hash + (int) (this.userId ^ (this.userId >>> 32));
+        hash = 29 * hash + (int) (this.dailyMenuId ^ (this.dailyMenuId >>> 32));
+        hash = 29 * hash + Objects.hashCode(this.comment);
+        hash = 29 * hash + this.version;
         return hash;
     }
 
@@ -168,6 +169,14 @@ public class DailyOrder {
         this.orderItems = orderItems;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     public DateTime getLastEdit() {
         return lastEdit;
     }
@@ -190,7 +199,8 @@ public class DailyOrder {
         dto.setDate(dailyMenu.getDate());
         dto.setOrderId(dailyOrderId);
         dto.setLastEdit(new org.bootcamp.yum.api.model.LastEdit(dailyMenu.getLastEdit(), dailyMenu.getVersion()));
-        dto.setIsFinal(finalised);
+        dto.setIsFinal(finalised); 
+        dto.setComment(comment);
         for (OrderItem orderItem : orderItems) {
             FoodWithQuantity foodWithQuantity = new FoodWithQuantity();
             foodWithQuantity.setFood(orderItem.getFood().toDtoFood());
@@ -216,7 +226,9 @@ public class DailyOrder {
 
     @Override
     public String toString() {
-        return "DailyOrder{" + "dailyOrderId=" + dailyOrderId + ", dailyMenu=" + dailyMenu + ", orderItems=" + orderItems + ", finalised=" + finalised + ", userId=" + userId + ", dailyMenuId=" + dailyMenuId + ", lastEdit=" + lastEdit + '}';
+        return "DailyOrder{" + "dailyOrderId=" + dailyOrderId + ", user=" + user + ", dailyMenu=" + dailyMenu + ", orderItems=" + orderItems + ", finalised=" + finalised + ", userId=" + userId + ", dailyMenuId=" + dailyMenuId + ", comment=" + comment + ", lastEdit=" + lastEdit + ", version=" + version + '}';
     }
+
+ 
 
 }

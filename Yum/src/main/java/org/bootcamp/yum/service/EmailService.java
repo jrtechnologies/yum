@@ -204,6 +204,7 @@ public class EmailService {
         model.put("menuDate", menuDate.toString("EEEE dd MMMM YYYY"));
         model.put("link", applicationProperties.getMail().getDomain() + "/hungry/" + menuDate.getYear() + "/" + menuDate.getWeekOfWeekyear());
         model.put("orderItems", order.getOrderItems());
+        model.put("comment", order.getComment());
         model.put("currency", settings.getCurrency());
         BigDecimal total = new BigDecimal("0");
         int totalQuantity = 0;

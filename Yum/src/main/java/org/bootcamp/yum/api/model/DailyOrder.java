@@ -1,39 +1,33 @@
-/*
- * Copyright (C) 2017 JR Technologies.
- * This file is part of Yum.
- * 
- * Yum is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * 
- * Yum is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with Yum. 
- * If not, see <http://www.gnu.org/licenses/>.
- */
-
 package org.bootcamp.yum.api.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import org.bootcamp.yum.api.model.FoodWithQuantity;
+import org.bootcamp.yum.api.model.LastEdit;
 import org.joda.time.LocalDate;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+
 /**
  * A single order DTO
  */
 @ApiModel(description = "A single order DTO")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-04-20T10:12:43.892+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-10-05T12:37:13.367+03:00")
 
 public class DailyOrder   {
   @JsonProperty("foods")
-  private List<FoodWithQuantity> foods = new ArrayList<FoodWithQuantity>();
+  private List<FoodWithQuantity> foods = null;
 
   @JsonProperty("dailyMenuDate")
   private LocalDate dailyMenuDate = null;
+
+  @JsonProperty("comment")
+  private String comment = null;
 
   @JsonProperty("lastEdit")
   private LastEdit lastEdit = null;
@@ -44,6 +38,9 @@ public class DailyOrder   {
   }
 
   public DailyOrder addFoodsItem(FoodWithQuantity foodsItem) {
+    if (this.foods == null) {
+      this.foods = new ArrayList<FoodWithQuantity>();
+    }
     this.foods.add(foodsItem);
     return this;
   }
@@ -53,6 +50,9 @@ public class DailyOrder   {
    * @return foods
   **/
   @ApiModelProperty(value = "")
+
+  @Valid
+
   public List<FoodWithQuantity> getFoods() {
     return foods;
   }
@@ -71,12 +71,35 @@ public class DailyOrder   {
    * @return dailyMenuDate
   **/
   @ApiModelProperty(value = "")
+
+  @Valid
+
   public LocalDate getDailyMenuDate() {
     return dailyMenuDate;
   }
 
   public void setDailyMenuDate(LocalDate dailyMenuDate) {
     this.dailyMenuDate = dailyMenuDate;
+  }
+
+  public DailyOrder comment(String comment) {
+    this.comment = comment;
+    return this;
+  }
+
+   /**
+   * Get comment
+   * @return comment
+  **/
+  @ApiModelProperty(value = "")
+
+ @Size(max=150)
+  public String getComment() {
+    return comment;
+  }
+
+  public void setComment(String comment) {
+    this.comment = comment;
   }
 
   public DailyOrder lastEdit(LastEdit lastEdit) {
@@ -89,6 +112,9 @@ public class DailyOrder   {
    * @return lastEdit
   **/
   @ApiModelProperty(value = "")
+
+  @Valid
+
   public LastEdit getLastEdit() {
     return lastEdit;
   }
@@ -109,12 +135,13 @@ public class DailyOrder   {
     DailyOrder dailyOrder = (DailyOrder) o;
     return Objects.equals(this.foods, dailyOrder.foods) &&
         Objects.equals(this.dailyMenuDate, dailyOrder.dailyMenuDate) &&
+        Objects.equals(this.comment, dailyOrder.comment) &&
         Objects.equals(this.lastEdit, dailyOrder.lastEdit);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(foods, dailyMenuDate, lastEdit);
+    return Objects.hash(foods, dailyMenuDate, comment, lastEdit);
   }
 
   @Override
@@ -124,6 +151,7 @@ public class DailyOrder   {
     
     sb.append("    foods: ").append(toIndentedString(foods)).append("\n");
     sb.append("    dailyMenuDate: ").append(toIndentedString(dailyMenuDate)).append("\n");
+    sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("    lastEdit: ").append(toIndentedString(lastEdit)).append("\n");
     sb.append("}");
     return sb.toString();
