@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
 import org.bootcamp.yum.api.ApiException;
 import org.bootcamp.yum.api.ConcurrentCreationException;
 import org.bootcamp.yum.api.ConcurrentDeletionException;
@@ -50,6 +50,7 @@ import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OrdersService {
@@ -173,7 +174,7 @@ public class OrdersService {
                         orderAmount = orderAmount.add(foodEntity.getPrice().multiply(new BigDecimal(itemQuantity)));
                     }
 
-                    dailyOrderRep.save(dailyOrderEntity);
+                    
                     BigDecimal balance = user.getBalance();
                     if (balance == null) {
                         balance = orderAmount.negate();
@@ -184,7 +185,8 @@ public class OrdersService {
                     if (balance.compareTo(BigDecimal.ZERO)<0) {
                         throw new ApiException(402, "Not enough balance");
                     }
-                    
+                                       
+                    dailyOrderRep.save(dailyOrderEntity);
                     user.setBalance(balance);
                     Transaction transaction = new Transaction(userId, orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(),dailyMenuId, 1);
                     transactionRep.save(transaction);
@@ -269,7 +271,7 @@ public class OrdersService {
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = ApiException.class)
     public LastEdit ordersIdPut(Long id, UpdateOrderItems updateOrderItems, Long reqUserId) throws ApiException {
         try {
             
