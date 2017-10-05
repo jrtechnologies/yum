@@ -84,6 +84,7 @@ public interface OrdersApi {
         @ApiResponse(code = 200, message = "Order succesfully modified", response = LastEdit.class),
         @ApiResponse(code = 304, message = "Unmodified data", response = LastEdit.class),
         @ApiResponse(code = 400, message = "Order couldn't be modified.", response = LastEdit.class),
+        @ApiResponse(code = 402, message = "Not enough balance.", response = Void.class),
         @ApiResponse(code = 404, message = "Order not found (id)", response = LastEdit.class),
         @ApiResponse(code = 409, message = "Concurrent modification error", response = LastEdit.class),
         @ApiResponse(code = 410, message = "Concurrent Order Deletion", response = LastEdit.class),
@@ -102,6 +103,7 @@ public interface OrdersApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Order succesfully placed", response = DailyMenu.class),
         @ApiResponse(code = 400, message = "Order couldn't have been placed.", response = DailyMenu.class),
+        @ApiResponse(code = 402, message = "Not enough balance.", response = Void.class),
         @ApiResponse(code = 409, message = "Order already placed", response = DailyMenu.class),
         @ApiResponse(code = 410, message = "Concurrent Order Deletion", response = DailyMenu.class),
         @ApiResponse(code = 412, message = "Deadline for orders passed", response = DailyMenu.class),

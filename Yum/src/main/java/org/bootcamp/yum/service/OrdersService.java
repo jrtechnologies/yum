@@ -180,7 +180,11 @@ public class OrdersService {
                     } else {
                         balance = balance.subtract(orderAmount);
                     }
-
+                    
+                    if (balance.compareTo(BigDecimal.ZERO)<0) {
+                        throw new ApiException(402, "Not enough balance");
+                    }
+                    
                     user.setBalance(balance);
                     Transaction transaction = new Transaction(userId, orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(),dailyMenuId, 1);
                     transactionRep.save(transaction);
@@ -394,12 +398,7 @@ public class OrdersService {
                     LastEdit lastEdit = new LastEdit();
                     lastEdit.setTimeStamp(dailyOrderEntity.getLastEdit());
                     lastEdit.setVersion(dailyOrderEntity.getVersion());
-
-                    // If user requested email confirmation the email service is injected  
-                    if (updateOrderItems.getEmailRequest() && (emailService != null)) {
-                        emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
-                    }
-
+                    
                     BigDecimal balance = user.getBalance();
                     if (balance == null) {
                         balance = orderAmount.negate();
@@ -407,10 +406,19 @@ public class OrdersService {
                         balance = balance.subtract(orderAmount);
                     }
 
+                    if (balance.compareTo(BigDecimal.ZERO)<0) {
+                        throw new ApiException(402, "Not enough balance");
+                    }
+                    
                     user.setBalance(balance);
 
                     Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 2);
                     transactionRep.save(transaction);
+                    
+                    // If user requested email confirmation the email service is injected  
+                    if (updateOrderItems.getEmailRequest() && (emailService != null)) {
+                        emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
+                    }
 
                     return lastEdit;
 
