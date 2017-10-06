@@ -130,7 +130,7 @@ export class HungryApi {
      * @param userid
      * @param dailyMenuDetails dailymenu details id, version, date
      */
-    public ordersIdDelete(id: number, userid?: number, dailyMenuDetails?: models.DailyMenuDetails, extraHttpRequestParams?: any): Observable<{}> {
+    public ordersIdDelete(id: number, userid?: number, dailyMenuDetails?: models.DailyMenuDetails, extraHttpRequestParams?: any): Observable<models.OrderUpdate> {
         return this.ordersIdDeleteWithHttpInfo(id, userid, dailyMenuDetails, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
@@ -168,7 +168,7 @@ export class HungryApi {
      * @param userid
      * @param updateOrderItems The order items to modify
      */
-    public ordersIdPut(id: number, userid?: number, updateOrderItems?: models.UpdateOrderItems, extraHttpRequestParams?: any): Observable<models.LastEdit> {
+    public ordersIdPut(id: number, userid?: number, updateOrderItems?: models.UpdateOrderItems, extraHttpRequestParams?: any): Observable<models.OrderUpdate> {
         return this.ordersIdPutWithHttpInfo(id, userid, updateOrderItems, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
@@ -199,13 +199,13 @@ export class HungryApi {
     /**
      * get refreshed token
      */
-    public refreshTokenGet(extraHttpRequestParams?: any): Observable<string> {
+    public refreshTokenGet(extraHttpRequestParams?: any): Observable<models.Refresh> {
         return this.refreshTokenGetWithHttpInfo(extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
                 } else {
-                    return response.text() || null;
+                  return response.json() || {};
                 }
             });
     }

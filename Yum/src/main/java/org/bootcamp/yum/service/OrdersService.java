@@ -32,6 +32,7 @@ import org.bootcamp.yum.api.model.FoodWithQuantity;
 import org.bootcamp.yum.api.model.LastEdit;
 import org.bootcamp.yum.api.model.Order;
 import org.bootcamp.yum.api.model.OrderItem;
+import org.bootcamp.yum.api.model.OrderUpdate;
 import org.bootcamp.yum.api.model.UpdateOrderItems;
 import org.bootcamp.yum.data.entity.OrderItemId;
 import org.bootcamp.yum.data.entity.Settings;
@@ -213,6 +214,7 @@ public class OrdersService {
                     lastEdit.setVersion(dailyMenuEntity.getVersion());
                     dailyMenu.setLastEdit(lastEdit);
                     dailyMenu.setIsFinal(false);
+                    dailyMenu.setBalance(balance);
                     // If user requested email confirmation the email service is injected  
                     if (order.getEmailRequest() && (emailService != null)) {
                         emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
@@ -272,7 +274,7 @@ public class OrdersService {
     }
 
     @Transactional(rollbackFor = ApiException.class)
-    public LastEdit ordersIdPut(Long id, UpdateOrderItems updateOrderItems, Long reqUserId) throws ApiException {
+    public OrderUpdate ordersIdPut(Long id, UpdateOrderItems updateOrderItems, Long reqUserId) throws ApiException {
         try {
             
             org.bootcamp.yum.data.entity.User sourceUser = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
@@ -413,6 +415,10 @@ public class OrdersService {
                     }
                     
                     user.setBalance(balance);
+                    
+                    OrderUpdate orderUpdate = new OrderUpdate();
+                    orderUpdate.setBalance(balance);
+                    orderUpdate.setLastEdit(lastEdit);
 
                     Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 2);
                     transactionRep.save(transaction);
@@ -421,8 +427,9 @@ public class OrdersService {
                     if (updateOrderItems.getEmailRequest() && (emailService != null)) {
                         emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
                     }
-
-                    return lastEdit;
+                    
+                    
+                    return orderUpdate;
 
                     // if quantities same and no new orderItem    
                 } else {
@@ -436,7 +443,7 @@ public class OrdersService {
     }
 
     @Transactional
-    public void ordersIdDelete(Long id, DailyMenuDetails dailyMenuDetails, Long reqUserId) throws ApiException {
+    public OrderUpdate ordersIdDelete(Long id, DailyMenuDetails dailyMenuDetails, Long reqUserId) throws ApiException {
         
         org.bootcamp.yum.data.entity.User sourceUser = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         org.bootcamp.yum.data.entity.User user = getUserOfDailyOrder(sourceUser, reqUserId);
@@ -469,10 +476,13 @@ public class OrdersService {
                 balance = balance.add(orderAmount);
             }
             user.setBalance(balance);
+            OrderUpdate orderUpdate = new OrderUpdate();
+            orderUpdate.setBalance(balance);
 
             Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 3);
             transactionRep.save(transaction);
             dailyOrderRep.delete(dailyOrderEntity);
+            return orderUpdate;
         }
     }
 

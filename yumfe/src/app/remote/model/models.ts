@@ -22,6 +22,8 @@ export * from './ModelError';
 export * from './NewDailyMenu';
 export * from './Order';
 export * from './OrderItem';
+export * from './OrderUpdate';
+export * from './Refresh';
 export * from './ResetPwd';
 export * from './Settings';
 export * from './Statistic';

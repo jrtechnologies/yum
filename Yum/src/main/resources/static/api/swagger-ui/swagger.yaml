@@ -170,12 +170,12 @@ paths:
         - hungry
       description: get refreshed token
       produces:
-        - text/plain
+        - application/json
       responses:
         '200':
           description: refreshed token string
           schema:
-            type: string
+            $ref: '#/definitions/Refresh'
         '500':
           $ref: '#/responses/Error'
   /settings:
@@ -504,7 +504,7 @@ paths:
         '200':
           description: Order succesfully modified
           schema:
-            $ref: '#/definitions/LastEdit'
+            $ref: '#/definitions/OrderUpdate'
         '304':
           description: Unmodified data
         '400':
@@ -559,6 +559,8 @@ paths:
       responses:
         '200':
           description: Order succesfully deleted
+          schema:
+            $ref: '#/definitions/OrderUpdate'
         '400':
           description: Order couldn't be deleted.
         '404':
@@ -1558,6 +1560,15 @@ definitions:
         type: string
       user:
         $ref: '#/definitions/User'
+  Refresh:
+    type: object
+    description: auth token
+    properties:
+      token:
+        type: string
+      balance:
+        type: number
+        format: int64
   Error:
     type: object
     description: An error with some info DTO
@@ -1677,6 +1688,18 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/FoodWithQuantity'
+      lastEdit:
+        $ref: '#/definitions/LastEdit'
+      balance:
+        type: number
+        format: int64
+  OrderUpdate:
+    type: object
+    description: Order last edit and user balance
+    properties:
+      balance:
+        type: number
+        format: int64
       lastEdit:
         $ref: '#/definitions/LastEdit'
   DailyMenuChef:

@@ -19,13 +19,14 @@ import io.swagger.annotations.*;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import org.bootcamp.yum.api.model.ConcurrentOrderDeletion;
 import org.bootcamp.yum.api.model.DailyMenu;
 import org.bootcamp.yum.api.model.DailyMenuDetails;
 import org.bootcamp.yum.api.model.DailyMenuOrder;
 import org.bootcamp.yum.api.model.DailyOrder;
 import org.bootcamp.yum.api.model.DailyOrderSummary;
-import org.bootcamp.yum.api.model.LastEdit;
 import org.bootcamp.yum.api.model.Order;
+import org.bootcamp.yum.api.model.OrderUpdate;
 import org.bootcamp.yum.api.model.UpdateOrderItems;
 import org.joda.time.LocalDate;
 import org.springframework.http.ResponseEntity;
@@ -42,11 +43,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping(value="/api")
 public interface OrdersApi {
 
-    @ApiOperation(value = "Deletes specified order", notes = "Deletes the order", response = Void.class, authorizations = {
+    @ApiOperation(value = "Deletes specified order", notes = "Deletes the order", response = Object.class, authorizations = {
         @Authorization(value = "Bearer")
     }, tags={ "hungry", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Order succesfully deleted", response = Void.class),
+        @ApiResponse(code = 200, message = "Order succesfully deleted", response = OrderUpdate.class),
         @ApiResponse(code = 400, message = "Order couldn't be deleted.", response = Void.class),
         @ApiResponse(code = 404, message = "Order not found (id).", response = Void.class),
         @ApiResponse(code = 410, message = "Concurrent Order Deletion", response = Void.class),
@@ -77,19 +78,19 @@ public interface OrdersApi {
          @NotNull @ApiParam(value = "", required = true) @RequestParam(value = "dailyMenuDate", required = true) LocalDate dailyMenuDate,@ApiParam(value = "") @RequestParam(value = "userid", required = false) Long userid) throws ApiException;
 
 
-    @ApiOperation(value = "Modifies order for the specified day", notes = "Modify the order", response = LastEdit.class, authorizations = {
+    @ApiOperation(value = "Modifies order for the specified day", notes = "Modify the order", response = OrderUpdate.class, authorizations = {
         @Authorization(value = "Bearer")
     }, tags={ "hungry", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Order succesfully modified", response = LastEdit.class),
-        @ApiResponse(code = 304, message = "Unmodified data", response = LastEdit.class),
-        @ApiResponse(code = 400, message = "Order couldn't be modified.", response = LastEdit.class),
+        @ApiResponse(code = 200, message = "Order succesfully modified", response = OrderUpdate.class),
+        @ApiResponse(code = 304, message = "Unmodified data", response = Void.class),
+        @ApiResponse(code = 400, message = "Order couldn't be modified.", response = Void.class),
         @ApiResponse(code = 402, message = "Not enough balance.", response = Void.class),
-        @ApiResponse(code = 404, message = "Order not found (id)", response = LastEdit.class),
-        @ApiResponse(code = 409, message = "Concurrent modification error", response = LastEdit.class),
-        @ApiResponse(code = 410, message = "Concurrent Order Deletion", response = LastEdit.class),
-        @ApiResponse(code = 412, message = "Deadline for orders passed", response = LastEdit.class),
-        @ApiResponse(code = 500, message = "An unexpected error occured.", response = LastEdit.class) })
+        @ApiResponse(code = 404, message = "Order not found (id)", response = Void.class),
+        @ApiResponse(code = 409, message = "Concurrent modification error", response = DailyOrder.class),
+        @ApiResponse(code = 410, message = "Concurrent Order Deletion", response = ConcurrentOrderDeletion.class),
+        @ApiResponse(code = 412, message = "Deadline for orders passed", response = Void.class),
+        @ApiResponse(code = 500, message = "An unexpected error occured.", response = Error.class) })
     @RequestMapping(value = "/orders/{id}",
         produces = { "application/json" }, 
         method = RequestMethod.PUT)

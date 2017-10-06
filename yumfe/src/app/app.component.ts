@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { AuthenticationService } from './shared/authentication.service';
+import { BalanceService } from './shared/services/balance.service';
 import { HttpSubjectService } from './shared/services/httpSubject.service';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 import { Router } from '@angular/router';
@@ -19,6 +20,7 @@ export class AppComponent {
 
     constructor(
         private authService: AuthenticationService, private httpSubjectService: HttpSubjectService,
+        private balanceService: BalanceService,
         public dialog: MdDialog, private router: Router,
         public hugryService: remote.HungryApi,
         public snackBar: MdSnackBar
@@ -53,8 +55,15 @@ export class AppComponent {
             (url: string) => {
                 if (this.authService.isLogged()) {
                     if (!/refreshToken$/.test(url)) {
-                        this.hugryService.refreshTokenGet().subscribe(token => {
-                            if (token) this.authService.refreshToken(token);
+                        this.hugryService.refreshTokenGet().subscribe(refresh => {
+                          const token = refresh.token;
+                          if (token) {
+                            this.authService.refreshToken(token)
+                          }
+                          const balance = refresh.balance;
+                          if (balance) {
+                            this.balanceService.updateBalance(balance);
+                          }
                         });
                     }
                 }

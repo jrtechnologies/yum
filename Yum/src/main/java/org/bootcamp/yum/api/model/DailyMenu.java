@@ -15,18 +15,25 @@
 
 package org.bootcamp.yum.api.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import org.bootcamp.yum.api.model.FoodWithQuantity;
+import org.bootcamp.yum.api.model.LastEdit;
 import org.joda.time.LocalDate;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+
 /**
  * A daily Menu,  has order checked DTO
  */
 @ApiModel(description = "A daily Menu,  has order checked DTO")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-05-15T17:20:26.790+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-10-06T15:19:56.604+03:00")
 
 public class DailyMenu   {
   @JsonProperty("id")
@@ -42,10 +49,13 @@ public class DailyMenu   {
   private Boolean isFinal = null;
 
   @JsonProperty("foods")
-  private List<FoodWithQuantity> foods = new ArrayList<FoodWithQuantity>();
+  private List<FoodWithQuantity> foods = null;
 
   @JsonProperty("lastEdit")
   private LastEdit lastEdit = null;
+
+  @JsonProperty("balance")
+  private BigDecimal balance = null;
 
   public DailyMenu id(Long id) {
     this.id = id;
@@ -57,6 +67,8 @@ public class DailyMenu   {
    * @return id
   **/
   @ApiModelProperty(value = "")
+
+
   public Long getId() {
     return id;
   }
@@ -75,6 +87,9 @@ public class DailyMenu   {
    * @return date
   **/
   @ApiModelProperty(value = "")
+
+  @Valid
+
   public LocalDate getDate() {
     return date;
   }
@@ -93,6 +108,8 @@ public class DailyMenu   {
    * @return orderId
   **/
   @ApiModelProperty(value = "")
+
+
   public Long getOrderId() {
     return orderId;
   }
@@ -111,6 +128,8 @@ public class DailyMenu   {
    * @return isFinal
   **/
   @ApiModelProperty(value = "")
+
+
   public Boolean getIsFinal() {
     return isFinal;
   }
@@ -125,6 +144,9 @@ public class DailyMenu   {
   }
 
   public DailyMenu addFoodsItem(FoodWithQuantity foodsItem) {
+    if (this.foods == null) {
+      this.foods = new ArrayList<FoodWithQuantity>();
+    }
     this.foods.add(foodsItem);
     return this;
   }
@@ -134,6 +156,9 @@ public class DailyMenu   {
    * @return foods
   **/
   @ApiModelProperty(value = "")
+
+  @Valid
+
   public List<FoodWithQuantity> getFoods() {
     return foods;
   }
@@ -152,12 +177,36 @@ public class DailyMenu   {
    * @return lastEdit
   **/
   @ApiModelProperty(value = "")
+
+  @Valid
+
   public LastEdit getLastEdit() {
     return lastEdit;
   }
 
   public void setLastEdit(LastEdit lastEdit) {
     this.lastEdit = lastEdit;
+  }
+
+  public DailyMenu balance(BigDecimal balance) {
+    this.balance = balance;
+    return this;
+  }
+
+   /**
+   * Get balance
+   * @return balance
+  **/
+  @ApiModelProperty(value = "")
+
+  @Valid
+
+  public BigDecimal getBalance() {
+    return balance;
+  }
+
+  public void setBalance(BigDecimal balance) {
+    this.balance = balance;
   }
 
 
@@ -175,12 +224,13 @@ public class DailyMenu   {
         Objects.equals(this.orderId, dailyMenu.orderId) &&
         Objects.equals(this.isFinal, dailyMenu.isFinal) &&
         Objects.equals(this.foods, dailyMenu.foods) &&
-        Objects.equals(this.lastEdit, dailyMenu.lastEdit);
+        Objects.equals(this.lastEdit, dailyMenu.lastEdit) &&
+        Objects.equals(this.balance, dailyMenu.balance);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, date, orderId, isFinal, foods, lastEdit);
+    return Objects.hash(id, date, orderId, isFinal, foods, lastEdit, balance);
   }
 
   @Override
@@ -194,6 +244,7 @@ public class DailyMenu   {
     sb.append("    isFinal: ").append(toIndentedString(isFinal)).append("\n");
     sb.append("    foods: ").append(toIndentedString(foods)).append("\n");
     sb.append("    lastEdit: ").append(toIndentedString(lastEdit)).append("\n");
+    sb.append("    balance: ").append(toIndentedString(balance)).append("\n");
     sb.append("}");
     return sb.toString();
   }
