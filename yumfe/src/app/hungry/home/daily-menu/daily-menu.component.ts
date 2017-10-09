@@ -514,7 +514,9 @@ export class DailyMenuOrderDialog implements OnInit {
 
   // method for count how many chars is remaning for the description
   countComment() {
-    this.characterleft = (this.maxlength) - (this.comment.length);
+    if(this.comment){
+      this.characterleft = (this.maxlength) - (this.comment.length);
+    }
   }
 
 }

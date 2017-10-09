@@ -530,7 +530,7 @@
                                             <!--<![endif]-->
 
 
-                                            <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
+                                            <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;word-break:break-all;"><![endif]-->
                                             <div style="line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
                                                 <div style="font-size:12px;line-height:14px;color:#4D4A4A;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
                                                     <p style="margin: 0;font-size: 12px;line-height: 14px;"><span style="font-size: 12px; line-height: 16px;font-style: italic;">Order comments: ${comment}</span></p>
