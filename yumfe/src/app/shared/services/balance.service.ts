@@ -15,11 +15,6 @@ export class BalanceService {
     }
 
     public updateBalance(newBalance: number) {
-      // this.balance.subscribe(oldBalance => {
-      //   if (oldBalance !== newBalance) {
-      //     this.balance.next(newBalance);
-      //   }
-      // });
       this.balance.next(newBalance);
     }
 

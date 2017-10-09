@@ -61,9 +61,10 @@ export class AppComponent {
                             this.authService.refreshToken(token)
                           }
                           const balance = refresh.balance;
-                          if (balance) {
-                            this.balanceService.updateBalance(balance);
+                          if (balance == null) {
+                            this.balanceService.updateBalance(0);
                           }
+                          this.balanceService.updateBalance(balance);
                         });
                     }
                 }
