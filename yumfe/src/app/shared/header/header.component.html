@@ -1,6 +1,6 @@
 <div class="is-flex topHeader ">
   <div id="logo"> <a href="/"><img src="/assets/img/Yum-logo.png" alt="logo"></a></div>
-  <div class="is-flex relative">
+  <div class="is-flex relative sticky right-pos">
     <div *ngIf="controlUser"  class="is-flex">
       <div class="controlledUserName">
         {{controlUser.firstName+" "+controlUser.lastName}}
@@ -16,6 +16,7 @@
     <div class="red">
       <div>{{getUser().firstName}}</div>
       <div>{{getUser().lastName}}</div>
+      <div class= "balance">Balance <span [innerHTML]="balance | async | number : '1.2-2'"></span><span [innerHTML]="currency | async"></span></div>
     </div>
     <div class="">
       <button md-icon-button md-raised-button [ngClass]="{'isOpen': trigger.menuOpen}" (click)="triggerMenu()"><i class="material-icons md-32 rotaded">keyboard_arrow_down</i></button>

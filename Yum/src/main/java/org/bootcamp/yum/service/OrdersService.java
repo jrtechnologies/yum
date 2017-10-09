@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
 import org.bootcamp.yum.api.ApiException;
 import org.bootcamp.yum.api.ConcurrentCreationException;
 import org.bootcamp.yum.api.ConcurrentDeletionException;
@@ -32,6 +32,7 @@ import org.bootcamp.yum.api.model.FoodWithQuantity;
 import org.bootcamp.yum.api.model.LastEdit;
 import org.bootcamp.yum.api.model.Order;
 import org.bootcamp.yum.api.model.OrderItem;
+import org.bootcamp.yum.api.model.OrderUpdate;
 import org.bootcamp.yum.api.model.UpdateOrderItems;
 import org.bootcamp.yum.data.entity.OrderItemId;
 import org.bootcamp.yum.data.entity.Settings;
@@ -50,6 +51,7 @@ import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OrdersService {
@@ -173,14 +175,19 @@ public class OrdersService {
                         orderAmount = orderAmount.add(foodEntity.getPrice().multiply(new BigDecimal(itemQuantity)));
                     }
 
-                    dailyOrderRep.save(dailyOrderEntity);
+                    
                     BigDecimal balance = user.getBalance();
                     if (balance == null) {
                         balance = orderAmount.negate();
                     } else {
                         balance = balance.subtract(orderAmount);
                     }
-
+                    
+                    if (balance.compareTo(BigDecimal.ZERO)<0) {
+                        throw new ApiException(402, "Not enough balance");
+                    }
+                                       
+                    dailyOrderRep.save(dailyOrderEntity);
                     user.setBalance(balance);
                     Transaction transaction = new Transaction(userId, orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(),dailyMenuId, 1);
                     transactionRep.save(transaction);
@@ -207,6 +214,7 @@ public class OrdersService {
                     lastEdit.setVersion(dailyMenuEntity.getVersion());
                     dailyMenu.setLastEdit(lastEdit);
                     dailyMenu.setIsFinal(false);
+                    dailyMenu.setBalance(balance);
                     // If user requested email confirmation the email service is injected  
                     if (order.getEmailRequest() && (emailService != null)) {
                         emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
@@ -265,8 +273,8 @@ public class OrdersService {
         }
     }
 
-    @Transactional
-    public LastEdit ordersIdPut(Long id, UpdateOrderItems updateOrderItems, Long reqUserId) throws ApiException {
+    @Transactional(rollbackFor = ApiException.class)
+    public OrderUpdate ordersIdPut(Long id, UpdateOrderItems updateOrderItems, Long reqUserId) throws ApiException {
         try {
             
             org.bootcamp.yum.data.entity.User sourceUser = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
@@ -394,12 +402,7 @@ public class OrdersService {
                     LastEdit lastEdit = new LastEdit();
                     lastEdit.setTimeStamp(dailyOrderEntity.getLastEdit());
                     lastEdit.setVersion(dailyOrderEntity.getVersion());
-
-                    // If user requested email confirmation the email service is injected  
-                    if (updateOrderItems.getEmailRequest() && (emailService != null)) {
-                        emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
-                    }
-
+                    
                     BigDecimal balance = user.getBalance();
                     if (balance == null) {
                         balance = orderAmount.negate();
@@ -407,12 +410,26 @@ public class OrdersService {
                         balance = balance.subtract(orderAmount);
                     }
 
+                    if (balance.compareTo(BigDecimal.ZERO)<0) {
+                        throw new ApiException(402, "Not enough balance");
+                    }
+                    
                     user.setBalance(balance);
+                    
+                    OrderUpdate orderUpdate = new OrderUpdate();
+                    orderUpdate.setBalance(balance);
+                    orderUpdate.setLastEdit(lastEdit);
 
                     Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 2);
                     transactionRep.save(transaction);
-
-                    return lastEdit;
+                    
+                    // If user requested email confirmation the email service is injected  
+                    if (updateOrderItems.getEmailRequest() && (emailService != null)) {
+                        emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
+                    }
+                    
+                    
+                    return orderUpdate;
 
                     // if quantities same and no new orderItem    
                 } else {
@@ -426,7 +443,7 @@ public class OrdersService {
     }
 
     @Transactional
-    public void ordersIdDelete(Long id, DailyMenuDetails dailyMenuDetails, Long reqUserId) throws ApiException {
+    public OrderUpdate ordersIdDelete(Long id, DailyMenuDetails dailyMenuDetails, Long reqUserId) throws ApiException {
         
         org.bootcamp.yum.data.entity.User sourceUser = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         org.bootcamp.yum.data.entity.User user = getUserOfDailyOrder(sourceUser, reqUserId);
@@ -459,10 +476,13 @@ public class OrdersService {
                 balance = balance.add(orderAmount);
             }
             user.setBalance(balance);
+            OrderUpdate orderUpdate = new OrderUpdate();
+            orderUpdate.setBalance(balance);
 
             Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 3);
             transactionRep.save(transaction);
             dailyOrderRep.delete(dailyOrderEntity);
+            return orderUpdate;
         }
     }
 

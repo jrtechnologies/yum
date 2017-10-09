@@ -85,8 +85,8 @@ public class OrdersApiController implements OrdersApi {
             @ApiParam(value = "") @RequestParam(value = "userid", required = false, defaultValue = "0") Long userid,
             @ApiParam(value = "dailymenu details id, version, date"  ) @RequestBody DailyMenuDetails dailyMenuDetails) {
         try {
-            ordersService.ordersIdDelete(id, dailyMenuDetails, userid);
-            return new ResponseEntity<>("{}", HttpStatus.OK);
+//            ordersService.ordersIdDelete(id, dailyMenuDetails, userid);
+            return new ResponseEntity<>(ordersService.ordersIdDelete(id, dailyMenuDetails, userid), HttpStatus.OK);
         } catch (ConcurrentDeletionException ex) {
             int exCode = ex.getCode();
             return new ResponseEntity<>(ex.getResponseDTO() ,HttpStatus.valueOf(exCode));    
@@ -122,8 +122,8 @@ public class OrdersApiController implements OrdersApi {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
-            LastEdit lastEdit = ordersService.ordersIdPut(id, updateOrderItems, userid);
-            return new ResponseEntity<>(lastEdit, HttpStatus.OK);
+            //OrderUpdate orderUpdate = ordersService.ordersIdPut(id, updateOrderItems, userid);
+            return new ResponseEntity<>(ordersService.ordersIdPut(id, updateOrderItems, userid), HttpStatus.OK);
         } catch (OptimisticLockException ex) {
             try {
                 DailyOrder dailyOrder = ordersService.ordersIdGet(id,updateOrderItems.getDailyMenuId(),updateOrderItems.getDailyMenuVersion(), updateOrderItems.getDailyMenuDate(), userid );

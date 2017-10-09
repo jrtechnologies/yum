@@ -30,4 +30,6 @@ export interface DailyMenu {
 
     totalPrice?: number;
 
+    balance?: number;
+
 }

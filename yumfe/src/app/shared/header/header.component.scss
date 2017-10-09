@@ -30,3 +30,42 @@
 
 .rotaded{ transition: 0.6s ease-in-out all; transform: rotate(0deg) rotate(1deg); }
 .isOpen .material-icons{ transform:   rotate(180deg);  }
+
+.sticky{
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 25px;
+  position: fixed;
+  top: 0;
+ // right:0;
+  height:100px !important;
+  z-index:1000;
+}
+
+.right-pos {
+  right: 200px;
+}
+
+@media screen and (max-width: 1400px) {
+  .right-pos {
+    right: 100px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .right-pos {
+    right: 30px;
+  }
+}
+
+@media screen and (max-width: 860px) {
+  .right-pos {
+    right: 0;
+  }
+}
+
+.balance {
+  color: black;
+  font-size: 12px;
+  font-style: italic;
+  padding-top: 10px;
+}
