@@ -15,14 +15,23 @@
 
 package org.bootcamp.yum.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import org.bootcamp.JwtCodec;
+import org.bootcamp.yum.api.model.Refresh;
+import org.bootcamp.yum.data.entity.User;
+import org.bootcamp.yum.data.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RefreshTokenService {
-    public String authRefreshTokenGet() {
+    
+    @Autowired
+    private UserRepository userRep;
+    
+    public Refresh authRefreshTokenGet() {
         //Retrieve user id
         Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //Retrieve user roles
@@ -32,6 +41,22 @@ public class RefreshTokenService {
         String subject = Long.toString(userId);
         // add subject and roles for the new token.
         String token = JwtCodec.encode(subject, roles);
-        return token;
+        
+        BigDecimal balance =null;
+        
+        User user=userRep.findById(userId);
+        if (user!=null) {
+            balance = user.getBalance();
+        }
+        if (balance==null){
+            balance = new BigDecimal(0); 
+        }
+        System.out.println("token: " + token);
+        System.out.println("balance: " + balance);
+        Refresh refresh = new Refresh();
+        refresh.setToken(token);
+        refresh.setBalance(balance);
+        System.out.println("refresh: " + refresh);
+        return refresh; 
     }
 }

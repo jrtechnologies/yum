@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.bootcamp.yum.api.model.FoodWithQuantity;
@@ -17,7 +18,7 @@ import javax.validation.constraints.*;
  * A daily Menu,  has order checked DTO
  */
 @ApiModel(description = "A daily Menu,  has order checked DTO")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-10-05T12:50:02.503+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-10-06T15:19:56.604+03:00")
 
 public class DailyMenu   {
   @JsonProperty("id")
@@ -40,6 +41,9 @@ public class DailyMenu   {
 
   @JsonProperty("lastEdit")
   private LastEdit lastEdit = null;
+
+  @JsonProperty("balance")
+  private BigDecimal balance = null;
 
   public DailyMenu id(Long id) {
     this.id = id;
@@ -192,6 +196,27 @@ public class DailyMenu   {
     this.lastEdit = lastEdit;
   }
 
+  public DailyMenu balance(BigDecimal balance) {
+    this.balance = balance;
+    return this;
+  }
+
+   /**
+   * Get balance
+   * @return balance
+  **/
+  @ApiModelProperty(value = "")
+
+  @Valid
+
+  public BigDecimal getBalance() {
+    return balance;
+  }
+
+  public void setBalance(BigDecimal balance) {
+    this.balance = balance;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -208,12 +233,13 @@ public class DailyMenu   {
         Objects.equals(this.isFinal, dailyMenu.isFinal) &&
         Objects.equals(this.comment, dailyMenu.comment) &&
         Objects.equals(this.foods, dailyMenu.foods) &&
-        Objects.equals(this.lastEdit, dailyMenu.lastEdit);
+        Objects.equals(this.lastEdit, dailyMenu.lastEdit) &&
+        Objects.equals(this.balance, dailyMenu.balance);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, date, orderId, isFinal, comment, foods, lastEdit);
+    return Objects.hash(id, date, orderId, isFinal, comment, foods, lastEdit, balance); 
   }
 
   @Override
@@ -228,6 +254,7 @@ public class DailyMenu   {
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("    foods: ").append(toIndentedString(foods)).append("\n");
     sb.append("    lastEdit: ").append(toIndentedString(lastEdit)).append("\n");
+    sb.append("    balance: ").append(toIndentedString(balance)).append("\n");
     sb.append("}");
     return sb.toString();
   }

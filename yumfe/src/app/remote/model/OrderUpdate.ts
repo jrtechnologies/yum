@@ -13,17 +13,11 @@
 import * as models from './models';
 
 /**
- * User order DTO
+ * Order last edit and user balance
  */
-export interface UserOrder {
-    firstName?: string;
+export interface OrderUpdate {
+    balance?: number;
 
-    lastName?: string;
-
-    total?: number;
-
-    comment?: string;
-
-    orderItems?: Array<models.OrderItem>;
+    lastEdit?: models.LastEdit;
 
 }

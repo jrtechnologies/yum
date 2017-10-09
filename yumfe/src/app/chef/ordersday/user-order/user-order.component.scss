@@ -20,6 +20,13 @@
   padding: 5px 0 5px 0;
 }
 .totalPrice{
-  padding-top:25px;
+  display: flex;
+  padding:25px 10px 10px 10px;
   font-weight: bold;
+}
+.comment{     
+  font-size: 0.8em;
+  font-style: italic;
+  word-wrap: break-word;
+  word-break: break-word;
 }

@@ -13,17 +13,11 @@
 import * as models from './models';
 
 /**
- * User order DTO
+ * auth token
  */
-export interface UserOrder {
-    firstName?: string;
+export interface Refresh {
+    token?: string;
 
-    lastName?: string;
-
-    total?: number;
-
-    comment?: string;
-
-    orderItems?: Array<models.OrderItem>;
+    balance?: number;
 
 }

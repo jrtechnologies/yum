@@ -1,31 +1,21 @@
-/*
- * Copyright (C) 2017 JR Technologies.
- * This file is part of Yum.
- * 
- * Yum is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * 
- * Yum is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with Yum. 
- * If not, see <http://www.gnu.org/licenses/>.
- */
-
 package org.bootcamp.yum.api.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import org.bootcamp.yum.api.model.OrderItem;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+
 /**
  * User order DTO
  */
 @ApiModel(description = "User order DTO")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-04-20T10:12:43.892+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-10-09T12:02:48.757+03:00")
 
 public class UserOrder   {
   @JsonProperty("firstName")
@@ -33,12 +23,15 @@ public class UserOrder   {
 
   @JsonProperty("lastName")
   private String lastName = null;
-  
+
   @JsonProperty("total")
   private Double total = null;
 
+  @JsonProperty("comment")
+  private String comment = null;
+
   @JsonProperty("orderItems")
-  private List<OrderItem> orderItems = new ArrayList<OrderItem>();
+  private List<OrderItem> orderItems = null;
 
   public UserOrder firstName(String firstName) {
     this.firstName = firstName;
@@ -50,6 +43,8 @@ public class UserOrder   {
    * @return firstName
   **/
   @ApiModelProperty(value = "")
+
+
   public String getFirstName() {
     return firstName;
   }
@@ -68,6 +63,8 @@ public class UserOrder   {
    * @return lastName
   **/
   @ApiModelProperty(value = "")
+
+
   public String getLastName() {
     return lastName;
   }
@@ -75,12 +72,19 @@ public class UserOrder   {
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
-  
-  /**
+
+  public UserOrder total(Double total) {
+    this.total = total;
+    return this;
+  }
+
+   /**
    * Get total
    * @return total
   **/
   @ApiModelProperty(value = "")
+
+
   public Double getTotal() {
     return total;
   }
@@ -89,12 +93,35 @@ public class UserOrder   {
     this.total = total;
   }
 
+  public UserOrder comment(String comment) {
+    this.comment = comment;
+    return this;
+  }
+
+   /**
+   * Get comment
+   * @return comment
+  **/
+  @ApiModelProperty(value = "")
+
+ @Size(max=150)
+  public String getComment() {
+    return comment;
+  }
+
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
+
   public UserOrder orderItems(List<OrderItem> orderItems) {
     this.orderItems = orderItems;
     return this;
   }
 
   public UserOrder addOrderItemsItem(OrderItem orderItemsItem) {
+    if (this.orderItems == null) {
+      this.orderItems = new ArrayList<OrderItem>();
+    }
     this.orderItems.add(orderItemsItem);
     return this;
   }
@@ -104,6 +131,9 @@ public class UserOrder   {
    * @return orderItems
   **/
   @ApiModelProperty(value = "")
+
+  @Valid
+
   public List<OrderItem> getOrderItems() {
     return orderItems;
   }
@@ -124,13 +154,14 @@ public class UserOrder   {
     UserOrder userOrder = (UserOrder) o;
     return Objects.equals(this.firstName, userOrder.firstName) &&
         Objects.equals(this.lastName, userOrder.lastName) &&
-            Objects.equals(this.total, userOrder.total) &&
+        Objects.equals(this.total, userOrder.total) &&
+        Objects.equals(this.comment, userOrder.comment) &&
         Objects.equals(this.orderItems, userOrder.orderItems);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(firstName, lastName, total, orderItems);
+    return Objects.hash(firstName, lastName, total, comment, orderItems);
   }
 
   @Override
@@ -141,6 +172,7 @@ public class UserOrder   {
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
     sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
     sb.append("    total: ").append(toIndentedString(total)).append("\n");
+    sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("    orderItems: ").append(toIndentedString(orderItems)).append("\n");
     sb.append("}");
     return sb.toString();

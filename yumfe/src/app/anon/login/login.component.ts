@@ -127,9 +127,9 @@ export class LoginComponent implements OnInit {
     this.showSpinner = true;
     this.disableBtn = true;
     
-    this.loginForm.get('username').updateValueAndValidity({ onlySelf: true, emitEvent: true });
-    this.loginForm.get('email').updateValueAndValidity({ onlySelf: true, emitEvent: true });
-    this.loginForm.get('password').updateValueAndValidity({ onlySelf: true, emitEvent: true }); 
+    //this.loginForm.get('username').updateValueAndValidity({ onlySelf: true, emitEvent: true });
+    //this.loginForm.get('email').updateValueAndValidity({ onlySelf: true, emitEvent: true });
+    //this.loginForm.get('password').updateValueAndValidity({ onlySelf: true, emitEvent: true }); 
 
     this.authService.login(this.loginForm.get('email').value, this.loginForm.get('password').value, this.loginForm.get('username').value)
       .finally(() => {

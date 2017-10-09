@@ -16,6 +16,7 @@
 package org.bootcamp.yum.api;
 
 import org.bootcamp.yum.api.model.Error;
+import org.bootcamp.yum.api.model.Refresh;
 
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
@@ -28,17 +29,17 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RequestMapping(value="/api")
 public interface RefreshTokenApi {
 
-    @ApiOperation(value = "", notes = "get refreshed token", response = String.class, authorizations = {
+    @ApiOperation(value = "", notes = "get refreshed token", response = Refresh.class, authorizations = {
         @Authorization(value = "Bearer")
     }, tags={ "hungry", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "refreshed token string", response = String.class),
+        @ApiResponse(code = 200, message = "refreshed token string", response = Refresh.class),
         @ApiResponse(code = 500, message = "An unexpected error occured.", response = Error.class) })
     
     @RequestMapping(value = "/refreshToken",
-        produces = { "text/plain" }, 
+        produces = { "application/json" }, 
         method = RequestMethod.GET)
     @CrossOrigin   
-    ResponseEntity<String> refreshTokenGet();
+    ResponseEntity<Refresh> refreshTokenGet();
 
 }

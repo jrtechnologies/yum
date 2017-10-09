@@ -73,8 +73,9 @@
 
   </div>
 
-  <div fxLayout="row" class="align-right print-row-border-total">
-    <div fxFlex="10" fxFlexOffset="90" class="totalPrice">
+  <div fxLayout="row" class="is-flex print-row-border-total">
+      <div  class="comment" > <span *ngIf="user.userOrder.comment">Order comment: {{user.userOrder.comment}}</span></div>
+    <div  class="totalPrice">
       {{user.userOrder.total  | number : '1.2-2'}} <span [innerHTML]="currency | async"></span>
     </div>
   </div>

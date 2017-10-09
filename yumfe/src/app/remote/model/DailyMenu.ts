@@ -31,4 +31,7 @@ export interface DailyMenu {
     lastEdit?: models.LastEdit;
 
     totalPrice?: number;
+
+    balance?: number;
+
 }

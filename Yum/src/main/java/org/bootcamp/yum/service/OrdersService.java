@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
 import org.bootcamp.yum.api.ApiException;
 import org.bootcamp.yum.api.ConcurrentCreationException;
 import org.bootcamp.yum.api.ConcurrentDeletionException;
@@ -32,6 +32,7 @@ import org.bootcamp.yum.api.model.FoodWithQuantity;
 import org.bootcamp.yum.api.model.LastEdit;
 import org.bootcamp.yum.api.model.Order;
 import org.bootcamp.yum.api.model.OrderItem;
+import org.bootcamp.yum.api.model.OrderUpdate;
 import org.bootcamp.yum.api.model.UpdateOrderItems;
 import org.bootcamp.yum.data.entity.OrderItemId;
 import org.bootcamp.yum.data.entity.Settings;
@@ -50,6 +51,7 @@ import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OrdersService {
@@ -74,7 +76,8 @@ public class OrdersService {
     @Transactional
     public DailyMenu ordersPost(Order order, Long reqUserId) throws ApiException {
 
-        org.bootcamp.yum.data.entity.User sourceUser = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        org.bootcamp.yum.data.entity.User sourceUser = userRep
+                .findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         org.bootcamp.yum.data.entity.User user = getUserOfDailyOrder(sourceUser, reqUserId);
 
         org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity = new org.bootcamp.yum.data.entity.DailyOrder();
@@ -89,7 +92,8 @@ public class OrdersService {
 
         //  Validation for dailyMenu
         if (dailyMenuEntity == null) {
-            org.bootcamp.yum.data.entity.DailyMenu newDailyMenuEntity = dailyMenuRep.findByDate(order.getDailyMenuDate());
+            org.bootcamp.yum.data.entity.DailyMenu newDailyMenuEntity = dailyMenuRep
+                    .findByDate(order.getDailyMenuDate());
             DailyMenu dailyMenu = new DailyMenu();
             ConcurrentOrderDeletion concurrentOrderDeletion = new ConcurrentOrderDeletion();
             org.bootcamp.yum.api.model.Error error = new org.bootcamp.yum.api.model.Error();
@@ -99,11 +103,13 @@ public class OrdersService {
                 dailyMenu.setId(0L);
                 error.setMessage("No menu is proposed for this day anymore.");
                 concurrentOrderDeletion.setDailyMenu(dailyMenu);
-                throw new ConcurrentDeletionException(410, "No menu is proposed for this day anymore.", concurrentOrderDeletion);
+                throw new ConcurrentDeletionException(410, "No menu is proposed for this day anymore.",
+                        concurrentOrderDeletion);
             } else {
                 error.setMessage("The chef changed the menu recently. Please place your order again.");
                 concurrentOrderDeletion.setDailyMenu(newDailyMenuEntity.toDtoDailyMenu());
-                throw new ConcurrentDeletionException(410, "The chef changed the menu recently. Please place your order again.", concurrentOrderDeletion);
+                throw new ConcurrentDeletionException(410,
+                        "The chef changed the menu recently. Please place your order again.", concurrentOrderDeletion);
             }
 
         }
@@ -116,10 +122,12 @@ public class OrdersService {
             error.setError("410");
             error.setMessage("The chef changed the menu recently. Please place your order again.");
             concurrentOrderDeletion.setDailyMenu(dailyMenuEntity.toDtoDailyMenu());
-            throw new ConcurrentDeletionException(410, "The chef changed the menu recently. Please place your order again", concurrentOrderDeletion);
+            throw new ConcurrentDeletionException(410,
+                    "The chef changed the menu recently. Please place your order again", concurrentOrderDeletion);
         }
         //Check if daily Order already exists 
-        org.bootcamp.yum.data.entity.DailyOrder dailyOrder = dailyOrderRep.findByUserIdAndDailyMenuId(user.getId(), dailyMenuId);
+        org.bootcamp.yum.data.entity.DailyOrder dailyOrder = dailyOrderRep.findByUserIdAndDailyMenuId(user.getId(),
+                dailyMenuId);
         if (dailyOrder != null) {
             throw new ConcurrentCreationException(409, "Order already placed", dailyOrder.toDtoDailyMenu());
         }
@@ -178,7 +186,6 @@ public class OrdersService {
             orderAmount = orderAmount.add(foodEntity.getPrice().multiply(new BigDecimal(itemQuantity)));
         }
 
-        dailyOrderRep.save(dailyOrderEntity);
         BigDecimal balance = user.getBalance();
         if (balance == null) {
             balance = orderAmount.negate();
@@ -186,8 +193,14 @@ public class OrdersService {
             balance = balance.subtract(orderAmount);
         }
 
+        if (balance.compareTo(BigDecimal.ZERO) < 0) {
+            throw new ApiException(402, "Not enough balance");
+        }
+
+        dailyOrderRep.save(dailyOrderEntity);
         user.setBalance(balance);
-        Transaction transaction = new Transaction(userId, orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), dailyMenuId, 1);
+        Transaction transaction = new Transaction(userId, orderAmount, balance, sourceUser.getId(),
+                dailyOrderEntity.getDailyOrderId(), dailyMenuId, 1);
         transactionRep.save(transaction);
 
         List<FoodWithQuantity> foodsWQ = dailyMenu.getFoods();
@@ -206,14 +219,13 @@ public class OrdersService {
                 dailyMenu.addFoodsItem(foodWithQuantity);
             }
         }
-
         dailyMenu.setOrderId(dailyOrderEntity.getDailyOrderId());
         LastEdit lastEdit = new LastEdit();
         lastEdit.setTimeStamp(dailyMenuEntity.getLastEdit());
         lastEdit.setVersion(dailyMenuEntity.getVersion());
         dailyMenu.setLastEdit(lastEdit);
         dailyMenu.setIsFinal(false);
-
+        dailyMenu.setBalance(balance);
         // If user requested email confirmation the email service is injected  
         if (order.getEmailRequest() && (emailService != null)) {
             emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
@@ -224,7 +236,8 @@ public class OrdersService {
     }
 
     private void ConcurrentOrderDeletionCheck(Long dailyMenuId, int dailyMenuVersion, LocalDate dailyMenuDate,
-            org.bootcamp.yum.data.entity.User user, org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity) throws ApiException {
+            org.bootcamp.yum.data.entity.User user, org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity)
+            throws ApiException {
 
         long userId = user.getId();
         ConcurrentOrderDeletion concurrentOrderDeletion = new ConcurrentOrderDeletion();
@@ -235,20 +248,25 @@ public class OrdersService {
         if ((dailyOrderEntity == null) || (userId != dailyOrderEntity.getUserId())) {
             org.bootcamp.yum.data.entity.DailyMenu dailyMenuEntity = dailyMenuRep.findById(dailyMenuId);
             if (dailyMenuEntity != null) {
-                org.bootcamp.yum.data.entity.DailyOrder newDailyOrderEntity = dailyOrderRep.findByUserIdAndDailyMenuId(userId, dailyMenuId); //getDailyMenu();
+                org.bootcamp.yum.data.entity.DailyOrder newDailyOrderEntity = dailyOrderRep
+                        .findByUserIdAndDailyMenuId(userId, dailyMenuId); //getDailyMenu();
                 if (newDailyOrderEntity != null) {
                     error.setMessage("You cancelled this order earlier, and placed again. Here is the new one.");
                     concurrentOrderDeletion.setDailyMenu(newDailyOrderEntity.toDtoDailyMenu());
-                    throw new ConcurrentDeletionException(410, "You cancelled this order earlier, and placed again. Here is the new one.", concurrentOrderDeletion);
+                    throw new ConcurrentDeletionException(410,
+                            "You cancelled this order earlier, and placed again. Here is the new one.",
+                            concurrentOrderDeletion);
                 } else {
                     if (dailyMenuVersion != dailyMenuEntity.getVersion()) {
                         error.setMessage("You cancelled this order earlier, and the menu has changed");
                         concurrentOrderDeletion.setDailyMenu(dailyMenuEntity.toDtoDailyMenu());
-                        throw new ConcurrentDeletionException(410, "You cancelled this order earlier, and the menu has changed", concurrentOrderDeletion);
+                        throw new ConcurrentDeletionException(410,
+                                "You cancelled this order earlier, and the menu has changed", concurrentOrderDeletion);
                     } else {
                         error.setMessage("You cancelled this order earlier");
                         concurrentOrderDeletion.setDailyMenu(dailyMenuEntity.toDtoDailyMenu());
-                        throw new ConcurrentDeletionException(410, "You cancelled this order earlier", concurrentOrderDeletion);
+                        throw new ConcurrentDeletionException(410, "You cancelled this order earlier",
+                                concurrentOrderDeletion);
                     }
                 }
             } else {
@@ -257,23 +275,27 @@ public class OrdersService {
                     error.setMessage("You cancelled this order earlier, and the menu has changed");
                     concurrentOrderDeletion.setDailyMenu(newDailyMenuEntity.toDtoDailyMenu());
 
-                    throw new ConcurrentDeletionException(410, "You cancelled this order earlier, and the menu has changed", concurrentOrderDeletion);
+                    throw new ConcurrentDeletionException(410,
+                            "You cancelled this order earlier, and the menu has changed", concurrentOrderDeletion);
                 } else {
                     error.setError("410");
                     error.setMessage("You cancelled this order earlier, and the menu has changed");
                     concurrentOrderDeletion.setDailyMenu(new DailyMenu());
-                    throw new ConcurrentDeletionException(410, "You cancelled this order earlier, and no menu is proposed anymore", concurrentOrderDeletion);
+                    throw new ConcurrentDeletionException(410,
+                            "You cancelled this order earlier, and no menu is proposed anymore",
+                            concurrentOrderDeletion);
                 }
             }
 
         }
     }
 
-    @Transactional
-    public LastEdit ordersIdPut(Long id, UpdateOrderItems updateOrderItems, Long reqUserId) throws ApiException {
+    @Transactional(rollbackFor = ApiException.class)
+    public OrderUpdate ordersIdPut(Long id, UpdateOrderItems updateOrderItems, Long reqUserId) throws ApiException {
         try {
 
-            org.bootcamp.yum.data.entity.User sourceUser = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            org.bootcamp.yum.data.entity.User sourceUser = userRep
+                    .findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
             org.bootcamp.yum.data.entity.User user = getUserOfDailyOrder(sourceUser, reqUserId);
 
             //  Validation for daily order
@@ -321,7 +343,9 @@ public class OrdersService {
                 throw new ConcurrentModificationException(409, "Concurrent modification error.", dailyOrder);
 
             }
-            if (deadlinePassed(dailyOrderEntity.getDailyMenu().getDate()) && !allowAdminAfterTodayChangeOrder(sourceUser, dailyOrderEntity.getDailyMenu().getDate(), reqUserId)) {
+            if (deadlinePassed(dailyOrderEntity.getDailyMenu().getDate())
+                    && !allowAdminAfterTodayChangeOrder(sourceUser, dailyOrderEntity.getDailyMenu().getDate(),
+                            reqUserId)) {
                 dailyOrderEntity.setFinalised(true);
                 throw new ApiException(412, "Deadline for orders passed");
             }
@@ -349,21 +373,21 @@ public class OrdersService {
                 }
             }
 
-            
             // Passes Validation                            
             Boolean updated = false;
             BigDecimal orderAmount = new BigDecimal(0);
-            
+
             //edit comment
-            if(updateOrderItems.getComment()!=null){
-                if(!updateOrderItems.getComment().equals(dailyOrderEntity.getComment())){
+            if (updateOrderItems.getComment() != null) {
+                if (!updateOrderItems.getComment().equals(dailyOrderEntity.getComment())) {
                     dailyOrderEntity.setComment(updateOrderItems.getComment());
                     updated = true;
                 }
             }
-            
+
             //Iterate over original order items 
-            for (Iterator<org.bootcamp.yum.data.entity.OrderItem> iterator = orderItemsEntity.iterator(); iterator.hasNext();) {
+            for (Iterator<org.bootcamp.yum.data.entity.OrderItem> iterator = orderItemsEntity.iterator(); iterator
+                    .hasNext();) {
                 org.bootcamp.yum.data.entity.OrderItem orderItemEntity = iterator.next();
                 Boolean found = false;
                 org.bootcamp.yum.data.entity.Food foodEntity = orderItemEntity.getFood();
@@ -378,7 +402,8 @@ public class OrdersService {
                         if (oldQuantity != newQuantity) {
                             orderItemEntity.setQuantity(newQuantity);
                             updated = true;
-                            orderAmount = orderAmount.add(foodEntity.getPrice().multiply(new BigDecimal(newQuantity - oldQuantity)));
+                            orderAmount = orderAmount
+                                    .add(foodEntity.getPrice().multiply(new BigDecimal(newQuantity - oldQuantity)));
                         }
                         modelIterator.remove();
                         break;
@@ -415,11 +440,6 @@ public class OrdersService {
                 lastEdit.setTimeStamp(dailyOrderEntity.getLastEdit());
                 lastEdit.setVersion(dailyOrderEntity.getVersion());
 
-                // If user requested email confirmation the email service is injected  
-                if (updateOrderItems.getEmailRequest() && (emailService != null)) {
-                    emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
-                }
-
                 BigDecimal balance = user.getBalance();
                 if (balance == null) {
                     balance = orderAmount.negate();
@@ -427,12 +447,26 @@ public class OrdersService {
                     balance = balance.subtract(orderAmount);
                 }
 
+                if (balance.compareTo(BigDecimal.ZERO) < 0) {
+                    throw new ApiException(402, "Not enough balance");
+                }
+
                 user.setBalance(balance);
 
-                Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 2);
+                OrderUpdate orderUpdate = new OrderUpdate();
+                orderUpdate.setBalance(balance);
+                orderUpdate.setLastEdit(lastEdit);
+
+                Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(),
+                        dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 2);
                 transactionRep.save(transaction);
 
-                return lastEdit;
+                // If user requested email confirmation the email service is injected  
+                if (updateOrderItems.getEmailRequest() && (emailService != null)) {
+                    emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
+                }
+
+                return orderUpdate;
 
                 // if quantities same and no new orderItem    
             } else {
@@ -445,9 +479,10 @@ public class OrdersService {
     }
 
     @Transactional
-    public void ordersIdDelete(Long id, DailyMenuDetails dailyMenuDetails, Long reqUserId) throws ApiException {
+    public OrderUpdate ordersIdDelete(Long id, DailyMenuDetails dailyMenuDetails, Long reqUserId) throws ApiException {
 
-        org.bootcamp.yum.data.entity.User sourceUser = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        org.bootcamp.yum.data.entity.User sourceUser = userRep
+                .findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         org.bootcamp.yum.data.entity.User user = getUserOfDailyOrder(sourceUser, reqUserId);
 
         //  Validation for daily order
@@ -462,13 +497,15 @@ public class OrdersService {
         if ((dailyMenuEntity == null) || user.getId() != dailyOrderEntity.getUserId()) {
             throw new ApiException(400, "Order couldn't be deleted.");
             // Check for deadline             
-        } else if (deadlinePassed(dailyOrderEntity.getDailyMenu().getDate()) && !allowAdminAfterTodayChangeOrder(sourceUser, dailyMenuEntity.getDate(), reqUserId)) {
+        } else if (deadlinePassed(dailyOrderEntity.getDailyMenu().getDate())
+                && !allowAdminAfterTodayChangeOrder(sourceUser, dailyMenuEntity.getDate(), reqUserId)) {
             dailyOrderEntity.setFinalised(true);
             throw new ApiException(412, "Deadline for orders passed");
         } else {
             BigDecimal orderAmount = new BigDecimal(0);
             for (org.bootcamp.yum.data.entity.OrderItem orderItem : dailyOrderEntity.getOrderItems()) {
-                orderAmount = orderAmount.add(orderItem.getFood().getPrice().multiply(new BigDecimal(orderItem.getQuantity())));
+                orderAmount = orderAmount
+                        .add(orderItem.getFood().getPrice().multiply(new BigDecimal(orderItem.getQuantity())));
             }
 
             BigDecimal balance = user.getBalance();
@@ -478,16 +515,22 @@ public class OrdersService {
                 balance = balance.add(orderAmount);
             }
             user.setBalance(balance);
+            OrderUpdate orderUpdate = new OrderUpdate();
+            orderUpdate.setBalance(balance);
 
-            Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(), dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 3);
+            Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(),
+                    dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 3);
             transactionRep.save(transaction);
             dailyOrderRep.delete(dailyOrderEntity);
+            return orderUpdate;
         }
     }
 
-    public DailyOrder ordersIdGet(Long id, Long dailyMenuId, int dailyMenuVersion, LocalDate dailyMenuDate, Long reqUserId) throws ApiException {
+    public DailyOrder ordersIdGet(Long id, Long dailyMenuId, int dailyMenuVersion, LocalDate dailyMenuDate,
+            Long reqUserId) throws ApiException {
 
-        org.bootcamp.yum.data.entity.User sourceUser = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        org.bootcamp.yum.data.entity.User sourceUser = userRep
+                .findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         org.bootcamp.yum.data.entity.User user = getUserOfDailyOrder(sourceUser, reqUserId);
 
         org.bootcamp.yum.data.entity.DailyOrder dailyOrderEntity = dailyOrderRep.findByDailyOrderId(id);
@@ -516,7 +559,8 @@ public class OrdersService {
 
     }
 
-    private org.bootcamp.yum.data.entity.User getUserOfDailyOrder(org.bootcamp.yum.data.entity.User sourceUser, Long userId) throws ApiException {
+    private org.bootcamp.yum.data.entity.User getUserOfDailyOrder(org.bootcamp.yum.data.entity.User sourceUser,
+            Long userId) throws ApiException {
 
         //org.bootcamp.yum.data.entity.User sourceUser = userRep.findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         org.bootcamp.yum.data.entity.User user;
@@ -543,8 +587,10 @@ public class OrdersService {
 
     }
 
-    private Boolean allowAdminAfterTodayChangeOrder(org.bootcamp.yum.data.entity.User sourceUser, LocalDate menuDate, Long userId) {
-        if (userId != 0 && sourceUser.getUserRole().toString().equalsIgnoreCase("admin") && (menuDate.isEqual(new LocalDate()) || menuDate.isAfter(new LocalDate()))) {
+    private Boolean allowAdminAfterTodayChangeOrder(org.bootcamp.yum.data.entity.User sourceUser, LocalDate menuDate,
+            Long userId) {
+        if (userId != 0 && sourceUser.getUserRole().toString().equalsIgnoreCase("admin")
+                && (menuDate.isEqual(new LocalDate()) || menuDate.isAfter(new LocalDate()))) {
             return true;
         }
         return false;

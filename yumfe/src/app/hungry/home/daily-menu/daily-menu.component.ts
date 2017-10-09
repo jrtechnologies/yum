@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Rx';
 import { isToday, isAfter } from 'date-fns';
 import { GlobalSettingsService } from './../../../shared/services/global-settings-service.service';
 import { AuthenticationService } from './../../../shared/authentication.service';
+import { BalanceService } from './../../../shared/services/balance.service';
 import * as remote from '../../../remote';
 
 interface outData{ price?: number, comment?: string};
@@ -35,7 +36,8 @@ export class DailyMenuComponent implements OnInit {
     private hungryService: remote.HungryApi,
     public dialog: MdDialog,
     public snackBar: MdSnackBar,
-    public globalSettingsService: GlobalSettingsService
+    public globalSettingsService: GlobalSettingsService,
+    private balanceService: BalanceService
   ) { }
 
   ngOnInit() {
@@ -58,7 +60,7 @@ export class DailyMenuComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     //console.log("Changes:", changes);
-    if (changes.dailyMenu) { //&& !changes.dailyMenu.isFirstChange() 
+    if (changes.dailyMenu) { //&& !changes.dailyMenu.isFirstChange()
       this.setup();
       // console.log('Changed:', changes.total.currentValue, changes.total.previousValue);
     }
@@ -248,17 +250,19 @@ export class DailyMenuComponent implements OnInit {
           updateOrderItem.orderItems = updateOrderItems;
           // Call, order with id put API.
           this.hungryService.ordersIdPut(this.dailyMenu.orderId, this.controlledUser ? this.controlledUser.id : 0, updateOrderItem)
-            .subscribe(lastEdit => {
-              if (!lastEdit) {
+            .subscribe(orderUpdate => {
+              const lastEdit = orderUpdate.lastEdit;
+              if(!lastEdit){
                 console.error("No lastEdit fetched for order!");
               }
               this.lastEditDailyOrder = lastEdit;
               this.isOrderBoolean = true;
               this.modifyChecked = false;
-              this.showSpinner = false;
-              this.disableBtn = false; 
-              this.emitData();
+              this.showSpinner = false;             
               // this.dailyTotalPrice.emit(this.getTotalPrice());
+              this.disableBtn = false;
+              this.emitData();
+              this.balanceService.updateBalance(orderUpdate.balance);
               console.log('Order changed');
               this.openSnackBar('Order modified successfully!', 'ok', 1); // Success SnackBar
             },
@@ -269,6 +273,9 @@ export class DailyMenuComponent implements OnInit {
                   break;
                 case 400:
                   this.openSnackBar('Order couldnot be modified.', 'ok', 3);
+                  break;
+                case 402:
+                  this.openSnackBar('Your balance is not enough for this order!', 'ok', 3);
                   break;
                 case 404:
                   this.openSnackBar('Order not found', 'ok', 3);
@@ -327,9 +334,9 @@ export class DailyMenuComponent implements OnInit {
               this.getOrderLastEdit(); // Update order last edit.
               this.isOrderBoolean = true;
               this.showSpinner = false;
-              this.disableBtn = false;             
-              this.emitData();  
-              //this.dailyTotalPrice.emit(this.getTotalPrice());
+              this.disableBtn = false; 
+              this.emitData(); 
+              this.balanceService.updateBalance(orderedDailyMenu.balance);
               console.log('Order placed');
               this.openSnackBar('Order placed successfully!', 'ok', 1);
             },
@@ -337,6 +344,9 @@ export class DailyMenuComponent implements OnInit {
               switch (error.status) {
                 case 400:
                   this.openSnackBar('Order couldnot be placed.', 'ok', 3);
+                  break;
+                case 402:
+                  this.openSnackBar('Your balance is not enough for this order!', 'ok', 3);
                   break;
                 case 409:
                   this.dailyMenu = JSON.parse(error._body);
@@ -384,13 +394,11 @@ export class DailyMenuComponent implements OnInit {
         dailyMenuDetails.dailyMenuVersion = this.dailyMenu.lastEdit.version;
         // Call delete api.
         this.hungryService.ordersIdDelete(this.dailyMenu.orderId, this.controlledUser ? this.controlledUser.id : 0, dailyMenuDetails)
-          .subscribe(() => {
+          .subscribe(orderUpdate => {
             this.isOrderBoolean = false;
-            this.dailyMenu.comment=null;
-            //this.dailyMenu.orderId=null;
-            this.removeFoodMapQuantity(); 
+            this.removeFoodMapQuantity();
             this.emitData();
-            //this.dailyTotalPrice.emit(this.getTotalPrice());
+            this.balanceService.updateBalance(orderUpdate.balance);
             this.openSnackBar('Order deleted successfully!', 'ok', 1);
             console.log('Order Deleted');
             this.showSpinner = false;

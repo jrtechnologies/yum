@@ -15,6 +15,7 @@
 
 package org.bootcamp.yum.api;
 
+import org.bootcamp.yum.api.model.Refresh;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class RefreshTokenApiController implements RefreshTokenApi {
 
     @Override
     @PreAuthorize("hasAuthority('hungry')")
-    public ResponseEntity<String> refreshTokenGet() {
+    public ResponseEntity<Refresh> refreshTokenGet() {
         return new ResponseEntity<>(refreshTokenService.authRefreshTokenGet(), HttpStatus.OK);
     }
 

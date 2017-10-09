@@ -220,13 +220,13 @@
         ],
         "description": "get refreshed token",
         "produces": [
-          "text/plain"
+          "application/json"
         ],
         "responses": {
           "200": {
             "description": "refreshed token string",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/Refresh"
             }
           },
           "500": {
@@ -592,6 +592,9 @@
           "400": {
             "description": "Order couldn't have been placed."
           },
+          "402": {
+            "description": "Not enough balance."
+          },
           "409": {
             "description": "Order already placed",
             "schema": {
@@ -749,7 +752,7 @@
           "200": {
             "description": "Order succesfully modified",
             "schema": {
-              "$ref": "#/definitions/LastEdit"
+              "$ref": "#/definitions/OrderUpdate"
             }
           },
           "304": {
@@ -757,6 +760,9 @@
           },
           "400": {
             "description": "Order couldn't be modified."
+          },
+          "402": {
+            "description": "Not enough balance."
           },
           "404": {
             "description": "Order not found (id)"
@@ -830,7 +836,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Order succesfully deleted"
+            "description": "Order succesfully deleted",
+            "schema": {
+              "$ref": "#/definitions/OrderUpdate"
+            }
           },
           "400": {
             "description": "Order couldn't be deleted."
@@ -2412,6 +2421,19 @@
         }
       }
     },
+    "Refresh": {
+      "type": "object",
+      "description": "auth token",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "balance": {
+          "type": "number",
+          "format": "int64"
+        }
+      }
+    },
     "Error": {
       "type": "object",
       "description": "An error with some info DTO",
@@ -2591,6 +2613,23 @@
         },
         "lastEdit": {
           "$ref": "#/definitions/LastEdit"
+        },
+        "balance": {
+          "type": "number",
+          "format": "int64"
+        }
+      }
+    },
+    "OrderUpdate": {
+      "type": "object",
+      "description": "Order last edit and user balance",
+      "properties": {
+        "balance": {
+          "type": "number",
+          "format": "int64"
+        },
+        "lastEdit": {
+          "$ref": "#/definitions/LastEdit"
         }
       }
     },
@@ -2735,6 +2774,10 @@
         "total": {
           "type": "number",
           "format": "double"
+        },
+        "comment": {
+          "type": "string",
+          "maxLength": 150
         },
         "orderItems": {
           "type": "array",

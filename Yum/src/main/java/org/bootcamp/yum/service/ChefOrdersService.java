@@ -100,7 +100,7 @@ public class ChefOrdersService {
             
             userOrder.setFirstName(user.getFirstName());
             userOrder.setLastName(user.getLastName());
-            
+            userOrder.setComment(doe.getComment());
             //orderItemListByUser = getOrderItemList(dailyMenuEntity, user.getId());
             
             for(org.bootcamp.yum.data.entity.OrderItem orderItemEntity : orderItems){
