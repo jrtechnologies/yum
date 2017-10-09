@@ -376,7 +376,7 @@
                                                 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
                                                 <div style="color:#555555;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
                                                     <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-                                                        <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: right"><span style="font-size: 16px; line-height: 19px;"><strong><span style="line-height: 19px; font-size: 16px;">x ${orderItem.food.price?string("0.00")}${currency}</span></strong>
+                                                        <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: right"><span style="font-size: 16px; line-height: 19px;"><strong><span style="line-height: 19px; font-size: 16px;">x ${orderItem.food.price?string("0.00")}${currency?no_esc}</span></strong>
                                                             </span>
                                                         </p>
                                                     </div>
@@ -497,7 +497,7 @@
                                             <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
                                             <div style="color:#555555;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
                                                 <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-                                                    <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: right"><span style="font-size: 16px; line-height: 19px;"><strong><span style="line-height: 19px; font-size: 16px;">${total?string("0.00")}${currency}</span></strong>
+                                                    <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: right"><span style="font-size: 16px; line-height: 19px;"><strong><span style="line-height: 19px; font-size: 16px;">${total?string("0.00")}${currency?no_esc}</span></strong>
                                                         </span>
                                                     </p>
                                                 </div>
@@ -567,7 +567,7 @@
                                             <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
                                             <div style="color:#FF5B57;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
                                                 <div style="font-size:12px;line-height:14px;color:#FF5B57;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-                                                    <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: right"><span style="font-size: 14px; line-height: 16px;">Your new balance is ${balance?string("0.00")}${currency}</span></p>
+                                                    <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: right"><span style="font-size: 14px; line-height: 16px;">Your new balance is ${balance?string("0.00")}${currency?no_esc}</span></p>
                                                 </div>
                                             </div>
                                             <!--[if mso]></td></tr></table><![endif]-->

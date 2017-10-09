@@ -18,9 +18,7 @@ import freemarker.core.ParseException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
+import java.util.Arrays; 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,18 +31,14 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.InternetAddress;
 import javax.transaction.Transactional;
 
-import org.bootcamp.ApplicationProperties;
-import org.bootcamp.yum.api.model.DailyOrderSummary;
-import org.bootcamp.yum.api.model.FoodWithQuantity;
-import org.bootcamp.yum.api.model.UserOrder;
+import org.bootcamp.ApplicationProperties; 
 import org.bootcamp.yum.data.entity.DailyMenu;
 import org.bootcamp.yum.data.entity.DailyOrder;
 import org.bootcamp.yum.data.entity.Food;
 import org.bootcamp.yum.data.entity.OrderItem;
 import org.bootcamp.yum.data.entity.Settings;
 import org.bootcamp.yum.data.entity.User;
-import org.bootcamp.yum.data.enums.UserRole;
-import org.bootcamp.yum.data.repository.FoodRepository;
+import org.bootcamp.yum.data.enums.UserRole; 
 import org.bootcamp.yum.data.repository.SettingsRepository;
 import org.bootcamp.yum.data.repository.UserRepository;
 import org.joda.time.DateTime;
@@ -66,8 +60,7 @@ import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import org.bootcamp.yum.data.repository.DailyMenuRepository;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.ClassPathResource; 
 
 @Service
 public class EmailService {
@@ -86,12 +79,6 @@ public class EmailService {
 
     @Autowired
     private UserRepository userRep;
-
-    @Autowired
-    private FoodRepository foodRep;
-
-    @Autowired
-    private ChefOrdersService chefService;
 
     @Autowired
     private SettingsRepository settingsRep;
@@ -154,6 +141,7 @@ public class EmailService {
 
             StringBuilder content = new StringBuilder();
             freeMarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates");
+            freeMarkerConfig.setRecognizeStandardFileExtensions(true);
             content.append(FreeMarkerTemplateUtils
                     .processTemplateIntoString(freeMarkerConfig.getTemplate(templateFileName), model));
 
@@ -187,7 +175,7 @@ public class EmailService {
         for (User admin : admins) {
             model.put("adminFirstName", admin.getFirstName());
             model.put("adminLastName", admin.getLastName());
-            sendHtmlTemplateEmail(admin.getEmail(), "[Yum] New user registered", model, "user-registered.html");
+            sendHtmlTemplateEmail(admin.getEmail(), "[Yum] New user registered", model, "user-registered.ftlh");
         }
     }
 
@@ -219,7 +207,7 @@ public class EmailService {
         model.put("totalQuantity", totalQuantity);
         model.put("deadline", settings.getDeadline().toString("HH:mm") + ", on " + menuDate.minusDays(settings.getDeadlineDays()).toString("EEEE dd MMMM YYYY"));
         model.put("balance", user.getBalance());
-        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Order Confirmation for " + menuDate.toString("dd/MM/yyyy"), model, "order.html");
+        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Order Confirmation for " + menuDate.toString("dd/MM/yyyy"), model, "order.ftlh");
 
     }
 
@@ -234,7 +222,7 @@ public class EmailService {
         model.put("expirationTime", expiration.toString("HH:mm:ss"));
         model.put("expirationDate", expiration.toString("EEEE dd MMMM YYYY"));
         // Sends the email
-        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Password reset", model, "reset-password.html");
+        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Password reset", model, "reset-password.ftlh");
 
     }
 
@@ -247,7 +235,7 @@ public class EmailService {
         model.put("link", applicationProperties.getMail().getDomain());
 
         // Sends the email
-        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Account activated", model, "user-approval.html");
+        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Account activated", model, "user-approval.ftlh");
 
     }
 
@@ -286,7 +274,7 @@ public class EmailService {
             if (emails != null && !emails.isEmpty()) {
                 ArrayList<String> emailsTo = new ArrayList<>(Arrays.asList(emails.split(";")));
                 for (String emailTo : emailsTo) {
-                    sendHtmlTemplateEmail(emailTo, "[Yum] Order summary for " + formattedDate, model, "order-summary.html");
+                    sendHtmlTemplateEmail(emailTo, "[Yum] Order summary for " + formattedDate, model, "order-summary.ftlh");
                 }
             }
         }

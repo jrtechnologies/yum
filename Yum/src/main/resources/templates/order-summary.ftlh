@@ -231,7 +231,7 @@
 
                                                 <!--[if mso]><table width="100%" cellpadding="0"><tr><td style="padding: 10px;"><![endif]-->
                                                 <div style="color:#555555;line-height:120%; padding: 10px;">	
-                                                    <div style="font-size:12px;line-height:14px;"><p style="margin: 0;text-align: right"><strong>${food.price?string("0.00")}${currency}</strong></p></div>	
+                                                    <div style="font-size:12px;line-height:14px;"><p style="margin: 0;text-align: right"><strong>${food.price?string("0.00")}${currency?no_esc}</strong></p></div>	
                                                 </div>
                                                 <!--[if mso]></td></tr></table><![endif]-->
 
@@ -248,7 +248,7 @@
 
                                                 <!--[if mso]><table width="100%" cellpadding="0"><tr><td style="padding: 10px;"><![endif]-->
                                                 <div style="color:#555555;line-height:120%; padding: 10px;">	
-                                                    <div style="font-size:12px;line-height:14px;"><p style="margin: 0;text-align: right"><strong>${(partTotal)?string("0.00")}${currency}</strong></p></div>	
+                                                    <div style="font-size:12px;line-height:14px;"><p style="margin: 0;text-align: right"><strong>${(partTotal)?string("0.00")}${currency?no_esc}</strong></p></div>	
                                                 </div>
                                                 <!--[if mso]></td></tr></table><![endif]-->
 
@@ -335,7 +335,7 @@
 
                                                 <!--[if mso]><table width="100%" cellpadding="0"><tr><td style="padding: 10px;"><![endif]-->
                                                 <div style="color:#555555;line-height:120%; padding: 10px;">	
-                                                    <div style="font-size:12px;line-height:14px;"><p style="margin: 0;text-align: right"><strong>${food.price?string("0.00")}${currency}</strong></p></div>	
+                                                    <div style="font-size:12px;line-height:14px;"><p style="margin: 0;text-align: right"><strong>${food.price?string("0.00")}${currency?no_esc}</strong></p></div>	
                                                 </div>
                                                 <!--[if mso]></td></tr></table><![endif]-->
 
@@ -353,7 +353,7 @@
 
                                                 <!--[if mso]><table width="100%" cellpadding="0"><tr><td style="padding: 10px;"><![endif]-->
                                                 <div style="color:#555555;line-height:120%; padding: 10px;">	
-                                                    <div style="font-size:12px;line-height:14px;"><p style="margin: 0;text-align: right"><strong>${partTotal?string("0.00")}${currency}</strong></p></div>	
+                                                    <div style="font-size:12px;line-height:14px;"><p style="margin: 0;text-align: right"><strong>${partTotal?string("0.00")}${currency?no_esc}</strong></p></div>	
                                                 </div>
                                                 <!--[if mso]></td></tr></table><![endif]-->
 
@@ -440,7 +440,7 @@
 
                                                 <!--[if mso]><table width="100%" cellpadding="0"><tr><td style="padding: 10px;"><![endif]-->
                                                 <div style="color:#555555;line-height:120%; padding: 10px;">	
-                                                    <div style="font-size:12px;line-height:14px;"><p style="margin: 0;text-align: right"><strong>${food.price?string("0.00")}${currency}</strong></p></div>	
+                                                    <div style="font-size:12px;line-height:14px;"><p style="margin: 0;text-align: right"><strong>${food.price?string("0.00")}${currency?no_esc}</strong></p></div>	
                                                 </div>
                                                 <!--[if mso]></td></tr></table><![endif]-->
 
@@ -458,7 +458,7 @@
 
                                                 <!--[if mso]><table width="100%" cellpadding="0"><tr><td style="padding: 10px;"><![endif]-->
                                                 <div style="color:#555555;line-height:120%; padding: 10px;">	
-                                                    <div style="font-size:12px;line-height:14px;"><p style="margin: 0;text-align: right"><strong>${partTotal?string("0.00")}${currency}</strong></p></div>	
+                                                    <div style="font-size:12px;line-height:14px;"><p style="margin: 0;text-align: right"><strong>${partTotal?string("0.00")}${currency?no_esc}</strong></p></div>	
                                                 </div>
                                                 <!--[if mso]></td></tr></table><![endif]-->
 
@@ -526,7 +526,7 @@
 
                                                 <!--[if mso]><table width="100%" cellpadding="0"><tr><td style="padding: 10px;"><![endif]-->
                                                 <div style="color:#555555;line-height:120%; padding: 10px;">	
-                                                    <div style="font-size:14px;line-height:16px;"><p style="margin: 0;text-align: right"><strong>${total?string("0.00")}${currency}</strong></p></div>	
+                                                    <div style="font-size:14px;line-height:16px;"><p style="margin: 0;text-align: right"><strong>${total?string("0.00")}${currency?no_esc}</strong></p></div>	
                                                 </div>
                                                 <!--[if mso]></td></tr></table><![endif]-->
 
@@ -863,7 +863,7 @@
 
                                                 <!--[if mso]><table width="100%" cellpadding="0"><tr><td style="padding: 10px;"><![endif]-->
                                                 <div style="color:#555555;line-height:120%; padding: 10px;">	
-                                                    <div style="font-size:14px;line-height:16px;"><p style="margin: 0;text-align: right"><strong>${userTotal?string("0.00")}${currency}</strong></p></div>	
+                                                    <div style="font-size:14px;line-height:16px;"><p style="margin: 0;text-align: right"><strong>${userTotal?string("0.00")}${currency?no_esc}</strong></p></div>	
                                                 </div>
                                                 <!--[if mso]></td></tr></table><![endif]-->
 
