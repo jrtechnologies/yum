@@ -18,18 +18,20 @@
       </p>
     </div>
     <div>
-      <div *ngFor="let food of orderedFoods">
-        <div class="food" fxLayout="row">
-          <div fxFlex="70">
-            {{food.food.foodName}}
-          </div>
-          <div fxFlex="30">
-            <div fxLayout="row">
-              <div fxFlex="40">
-                {{food.quantity}}
-              </div>
-              <div fxFlex="60" class="right-align">
-                <b>x {{food.food.price | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></b>
+      <div class="foodList">
+        <div *ngFor="let food of orderedFoods">
+          <div class="food" fxLayout="row">
+            <div fxFlex="70">
+              {{food.food.foodName}}
+            </div>
+            <div fxFlex="30">
+              <div fxLayout="row">
+                <div fxFlex="40">
+                  {{food.quantity}}
+                </div>
+                <div fxFlex="60" class="right-align paddRight">
+                  <b>x {{food.food.price | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></b>
+                </div>
               </div>
             </div>
           </div>
@@ -43,16 +45,16 @@
           &nbsp;
           <!--Items: {{items}}-->
         </div>
-        <div fxFlex="20" class="right-align">
+        <div fxFlex="20" class="right-align paddRight">
           <b>{{total | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></b>
         </div>
       </div>
-    </div> 
-      <md-form-field class="full-width">
-        <textarea mdInput placeholder="Comments" value="" maxlength="150" class="noResize" (keyup)="countComment()"  [(ngModel)]="comment"></textarea>
-        <md-icon mdSuffix>mode_edit</md-icon>
-        <md-hint>{{characterleft}} character(s) left</md-hint>
-    </md-form-field> 
+    </div>
+    <md-form-field class="full-width">
+      <textarea mdInput placeholder="Comments" value="" maxlength="150" class="noResize" (keyup)="countComment()" [(ngModel)]="comment"></textarea>
+      <md-icon mdSuffix>mode_edit</md-icon>
+      <md-hint>{{characterleft}} character(s) left</md-hint>
+    </md-form-field>
     <div class="centered email" fxLayout="row">
       <md-checkbox fxFlex="100" [checked]="isChecked" (change)="toggle()">Email me this</md-checkbox>
     </div>
