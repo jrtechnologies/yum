@@ -15,6 +15,7 @@
 package org.bootcamp.yum.data.entity;
 
 import java.math.BigDecimal;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -25,6 +26,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.bootcamp.yum.data.converter.LocalDateTimeAttributeConverter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.joda.time.DateTime;
 
 @Entity
@@ -44,8 +47,9 @@ public class Transaction {
     @JoinColumn(name = "source_id", insertable = false, updatable = false)
     private User sourceUser;
     
-    @ManyToOne
-    @JoinColumn(name = "menu_id", insertable = false, updatable = false)
+    @ManyToOne(optional=true )
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "menu_id", insertable = false, updatable = false, nullable = true)
     private DailyMenu dailyMenu;
         
     @Column(name = "user_id")

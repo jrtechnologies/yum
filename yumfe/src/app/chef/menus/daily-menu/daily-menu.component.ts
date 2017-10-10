@@ -20,15 +20,16 @@ import { Observable } from 'rxjs/Rx';
 export class DailyMenuComponent implements OnInit, OnChanges {
 
 
-
   @Input() foods: Array<remote.Food>;
   foodsAvailable: Array<remote.Food>;
 
   @Input() day;
   @Input() viewdate;
   @Input() menu: remote.DailyMenuChef;
+  @Input() userRole: string;
   @Input() holidays: string[];
   @Output() snackMessage = new EventEmitter<models.SnackMessage>();
+  @Output() deleteMenu = new EventEmitter<remote.DailyMenuChef>();
 
   @ViewChild( MdAutocompleteTrigger ) mdAutoCompleteTrigger: MdAutocompleteTrigger; //
   @ViewChild('blurMe') el: ElementRef;
@@ -46,6 +47,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
   menuCanBeUpdated: Boolean = false;
   menuCanBeEdited: Boolean = false;
   menuHasAllStandards: Boolean = false;
+  menuCanBeDeletedWithOrders: Boolean = false;
   private quantityOfStandards: number=0;
 
   checkUserChanges: Boolean = false;
@@ -70,26 +72,18 @@ export class DailyMenuComponent implements OnInit, OnChanges {
       this.showSpinner=false;
       return;
     }
-
-    this.setAvailableFoods();
-
-    this.setup();
+ 
   }
 
-   ngOnChanges(changes: SimpleChanges) {
-      if (changes.menu!==undefined && !changes.menu.isFirstChange()){
-          //console.log("menu changed:"+changes.menu.currentValue.date, changes.menu.currentValue);
-          this.setup();
-      }
-
-      if (changes.foods!==undefined && !changes.foods.isFirstChange()){
-        //console.log("refresh menu foods");
-          this.setAvailableFoods();
-          this.setup();
+   ngOnChanges(changes: SimpleChanges) { 
+      if( changes.menu || changes.foods){
+        this.setAvailableFoods();
+        this.setup();
       }
    }
   setAvailableFoods(){
     this.foodsAvailable=[];
+    this.quantityOfStandards = 0;
     for(let food of this.foods){
         if(!food.archived){
           this.foodsAvailable.push(food);
@@ -107,6 +101,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
       this.menuCanBeUpdated  = false;
       this.menuCanBeEdited  = false;
       this.checkUserChanges  = false;
+      this.menuCanBeDeletedWithOrders=false;
 
       this.initMenu = this.menu;
 
@@ -134,16 +129,18 @@ export class DailyMenuComponent implements OnInit, OnChanges {
               this.menuCanBeEdited = new Date(menuDate) > today;
 
               //console.log("deadline:", new Date(menuDate));
-
+              if(this.menuCanBeEdited && this.userRole && this.userRole=='admin' && this.menu && this.menu.id){
+                this.menuCanBeDeletedWithOrders=true;
+              } 
           });
       }
 
-      if (this.menu !== undefined) {
+      if (this.menu) {
 
             for(let menuFood of this.menu.foods){
                 //let food = this.foodsService.getFoodById(menuFood.foodId);
                  this.foodsService.getFoodById(menuFood.foodId).subscribe( food=>{
-                   if( food!==undefined){
+                   if( food ){
                     this.addMenuFood(food);
                   }
                 });
@@ -157,17 +154,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
              .map(food => {
                if (food && typeof food === 'object'){
                     this.addMenuFood(food);
-                    this.selectCtrl.patchValue('');
-                    //window.blur();
-                    //document.getElementById("focusMe").focus();
-                    //this.el.nativeElement.blur();
-
-
-                    //this.mdAutoCompleteTrigger.closePanel();
-                    //this.mdAutoCompleteTrigger.openPanel();
-
-                    //console.log(allDivs);
-                    //allDivs.blur();
+                    this.selectCtrl.patchValue(''); 
                }
                else {
                  return food;
@@ -175,10 +162,8 @@ export class DailyMenuComponent implements OnInit, OnChanges {
               })
              .map(name => name && name !== '' ? this.filter(name) : this.foodsAvailable.slice());
 
-      this.selectCtrl.valueChanges.subscribe(status => {
-          //console.log(status);
-         if ( this.el && this.focusMe && status.length == 0 ) {
-            //console.log('blur enter');
+      this.selectCtrl.valueChanges.subscribe(status => { 
+         if ( this.el && this.focusMe && status.length == 0 ) { 
             this.el.nativeElement.blur();
             this.focusMe.nativeElement.focus();
             setTimeout(() => {
@@ -209,8 +194,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
       return this.foodsAvailable.filter(food => new RegExp(`(.)*${name}(.)*`, 'gi').test(food.foodName));
    }
 
-  addMenuFood(food: remote.Food) {
-    //console.log(this.selectCtrl);
+  addMenuFood(food: remote.Food) { 
 
     this.foodsSelectedMap.set( food.id,  food);
     this.removeFromAvailable(food);
@@ -279,7 +263,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
 
       // PUT
 
-      if (this.menu !== undefined  ) {
+      if (this.menu ) {
 
           console.log("update menu id:", this.menu.id);
 
@@ -447,6 +431,8 @@ export class DailyMenuComponent implements OnInit, OnChanges {
     //console.log(this.quantityOfStandards);
   }
 
-
+  public deleteMenuAndOrders(){
+    this.deleteMenu.emit(this.menu);
+  }
 
 }

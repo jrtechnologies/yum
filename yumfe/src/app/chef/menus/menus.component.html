@@ -17,7 +17,7 @@
     </mwl-calendar-month-view>
 
     <ng-template #dailyMenuTemplate let-day="day" let-locale="locale">
-      <app-daily-menu [foods]='foods' [holidays]='holidays' [day]=day.date [viewdate]="viewdate" [menu]='menusMap.get(day.date|date:"yyyy-MM-dd")' (snackMessage)="dailyMenuError($event) "></app-daily-menu>
+      <app-daily-menu [foods]='foods' [holidays]='holidays' [day]=day.date [viewdate]="viewdate" [menu]='menusMap.get(day.date|date:"yyyy-MM-dd")' (snackMessage)="dailyMenuError($event) " [userRole]="userRole" (deleteMenu)='deleteMenuAndOrders($event)'></app-daily-menu>
       <!--{{menusMap.get(day.date|date:"yyyy-MM-dd")}}-->
       <small style="margin: 5px"></small>
     </ng-template>

@@ -56,6 +56,22 @@ export class AdminApi {
             });
     }
 
+        /**
+     * 
+     * @summary Delete menu and orders
+     * @param id 
+     */
+    public dailyMenusIdDelete(id: number, extraHttpRequestParams?: any): Observable<{}> {
+        return this.dailyMenusIdDeleteWithHttpInfo(id, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json() || {};
+                }
+            });
+    }
+
     /**
      *
      * get global settings
@@ -338,6 +354,48 @@ export class AdminApi {
             search: queryParameters
         });
 
+        // https://github.com/swagger-api/swagger-codegen/issues/4037
+        if (extraHttpRequestParams) {
+            requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
+        }
+
+        return this.http.request(path, requestOptions);
+    }
+    /**
+     * Delete menu and orders
+     * 
+     * @param id 
+     */
+    public dailyMenusIdDeleteWithHttpInfo(id: number, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + '/dailyMenus/${id}'
+                    .replace('${' + 'id' + '}', String(id));
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling dailyMenusIdDelete.');
+        }
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+            'application/json'
+        ];
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKey) {
+            headers.set('Authorization', this.configuration.apiKey);
+        }
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: RequestMethod.Delete,
+            headers: headers,
+            search: queryParameters,
+            withCredentials:this.configuration.withCredentials
+        });
         // https://github.com/swagger-api/swagger-codegen/issues/4037
         if (extraHttpRequestParams) {
             requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);

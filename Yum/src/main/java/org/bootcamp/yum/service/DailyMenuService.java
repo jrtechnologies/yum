@@ -14,8 +14,10 @@
  */
 package org.bootcamp.yum.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import javax.transaction.Transactional;
 import org.bootcamp.yum.api.ApiException;
@@ -30,20 +32,26 @@ import org.bootcamp.yum.api.model.NewDailyMenu;
 import org.bootcamp.yum.api.model.OrderItem;
 import org.bootcamp.yum.data.converter.FoodTypeConverter;
 import org.bootcamp.yum.data.entity.DailyMenu;
+import org.bootcamp.yum.data.entity.DailyOrder;
 import org.bootcamp.yum.data.entity.Food;
 import org.bootcamp.yum.data.entity.Settings;
+import org.bootcamp.yum.data.entity.Transaction;
+import org.bootcamp.yum.data.entity.User;
 import org.bootcamp.yum.data.repository.DailyMenuRepository;
 import org.bootcamp.yum.data.repository.DailyOrderRepository;
 import org.bootcamp.yum.data.repository.FoodRepository;
 import org.bootcamp.yum.data.repository.HolidaysRepository;
 import org.bootcamp.yum.data.repository.OrderItemRepository;
 import org.bootcamp.yum.data.repository.SettingsRepository;
+import org.bootcamp.yum.data.repository.TransactionRepository;
+import org.bootcamp.yum.data.repository.UserRepository;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-04-20T10:12:43.892+03:00")
@@ -64,7 +72,11 @@ public class DailyMenuService
     private SettingsRepository settingsRepo;
     @Autowired
     HolidaysRepository holidaysRepo;
-
+    @Autowired
+    private UserRepository userRep;
+    @Autowired
+    private TransactionRepository transactionRep;
+    
     FoodTypeConverter fooodTypeConverter = new FoodTypeConverter();
     /**
      * @update. Chef updates the daily menu
@@ -373,5 +385,47 @@ public class DailyMenuService
         
         // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
         return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
+    }
+
+    @Transactional
+    public void dailyMenusIdDelete(Long id) throws ApiException {
+        
+        DailyMenu dailyMenuEntity = dailyMenuRep.findById(id);
+        
+        if(dailyMenuEntity==null){
+            throw new ApiException(400, "Bad request data");
+        }
+        if (deadlinePassed(dailyMenuEntity.getDate())) {
+            dailyMenuEntity.setFinalised(true);
+            throw new ApiException(412, "Can't modify menu, deadline time has passed");
+        }    
+        
+        org.bootcamp.yum.data.entity.User sourceUser = userRep
+                    .findById((Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        
+        BigDecimal orderAmount = new BigDecimal(0);
+        
+        for( DailyOrder dailyOrder : dailyMenuEntity.getDailyOrders()){
+            
+            List<org.bootcamp.yum.data.entity.OrderItem> orderItems = dailyOrder.getOrderItems();
+            orderAmount = new BigDecimal(0);
+            for(org.bootcamp.yum.data.entity.OrderItem orderItem : orderItems){ 
+                org.bootcamp.yum.data.entity.Food foodEntity = orderItem.getFood();
+                orderAmount = orderAmount.add(foodEntity.getPrice().multiply(new BigDecimal(orderItem.getQuantity())));
+            }
+            
+            User user = dailyOrder.getUser();
+            BigDecimal balance = user.getBalance();
+            balance = balance.add(orderAmount);
+            user.setBalance(balance);
+            
+            Transaction transaction = new Transaction(user.getId(), orderAmount, balance, sourceUser.getId(), dailyOrder.getDailyOrderId(), dailyMenuEntity.getId(), 3);
+            
+            transactionRep.save(transaction);
+            
+            dailyOrderRep.delete(dailyOrder);
+        }
+        
+        dailyMenuRep.delete(dailyMenuEntity);
     }
 }

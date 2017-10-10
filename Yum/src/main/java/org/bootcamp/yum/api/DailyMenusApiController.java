@@ -57,6 +57,20 @@ public class DailyMenusApiController implements DailyMenusApi {
         this.dailyMenuService = dailyMenuService;
     }
 
+    @PreAuthorize("hasAuthority('admin')")
+    public ResponseEntity<Void> dailyMenusIdDelete(@ApiParam(value = "",required=true ) @PathVariable("id") Long id) throws ApiException {
+         
+       // return new ResponseEntity<Void>(HttpStatus.OK);
+       try { 
+        dailyMenuService.dailyMenusIdDelete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT); 
+        } catch (OptimisticLockException ex) {
+            Logger.getLogger(DailyMenusApiController.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ApiException(500, "Concurrent modification exception: internal error");
+        }    
+    }
+
+
     /**
      * @update. Chef updates the daily menu
      */

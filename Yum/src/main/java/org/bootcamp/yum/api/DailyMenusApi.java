@@ -32,6 +32,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping(value="/api")
 public interface DailyMenusApi {
 
+    @ApiOperation(value = "Delete menu and orders", notes = "", response = Void.class, authorizations = {
+        @Authorization(value = "Bearer")
+    }, tags={ "admin", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 204, message = "Daily menu deleted", response = Void.class),
+        @ApiResponse(code = 400, message = "Bad Request Data", response = Void.class),
+        @ApiResponse(code = 412, message = "Deadline passed", response = Void.class),
+        @ApiResponse(code = 500, message = "An unexpected error occured.", response = Error.class) })
+    
+    @RequestMapping(value = "/dailyMenus/{id}",
+        produces = { "application/json" }, 
+        method = RequestMethod.DELETE)
+    @CrossOrigin 
+    ResponseEntity<Void> dailyMenusIdDelete(@ApiParam(value = "",required=true ) @PathVariable("id") Long id)  throws ApiException;
+
     @ApiOperation(value = "Put Food/Foods in a dailyMenu", notes = "", response = LastEdit.class, authorizations = {
         @Authorization(value = "Bearer")
     }, tags={ "chef", })
