@@ -127,6 +127,7 @@ public class UsersService {
         userEntity.setFirstName(firstName);
         userEntity.setLastName(lastName);
         userEntity.setEmail(email);
+        userEntity.setFirstEmail(email);
         userEntity.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt())); //Crypt password 
         userEntity.setUserRole(userRole);
         userEntity.setRegistrationDate(LocalDate.now());

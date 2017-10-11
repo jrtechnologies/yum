@@ -62,6 +62,9 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "first_email")
+    private String firstEmail;
+    
     @Column(name = "role")
     @Convert(converter = UserRoleConverter.class)
     private UserRole userRole;
@@ -159,6 +162,14 @@ public class User {
         this.email = email;
     }
 
+    public String getFirstEmail() {
+        return firstEmail;
+    }
+
+    public void setFirstEmail(String firstEmail) {
+        this.firstEmail = firstEmail;
+    }
+    
     public UserRole getUserRole() {
         return userRole;
     }

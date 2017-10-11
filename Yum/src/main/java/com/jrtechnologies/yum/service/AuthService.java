@@ -84,6 +84,7 @@ public class AuthService {
             }
             User user = new User();
             user.setEmail(email);
+            user.setFirstEmail(email);
             user.setFirstName(body.getFirstName());
             user.setLastName(body.getLastName());
             // Encrypt password and set it to User D.A.O.
@@ -222,7 +223,9 @@ public class AuthService {
                 // store user in db on first login
                 if (user == null) {
                     user = new User();
-                    user.setEmail(attrs.get("mail").get().toString());
+                    String email = attrs.get("mail").get().toString();
+                    user.setEmail(email);
+                    user.setFirstEmail(email);
                     user.setFirstName(attrs.get("givenName").get().toString());
                     user.setLastName(attrs.get("sn").get().toString());
                     user.setUserRole(convertToUserRole("hungry"));
