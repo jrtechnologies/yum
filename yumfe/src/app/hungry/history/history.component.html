@@ -1,44 +1,45 @@
+<div class="animate">
 
-<div class="header">
-  <app-month-nav
-    [viewDate]='viewdate'
-    (monthViewDate)="onMonthNavChange($event)"
-  ></app-month-nav>
+  <div class="header">
+    <app-month-nav [viewDate]='viewdate' (monthViewDate)="onMonthNavChange($event)"></app-month-nav>
 
-  <app-hungry-nav></app-hungry-nav>
+    <app-hungry-nav></app-hungry-nav>
 
-</div>
-
-<div class="fullLayer" *ngIf="showSpinner">
-    <md-spinner class="centered" color="accent"></md-spinner>
-</div>
-
-
-<ng-container *ngIf='getDailyMenusMap().size>=0'>
-
-  <!--Counted Orders: {{ getDailyMenusMap().size}}-->
-
-  <ng-template #dailyOrderTemplate let-day="day" let-locale="locale">
-      <ng-container>
-        <app-daily-order-history   [dailyMenu]='getDailyMenusMap().get(day.date|date:"yyyy-MM-dd")' [day]=day.date [currency] = 'currency'></app-daily-order-history>
-      </ng-container>
-  </ng-template>
-
-  <div [ngSwitch]="view">
-    <mwl-calendar-month-view
-      [viewDate]="viewdate"
-      [excludeDays]="excludeDays"
-      [cellTemplate]="dailyOrderTemplate"
-      [locale]="locale"
-      >
-    </mwl-calendar-month-view>
   </div>
 
-</ng-container>
+  <div class="fullLayer" *ngIf="showSpinner">
+    <md-spinner class="centered" color="accent"></md-spinner>
+  </div>
 
-<md-card>
-      <div fxLayout="row">
-      <div fxFlexOffset="2" fxFlex="91"><h2>Your monthly total</h2></div>
-      <div fxFlex="7"><h3>{{getTotal() | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></h3></div>
+
+  <ng-container *ngIf='getDailyMenusMap().size>=0'>
+
+    <!--Counted Orders: {{ getDailyMenusMap().size}}-->
+
+    <ng-template #dailyOrderTemplate let-day="day" let-locale="locale">
+      <ng-container>
+        <app-daily-order-history [dailyMenu]='getDailyMenusMap().get(day.date|date:"yyyy-MM-dd")' [day]=day.date [currency]='currency'></app-daily-order-history>
+      </ng-container>
+    </ng-template>
+
+    <div [ngSwitch]="view">
+      <mwl-calendar-month-view [viewDate]="viewdate" [excludeDays]="excludeDays" [cellTemplate]="dailyOrderTemplate" [locale]="locale">
+      </mwl-calendar-month-view>
     </div>
-</md-card>
+
+  </ng-container>
+
+  <md-card>
+    <div fxLayout="row">
+      <div fxFlexOffset="2" fxFlex="91">
+        <h2>Your monthly total</h2>
+      </div>
+      <div fxFlex="7">
+        <h3>{{getTotal() | number : '1.2-2'}}
+          <span [innerHTML]="currency | async"></span>
+        </h3>
+      </div>
+    </div>
+  </md-card>
+
+</div>
