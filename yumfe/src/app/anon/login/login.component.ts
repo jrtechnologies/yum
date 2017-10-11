@@ -48,7 +48,6 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     // Create Form group, form controls, validators.
 
-    const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     this.loginForm = this.fb.group({
       username: [''
@@ -57,7 +56,7 @@ export class LoginComponent implements OnInit {
       email: ['', [
         Validators.required,
         Validators.minLength(2),
-        Validators.pattern(emailPattern)
+        Validators.email
       ]],
       password: ['', [
         Validators.required,
@@ -80,7 +79,7 @@ export class LoginComponent implements OnInit {
           this.loginForm.get('email').setValidators([
             Validators.required,
             Validators.minLength(2),
-            Validators.pattern(emailPattern)
+            Validators.email
           ]);
 
         }
@@ -89,7 +88,7 @@ export class LoginComponent implements OnInit {
         this.loginForm.get('email').updateValueAndValidity({ onlySelf: true, emitEvent: false });
 
 
-        // Handle chrome autofill password  
+        // Handle chrome autofill password
         let passwordListener = this.loginForm.controls['password'].valueChanges
           .startWith(null)
           .debounceTime(200)
