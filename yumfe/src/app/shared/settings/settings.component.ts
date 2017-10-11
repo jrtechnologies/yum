@@ -32,11 +32,9 @@ export class SettingsComponent implements OnInit {
     public snackBar: MdSnackBar, private router: Router) { }
 
   ngOnInit() {
-    if(!this.authService.getLoggedInUser()){ return; }
+    if(!this.authService.getLoggedInUser()) { return; }
     this.userId =   this.authService.getLoggedInUser().id;
-    //const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,20}$/;
 
     this.externalAuth = this.authService.hasExternalAuth();
     //console.log("settings auth:" + this.externalAuth);
@@ -48,7 +46,7 @@ export class SettingsComponent implements OnInit {
       lastName: ['', [Validators.required, Validators.minLength(1)]],
       email: ['', [
         Validators.required, Validators.minLength(2),
-        Validators.pattern(emailPattern)
+        Validators.email
       ]
       ],
       password: ['', [ //, disabled: this.externalAuth
