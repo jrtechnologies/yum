@@ -828,7 +828,7 @@
                                                     <!--<![endif]-->
     
     
-                                                    <!--[if mso]><table width="100%" cellpadding="0"><tr><td style="padding: 10px;word-break:break-all;"><![endif]-->
+                                                    <!--[if mso]><table width="100%" cellpadding="0"><tr><td style="padding: 10px;word-break:break-all;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;"><![endif]-->
                                                     <div style="color:#555555;line-height:120%; padding: 10px;">
                                                         <div style="font-size:10px;line-height:16px;">
                                                             <p style="margin: 0; font-style:italic;"><strong>Order comments: ${dailyOrder.comment}</strong></p>

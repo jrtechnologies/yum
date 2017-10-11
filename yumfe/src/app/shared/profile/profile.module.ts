@@ -10,7 +10,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 
 @NgModule({
   imports: [CommonModule,  MdGridListModule, MdSelectModule, FormsModule, ReactiveFormsModule, FileUploadModule, MdProgressBarModule, MdButtonModule, MdInputModule ],
-  declarations: [ ProfileComponent, DeletePictureDialog],
+  declarations: [ ProfileComponent, DeletePictureDialog],  
   exports: [ProfileComponent]
 })
 export class ProfileModule {}

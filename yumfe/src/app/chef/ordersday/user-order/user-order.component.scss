@@ -28,5 +28,6 @@
   font-size: 0.8em;
   font-style: italic;
   word-wrap: break-word;
-  word-break: break-word;
+  // word-break: break-word; 
+  word-break: break-all;
 }

@@ -397,6 +397,7 @@ export class DailyMenuComponent implements OnInit {
           .subscribe(orderUpdate => {
             this.isOrderBoolean = false;
             this.removeFoodMapQuantity();
+            this.dailyMenu.comment="";
             this.emitData();
             this.balanceService.updateBalance(orderUpdate.balance);
             this.openSnackBar('Order deleted successfully!', 'ok', 1);
