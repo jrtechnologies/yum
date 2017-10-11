@@ -5,6 +5,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import * as remote from '../../remote';
 import { DatePipe } from '@angular/common';
+import { MdTooltip }  from '@angular/material';
 import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.component';
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 import { Observable, Subject } from 'rxjs/Rx';
@@ -13,6 +14,7 @@ import { ControlUserService } from '../../shared/services/control-user.service';
 interface observables{
   wdays: any, controlledUser: any
 }
+interface dailyMenuData{ price: number, comment: string};
 
 @Component({
   selector: 'app-hungry-home',
@@ -112,9 +114,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
 
-  public handleUserUpdated(dailyTPrice, day) {
+  public handleUserUpdated(menuData: dailyMenuData, day) {
     const menu: remote.DailyMenu = this.dailymenusMap.get(day);
-    menu.totalPrice = dailyTPrice;
+    menu.totalPrice = menuData.price;
+    menu.comment = menuData.comment;
     this.dailymenusMap.set(day, menu);
   }
   public getTotalPrice() {
@@ -177,6 +180,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         return dailymenu;
       }
     }
+  }
+
+  public getDailyMenuComment(dt: string): string{
+     
+      return this.dailymenusMap.get(dt)? this.dailymenusMap.get(dt).comment : null;
   }
 
   public dailyMenuExists(dateStr: String) {

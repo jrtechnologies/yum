@@ -9,6 +9,7 @@ CREATE TABLE user(
     last_name varchar(25),
 	first_name varchar(25),
 	email varchar(150) NOT NULL UNIQUE,
+	first_email varchar(150),
     role enum('hungry','chef','admin'),
     password varchar(60),
     registration_date date,
@@ -53,6 +54,7 @@ CREATE TABLE daily_order(
     final BIT(1) NOT NULL DEFAULT false,
     user_id BIGINT,
     dailymenu_id BIGINT,
+	comment VARCHAR(150),
 	last_edit TIMESTAMP NULL  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	version INT NOT NULL  DEFAULT 0,
     PRIMARY KEY (id)
@@ -114,13 +116,13 @@ CREATE TABLE transaction(
     FOREIGN KEY (source_id) REFERENCES user(id)
 );
 
-CREATE TABLE `yum`.`holidays` (
+CREATE TABLE holidays (
   `holidate` DATE NOT NULL,
   PRIMARY KEY (`holidate`));
 
 
 
-INSERT INTO `user` VALUES (1,'admin','admin','admin@yum.com','admin','$2a$10$94RawXgiAdX76VORM7MkRevNSYa8NzlVcQVPZJqaNNBdmrq62y3aa','2017-03-28','','2017-05-22 15:22:09',0,NULL,NULL,NULL,NULL,0);
+INSERT INTO `user` VALUES (1,'admin','admin','admin@yum.com','admin@yum.com','admin','$2a$10$94RawXgiAdX76VORM7MkRevNSYa8NzlVcQVPZJqaNNBdmrq62y3aa','2017-03-28','','2017-05-22 15:22:09',0,NULL,NULL,NULL,NULL,0);
 
 
 

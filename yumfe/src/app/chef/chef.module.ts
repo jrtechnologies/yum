@@ -18,6 +18,7 @@ import { OrderTotalComponent } from './orders/order-total/order-total.component'
 import { FoodItemComponent } from './ordersday/food-item/food-item.component';
 import { UserOrderComponent } from './ordersday/user-order/user-order.component';
 import {ChefRouteGuard} from './chef-route.guard';
+import { DialogDeleteMenuWithOrders } from './menus/menus.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,7 @@ import {ChefRouteGuard} from './chef-route.guard';
 
   declarations: [HomeComponent, FoodComponent,
    FoodEditComponent, FoodInlineEditComponent,
-    EditCloneDialogComponent, DeleteDialogComponent,
+    EditCloneDialogComponent, DeleteDialogComponent,DialogDeleteMenuWithOrders,
      ChefNavComponent,
      MenusComponent,
      OrdersComponent,
@@ -44,6 +45,6 @@ import {ChefRouteGuard} from './chef-route.guard';
 
 
   providers: [ChefApi, FoodsService, ChefRouteGuard],
-  entryComponents: [EditCloneDialogComponent, DeleteDialogComponent, DeleteAskDialogComponent, ReportEmailDialog]
+  entryComponents: [EditCloneDialogComponent, DeleteDialogComponent, DeleteAskDialogComponent, ReportEmailDialog, DialogDeleteMenuWithOrders]
 })
 export class ChefModule { }

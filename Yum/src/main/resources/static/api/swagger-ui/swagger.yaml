@@ -21,7 +21,7 @@ info:
       
     ------------------------------------
 
-        Last edit: 28/09/2017 10:00
+        Last edit: 10/10/2017 10:00
 
     -------------------------------------
 basePath: /api
@@ -492,6 +492,9 @@ paths:
               dailyMenuDate:
                 type: string
                 format: date
+              comment:
+                type: string
+                maxLength: 150
               orderItems:
                 type: array
                 items:
@@ -863,6 +866,27 @@ paths:
           description: The request is failed because there are orders on the food
           schema:
             $ref: '#/definitions/Food'
+        '500':
+          $ref: '#/responses/Error'
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - admin
+      summary: Delete menu and orders
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Daily menu deleted
+        '412':
+          description: Deadline passed
         '500':
           $ref: '#/responses/Error'
   /dailyMenus:
@@ -1462,6 +1486,9 @@ definitions:
       dailyMenuDate:
         type: string
         format: date
+      comment:
+        type: string
+        maxLength: 150
       lastEdit:
         $ref: '#/definitions/LastEdit'
   User:
@@ -1684,6 +1711,9 @@ definitions:
         format: int64
       isFinal:
         type: boolean
+      comment:
+        type: string
+        maxLength: 150
       foods:
         type: array
         items:
@@ -1757,6 +1787,9 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/OrderItem'
+      comment:
+        type: string
+        maxLength: 150
   DailyOrderSummary:
     type: object
     description: Daily order summary DTO
@@ -1797,6 +1830,9 @@ definitions:
       total:
         type: number
         format: double
+      comment:
+        type: string
+        maxLength: 150
       orderItems:
         type: array
         items:

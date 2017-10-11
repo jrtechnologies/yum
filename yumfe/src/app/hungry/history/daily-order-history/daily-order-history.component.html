@@ -3,29 +3,31 @@
     <span class="cal-day-number">{{ day | date:"d" }}</span>
   </div>
 
-  <div class=" flexGrow is-flex-column" *ngIf="dailyMenu!==undefined" >
-    <div *ngIf="dailyMenu.foods!==undefined">
+  <div class=" flexGrow is-flex-column" *ngIf="dailyMenu">
+    <div *ngIf="dailyMenu.foods">
       <ng-container *ngIf="dailyMenu.foods.length>0">
-         <div class="foodsList grid-container">
-           <ng-container *ngFor="let food of dailyMenu.foods">
-            <div [ngClass]="{'icon-Meal': food.food.foodType==='MAIN', 'icon-Salad': food.food.foodType==='SALAD', 'icon-Drink': food.food.foodType==='DRINK'}"
-              class="cell"> </div>
-            <div  class="cell"> {{food.food.foodName}} </div>
-            <div class="foodListItemQty cell cellLast"> {{food.quantity}}</div>
+        <div class="foodsList grid-container">
+          <ng-container *ngFor="let food of dailyMenu.foods">
+            <ng-container *ngIf="food.quantity>0">
+              <div [ngClass]="{'icon-Meal': food.food.foodType==='MAIN', 'icon-Salad': food.food.foodType==='SALAD', 'icon-Drink': food.food.foodType==='DRINK'}"
+                class="cell"> </div>
+              <div class="cell"> {{food.food.foodName}} </div>
+              <div class="foodListItemQty cell cellLast"> {{food.quantity}}</div>
+            </ng-container>
           </ng-container>
         </div>
       </ng-container>
     </div>
   </div>
 
-  <div *ngIf="dailyMenu!==undefined && dailyMenu.foods.length>0" class="calendarBottom borderTop is-flex">
+  <div *ngIf="dailyMenu && dailyMenu.foods && dailyMenu.foods.length>0" class="calendarBottom borderTop is-flex">
     <ng-container *ngIf="getTotal()!=0">
       <div>Total: </div>
       <div> {{getTotal() | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
     </ng-container>
   </div>
 
-  <div *ngIf="dailyMenu!==undefined && dailyMenu.foods.length==0" class="calendarBottom smallPad flexEnd">
+  <div *ngIf="dailyMenu && dailyMenu.foods && dailyMenu.foods.length==0" class="calendarBottom smallPad flexEnd">
     <!--<ng-container *ngIf="dailyMenu.foods.length==0">-->
     <button md-raised-button color="accent" (click)='viewDailyMenu()'>Οrder</button>
     <!--</ng-container>-->

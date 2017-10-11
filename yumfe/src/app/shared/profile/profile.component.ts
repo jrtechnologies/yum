@@ -80,7 +80,7 @@ export class ProfileComponent implements OnInit {
       email: [this.user.email, [
         Validators.required, Validators.minLength(2),
         // tslint:disable-next-line:max-line-length
-        Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+        Validators.email
       ]
       ]
     });

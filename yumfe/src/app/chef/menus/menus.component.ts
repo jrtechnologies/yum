@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
-
+import { MdSnackBar, MdProgressBar, MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { subDays, addDays, startOfMonth, endOfMonth, getMonth, getYear, isToday, isValid } from 'date-fns';
 
-import { MdSnackBar, MdProgressBar } from '@angular/material';
+
 
 import * as models from './../../shared/models';
 import * as remote from '../../remote';
@@ -16,7 +16,7 @@ import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.compo
 import { ChefNavComponent } from '../shared/chef-nav/chef-nav.component';
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 import { AdminApi } from '../../remote';
-
+import { AuthenticationService } from '../../shared/authentication.service';
 @Component({
   selector: 'app-menus',
   templateUrl: './menus.component.html',
@@ -43,6 +43,7 @@ export class MenusComponent implements OnInit {
   private remote: any;
   public showSpinner: boolean = true;
   public holidays: string[];
+  public userRole: string;
 
   constructor(private foodsService: FoodsService,
     private chefService: remote.ChefApi,
@@ -52,11 +53,14 @@ export class MenusComponent implements OnInit {
     private router: Router,
     public snackBar: MdSnackBar,
     public globalSettingsService: GlobalSettingsService,
-    private adminService: AdminApi
+    private adminService: AdminApi,
+    private authService: AuthenticationService,
+    public dialog: MdDialog
   ) { }
 
   ngOnInit() {
     this.viewdate = new Date();
+    this.userRole = this.authService.getLoggedInRole();
 
     this.globalSettingsService.getWorkingDays().subscribe(days => {
       this.excludeDays = this.alldays.filter(function (el) {
@@ -94,7 +98,7 @@ export class MenusComponent implements OnInit {
     if (this.holidays && this.holidays[0] == year.toString()) {
       return;
     }
-    
+
     console.log("getHolidays");
     this.adminService.globalsettingsHolidaysYearGet(year).subscribe(holidays => {
       this.holidays = [year.toString()];
@@ -201,4 +205,79 @@ export class MenusComponent implements OnInit {
   public setSpinner(set: boolean) {
 
   }
+
+  public deleteMenuAndOrders(menu) {
+    if(!menu){ return; }
+
+    let dialogRef = this.dialog.open(DialogDeleteMenuWithOrders, {
+      width: '300px',
+      data: menu
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      //console.log(result);
+      if (result == 'Yes') {
+        this.showSpinner = true;
+
+        this.adminService.dailyMenusIdDelete(menu.id)
+          .finally(() => {
+            this.showSpinner = false;
+          })
+          .subscribe(() => {
+            //toggle
+            if(this.menusMap.get(menu.date)===null){
+                this.menusMap.delete(menu.date);
+            }
+            else{
+              this.menusMap.set(menu.date, null);
+            }
+            let responseOk: models.SnackMessage = {};   
+            responseOk.message="Menu deleted successfully";
+            responseOk.status = 1; //ok
+            this.dailyMenuError(responseOk);
+          }, error => {
+            console.log(error);
+            let responseError: models.SnackMessage = {};
+            switch (error.status) {
+              case 400:
+                responseError.message = "Menu delete bad request data";
+                break;
+              case 412:
+                responseError.message = "Menu deadline passed";
+                break;
+              case 500:
+                responseError.message = "An unexpected error occured.";
+                break;
+
+            }
+            responseError.status = 3; //error
+            this.dailyMenuError(responseError);
+
+          });
+
+      }
+    });
+  }
+
+}
+
+
+
+@Component({
+  selector: 'dialog-delete-menu-with-orders',
+  templateUrl: 'dialog-delete-menu-with-orders.html',
+})
+export class DialogDeleteMenuWithOrders {
+
+  public menuDate: string;
+
+  constructor(
+    public dialogRef: MdDialogRef<DialogDeleteMenuWithOrders>, private datePipe: DatePipe,
+    @Inject(MD_DIALOG_DATA) public menu: remote.DailyMenuChef) { }
+
+  ngOnInit() {
+    this.menuDate = this.datePipe.transform(this.menu.date, 'dd/MM/yyyy');
+  }
+
+
 }

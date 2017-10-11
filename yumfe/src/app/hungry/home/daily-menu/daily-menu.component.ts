@@ -1,11 +1,13 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Observable } from 'rxjs/Rx';
-import {  isToday, isAfter  } from 'date-fns';
+import { isToday, isAfter } from 'date-fns';
 import { GlobalSettingsService } from './../../../shared/services/global-settings-service.service';
 import { AuthenticationService } from './../../../shared/authentication.service';
 import { BalanceService } from './../../../shared/services/balance.service';
 import * as remote from '../../../remote';
+
+interface outData{ price?: number, comment?: string};
 
 @Component({
   selector: 'app-daily-menu',
@@ -15,7 +17,7 @@ import * as remote from '../../../remote';
 export class DailyMenuComponent implements OnInit {
   @Input() dailyMenu: remote.DailyMenu;
   @Input() controlledUser: remote.User;
-  @Output() dailyTotalPrice = new EventEmitter<number>();
+  @Output() dailyMenuChanges = new EventEmitter<outData>();
 
   private lastEditDailyOrder: remote.LastEdit = {};
   private foodsMapNoModify: Map<number, remote.FoodWithQuantity> = new Map<number, remote.FoodWithQuantity>();
@@ -28,6 +30,7 @@ export class DailyMenuComponent implements OnInit {
   // create spinner
   public showSpinner = false;
   public disableBtn = false;
+  private outData: outData={};
 
   constructor(
     private hungryService: remote.HungryApi,
@@ -47,8 +50,8 @@ export class DailyMenuComponent implements OnInit {
     this.createFoodMap();
 
     if (this.dailyMenu.orderId != null) {
-      this.isOrderBoolean = true;
-      this.dailyTotalPrice.emit(this.getTotalPrice());
+      this.isOrderBoolean = true; 
+      this.emitData();
       if (!this.isFinalised()) {
         this.getOrderLastEdit(); // Set order lastEdit.
       }
@@ -92,8 +95,8 @@ export class DailyMenuComponent implements OnInit {
     });
   }
   public isFinalised() {
-   // if(this.controlledUser && isToday(this.dailyMenu.date)) {
-    if(this.controlledUser && (isToday(this.dailyMenu.date) || isAfter(this.dailyMenu.date, new Date()))) {
+    // if(this.controlledUser && isToday(this.dailyMenu.date)) { 
+    if (this.controlledUser && (isToday(this.dailyMenu.date) || isAfter(this.dailyMenu.date, new Date()))) {
       return false;
     }
     return this.dailyMenu.isFinal;
@@ -189,14 +192,17 @@ export class DailyMenuComponent implements OnInit {
   }
   // Call Order Dialog.
   public order() {
+    
     const dialogRef = this.dialog.open(DailyMenuOrderDialog);
     const instance = dialogRef.componentInstance; // This instance pass data to dialog.
     const orderFoods: Array<remote.FoodWithQuantity> = [];
+    let comment: string;
     instance.total = this.totalPrice;
     instance.orderedFoods = [];
     instance.date = this.dailyMenu.date;
     instance.currency = this.currency;
     instance.controlledUserFullName = this.controlledUser ? this.controlledUser.firstName + " " + this.controlledUser.lastName : null;
+    instance.comment = this.dailyMenu.comment;
 
     for (const food of this.foodsList) {
       if (food.quantity > 0) {
@@ -206,10 +212,17 @@ export class DailyMenuComponent implements OnInit {
       instance.items += food.quantity;
     }
 
+    dialogRef.beforeClose().subscribe(() => {
+      let instance = dialogRef.componentInstance;
+      console.log(instance.comment );
+       comment = instance.comment;
+    });
+
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'Yes' || result === 'YesWithEmail') {
         this.showSpinner = true;
         this.disableBtn = true;
+        this.dailyMenu.comment = comment;
         // Is Modify.
         if (this.modifyChecked) {
           const updateOrderItem: remote.UpdateOrderItems = {};
@@ -220,6 +233,8 @@ export class DailyMenuComponent implements OnInit {
           updateOrderItem.dailyMenuId = this.dailyMenu.id;
           updateOrderItem.dailyMenuDate = this.dailyMenu.date;
           updateOrderItem.dailyMenuVersion = this.dailyMenu.lastEdit.version;
+          updateOrderItem.comment = this.dailyMenu.comment;
+          
           if (result === 'YesWithEmail') {
             updateOrderItem.emailRequest = true;
           } else {
@@ -243,9 +258,10 @@ export class DailyMenuComponent implements OnInit {
               this.lastEditDailyOrder = lastEdit;
               this.isOrderBoolean = true;
               this.modifyChecked = false;
-              this.showSpinner = false;
+              this.showSpinner = false;             
+              // this.dailyTotalPrice.emit(this.getTotalPrice());
               this.disableBtn = false;
-              this.dailyTotalPrice.emit(this.getTotalPrice());
+              this.emitData();
               this.balanceService.updateBalance(orderUpdate.balance);
               console.log('Order changed');
               this.openSnackBar('Order modified successfully!', 'ok', 1); // Success SnackBar
@@ -268,6 +284,8 @@ export class DailyMenuComponent implements OnInit {
                   const dailyOrder: remote.DailyOrder = JSON.parse(error._body);
                   this.updateFoodMapWithOrderedFoods(dailyOrder.foods);
                   this.lastEditDailyOrder = dailyOrder.lastEdit;
+                  this.dailyMenu.comment = dailyOrder.comment;
+                  this.emitData();
                   this.openSnackBar('Order not modified! It has been modified in the past and now is displayed in your page!', 'ok', 3);
                   break;
                 case 410: // Concurrent Order Deletion error. Return an error message and the new daily Menu.
@@ -296,6 +314,7 @@ export class DailyMenuComponent implements OnInit {
           order.dailyMenuId = this.dailyMenu.id;
           order.dailyMenuDate = this.dailyMenu.date;
           order.menuVersion = this.dailyMenu.lastEdit.version;
+          order.comment  = this.dailyMenu.comment;
           if (result === 'YesWithEmail') {
             order.emailRequest = true;
           } else {
@@ -315,8 +334,8 @@ export class DailyMenuComponent implements OnInit {
               this.getOrderLastEdit(); // Update order last edit.
               this.isOrderBoolean = true;
               this.showSpinner = false;
-              this.disableBtn = false;
-              this.dailyTotalPrice.emit(this.getTotalPrice());
+              this.disableBtn = false; 
+              this.emitData(); 
               this.balanceService.updateBalance(orderedDailyMenu.balance);
               console.log('Order placed');
               this.openSnackBar('Order placed successfully!', 'ok', 1);
@@ -334,6 +353,7 @@ export class DailyMenuComponent implements OnInit {
                   this.isOrderBoolean = true;
                   this.getOrderLastEdit();
                   this.createFoodMap();
+                  this.emitData();
                   this.openSnackBar('Order has already been placed and now is displayed in page', 'ok', 2);
                   break;
                 case 410: // Concurrent Order Deletion error. Return an error message and the new daily Menu.
@@ -377,7 +397,8 @@ export class DailyMenuComponent implements OnInit {
           .subscribe(orderUpdate => {
             this.isOrderBoolean = false;
             this.removeFoodMapQuantity();
-            this.dailyTotalPrice.emit(this.getTotalPrice());
+            this.dailyMenu.comment="";
+            this.emitData();
             this.balanceService.updateBalance(orderUpdate.balance);
             this.openSnackBar('Order deleted successfully!', 'ok', 1);
             console.log('Order Deleted');
@@ -434,6 +455,12 @@ export class DailyMenuComponent implements OnInit {
         break;
     }
   }
+
+  private emitData(){
+    this.outData.price = this.getTotalPrice();
+    this.outData.comment = this.dailyMenu.comment;
+    this.dailyMenuChanges.emit(this.outData);
+  }
 }
 // Daily Order Cancel Dialog to confirm delete.
 @Component({
@@ -459,6 +486,10 @@ export class DailyMenuOrderDialog implements OnInit {
   public currency: Observable<string>;
   public fullName = '';
   public controlledUserFullName = null;
+  public comment: string;
+  public maxlength = 150;
+  public characterleft = this.maxlength;
+
   constructor(public dialogRef: MdDialogRef<DailyMenuOrderDialog>, private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
@@ -466,6 +497,9 @@ export class DailyMenuOrderDialog implements OnInit {
     const user = this.authenticationService.getLoggedInUser();
     this.fullName = user.firstName + ' ' + user.lastName;
   }
+
+ 
+
   // check email check box.
   public toggle() {
     this.isChecked = !this.isChecked;
@@ -478,4 +512,12 @@ export class DailyMenuOrderDialog implements OnInit {
       return 'Yes';
     }
   }
+
+  // method for count how many chars is remaning for the description
+  countComment() {
+    if(this.comment){
+      this.characterleft = (this.maxlength) - (this.comment.length);
+    }
+  }
+
 }

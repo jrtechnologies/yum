@@ -1,6 +1,11 @@
 .dialog{
-  height: 550px;
+  max-height: 800px;
   width: 420px;
+}
+.foodList{   
+  max-height: 315px;
+  overflow: auto;
+  padding: 10px 0px 10px 0px; 
 }
 .order{
   width: 370px;
@@ -40,3 +45,7 @@ img{
 .right-align{
   text-align: right !important;
 }
+
+.full-width{width:100%;}
+
+.paddRight { padding-right: 5px; }

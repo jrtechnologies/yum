@@ -15,6 +15,8 @@ import { GlobalSettingsService } from './services/global-settings-service.servic
 import {SharedMaterialModule} from './shared-material.module';
 import { ControlUserService } from './services/control-user.service';
 import { BalanceService } from './services/balance.service';
+import { DeletePictureDialog } from './profile/profile.component';
+import { ProfileModule } from '../shared/profile/profile.module';
 
 @NgModule({
   imports: [
@@ -24,7 +26,8 @@ import { BalanceService } from './services/balance.service';
     ReactiveFormsModule,
     FlexLayoutModule,
     PaginationModule,
-    SharedMaterialModule
+    SharedMaterialModule,
+    ProfileModule
   ],
   exports: [
     SharedMaterialModule,
@@ -54,7 +57,6 @@ import { BalanceService } from './services/balance.service';
     ControlUserService,
     BalanceService
   ],
-  entryComponents: [
-  ]
+  entryComponents: [DeletePictureDialog]
 })
 export class SharedModule { }

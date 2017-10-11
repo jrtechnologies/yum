@@ -64,7 +64,7 @@ $primary: #ff5b57;
 .smallSidePad{ padding: 0 10px;}
 .width100 { width:100%; }
 .noResize{
-  resize: none;
+  resize: none!important;
 }
 
 .noMarginInput  .mat-input-wrapper { margin: 20px 0 20px 0 !important; }
@@ -214,8 +214,9 @@ button.mat-raised-button.active {
 .hidden{visibility:hidden !important;}
 .relative{ position:relative; }
 .absolute{ position:absolute; }
-.menuDrawerButton{ position: absolute;     top: 78px;
-    right: -32px;}
+.menuDrawerButton{ position: absolute;      
+  top: 89px;
+  right: -12px;}
 .menuDrawer{ max-width: 320px!important;}
 
 .bigger-button {

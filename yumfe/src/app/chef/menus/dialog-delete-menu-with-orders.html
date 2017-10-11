@@ -1,0 +1,9 @@
+<h1 md-dialog-title class="centered">Delete menu and orders for {{menuDate}}</h1>
+<md-dialog-content class="dialog-content-size">
+  <div>This action deletes the menu and the associated orders, are you sure want to delete it? </div>  
+</md-dialog-content>
+<br>
+<div class="is-flex">
+    <button md-raised-button color="accent" (click)="dialogRef.close('Yes')">Yes</button>
+    <button md-raised-button color="accent" (click)="dialogRef.close('No')">No</button>
+</div>
