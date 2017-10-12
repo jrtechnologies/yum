@@ -118,7 +118,7 @@ export class OrdersdayComponent implements OnInit {
           })
           .subscribe(
             result => {
-              this.openSnackBar('Order summary email report sent successfully!.', 'ok', 1);
+              this.openSnackBar('Order summary email report sent successfully!', 'ok', 1);
             },
             error => {
               switch (error.status) {

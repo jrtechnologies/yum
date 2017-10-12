@@ -715,7 +715,7 @@
 
                                                 <!--[if mso]><table width="100%" cellpadding="0"><tr><td style="padding: 10px;"><![endif]-->
                                                 <div style="color:#555555;line-height:120%; padding: 10px;">	
-                                                    <div style="font-size:12px;line-height:14px;"><p style="margin: 0;"><strong>${dailyOrder.user.lastName}</strong></p></div>	
+                                                    <div style="font-size:12px;line-height:14px;"><p style="margin: 0;"><strong>${dailyOrder.user.lastName} ${dailyOrder.user.firstName}</strong></p></div>	
                                                 </div>
                                                 <!--[if mso]></td></tr></table><![endif]-->
 
