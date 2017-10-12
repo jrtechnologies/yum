@@ -1,4 +1,4 @@
- 
+
   <div class="is-flex header">
     <div class="relative">
       <div class="hat">
@@ -7,7 +7,7 @@
       <div>
         <h1 class="title-style">
           Welcome Chef!
-        </h1> 
+        </h1>
       </div>
 
     </div>
@@ -23,16 +23,16 @@
   <!--The area of sorting-->
   <div fxLayout="row" class="margin-bar">
 
-    <div fxFlex="15">
-      <md-select [ngModel]="nbrOfItem" (ngModelChange)="changePageSize($event)" placeholder="Number Of Items">
+    <div fxFlex="9">
+      <md-select [ngModel]="nbrOfItem" (ngModelChange)="changePageSize($event)" placeholder="Show" class="smallerSelect">
         <md-option *ngFor="let nbrOfItem of this.numberOfItems" [value]='nbrOfItem'>
           {{ nbrOfItem }}
         </md-option>
       </md-select>
     </div>
 
-    <div fxFlex="15">
-      <md-select placeholder="Type of food" [(ngModel)]="foodType" (ngModelChange)="showByFoodType()">
+    <div fxFlex="12">
+      <md-select placeholder="Food type" [(ngModel)]="foodType" (ngModelChange)="showByFoodType()" class="smallerSelect">
         <md-option *ngFor="let foodType of this.foodTypes" [value]='foodType'>
           {{ foodType }}
         </md-option>
@@ -51,11 +51,7 @@
       <md-checkbox color='accent' [(ngModel)]="checked" (ngModelChange)="viewArchived()">View archived items</md-checkbox>
     </div>
 
-    <div fxFlex="8" class="is-flex standardFood">
-         <!-- Standard menu -->
-      </div>
-
-    <div fxFlex="30">
+    <div fxFlex="47">
       <app-pagination (changePage)="handleChangePage($event)" [totalItems]="totalFoods" [currentPage]="page" [pageSize]="pageSize"></app-pagination>
     </div>
 

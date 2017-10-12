@@ -37,6 +37,7 @@ export class HomeComponent implements OnInit {
     this.sortBy = ['Newest food', 'Most popular food', 'Least popular food', 'Higher price', 'Lower price'];
     this.foodType = this.foodTypes[0];
     this.nbrOfItem = this.numberOfItems[0];
+    this.sort = 'Newest food';
 
     this.chefService.foodsGet(this.stats, null, this.nbrOfItem, this.foodType, this.archived, this.orderBy, null, this.direction).subscribe(foods => {
       this.foods = foods.foods;
