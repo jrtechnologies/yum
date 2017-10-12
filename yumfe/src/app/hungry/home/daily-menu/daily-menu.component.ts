@@ -203,6 +203,7 @@ export class DailyMenuComponent implements OnInit {
     instance.currency = this.currency;
     instance.controlledUserFullName = this.controlledUser ? this.controlledUser.firstName + " " + this.controlledUser.lastName : null;
     instance.comment = this.dailyMenu.comment;
+    instance.countComment(this.dailyMenu.comment);
 
     for (const food of this.foodsList) {
       if (food.quantity > 0) {
@@ -514,10 +515,9 @@ export class DailyMenuOrderDialog implements OnInit {
   }
 
   // method for count how many chars is remaning for the description
-  countComment() {
-    if(this.comment){
-      this.characterleft = (this.maxlength) - (this.comment.length);
-    }
+  countComment(comment) {  
+      this.characterleft = (this.maxlength) - (comment? comment.length: 0);      
+      this.comment = comment;
   }
 
 }

@@ -13,9 +13,7 @@
     </div>
   </div>
 
-  <div class="fullLayer" *ngIf="showLoadSpinner">
-    <md-spinner class="centered" color="accent"></md-spinner>
-  </div>
+
 
   <div class="animate" *ngIf="!showLoadSpinner" class="" [@flyInOut]="'in'">
     <div *ngFor="let day of weekDays" [ngClass]="{'warningUser': controlledUser}">
@@ -99,4 +97,9 @@
     </div>
 
   </div>
+</div>
+
+
+<div class="fullLayer" *ngIf="showLoadSpinner">
+  <md-spinner class="centered" color="accent"></md-spinner>
 </div>

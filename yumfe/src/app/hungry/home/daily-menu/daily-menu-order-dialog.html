@@ -51,7 +51,7 @@
       </div>
     </div>
     <md-form-field class="full-width">
-      <textarea mdInput placeholder="Comments" value="" maxlength="150" class="noResize" (keyup)="countComment()" [(ngModel)]="comment"></textarea>
+      <textarea mdInput placeholder="Comments" value="" maxlength="150" class="noResize" (ngModelChange)="countComment(comment=$event)" [ngModel]="comment"></textarea>
       <md-icon mdSuffix>mode_edit</md-icon>
       <md-hint>{{characterleft}} character(s) left</md-hint>
     </md-form-field>

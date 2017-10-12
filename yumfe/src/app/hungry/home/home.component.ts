@@ -26,26 +26,27 @@ interface dailyMenuData { price: number, comment: string };
       state('in', style({})),
       transition('void => *', [
         style({}),
-        group([query('.animateMenu, .hideUntilEndOfAnimation', style({ opacity: 0 }), { optional: true }),
-        query(':enter .animateMenu',
-          stagger(400, [style({}),
-          animate('350ms 0.0s', keyframes([
-            style({ opacity: 0, transform: 'translateY(150px)', offset: 0 }),
-            style({ opacity: 0.6, transform: 'translateY(50px)', offset: 0.8 }),
-            style({ opacity: 1, transform: 'translateY(0px)', offset: 1.0 })
-          ]))
-            // animate('2s ease-in-out',
-            //     style({ transform: 'translateY(0px)' })),
-          ]), { optional: true }),
-        query(':enter .hideUntilEndOfAnimation',
+        group([
+          query('.animateMenu', style({ opacity: 0 }), { optional: true }),
+          query(':enter .animateMenu',
+            stagger(400, [style({}),
+            animate('150ms 0.0s', keyframes([
+              style({ opacity: 0, transform: 'translateY(150px)', offset: 0 }),
+              style({ opacity: 0.6, transform: 'translateY(50px)', offset: 0.8 }),
+              style({ opacity: 1, transform: 'translateY(0px)', offset: 1.0 })
+            ]))
+              // animate('2s ease-in-out',
+              //     style({ transform: 'translateY(0px)' })),
+            ]), { optional: true }),
+          query(':enter .hideUntilEndOfAnimation',
 
-          [animate('1500ms 0.0s', keyframes([
-            style({ opacity: 0, offset: 0 }),
-            style({ opacity: 0.1, offset: 0.8 }),
-            style({ opacity: 1, offset: 1.0 })
-          ]))]
+            [animate('1500ms 0.0s', keyframes([
+              style({ opacity: 0, offset: 0 }),
+              style({ opacity: 0.1, offset: 0.8 }),
+              style({ opacity: 1, offset: 1.0 })
+            ]))]
 
-          , { optional: true })
+            , { optional: true })
         ])
       ]),
     ])
