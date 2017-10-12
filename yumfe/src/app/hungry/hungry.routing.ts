@@ -11,8 +11,8 @@ const hungryRoutes: Routes = [
     children: [
       { path: '', component: HomeComponent ,   data: { state: 'home' }},
       { path: 'history', component: HistoryComponent, data: { state: 'history' } },
-      { path: 'history/:year/:month', component: HistoryComponent, data: { state: 'month' } },
-      { path: ':year/:week', component: HomeComponent, data: { state: 'week' } },
+      { path: 'history/:year/:month', component: HistoryComponent, data: { state: 'home' } },
+      { path: ':year/:week', component: HomeComponent, data: { state: 'home' } },
     ]
   }
 ];

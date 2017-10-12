@@ -34,6 +34,6 @@ export class LoggedComponent implements OnInit {
   }
 
   animationDone(event){
-    console.log(event);
+    //console.log(event);
   }
 }
