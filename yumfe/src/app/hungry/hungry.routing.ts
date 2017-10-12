@@ -9,10 +9,10 @@ const hungryRoutes: Routes = [
     component: LoggedComponent,
     canActivate: [HungryRouteGuard],
     children: [
-      { path: '', component: HomeComponent },
-      { path: 'history', component: HistoryComponent },
-      { path: 'history/:year/:month', component: HistoryComponent },
-      { path: ':year/:week', component: HomeComponent },
+      { path: '', component: HomeComponent ,   data: { state: 'home' }},
+      { path: 'history', component: HistoryComponent, data: { state: 'history' } },
+      { path: 'history/:year/:month', component: HistoryComponent, data: { state: 'home' } },
+      { path: ':year/:week', component: HomeComponent, data: { state: 'home' } },
     ]
   }
 ];

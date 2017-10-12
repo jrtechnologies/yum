@@ -1,10 +1,11 @@
 <div class="content main">
   <div class="yum-content">
     <app-header> </app-header>
-    <div class="yum-content">
-      <router-outlet></router-outlet>
-
-
+    <div class="fullWidth" [@routerTransition]="getState(o)" (@routerTransition.start)="animationStarted($event)"
+    (@routerTransition.done)="animationDone($event)">
+      <router-outlet #o="outlet"></router-outlet> 
+    </div> 
+    <div class="footer">
       <app-footer></app-footer>
     </div>
   </div>

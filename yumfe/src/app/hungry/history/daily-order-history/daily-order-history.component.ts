@@ -31,8 +31,8 @@ export class DailyOrderHistoryComponent implements OnInit, OnChanges  {
   }
 
   ngOnInit() {
-     if (this.dailyMenu !== undefined ) {
-       if(this.dailyMenu.foods!==undefined){
+     if (this.dailyMenu ) {
+       if(this.dailyMenu.foods){
         this.setTotal();
        }
      }
