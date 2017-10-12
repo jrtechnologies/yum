@@ -49,9 +49,10 @@ export class DailyOrderHistoryComponent implements OnInit, OnChanges  {
 
   getTotal() {
       this.total = 0;
-
-      for (let i = 0; i < this.dailyMenu.foods.length; i++) {
-        this.total += this.dailyMenu.foods[i].quantity * this.dailyMenu.foods[i].food.price;
+      if(this.dailyMenu.foods){
+        for (let i = 0; i < this.dailyMenu.foods.length; i++) {
+          this.total += this.dailyMenu.foods[i].quantity * this.dailyMenu.foods[i].food.price;
+        }
       }
       return this.total;
   }
