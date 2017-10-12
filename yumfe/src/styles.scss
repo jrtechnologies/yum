@@ -215,8 +215,8 @@ button.mat-raised-button.active {
 .hidden{visibility:hidden !important;}
 .relative{ position:relative; }
 .absolute{ position:absolute; }
-.menuDrawerButton{ position: absolute;  
-    height: 0; padding: 0!important;   
+.menuDrawerButton{ position: absolute;
+    height: 0; padding: 0!important;
     top: 102px;
     right: 0px;}
 .menuDrawer{ max-width: 320px!important;}
@@ -255,8 +255,12 @@ button.mat-raised-button.active {
   width: 80%;
 }
 
-.input-extra-width {
-  width: 90%;
+.input-sm-md-width {
+  width: 75% !important;
+}
+
+.input-full-width {
+  width: 100% !important;
 }
 
 .loader {
