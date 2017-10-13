@@ -156,6 +156,9 @@ public class OrdersService {
         List<OrderItem> orderItems = order.getOrderItems();
         BigDecimal orderAmount = new BigDecimal(0);
 
+        if (orderItems==null || orderItems.isEmpty()) {
+            throw new ApiException(400, "Bad request");
+        }
         for (OrderItem orderItem : orderItems) {
             Long foodID = orderItem.getFoodId();
             com.jrtechnologies.yum.data.entity.Food foodEntity = foodRep.findById(foodID);

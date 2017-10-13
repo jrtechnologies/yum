@@ -66,7 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public weeklyTotalPrice = 0;
   public workingDays: number[];
   private observable: any
-  //admin 
+  //admin
   public controlledUser: remote.User;
 
   constructor(
@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     // .zip(this.globalSettingsService.getWorkingDays(), this.controlUserService.getUser(), (wdays: any, controlledUser: any) => {
     //    return { wdays: wdays, controlledUser: controlledUser } })
     // .subscribe((r:observables) => {
-    //   this.workingDays = r.wdays; 
+    //   this.workingDays = r.wdays;
     //   this.controlledUser = r.controlledUser;
     //   console.log("Controlled user:", r.controlledUser);
     //   this.setup();
