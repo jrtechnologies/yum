@@ -81,6 +81,7 @@ public class OrdersApiController implements OrdersApi {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('hungry')")
     public ResponseEntity<Object> ordersIdDelete(@ApiParam(value = "", required = true) @PathVariable("id") Long id,
             @ApiParam(value = "") @RequestParam(value = "userid", required = false, defaultValue = "0") Long userid,
             @ApiParam(value = "dailymenu details id, version, date"  ) @RequestBody DailyMenuDetails dailyMenuDetails) {
