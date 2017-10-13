@@ -73,9 +73,9 @@
 
   </div>
 
-  <div fxLayout="row" class="is-flex print-row-border-total">
+  <div fxLayout="row" class="is-flex ">
       <div  class="comment" > <div *ngIf="user.userOrder.comment">Order comment: {{user.userOrder.comment}}</div></div>
-    <div  class="totalPrice">
+    <div  class="totalPrice print-row-border-total">
       {{user.userOrder.total  | number : '1.2-2'}} <span [innerHTML]="currency | async"></span>
     </div>
   </div>

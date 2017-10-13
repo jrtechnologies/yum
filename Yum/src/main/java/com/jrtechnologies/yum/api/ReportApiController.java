@@ -36,6 +36,7 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 import com.jrtechnologies.yum.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-10-02T14:58:12.922+03:00")
 
 @Controller
@@ -45,6 +46,7 @@ public class ReportApiController implements ReportApi {
     private ReportService reportService;
 
     @Override
+    @PreAuthorize("hasAuthority('chef')")
     public ResponseEntity<Object> reportDayPost(@ApiParam(value = "",required=true ) @PathVariable("day") String day) throws ApiException{
         try {
             reportService.reportDayPost(day);

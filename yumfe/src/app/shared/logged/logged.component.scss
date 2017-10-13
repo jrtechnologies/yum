@@ -1,5 +1,16 @@
-// .yum-content {
-//   min-width: 904px;
-// }
+ .yum-content {
+   display: flex;
+   flex-direction: column;
+   min-height: 100vh;
+   align-items: stretch;
+ }
 
 
+.footer{ align-self: flex-end;
+    display: block; 
+    width: 100%;
+    flex: 0;
+    margin-top: auto;
+}
+
+.fullWidth{ width:100%;}

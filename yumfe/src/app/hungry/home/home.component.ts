@@ -5,21 +5,52 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import * as remote from '../../remote';
 import { DatePipe } from '@angular/common';
-import { MdTooltip }  from '@angular/material';
+import { MdTooltip } from '@angular/material';
 import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.component';
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 import { Observable, Subject } from 'rxjs/Rx';
 import { ControlUserService } from '../../shared/services/control-user.service';
+import { trigger, animate, style, group, animateChild, query, stagger, transition, keyframes, state } from '@angular/animations';
 
-interface observables{
+interface observables {
   wdays: any, controlledUser: any
 }
-interface dailyMenuData{ price: number, comment: string};
+interface dailyMenuData { price: number, comment: string };
 
 @Component({
   selector: 'app-hungry-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  animations: [
+    trigger('flyInOut', [
+      state('in', style({})),
+      transition('void => *', [
+        style({}),
+        group([
+          query('.animateMenu', style({ opacity: 0 }), { optional: true }),
+          query(':enter .animateMenu',
+            stagger(400, [style({}),
+            animate('150ms 0.0s', keyframes([
+              style({ opacity: 0, transform: 'translateY(150px)', offset: 0 }),
+              style({ opacity: 0.6, transform: 'translateY(50px)', offset: 0.8 }),
+              style({ opacity: 1, transform: 'translateY(0px)', offset: 1.0 })
+            ]))
+              // animate('2s ease-in-out',
+              //     style({ transform: 'translateY(0px)' })),
+            ]), { optional: true }),
+          query(':enter .hideUntilEndOfAnimation',
+
+            [animate('1500ms 0.0s', keyframes([
+              style({ opacity: 0, offset: 0 }),
+              style({ opacity: 0.1, offset: 0.8 }),
+              style({ opacity: 1, offset: 1.0 })
+            ]))]
+
+            , { optional: true })
+        ])
+      ]),
+    ])
+  ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
   protected dailymenus: Array<remote.DailyMenu>;
@@ -35,7 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public weeklyTotalPrice = 0;
   public workingDays: number[];
   private observable: any
-  //admin 
+  //admin
   public controlledUser: remote.User;
 
   constructor(
@@ -58,20 +89,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     // .zip(this.globalSettingsService.getWorkingDays(), this.controlUserService.getUser(), (wdays: any, controlledUser: any) => {
     //    return { wdays: wdays, controlledUser: controlledUser } })
     // .subscribe((r:observables) => {
-    //   this.workingDays = r.wdays; 
+    //   this.workingDays = r.wdays;
     //   this.controlledUser = r.controlledUser;
     //   console.log("Controlled user:", r.controlledUser);
     //   this.setup();
     // });
 
     this.globalSettingsService.getWorkingDays().subscribe(wdays => {
-      this.workingDays = wdays;      
-        
-        //admin
-        this.observable = this.controlUserService.getUser().subscribe(user=>{       
-          if(user){ console.log("Controlled user:", user); }
-          this.controlledUser = user;
-          this.setup();         
+      this.workingDays = wdays;
+
+      //admin
+      this.observable = this.controlUserService.getUser().subscribe(user => {
+        if (user) { console.log("Controlled user:", user); }
+        this.controlledUser = user;
+        this.setup();
       });
 
     });
@@ -79,7 +110,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public setup() {
- 
+
     this.sub = this.route.params.subscribe(params => {
       let dt = new Date(+params['year'], 1, 1); // (+) converts string 'year' na d 'month' to a number
       dt = setISOWeek(dt, +params['week']);
@@ -97,14 +128,14 @@ export class HomeComponent implements OnInit, OnDestroy {
         else { this.monthDate = this.date; }
 
         this.getCurrentWeeklyMenu(this.buildweekYear(this.date));
-      }  
+      }
     });
 
     if (isToday(this.date)) {
       this.showLoadSpinner = true;
       this.monthDate = this.date;
-      this.weekDaysCal(startOfWeek(this.date, { weekStartsOn: 1 })); 
-      this.hungryService.menusWeeklyGet(this.controlledUser ? this.controlledUser.id : null).subscribe(dailymenus => { 
+      this.weekDaysCal(startOfWeek(this.date, { weekStartsOn: 1 }));
+      this.hungryService.menusWeeklyGet(this.controlledUser ? this.controlledUser.id : null).subscribe(dailymenus => {
         this.showLoadSpinner = false;
         this.dailymenus = dailymenus;
         this.weekMenuMap();
@@ -130,9 +161,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     return weekTotal;
   }
   ngOnDestroy() {
-    if(this.sub) this.sub.unsubscribe();
+    if (this.sub) this.sub.unsubscribe();
 
-    if(this.observable) this.observable.unsubscribe();
+    if (this.observable) this.observable.unsubscribe();
   }
 
   private getCurrentWeeklyMenu(weekYear: string) {
@@ -182,9 +213,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getDailyMenuComment(dt: string): string{
-     
-      return this.dailymenusMap.get(dt)? this.dailymenusMap.get(dt).comment : null;
+  public getDailyMenuComment(dt: string): string {
+
+    return this.dailymenusMap.get(dt) ? this.dailymenusMap.get(dt).comment : null;
   }
 
   public dailyMenuExists(dateStr: String) {

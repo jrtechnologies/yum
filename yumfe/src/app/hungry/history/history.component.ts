@@ -15,12 +15,22 @@ import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.compo
 import { Observable } from 'rxjs/Rx';
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 import { ControlUserService } from '../../shared/services/control-user.service';
+import { trigger, animate, style, group, animateChild, query, stagger, transition, keyframes, state } from '@angular/animations';
 
 @Component({
   selector: 'app-hungry-history',
   templateUrl: './history.component.html',
-  styleUrls: ['./history.component.scss']
-
+  styleUrls: ['./history.component.scss'],
+  animations: [
+    trigger('flyInHistory', [
+      transition('void => *', [
+        query(':enter .animateShow', [
+          style({}),
+          animate('0.5s ease-in-out', keyframes([
+            style({ opacity: 0, offset: 0 }),
+            style({ opacity: 1, offset: 1.0 })
+          ]))], { optional: true }),
+      ])])]
 })
 
 export class HistoryComponent implements OnInit, OnDestroy {

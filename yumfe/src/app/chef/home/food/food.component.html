@@ -56,7 +56,7 @@
             {{food.stats['currentWeek'].quantity}} </span> / this week | prev. week:
   <span class="number-style">{{lastWeek}}</span> | 2 weeks ago:
   <span class="number-style">{{secondLastWeek}}</span>
-  <span *ngIf="percentage !== -1 && (lastWeek !== 0 || secondLastWeek !== 0)" class="number-style">
+  <span *ngIf="percentage !== 0 && (lastWeek !== 0 || secondLastWeek !== 0)" class="number-style">
           ({{percentage | number : '2.0-2'}}%)
           </span>
   <span *ngIf="percentage > 0">

@@ -52,11 +52,8 @@ export class FoodComponent implements OnInit {
 
     if (this.secondLastWeek === 0 && this.lastWeek === 0) {
       this.percentage = 0;
-    } else if (this.secondLastWeek === 0 && this.lastWeek === 0) {
-      this.percentage = -1;
     } else {
-      this.percentage = (this.lastWeek * 100) / this.secondLastWeek;
-      this.percentage -= 100;
+      this.percentage = ((this.lastWeek-this.secondLastWeek)*100) / this.secondLastWeek; 
     }
 
   }

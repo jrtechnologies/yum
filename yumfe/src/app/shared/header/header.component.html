@@ -13,7 +13,7 @@
       </div>
       <img *ngIf="user.hasPicture" class="img-circle smallImage " src="{{userPicture}}" />
     </div>
-    <div class="red">
+    <div class="red minWidth">
       <div>{{getUser().firstName}}</div>
       <div>{{getUser().lastName}}</div>
       <div class= "balance">Balance <span [innerHTML]="balance | async | number : '1.2-2'"></span><span [innerHTML]="currency | async"></span></div>

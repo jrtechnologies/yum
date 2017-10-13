@@ -54,6 +54,7 @@ export class OrdersdayComponent implements OnInit {
     let printContents, popupWin;
     printContents = document.getElementById('container-to-print').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=800px,width=950px');
+    if(!popupWin) { return; }
     popupWin.document.open();
     popupWin.document.write(`
       <html>
@@ -73,7 +74,17 @@ export class OrdersdayComponent implements OnInit {
           .print-row-border-total {
             border-bottom: solid 2px;
           }
-
+          .is-flex {display: flex; align-items: center; justify-content: space-between; }
+          .align-right {
+            text-align: right;
+          }
+          .comment{     
+            font-size: 0.8em;
+            font-style: italic;
+            word-wrap: break-word; 
+            word-break: break-all;
+          }
+          .user{ margin-bottom:20px;}
           </style>
         </head>
         <body onload="window.print();window.close()">${printContents}</body>
@@ -118,7 +129,7 @@ export class OrdersdayComponent implements OnInit {
           })
           .subscribe(
             result => {
-              this.openSnackBar('Order summary email report sent successfully!.', 'ok', 1);
+              this.openSnackBar('Order summary email report sent successfully!', 'ok', 1);
             },
             error => {
               switch (error.status) {

@@ -70,6 +70,7 @@ export class FoodEditComponent implements OnInit {
     this.showForm = false;
     setTimeout(() => {
       this.food.reset({ description: '' });
+      this.characterleft = this.maxlength;
       this.showForm = true;
     });
   }
@@ -78,12 +79,12 @@ export class FoodEditComponent implements OnInit {
 
     this.showSpinner = true;
 
-    
+
     this.foodDetails.description = this.food.get('description').value;
     this.foodDetails.foodName = this.food.get('foodName').value;
     this.foodDetails.foodType = this.food.get('foodType').value;
-    this.foodDetails.price = this.food.get('price').value; 
-    if(!this.foodDetails.standard ){ 
+    this.foodDetails.price = this.food.get('price').value;
+    if(!this.foodDetails.standard ){
       this.foodDetails.standard =false;
     }
     this.chefService.foodsPost(this.foodDetails).subscribe(foodDetails => {
@@ -95,11 +96,11 @@ export class FoodEditComponent implements OnInit {
       this.showSpinner = false;
     },
       () => {
-        this.clearForm();   
+        this.clearForm();
         this.showSpinner = false;
       });
 
-      
+
   }
 
 
@@ -133,7 +134,7 @@ export class FoodEditComponent implements OnInit {
 
   }
 
-  public setAsStandardFood(val: MdSlideToggleChange){ 
+  public setAsStandardFood(val: MdSlideToggleChange){
     this.foodDetails.standard = val.checked;
   }
 }

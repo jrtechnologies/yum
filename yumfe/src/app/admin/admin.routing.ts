@@ -12,11 +12,11 @@ const adminRoutes: Routes = [
     path: '',    
     component: LoggedComponent,    canActivate: [AdminRouteGuard],
     children: [
-      { path: '', component: HomeComponent },
-      { path: 'users/:id', component: UsersComponent },
-      { path: 'globalSettings', component: GlobalSettingsComponent },
+      { path: '', component: HomeComponent, data: { state: 'homeAdmin' } },
+      { path: 'users/:id', component: UsersComponent, data: { state: 'userSet' } },
+      { path: 'globalSettings', component: GlobalSettingsComponent, data: { state: 'globalSettings' } },
       { path: 'globalSettings/holidays', component: HolidaysComponent },
-      { path: 'globalSettings/holidays/:year', component: HolidaysComponent }
+      { path: 'globalSettings/holidays/:year', component: HolidaysComponent } 
     ]
   }
 ];
