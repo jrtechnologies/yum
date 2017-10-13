@@ -17,6 +17,8 @@ package com.jrtechnologies.yum.api;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 import com.jrtechnologies.yum.api.model.Error;
 import static com.jrtechnologies.yum.service.FoodsService.getLineNumber;
 import org.springframework.http.HttpHeaders;
@@ -81,7 +83,11 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler{
 
     @ExceptionHandler(value = { Exception.class })
     protected ResponseEntity<Object> handleException(Exception ex) {
-        LOGGER.log(Level.WARNING, "Exception"+" @line:"+getLineNumber(),""); 
+
+        StringWriter sw = new StringWriter();
+        ex.printStackTrace(new PrintWriter(sw)); 
+
+        LOGGER.log(Level.WARNING, "500 Exception" + "\n" + sw.toString(),""); 
         ex.printStackTrace();
         Error e = new Error();
         e.setError("500");
