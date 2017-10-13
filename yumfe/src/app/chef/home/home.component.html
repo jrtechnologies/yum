@@ -75,10 +75,7 @@
   </md-grid-list>
 
 
-  <!--The area of sorting-->
-  <div fxLayout="row" class="margin-bar">
-    <div fxFlex="40" fxFlexOffset="60">
+  <div class="padding-footer">
       <app-pagination (changePage)="handleChangePage($event)" [totalItems]="totalFoods" [currentPage]="page" [pageSize]="pageSize"></app-pagination>
-    </div>
   </div>
-  <!---->
+
