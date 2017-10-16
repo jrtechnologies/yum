@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs/Rx';
 import { isToday, isAfter } from 'date-fns';
 import { GlobalSettingsService } from './../../../shared/services/global-settings-service.service';
@@ -34,8 +34,8 @@ export class DailyMenuComponent implements OnInit {
 
   constructor(
     private hungryService: remote.HungryApi,
-    public dialog: MdDialog,
-    public snackBar: MdSnackBar,
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar,
     public globalSettingsService: GlobalSettingsService,
     private balanceService: BalanceService
   ) { }
@@ -469,7 +469,7 @@ export class DailyMenuComponent implements OnInit {
   templateUrl: './daily-order-cancel-dialog.html',
 })
 export class DailyOrderCancelDialog {
-  constructor(public dialogRef: MdDialogRef<DailyOrderCancelDialog>) { }
+  constructor(public dialogRef: MatDialogRef<DailyOrderCancelDialog>) { }
 }
 // Daily Menu Order Details Dialog.
 @Component({
@@ -491,7 +491,7 @@ export class DailyMenuOrderDialog implements OnInit {
   public maxlength = 150;
   public characterleft = this.maxlength;
 
-  constructor(public dialogRef: MdDialogRef<DailyMenuOrderDialog>, private authenticationService: AuthenticationService) { }
+  constructor(public dialogRef: MatDialogRef<DailyMenuOrderDialog>, private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
     // Get user details.

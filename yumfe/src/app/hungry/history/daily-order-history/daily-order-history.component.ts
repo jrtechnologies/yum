@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, OnChanges  } from '@angular/core';
-import { MdProgressBar  } from '@angular/material';
+import { MatProgressBar  } from '@angular/material';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { getISOWeek, getYear } from 'date-fns';

@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MdSnackBar, MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import * as remote from '../../remote';
 import { AuthenticationService } from '../../shared/authentication.service';
@@ -38,8 +38,8 @@ export class UsersComponent implements OnInit {
     private route: ActivatedRoute,
     private adminService: remote.AdminApi,
     private fb: FormBuilder,
-    public snackBar: MdSnackBar,
-    public dialog: MdDialog,
+    public snackBar: MatSnackBar,
+    public dialog: MatDialog,
     private router: Router,
     private authService: AuthenticationService,
     private controlUserService:ControlUserService
@@ -235,5 +235,5 @@ export class UsersComponent implements OnInit {
   templateUrl: './admin-reset-pwd-dialog.html',
 })
 export class ResetPwdDialog {
-  constructor(public dialogRef: MdDialogRef<ResetPwdDialog>) { }
+  constructor(public dialogRef: MatDialogRef<ResetPwdDialog>) { }
 }

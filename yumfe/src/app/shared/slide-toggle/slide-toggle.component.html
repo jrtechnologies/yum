@@ -1,9 +1,9 @@
 
-<md-slide-toggle class="example-margin" color="accent" [checked]="user.approved" (change)="approve($event, !user.approved)"
+<mat-slide-toggle class="example-margin" color="accent" [checked]="user.approved" (change)="approve($event, !user.approved)"
   [disabled]="user.id===1||user.id===userId||externalAuth">
   <!--{{approvedText}} -->
   <span *ngIf="user.approved">User approved</span>
   <span *ngIf="!user.approved">User not approved</span>
-</md-slide-toggle>
-<!--<md-slide-toggle>
-</md-slide-toggle>-->
+</mat-slide-toggle>
+<!--<mat-slide-toggle>
+</mat-slide-toggle>-->

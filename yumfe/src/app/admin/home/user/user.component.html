@@ -57,10 +57,10 @@
     <app-slide-toggle-component [user]="user" [externalAuth]=externalAuth></app-slide-toggle-component>
   </div>
   <div fxFlex="7">
-    <a [routerLink]="editRouterLink" routerLinkActive="active" md-fab color="accent" title="Edit user!"><i class="material-icons">edit</i></a>
+    <a [routerLink]="editRouterLink" routerLinkActive="active" mat-fab color="accent" title="Edit user!"><i class="material-icons">edit</i></a>
   </div>
   <div fxFlex="4">
-    <button md-icon-button color="accent" (click)="deleteConfirm()" [disabled]="user.id===1||user.id===userId||externalAuth"
+    <button mat-icon-button color="accent" (click)="deleteConfirm()" [disabled]="user.id===1||user.id===userId||externalAuth"
       title="Delete user!"><i class="material-icons bigger-button">delete_forever</i></button>
   </div>
 

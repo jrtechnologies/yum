@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as remote from '../../remote';
-import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
 import { AuthenticationService } from '../authentication.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -29,7 +29,7 @@ export class SettingsComponent implements OnInit {
   public externalAuth: Boolean = false;
 
   constructor(private authService: AuthenticationService, private hungryService: remote.HungryApi, private fb: FormBuilder,
-    public snackBar: MdSnackBar, private router: Router) { }
+    public snackBar: MatSnackBar, private router: Router) { }
 
   ngOnInit() {
     if(!this.authService.getLoggedInUser()) { return; }

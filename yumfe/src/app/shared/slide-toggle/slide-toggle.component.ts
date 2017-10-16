@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as remote from '../../remote';
 import { AuthenticationService } from '../authentication.service';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-slide-toggle-component',
@@ -18,7 +18,7 @@ export class SlideToggleComponent implements OnInit {
 
   public userId = this.authService.getLoggedInUser().id;
 
-  constructor(private adminService: remote.AdminApi, private authService: AuthenticationService,  public dialog: MdDialog) { }
+  constructor(private adminService: remote.AdminApi, private authService: AuthenticationService,  public dialog: MatDialog) { }
 
 
 
@@ -89,5 +89,5 @@ export class SlideToggleComponent implements OnInit {
   templateUrl: './user-disapprove-dialog.html',
 })
 export class UserDisapproveDialog {
-  constructor(public dialogRef: MdDialogRef<UserDisapproveDialog>) { }
+  constructor(public dialogRef: MatDialogRef<UserDisapproveDialog>) { }
 }

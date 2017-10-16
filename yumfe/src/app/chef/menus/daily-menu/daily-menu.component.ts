@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, SimpleChanges, OnChanges, EventEmitter, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { Validators, FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { MdAutocomplete, MdAutocompleteTrigger, MdProgressBar } from '@angular/material';
+import { MatAutocomplete, MatAutocompleteTrigger, MatProgressBar } from '@angular/material';
 import { subDays,  isValid , getHours, getMinutes, getSeconds, addDays, getMonth, compareAsc } from 'date-fns';
 import * as remote from '../../../remote';
 import * as models from './../../../shared/models';
@@ -31,7 +31,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
   @Output() snackMessage = new EventEmitter<models.SnackMessage>();
   @Output() deleteMenu = new EventEmitter<remote.DailyMenuChef>();
 
-  @ViewChild( MdAutocompleteTrigger ) mdAutoCompleteTrigger: MdAutocompleteTrigger; //
+  @ViewChild( MatAutocompleteTrigger ) matAutoCompleteTrigger: MatAutocompleteTrigger; //
   @ViewChild('blurMe') el: ElementRef;
   @ViewChild('focusMe') focusMe: ElementRef;
 

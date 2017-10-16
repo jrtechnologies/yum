@@ -9,17 +9,17 @@
         instructions.
         </p>
         <label>Enter your email address</label>
-        <md-form-field>
-          <input mdInput type="email" placeholder="Email" formControlName="email"/>
-          <md-error class="error" *ngIf="forgotForm.get('email').touched && forgotForm.get('email').hasError('required')">
+        <mat-form-field>
+          <input matInput type="email" placeholder="Email" formControlName="email"/>
+          <mat-error class="error" *ngIf="forgotForm.get('email').touched && forgotForm.get('email').hasError('required')">
             Email is required.
-          </md-error>
-          <md-error class="error" *ngIf="forgotForm.get('email').touched && forgotForm.get('email').hasError('pattern')">
+          </mat-error>
+          <mat-error class="error" *ngIf="forgotForm.get('email').touched && forgotForm.get('email').hasError('pattern')">
             Wrong email address
-          </md-error>
-        </md-form-field>
+          </mat-error>
+        </mat-form-field>
         <div>
-          <button md-raised-button type="submit" color="accent" [disabled]="forgotForm.invalid || isDisable === true">Reset Password</button>
+          <button mat-raised-button type="submit" color="accent" [disabled]="forgotForm.invalid || isDisable === true">Reset Password</button>
           <img class="spinner" *ngIf="showSpinner" src="../../assets/img/spinner.gif">
         </div>
     </form>

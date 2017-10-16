@@ -5,11 +5,11 @@
       <app-hungry-nav></app-hungry-nav>
     </div>
     <div>
-      <button md-raised-button color="accent" (click)="previousWeek()" class="animateBlock">Previous Week</button>
-      <button md-raised-button color="accent" (click)="currentWeek()" routerLink="/hungry" [routerLinkActiveOptions]="{ exact: true }"
+      <button mat-raised-button color="accent" (click)="previousWeek()" class="animateBlock">Previous Week</button>
+      <button mat-raised-button color="accent" (click)="currentWeek()" routerLink="/hungry" [routerLinkActiveOptions]="{ exact: true }"
         routerLinkActive #rlaCurrentHungry="routerLinkActive" [disabled]='rlaCurrentHungry.isActive' routerLinkActive="active"
         class="animateBlock">Current Week</button>
-      <button md-raised-button color="accent" (click)="nextWeek()" class="animateBlock">Next Week</button>
+      <button mat-raised-button color="accent" (click)="nextWeek()" class="animateBlock">Next Week</button>
     </div>
   </div>
 
@@ -19,7 +19,7 @@
     <div *ngFor="let day of weekDays" [ngClass]="{'warningUser': controlledUser}">
       <div class="animateMenu">
         <div class="dateHeader is-flex ">
-          <div class="date  is-flex" [ngClass]="{'cursor': getDailyMenuComment(day)}" mdTooltip='{{getDailyMenuComment(day)}}' [mdTooltipPosition]="'after'">
+          <div class="date  is-flex" [ngClass]="{'cursor': getDailyMenuComment(day)}" matTooltip='{{getDailyMenuComment(day)}}' [matTooltipPosition]="'after'">
             <div>{{formattedDay(day)}}</div>
             <i *ngIf="getDailyMenuComment(day)" class="material-icons">assignment</i>
           </div>
@@ -28,7 +28,7 @@
             <div class="controlledUserName inline">{{controlledUser.firstName+" "+controlledUser.lastName}}</div>
           </div>
         </div>
-        <md-card>
+        <mat-card>
           <div class="no-menu centered" *ngIf='!dailyMenuExists(day)'>
             <div>
               <i class="material-icons medium-size">mood_bad</i>
@@ -41,18 +41,18 @@
           <div *ngIf='dailyMenuExists(day)'>
             <app-daily-menu (dailyMenuChanges)="handleUserUpdated($event, day)" [dailyMenu]='getDailyMenu(day)' [controlledUser]="controlledUser"></app-daily-menu>
           </div>
-        </md-card>
+        </mat-card>
       </div>
     </div>
 
     <div class="hideUntilEndOfAnimation">
-      <md-grid-list cols="1" rowHeight="70px">
-        <md-grid-tile colspan="1" class="right-no-pad">
-          <button md-raised-button color="accent" (click)="previousWeek()">Previous Week</button>
-          <button md-raised-button color="accent" (click)="nextWeek()">Next Week</button>
-        </md-grid-tile>
-      </md-grid-list>
-      <md-card>
+      <mat-grid-list cols="1" rowHeight="70px">
+        <mat-grid-tile colspan="1" class="right-no-pad">
+          <button mat-raised-button color="accent" (click)="previousWeek()">Previous Week</button>
+          <button mat-raised-button color="accent" (click)="nextWeek()">Next Week</button>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <mat-card>
         <div fxLayout="column" fxLayoutAlign="space-between none" class="hungryFooter">
           <div >
             <div fxLayout="row">
@@ -93,7 +93,7 @@
             </div>
           </div>
         </div>
-      </md-card>
+      </mat-card>
     </div>
 
   </div>
@@ -101,5 +101,5 @@
 
 
 <div class="fullLayer" *ngIf="showLoadSpinner">
-  <md-spinner class="centered" color="accent"></md-spinner>
+  <mat-spinner class="centered" color="accent"></mat-spinner>
 </div>

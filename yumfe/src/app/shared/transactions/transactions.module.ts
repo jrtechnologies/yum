@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MdCardModule, MdTableModule, MdPaginatorModule } from '@angular/material';
+import { MatCardModule, MatTableModule, MatPaginatorModule } from '@angular/material';
 import { TransactionsComponent } from './transactions.component'
 
 
 @NgModule({
   imports: [
     CommonModule,
-    MdCardModule,
-    MdTableModule,
-    MdPaginatorModule,
+    MatCardModule,
+    MatTableModule,
+    MatPaginatorModule,
   ],
   declarations: [ TransactionsComponent],
   entryComponents: [  ],

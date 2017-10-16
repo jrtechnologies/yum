@@ -2,11 +2,11 @@ import { NgModule  } from '@angular/core';
 import { CommonModule } from '@angular/common';  
 import { FooterComponent, TermsDialog } from './footer.component';
 import { TabsComponent } from './tabs/tabs.component'
-import {  MdTabsModule, MdGridListModule, MdButtonModule } from '@angular/material';
+import {  MatTabsModule, MatGridListModule, MatButtonModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({ 
-  imports: [CommonModule, MdTabsModule, FlexLayoutModule, MdGridListModule, MdButtonModule],
+  imports: [CommonModule, MatTabsModule, FlexLayoutModule, MatGridListModule, MatButtonModule],
   declarations: [FooterComponent, TermsDialog, TabsComponent],
   exports: [FooterComponent],
   entryComponents: [TermsDialog]

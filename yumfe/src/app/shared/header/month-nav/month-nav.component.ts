@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Input, Output, OnChanges, SimpleChanges  } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { MdButtonModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material';
 import {setHours, subDays, addDays, startOfMonth, endOfMonth, getMonth, getYear, isToday, isValid,  isSaturday, isSunday } from 'date-fns';
 
 

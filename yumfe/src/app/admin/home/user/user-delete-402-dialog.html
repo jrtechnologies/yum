@@ -1,18 +1,18 @@
-<h1 md-dialog-title class="centered">Delete user</h1>
-<md-dialog-content class="dialog-content-size">
+<h1 matDialogTitle class="centered">Delete user</h1>
+<mat-dialog-content class="dialog-content-size">
   <div>The user has final and non final orders.</div>
   <div>Do you want to disapprove him and delete the non final orders?</div>
-</md-dialog-content>
+</mat-dialog-content>
 
-<md-grid-list cols="4" rowHeight="50px">
-  <md-grid-tile>
-  </md-grid-tile>
-  <md-grid-tile>
-    <button md-raised-button color="accent" (click)="dialogRef.close('Yes')">Yes</button>
-  </md-grid-tile>
-  <md-grid-tile>
-    <button md-raised-button color="accent" (click)="dialogRef.close('No')">No</button>
-  </md-grid-tile>
-  <md-grid-tile>
-  </md-grid-tile>
-</md-grid-list>
+<mat-grid-list cols="4" rowHeight="50px">
+  <mat-grid-tile>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-raised-button color="accent" (click)="dialogRef.close('Yes')">Yes</button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-raised-button color="accent" (click)="dialogRef.close('No')">No</button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+  </mat-grid-tile>
+</mat-grid-list>

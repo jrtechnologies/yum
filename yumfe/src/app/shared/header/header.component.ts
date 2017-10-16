@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import * as remote from '../../remote';
-import { MdButtonModule, MdMenu, MdMenuTrigger } from '@angular/material';
+import { MatButtonModule, MatMenu, MatMenuTrigger } from '@angular/material';
 import { AuthenticationService } from '../../shared/authentication.service';
 import { BASE_PATH } from '../../remote/variables';
 import { Router, ActivatedRoute, RouterLinkActive, NavigationEnd } from '@angular/router';
@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit {
   public balance: Observable<number>;
   public currency: Observable<string>;
 
-  @ViewChild(MdMenuTrigger) trigger: MdMenuTrigger; //
+  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger; //
 
   constructor(private authenticationService: AuthenticationService,
     @Inject(BASE_PATH) private baseUrl: string,

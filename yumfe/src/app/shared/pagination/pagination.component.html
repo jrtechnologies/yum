@@ -1,16 +1,16 @@
 <div *ngIf="pages && pages.length" class="right-pg">
-  <button md-raised-button color="accent" [ngClass]="{disabled:currentPage === 1}" [disabled]="currentPage === 1" (click)="pageChanger(1)">First
+  <button mat-raised-button color="accent" [ngClass]="{disabled:currentPage === 1}" [disabled]="currentPage === 1" (click)="pageChanger(1)">First
                 </button>
-  <button md-raised-button color="accent" [ngClass]="{disabled:currentPage === 1}" [disabled]="currentPage === 1" (click)="pageChanger(currentPage - 1)">Previous
+  <button mat-raised-button color="accent" [ngClass]="{disabled:currentPage === 1}" [disabled]="currentPage === 1" (click)="pageChanger(currentPage - 1)">Previous
                 </button>
-  <button md-raised-button class="page-btn" *ngFor="let page of pages" [color]="currentPage === page? 'primary':'accent'" [disabled]="currentPage === page"
+  <button mat-raised-button class="page-btn" *ngFor="let page of pages" [color]="currentPage === page? 'primary':'accent'" [disabled]="currentPage === page"
     [ngClass]="{active:currentPage === page}" (click)="pageChanger(page)">
                     {{page}}
                 </button>
-  <button md-raised-button color="accent" [ngClass]="{disabled:currentPage === totalPages}" [disabled]="currentPage === totalPages"
+  <button mat-raised-button color="accent" [ngClass]="{disabled:currentPage === totalPages}" [disabled]="currentPage === totalPages"
     (click)="pageChanger(currentPage + 1)">Next
                 </button>
-  <button md-raised-button color="accent" [ngClass]="{disabled:currentPage === totalPages}" [disabled]="currentPage === totalPages"
+  <button mat-raised-button color="accent" [ngClass]="{disabled:currentPage === totalPages}" [disabled]="currentPage === totalPages"
     (click)="pageChanger(totalPages)">Last
                 </button>
 </div>
