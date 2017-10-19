@@ -235,9 +235,22 @@ button.mat-raised-button.active {
 
 .largerSelect .mat-select-trigger { min-width: 150px; }
 
-.mediumSelect .mat-select-trigger { min-width: 140px; }
+// .mediumSelect .mat-select-trigger { min-width: 140px; }
 
-.smallerSelect .mat-select-trigger { min-width: 60px; }
+// .smallerSelect .mat-select-trigger { min-width: 60px; }
+.sm-select  { max-width: 60px; }
+
+.sm-med-select  { max-width: 80px; }
+
+.med-select  { max-width: 135px; }
+
+.lg-select { max-width: 150px; }
+
+
+
+.select-padding {
+  padding-top: 20px;
+}
 
 //terms & policy css
 .tabContent{ padding:10px;     max-height: 430px;}
@@ -290,3 +303,17 @@ button.mat-raised-button.active {
 .mat-fab, .mat-mini-fab, .mat-raised-button{
   transition: background 0s!important;
 }
+.deadlineCurrency .mat-form-field-infix{
+  background-color: white;
+  border: 2px solid #CECECE;
+  padding: 5px;
+}
+
+.deadlineCurrency .mat-form-field-underline{
+  height: 0;
+}
+
+.deadlineCurrency .mat-input-wrapper{
+  margin: 20px 0 0 10px;
+}
+

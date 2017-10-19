@@ -31,11 +31,13 @@
         </div>
 
         <div class="top-margin">
-          <mat-select placeholder="Food Type" formControlName="foodType" (ngModelChange)="foodTypeChanges($event)">
-            <mat-option *ngFor="let foodType of this.foodTypesForm" [value]='foodType'>
-              {{ foodType }}
-            </mat-option>
-          </mat-select>
+          <mat-form-field class="left-position med-select">
+            <mat-select placeholder="Food Type" formControlName="foodType" (ngModelChange)="foodTypeChanges($event)">
+              <mat-option *ngFor="let foodType of this.foodTypesForm" [value]='foodType'>
+                {{ foodType }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
           <mat-error *ngIf="foodEditForm.get('foodType').touched && foodEditForm.get('foodType').hasError('required')">
             Food Type is required
           </mat-error>
@@ -45,7 +47,8 @@
 
     <div fxFlex="20">
       <mat-form-field class="example-full-width" (keyup)="descriptionChanges($event.target.value)">
-        <textarea matInput placeholder="Description" type="text" formControlName="description" cols="40" rows="3" (keyup)="count(tweetmsg)" [(ngModel)]="tweetmsg" class="noResize"></textarea>
+        <textarea matInput placeholder="Description" type="text" formControlName="description" cols="40" rows="3" (keyup)="count(tweetmsg)"
+          [(ngModel)]="tweetmsg" class="noResize"></textarea>
         <mat-hint>{{characterleft}} charcter(s) left</mat-hint>
         <mat-error *ngIf="foodEditForm.get('description').touched && foodEditForm.get('description').hasError('maxlength')">
           Maximum of 250 characters
@@ -73,8 +76,8 @@
         <!--The check button-->
         <button mat-fab color='accent' [disabled]="(foodEditForm.invalid || !(isNameUnique && (foodNameChange || foodTypeChange || descriptionChange || priceChange)))"
           title="Save">
-        <i class="material-icons">check</i>
-      </button>
+          <i class="material-icons">check</i>
+        </button>
         <img *ngIf="showSpinner" src="../../../../assets/img/spinner.gif">
         <!---->
       </div>
