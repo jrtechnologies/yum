@@ -104,30 +104,38 @@
 
 <mat-grid-list cols="100" rowHeight="80px">
   <mat-grid-tile colspan="9" class="left-no-pad">
-    <mat-select [ngModel]="pageSize" (ngModelChange)="changePageSize($event)" placeholder="Show" name="show" class="smallerSelect">
-      <mat-option *ngFor="let pageSizeOption of pageSizes" [value]="pageSizeOption.value">
-        {{ pageSizeOption.viewValue }}
-      </mat-option>
-    </mat-select>
+    <mat-form-field class="select-padding sm-select">
+      <mat-select [ngModel]="pageSize" (ngModelChange)="changePageSize($event)" placeholder="Show" name="show" >
+        <mat-option *ngFor="let pageSizeOption of pageSizes" [value]="pageSizeOption.value">
+          {{ pageSizeOption.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </mat-grid-tile>
   <mat-grid-tile colspan="15" class="left-no-pad">
-    <mat-select [ngModel]="orderBy" (ngModelChange)="changeOrderBy($event)" placeholder="Order by" name="order" class="mediumSelect">
-      <mat-option *ngFor="let orderByOption of orderByOptions" [value]="orderByOption.value">
-        {{ orderByOption.viewValue }}
-      </mat-option>
-    </mat-select>
+    <mat-form-field class="select-padding lg-select">
+      <mat-select [ngModel]="orderBy" (ngModelChange)="changeOrderBy($event)" placeholder="Order by" name="order" >
+        <mat-option *ngFor="let orderByOption of orderByOptions" [value]="orderByOption.value">
+          {{ orderByOption.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </mat-grid-tile>
   <mat-grid-tile colspan="9" class="direction-title left-no-pad">
     <div>
       <div class="direction">Desc</div>
       <div>
-        <button mat-icon-button [ngClass]="{current:direction === 'DESC'}" color="accent" (click)="changeDirection('DESC')" [disabled]="direction === 'DESC'"><i class="material-icons">arrow_downward</i></button>
+        <button mat-icon-button [ngClass]="{current:direction === 'DESC'}" color="accent" (click)="changeDirection('DESC')" [disabled]="direction === 'DESC'">
+          <i class="material-icons">arrow_downward</i>
+        </button>
       </div>
     </div>
     <div>
       <div class="direction">Asc</div>
       <div>
-        <button mat-icon-button [ngClass]="{current:direction === 'ASC'}" color="accent" (click)="changeDirection('ASC')" [disabled]="direction === 'ASC'"><i class="material-icons">arrow_upward</i></button>
+        <button mat-icon-button [ngClass]="{current:direction === 'ASC'}" color="accent" (click)="changeDirection('ASC')" [disabled]="direction === 'ASC'">
+          <i class="material-icons">arrow_upward</i>
+        </button>
       </div>
     </div>
   </mat-grid-tile>
@@ -135,10 +143,11 @@
     <form novalidate [formGroup]="searchGroup" autocomplete="off">
       <mat-form-field class="top-pad">
         <mat-placeholder>
-          Last name  <mat-icon class="material-icons">search</mat-icon>
+          Last name
+          <mat-icon class="material-icons">search</mat-icon>
         </mat-placeholder>
         <input matInput type="text" formControlName="lastName" (keyup)="searchUsers()">
-         <mat-hint *ngIf="searchGroup.get('lastName').value===null || searchGroup.get('lastName').value.length<3">At least 3 first chars </mat-hint>
+        <mat-hint *ngIf="searchGroup.get('lastName').value===null || searchGroup.get('lastName').value.length<3">At least 3 first chars </mat-hint>
       </mat-form-field>
     </form>
   </mat-grid-tile>

@@ -14,7 +14,9 @@
 <div *ngIf='gss' class="globalSettings">
   <form #gssForm="ngForm" (ngSubmit)="save(gssForm)" class="form" autocomplete="off">
     <h3>Set global settings</h3>
-    <span layout="row"><hr flex/></span>
+    <span layout="row">
+      <hr flex/>
+    </span>
     <mat-grid-list cols="1" rowHeight="50">
       <mat-grid-tile class="right" colspan="1" rowspan="1">
         <button mat-raised-button type="submit" color='accent' [disabled]="showSpinner">Save Changes</button>
@@ -48,21 +50,25 @@
           <input class="reportEmail" type="text" name="reportEmail" [(ngModel)]="gss.reportEmail">
         </mat-grid-tile>
         <mat-grid-tile class="right-no-pad" colspan="3" rowspan="2">
-          <mat-select class="deadlineCurrency" [(ngModel)]="gss.currency" name="currency">
-            <mat-option *ngFor="let currency of currencyList" [value]='currency.symbol' [innerHtml]="currency.name"> </mat-option>
-          </mat-select>
+          <mat-form-field class="deadlineCurrency">
+            <mat-select class="" [(ngModel)]="gss.currency" name="currency">
+              <mat-option *ngFor="let currency of currencyList" [value]='currency.symbol' [innerHtml]="currency.name"> </mat-option>
+            </mat-select>
+          </mat-form-field>
         </mat-grid-tile>
       </mat-grid-list>
 
       <div>
         <div class="headerText">Holidays</div>
-        <button mat-raised-button color="accent" routerLink="holidays"  [routerLinkActiveOptions]="{ exact: true }" routerLinkActive  routerLinkActive="active">Set bank Holidays</button>
+        <button mat-raised-button color="accent" routerLink="holidays" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive
+          routerLinkActive="active">Set bank Holidays</button>
       </div>
 
       <div>
         <div class="headerText">Working days</div>
-        <mat-button-toggle-group name="checkbox" #matButtongroup="matButtonToggleGroup" multiple  >
-          <mat-button-toggle *ngFor="let wDay of availableWorkingDays;" [value]="wDay.value" [checked]="workingDays.includes(wDay.value)" (change)="wDaysChanged($event)"   >
+        <mat-button-toggle-group name="checkbox" #matButtongroup="matButtonToggleGroup" multiple>
+          <mat-button-toggle *ngFor="let wDay of availableWorkingDays;" [value]="wDay.value" [checked]="workingDays.includes(wDay.value)"
+            (change)="wDaysChanged($event)">
             <span>{{wDay.name}}</span>
           </mat-button-toggle>
         </mat-button-toggle-group>

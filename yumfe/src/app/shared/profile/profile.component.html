@@ -6,7 +6,9 @@
     </mat-grid-tile>
     <mat-grid-tile colspan="1" rowspan="1" class="left-no-pad">
       <div>Change picture</div>
-      <button mat-icon-button color="accent" (click)="fileInput.click()"><i class="material-icons">add_circle</i></button>
+      <button mat-icon-button color="accent" (click)="fileInput.click()">
+        <i class="material-icons">add_circle</i>
+      </button>
       <input #fileInput type="file" ng2FileSelect [uploader]="uploader" hidden=true/>
     </mat-grid-tile>
     <mat-grid-tile colspan="4" rowspan="3">
@@ -15,18 +17,22 @@
     <mat-grid-tile class="image-rules" colspan="{{admin?'1':'1'}}" rowspan="1">
       You have to upload an image at least 180px by 180px, jpg, .gif, or .png. Max file size 700K.
     </mat-grid-tile>
-     <mat-grid-tile *ngIf="user.hasPicture" colspan="1" rowspan="1" class="left-no-pad">
+    <mat-grid-tile *ngIf="user.hasPicture" colspan="1" rowspan="1" class="left-no-pad">
       Delete picture
-      <button mat-icon-button color="accent" (click)="deletePicture()"><i class="material-icons">delete_forever</i></button>
+      <button mat-icon-button color="accent" (click)="deletePicture()">
+        <i class="material-icons">delete_forever</i>
+      </button>
     </mat-grid-tile>
   </mat-grid-list>
   <mat-grid-list cols="{{admin?'9':'7'}}" rowHeight="80px">
     <mat-grid-tile *ngIf="admin && user.id !==1" [colspan]="2" class="left">
-      <mat-select placeholder="User role" formControlName="role" class="bottom-pad">
-        <mat-option *ngFor="let role of roles" [value]="role.value">
-          {{ role.viewValue }}
-        </mat-option>
-      </mat-select>
+      <mat-form-field class="lg-select">
+        <mat-select placeholder="User role" formControlName="role">
+          <mat-option *ngFor="let role of roles" [value]="role.value">
+            {{ role.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </mat-grid-tile>
 
 

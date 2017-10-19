@@ -1,81 +1,85 @@
-
-  <div class="is-flex header">
-    <div class="relative">
-      <div class="hat">
-        <img src="../../../assets/img/chef-hat.png" class="img-size">
-      </div>
-      <div>
-        <h1 class="title-style">
-          Welcome Chef!
-        </h1>
-      </div>
-
+<div class="is-flex header">
+  <div class="relative">
+    <div class="hat">
+      <img src="../../../assets/img/chef-hat.png" class="img-size">
     </div>
-    <app-chef-nav></app-chef-nav>
+    <div>
+      <h1 class="title-style">
+        Welcome Chef!
+      </h1>
+    </div>
+
   </div>
-  <h3>Start preparing your menu...</h3>
+  <app-chef-nav></app-chef-nav>
+</div>
+<h3>Start preparing your menu...</h3>
 
-  <mat-grid-list cols="1" rowHeight="6:1">
-    <!--The Form for the new Food Items-->
-    <app-food-edit novalidate (foodCreated)="handleFoodRefresh()"></app-food-edit>
-  </mat-grid-list>
+<mat-grid-list cols="1" rowHeight="6:1">
+  <!--The Form for the new Food Items-->
+  <app-food-edit novalidate (foodCreated)="handleFoodRefresh()"></app-food-edit>
+</mat-grid-list>
 
-  <!--The area of sorting-->
-  <div fxLayout="row" class="margin-bar">
+<!--The area of sorting-->
+<div fxLayout="row" class="margin-bar">
 
-    <div fxFlex="9">
-      <mat-select [ngModel]="nbrOfItem" (ngModelChange)="changePageSize($event)" placeholder="Show" class="smallerSelect">
+  <div fxFlex="9">
+    <mat-form-field class="select-padding sm-select">
+      <mat-select [ngModel]="nbrOfItem" (ngModelChange)="changePageSize($event)" placeholder="Show">
         <mat-option *ngFor="let nbrOfItem of this.numberOfItems" [value]='nbrOfItem'>
           {{ nbrOfItem }}
         </mat-option>
       </mat-select>
-    </div>
+    </mat-form-field>
+  </div>
 
-    <div fxFlex="12">
-      <mat-select placeholder="Food type" [(ngModel)]="foodType" (ngModelChange)="showByFoodType()" class="smallerSelect">
+  <div fxFlex="10">
+    <mat-form-field class="select-padding sm-med-select">
+      <mat-select placeholder="Food type" [(ngModel)]="foodType" (ngModelChange)="showByFoodType()">
         <mat-option *ngFor="let foodType of this.foodTypes" [value]='foodType'>
           {{ foodType }}
         </mat-option>
       </mat-select>
-    </div>
+    </mat-form-field>
+  </div>
 
-    <div fxFlex="15">
+  <div fxFlex="17">
+    <mat-form-field class="select-padding med-select">
       <mat-select [ngModel]="sort" placeholder="Order by" (ngModelChange)="showByOrderType($event)">
         <mat-option *ngFor="let sort of this.sortBy" [value]='sort'>
           {{ sort }}
         </mat-option>
       </mat-select>
-    </div>
-
-    <div fxFlex="17" class="is-flex">
-      <mat-checkbox color='accent' [(ngModel)]="checked" (ngModelChange)="viewArchived()">View archived items</mat-checkbox>
-    </div>
-
-    <div fxFlex="47">
-      <app-pagination (changePage)="handleChangePage($event)" [totalItems]="totalFoods" [currentPage]="page" [pageSize]="pageSize"></app-pagination>
-    </div>
-
-  </div>
-  <!---->
-
-  <!--The list of all the existed Foods-->
-  <div *ngIf="foods">
-    <h1 *ngIf="foods.length <= 0" class="display-message">No food to display</h1>
+    </mat-form-field>
   </div>
 
-  <mat-card class="food-card" *ngFor="let food of foods">
-    <app-food [food]='food' (foodRefresh)='handleFoodRefresh()'></app-food>
-  </mat-card>
-
-  <!---->
-  <mat-grid-list *ngIf="showLoadSpinner" cols="1" rowHeight="200px">
-    <mat-grid-tile>
-      <mat-spinner class="centered" color="accent"></mat-spinner>
-    </mat-grid-tile>
-  </mat-grid-list>
-
-
-  <div class="padding-footer">
-      <app-pagination (changePage)="handleChangePage($event)" [totalItems]="totalFoods" [currentPage]="page" [pageSize]="pageSize"></app-pagination>
+  <div fxFlex="17" class="is-flex">
+    <mat-checkbox color='accent' [(ngModel)]="checked" (ngModelChange)="viewArchived()">View archived items</mat-checkbox>
   </div>
 
+  <div fxFlex="47" class="pad-pag" >
+    <app-pagination (changePage)="handleChangePage($event)" [totalItems]="totalFoods" [currentPage]="page" [pageSize]="pageSize"></app-pagination>
+  </div>
+
+</div>
+<!---->
+
+<!--The list of all the existed Foods-->
+<div *ngIf="foods">
+  <h1 *ngIf="foods.length <= 0" class="display-message">No food to display</h1>
+</div>
+
+<mat-card class="food-card" *ngFor="let food of foods">
+  <app-food [food]='food' (foodRefresh)='handleFoodRefresh()'></app-food>
+</mat-card>
+
+<!---->
+<mat-grid-list *ngIf="showLoadSpinner" cols="1" rowHeight="200px">
+  <mat-grid-tile>
+    <mat-spinner class="centered" color="accent"></mat-spinner>
+  </mat-grid-tile>
+</mat-grid-list>
+
+
+<div class="padding-footer">
+  <app-pagination (changePage)="handleChangePage($event)" [totalItems]="totalFoods" [currentPage]="page" [pageSize]="pageSize"></app-pagination>
+</div>
