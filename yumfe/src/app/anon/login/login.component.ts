@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Input, Output, Renderer2, ElementRef, 
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../shared/authentication.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { MdSnackBar, MdSnackBarConfig } from '@angular/material';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { ViewContainerRef } from '@angular/core';
 import { QuotesService } from './../services/quotes.service';
 
@@ -29,20 +29,20 @@ export class LoginComponent implements OnInit {
   public disableBtn = false;
 
   public externalAuth: Boolean = true;
-  public config: MdSnackBarConfig;
+  public config: MatSnackBarConfig;
   public quote: Quote;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private authService: AuthenticationService,
     private elRef: ElementRef,
     private renderer: Renderer2,
     public viewContainerRef: ViewContainerRef,
     private quoteService: QuotesService
   ) {
-    this.config = new MdSnackBarConfig();
+    this.config = new MatSnackBarConfig();
   }
 
   ngOnInit() {

@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { FileUploader } from 'ng2-file-upload';
 import { AuthenticationService } from '../authentication.service';
 import { BASE_PATH } from '../../remote/variables';
-import { MdProgressBar, MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
+import { MatProgressBar, MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
 
 import * as remote from '../../remote';
 
@@ -52,8 +52,8 @@ export class ProfileComponent implements OnInit {
               private auth: AuthenticationService,
               private adminService: remote.AdminApi,
               private hungryService: remote.HungryApi,
-              public dialog: MdDialog,
-              public snackBar: MdSnackBar,
+              public dialog: MatDialog,
+              public snackBar: MatSnackBar,
               @Inject(BASE_PATH) private baseUrl: string
   ) { }
 
@@ -214,5 +214,5 @@ export class ProfileComponent implements OnInit {
   templateUrl: './delete-picture-dialog.html',
 })
 export class DeletePictureDialog {
-  constructor(public dialogRef: MdDialogRef<DeletePictureDialog>) { }
+  constructor(public dialogRef: MatDialogRef<DeletePictureDialog>) { }
 }

@@ -1,163 +1,172 @@
-<md-grid-list cols="8" rowHeight="30px" class="adm-header">
-  <md-grid-tile colspan="4" rowspan="1" class="left-no-pad">
+<mat-grid-list cols="8" rowHeight="30px" class="adm-header">
+  <mat-grid-tile colspan="4" rowspan="1" class="left-no-pad">
     <div class="adm-header-title">
       Welcome administrator!
     </div>
-  </md-grid-tile>
-  <md-grid-tile colspan="4" rowspan="2" class="right-no-pad">
+  </mat-grid-tile>
+  <mat-grid-tile colspan="4" rowspan="2" class="right-no-pad">
     <app-admin-nav></app-admin-nav>
-  </md-grid-tile>
-  <md-grid-tile colspan="4" rowspan="1" class="left-no-pad create-user">
+  </mat-grid-tile>
+  <mat-grid-tile colspan="4" rowspan="1" class="left-no-pad create-user">
     Create or view users...
 
-  </md-grid-tile>
-</md-grid-list>
+  </mat-grid-tile>
+</mat-grid-list>
 
 <!--Create User Form-->
-<md-card *ngIf=!externalAuth>
+<mat-card *ngIf=!externalAuth>
   <form novalidate [formGroup]="userGroup" autocomplete="off">
-    <md-grid-list cols="6" rowHeight="55px">
-      <md-grid-tile colspan="6">
-        <md-radio-group formControlName="role" class="radio">
-          <md-radio-button value="hungry" checked="checked"> User is hungry</md-radio-button>
-          <md-radio-button value="chef"> User is a Chef</md-radio-button>
-          <md-radio-button value="admin"> User is an admin</md-radio-button>
-        </md-radio-group>
-      </md-grid-tile>
-      <md-grid-tile colspan="2" rowspan="2">
-        <md-form-field>
-          <input mdInput type="text" placeholder="First name" formControlName="firstName">
-          <md-error *ngIf="userGroup.get('firstName').touched && userGroup.get('firstName').hasError('required')">
+    <mat-grid-list cols="6" rowHeight="55px">
+      <mat-grid-tile colspan="6">
+        <mat-radio-group formControlName="role" class="radio">
+          <mat-radio-button value="hungry" checked="checked"> User is hungry</mat-radio-button>
+          <mat-radio-button value="chef"> User is a Chef</mat-radio-button>
+          <mat-radio-button value="admin"> User is an admin</mat-radio-button>
+        </mat-radio-group>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="2" rowspan="2">
+        <mat-form-field>
+          <input matInput type="text" placeholder="First name" formControlName="firstName">
+          <mat-error *ngIf="userGroup.get('firstName').touched && userGroup.get('firstName').hasError('required')">
             First Name is required
-          </md-error>
-          <md-error *ngIf="userGroup.get('firstName').touched && userGroup.get('firstName').hasError('minlength')">
+          </mat-error>
+          <mat-error *ngIf="userGroup.get('firstName').touched && userGroup.get('firstName').hasError('minlength')">
             Minimum of 2 characters
-          </md-error>
-        </md-form-field>
-      </md-grid-tile>
-      <md-grid-tile colspan="2" rowspan="2">
-        <md-form-field>
-          <input mdInput type="text" placeholder="Last name" formControlName="lastName">
-          <md-error *ngIf="userGroup.get('lastName').touched && userGroup.get('lastName').hasError('required')">
+          </mat-error>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="2" rowspan="2">
+        <mat-form-field>
+          <input matInput type="text" placeholder="Last name" formControlName="lastName">
+          <mat-error *ngIf="userGroup.get('lastName').touched && userGroup.get('lastName').hasError('required')">
             Last Name is required
-          </md-error>
-          <md-error *ngIf="userGroup.get('lastName').touched && userGroup.get('lastName').hasError('minlength')">
+          </mat-error>
+          <mat-error *ngIf="userGroup.get('lastName').touched && userGroup.get('lastName').hasError('minlength')">
             Minimum of 2 characters
-          </md-error>
-        </md-form-field>
-      </md-grid-tile>
-      <md-grid-tile colspan="2" rowspan="2">
-        <md-form-field class="input-med-width">
-          <input mdInput type="email" placeholder="User email address" formControlName="email">
-          <md-error *ngIf="userGroup.get('email').hasError('required') && userGroup.get('email').touched">
+          </mat-error>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="2" rowspan="2">
+        <mat-form-field class="input-med-width">
+          <input matInput type="email" placeholder="User email address" formControlName="email">
+          <mat-error *ngIf="userGroup.get('email').hasError('required') && userGroup.get('email').touched">
             Email is required
-          </md-error>
-          <md-error *ngIf="userGroup.get('email').hasError('pattern') && userGroup.get('email').touched">
+          </mat-error>
+          <mat-error *ngIf="userGroup.get('email').hasError('pattern') && userGroup.get('email').touched">
             Email is not valid
-          </md-error>
-        </md-form-field>
-      </md-grid-tile>
-      <md-grid-tile colspan="2" rowspan="2">
-        <md-form-field>
+          </mat-error>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="2" rowspan="2">
+        <mat-form-field>
 
-          <input mdInput type="password" placeholder="Password" formControlName="password" (keyup)="onPasswordChange()">
+          <input matInput type="password" placeholder="Password" formControlName="password" (keyup)="onPasswordChange()">
 
-          <md-hint *ngIf="userGroup.get('password').value===null || userGroup.get('password').value.length<6 ">Password should be at least 6 characters (space not allowed) </md-hint>
+          <mat-hint *ngIf="userGroup.get('password').value===null || userGroup.get('password').value.length<6 ">Password should be at least 6 characters (space not allowed) </mat-hint>
 
-          <md-error *ngIf="userGroup.get('password').hasError('required') && userGroup.get('password').touched">
+          <mat-error *ngIf="userGroup.get('password').hasError('required') && userGroup.get('password').touched">
             Password is required
-          </md-error>
+          </mat-error>
 
-          <md-error *ngIf="userGroup.get('password').hasError('pattern') && userGroup.get('password').touched">
+          <mat-error *ngIf="userGroup.get('password').hasError('pattern') && userGroup.get('password').touched">
             Password shoud be at least 6 characters (space not allowed)
-          </md-error>
+          </mat-error>
 
-        </md-form-field>
-      </md-grid-tile>
-      <md-grid-tile colspan="2" rowspan="2">
-        <md-form-field>
-          <input mdInput type="password" placeholder="Confirm Password" formControlName="confirm">
-          <md-error *ngIf="userGroup.get('confirm').hasError('required') && userGroup.get('confirm').touched">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="2" rowspan="2">
+        <mat-form-field>
+          <input matInput type="password" placeholder="Confirm Password" formControlName="confirm">
+          <mat-error *ngIf="userGroup.get('confirm').hasError('required') && userGroup.get('confirm').touched">
             Password Confirming is required
-          </md-error>
+          </mat-error>
 
-          <md-error *ngIf="userGroup.get('confirm').hasError('pattern') && userGroup.get('confirm').touched">
+          <mat-error *ngIf="userGroup.get('confirm').hasError('pattern') && userGroup.get('confirm').touched">
             Password should be at least 6 characters (space not allowed)
-          </md-error>
+          </mat-error>
 
-          <md-error *ngIf="userGroup.get('confirm').hasError('confirmError') && userGroup.get('confirm').touched">
+          <mat-error *ngIf="userGroup.get('confirm').hasError('confirmError') && userGroup.get('confirm').touched">
             Password and confirm do not match
-          </md-error>
-        </md-form-field>
-      </md-grid-tile>
-      <md-grid-tile colspan="2" rowspan="2">
-        <button md-raised-button color="accent" type="button" (click)="createUser()" [disabled]="userGroup.invalid || showSpinner">Create user</button>
+          </mat-error>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="2" rowspan="2">
+        <button mat-raised-button color="accent" type="button" (click)="createUser()" [disabled]="userGroup.invalid || showSpinner">Create user</button>
         <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
-      </md-grid-tile>
-    </md-grid-list>
+      </mat-grid-tile>
+    </mat-grid-list>
   </form>
-</md-card>
+</mat-card>
 
 <div>
   <div class="adm-user-list">User List</div>
 </div>
 
-<md-grid-list cols="100" rowHeight="80px">
-  <md-grid-tile colspan="9" class="left-no-pad">
-    <md-select [ngModel]="pageSize" (ngModelChange)="changePageSize($event)" placeholder="Show" name="show" class="smallerSelect">
-      <md-option *ngFor="let pageSizeOption of pageSizes" [value]="pageSizeOption.value">
-        {{ pageSizeOption.viewValue }}
-      </md-option>
-    </md-select>
-  </md-grid-tile>
-  <md-grid-tile colspan="15" class="left-no-pad">
-    <md-select [ngModel]="orderBy" (ngModelChange)="changeOrderBy($event)" placeholder="Order by" name="order" class="mediumSelect">
-      <md-option *ngFor="let orderByOption of orderByOptions" [value]="orderByOption.value">
-        {{ orderByOption.viewValue }}
-      </md-option>
-    </md-select>
-  </md-grid-tile>
-  <md-grid-tile colspan="9" class="direction-title left-no-pad">
+<mat-grid-list cols="100" rowHeight="80px">
+  <mat-grid-tile colspan="9" class="left-no-pad">
+    <mat-form-field class="select-padding sm-select">
+      <mat-select [ngModel]="pageSize" (ngModelChange)="changePageSize($event)" placeholder="Show" name="show" >
+        <mat-option *ngFor="let pageSizeOption of pageSizes" [value]="pageSizeOption.value">
+          {{ pageSizeOption.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="15" class="left-no-pad">
+    <mat-form-field class="select-padding lg-select">
+      <mat-select [ngModel]="orderBy" (ngModelChange)="changeOrderBy($event)" placeholder="Order by" name="order" >
+        <mat-option *ngFor="let orderByOption of orderByOptions" [value]="orderByOption.value">
+          {{ orderByOption.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="9" class="direction-title left-no-pad">
     <div>
       <div class="direction">Desc</div>
       <div>
-        <button md-icon-button [ngClass]="{current:direction === 'DESC'}" color="accent" (click)="changeDirection('DESC')" [disabled]="direction === 'DESC'"><i class="material-icons">arrow_downward</i></button>
+        <button mat-icon-button [ngClass]="{current:direction === 'DESC'}" color="accent" (click)="changeDirection('DESC')" [disabled]="direction === 'DESC'">
+          <i class="material-icons">arrow_downward</i>
+        </button>
       </div>
     </div>
     <div>
       <div class="direction">Asc</div>
       <div>
-        <button md-icon-button [ngClass]="{current:direction === 'ASC'}" color="accent" (click)="changeDirection('ASC')" [disabled]="direction === 'ASC'"><i class="material-icons">arrow_upward</i></button>
+        <button mat-icon-button [ngClass]="{current:direction === 'ASC'}" color="accent" (click)="changeDirection('ASC')" [disabled]="direction === 'ASC'">
+          <i class="material-icons">arrow_upward</i>
+        </button>
       </div>
     </div>
-  </md-grid-tile>
-  <md-grid-tile colspan="11" class="left-no-pad">
+  </mat-grid-tile>
+  <mat-grid-tile colspan="11" class="left-no-pad">
     <form novalidate [formGroup]="searchGroup" autocomplete="off">
-      <md-form-field class="top-pad">
-        <md-placeholder>
-          Last name  <md-icon class="material-icons">search</md-icon>
-        </md-placeholder>
-        <input mdInput type="text" formControlName="lastName" (keyup)="searchUsers()">
-         <md-hint *ngIf="searchGroup.get('lastName').value===null || searchGroup.get('lastName').value.length<3">At least 3 first chars </md-hint>
-      </md-form-field>
+      <mat-form-field class="top-pad">
+        <mat-placeholder>
+          Last name
+          <mat-icon class="material-icons">search</mat-icon>
+        </mat-placeholder>
+        <input matInput type="text" formControlName="lastName" (keyup)="searchUsers()">
+        <mat-hint *ngIf="searchGroup.get('lastName').value===null || searchGroup.get('lastName').value.length<3">At least 3 first chars </mat-hint>
+      </mat-form-field>
     </form>
-  </md-grid-tile>
-  <md-grid-tile colspan="56" class="right-no-pad">
+  </mat-grid-tile>
+  <mat-grid-tile colspan="56" class="right-no-pad">
     <app-pagination (changePage)="handlechangePage($event)" [totalItems]="totalUsers" [currentPage]="page" [pageSize]="pageSize"></app-pagination>
-  </md-grid-tile>
-</md-grid-list>
+  </mat-grid-tile>
+</mat-grid-list>
 
-<md-card class="user-card" *ngFor="let user of getUsers()">
+<mat-card class="user-card" *ngFor="let user of getUsers()">
   <app-admin-user [user]=user [externalAuth]=externalAuth (userDeleted)="handleDeletedUser($event)"></app-admin-user>
-</md-card>
+</mat-card>
 
-<md-grid-list *ngIf="showLoadSpinner" cols="1" rowHeight="200px">
-  <md-grid-tile>
-    <md-spinner class="centered" color="accent"></md-spinner>
-  </md-grid-tile>
-</md-grid-list>
-<md-grid-list cols="8" rowHeight="50px">
-  <md-grid-tile colspan="8" class="right-no-pad">
+<mat-grid-list *ngIf="showLoadSpinner" cols="1" rowHeight="200px">
+  <mat-grid-tile>
+    <mat-spinner class="centered" color="accent"></mat-spinner>
+  </mat-grid-tile>
+</mat-grid-list>
+<mat-grid-list cols="8" rowHeight="50px">
+  <mat-grid-tile colspan="8" class="right-no-pad">
     <app-pagination (changePage)="handlechangePage($event)" [totalItems]="totalUsers" [currentPage]="page" [pageSize]="pageSize"></app-pagination>
-  </md-grid-tile>
-</md-grid-list>
+  </mat-grid-tile>
+</mat-grid-list>

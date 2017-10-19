@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { MdSnackBar, MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 
 import * as remote from '../../remote';
@@ -24,8 +24,8 @@ export class BalanceComponent implements OnInit {
   constructor(
     private adminService: remote.AdminApi,
     private fb: FormBuilder,
-    public snackBar: MdSnackBar,
-    public dialog: MdDialog,
+    public snackBar: MatSnackBar,
+    public dialog: MatDialog,
     //private router: Router,
     //private authService: AuthenticationService,
     public globalSettingsService: GlobalSettingsService
@@ -128,5 +128,5 @@ export class BalanceComponent implements OnInit {
   templateUrl: './balance-dialog.html',
 })
 export class BalanceDialog {
-  constructor(public dialogRef: MdDialogRef<BalanceDialog>, @Inject(MD_DIALOG_DATA) public data: any) { }
+  constructor(public dialogRef: MatDialogRef<BalanceDialog>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 }

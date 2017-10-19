@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MdSnackBar, MdSlideToggleChange } from '@angular/material';
+import { MatSnackBar, MatSlideToggleChange } from '@angular/material';
 import { Observable } from 'rxjs/Rx';
 import * as remote from '../../../remote';
 import { GlobalSettingsService } from '../../../shared/services/global-settings-service.service';
@@ -35,7 +35,7 @@ export class FoodEditComponent implements OnInit {
 
   constructor(
     public chefService: remote.ChefApi,
-    public snackBar: MdSnackBar,
+    public snackBar: MatSnackBar,
     private gss: GlobalSettingsService
     ) { }
 
@@ -134,7 +134,7 @@ export class FoodEditComponent implements OnInit {
 
   }
 
-  public setAsStandardFood(val: MdSlideToggleChange){
+  public setAsStandardFood(val: MatSlideToggleChange){
     this.foodDetails.standard = val.checked;
   }
 }

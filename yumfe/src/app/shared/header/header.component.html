@@ -5,7 +5,7 @@
       <div class="controlledUserName">
         {{controlUser.firstName+" "+controlUser.lastName}}
       </div>
-      <button md-raised-button color="accent" type="button" (click)="exitControlUser()">Exit</button>
+      <button mat-raised-button color="accent" type="button" (click)="exitControlUser()">Exit</button>
     </div>
     <div>
       <div *ngIf="!user.hasPicture">
@@ -19,27 +19,27 @@
       <div class= "balance">Balance <span [innerHTML]="balance | async | number : '1.2-2'"></span><span [innerHTML]="currency | async"></span></div>
     </div>
     <div class="">
-      <button md-icon-button md-raised-button [ngClass]="{'isOpen': trigger.menuOpen}" (click)="triggerMenu()"><i class="material-icons md-32 rotaded">keyboard_arrow_down</i></button>
+      <button mat-icon-button mat-raised-button [ngClass]="{'isOpen': trigger.menuOpen}" (click)="triggerMenu()"><i class="material-icons mat-32 rotaded">keyboard_arrow_down</i></button>
 
     </div>
     <div class="menuDrawerButton">
 
-      <button md-icon-button class="hidden" md-raised-button [mdMenuTriggerFor]="menu"><i class="material-icons md-32">keyboard_arrow_down</i></button>
+      <button mat-icon-button class="hidden" mat-raised-button [matMenuTriggerFor]="menu"><i class="material-icons mat-32">keyboard_arrow_down</i></button>
 
-      <!-- <md-menu #menu="mdMenu" [classList]="testClass" xPosition="before" class="menuDrawer"  aria-label="Open settings menu"> -->
-      <md-menu #menu="mdMenu" xPosition="before" class="menuDrawer" aria-label="Open settings menu">
+      <!-- <mat-menu #menu="matMenu" [classList]="testClass" xPosition="before" class="menuDrawer"  aria-label="Open settings menu"> -->
+      <mat-menu #menu="matMenu" xPosition="before" class="menuDrawer" aria-label="Open settings menu">
         <div>
           <div class="is-flex menuDrawerContent">
 
 
 
             <div class="inline smallPad">
-              <button md-raised-button color="accent" routerLink="/settings" routerLinkActive #rlaSettings="routerLinkActive" [disabled]='rlaSettings.isActive'
+              <button mat-raised-button color="accent" routerLink="/settings" routerLinkActive #rlaSettings="routerLinkActive" [disabled]='rlaSettings.isActive'
                 routerLinkActive="active">Account settings</button>
             </div>
 
             <div class="inline smallPad">
-              <button (click)="logOff()" title="Sign out" md-icon-button md-raised-button><i class="material-icons md-32"><i class="material-icons">power_settings_new</i></i></button>
+              <button (click)="logOff()" title="Sign out" mat-icon-button mat-raised-button><i class="material-icons mat-32"><i class="material-icons">power_settings_new</i></i></button>
             </div>
 
 
@@ -48,21 +48,21 @@
           <div class="smallPad marginTop" *ngIf="role=='admin' || role=='chef'">
 
 
-            <button md-raised-button color="accent" routerLink="/hungry" routerLinkActive #rlaHungryHome="routerLinkActive" [disabled]='rlaHungryHome.isActive'
+            <button mat-raised-button color="accent" routerLink="/hungry" routerLinkActive #rlaHungryHome="routerLinkActive" [disabled]='rlaHungryHome.isActive'
               routerLinkActive="active">Hungry</button>
 
 
-            <button *ngIf="role=='admin' || role=='chef'" md-raised-button color="accent" routerLink="/chef" routerLinkActive #rlaChefHome="routerLinkActive"
+            <button *ngIf="role=='admin' || role=='chef'" mat-raised-button color="accent" routerLink="/chef" routerLinkActive #rlaChefHome="routerLinkActive"
               [disabled]='rlaChefHome.isActive' routerLinkActive="active">Chef</button>
 
-            <button *ngIf="role=='admin'" md-raised-button color="accent" routerLink="/admin" routerLinkActive #rlaAdminHome="routerLinkActive"
+            <button *ngIf="role=='admin'" mat-raised-button color="accent" routerLink="/admin" routerLinkActive #rlaAdminHome="routerLinkActive"
               [disabled]='rlaAdminHome.isActive' routerLinkActive="active">Admin</button>
 
 
           </div>
         </div>
-      </md-menu>
-      <!-- <button md-icon-button    md-raised-button [mdMenuTriggerFor]="menu" ><i class="material-icons md-32">keyboard_arrow_down</i></button> -->
+      </mat-menu>
+      <!-- <button mat-icon-button    mat-raised-button [matMenuTriggerFor]="menu" ><i class="material-icons mat-32">keyboard_arrow_down</i></button> -->
 
     </div>
 

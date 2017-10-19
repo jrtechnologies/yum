@@ -4,9 +4,24 @@ form {
 label {
    display:block;
 }
-md-select{
-  background-color: white;
+mat-select{
+  // background-color: white;
+  // border: 2px solid #CECECE;
+  // padding: 5px;
+  // width:100px;
+
 }
+
+//mat-form-field .mat-form-field-wrapper  {
+.mat-form-field-wrapper {
+  padding-bottom: 0.9em !important;
+}
+
+.currency{
+  max-width:80px;
+  padding-bottom: 0.9em !important;
+}
+
 hr{
   border-top: 1px solid red;
 }
@@ -29,8 +44,9 @@ hr{
   line-height: 1.5rem;
 }
 .deadlineCurrency{
-  width: 200px;
-  border: 2px solid #CECECE;
+ // background-color: white;
+  //width: 200px;
+  // border: 2px solid #CECECE;
 }
 .reportEmail{
   width:100%;
@@ -59,5 +75,5 @@ h3{
 
 .mat-button-toggle-checked{
   background-color: #f44336;
-  color: #fff; 
+  color: #fff;
 }

@@ -1,6 +1,6 @@
 <div fxLayout="row" class="right-align">
   <div fxFlex="100">
-    <button class="miniBtnX" md-button (click)="dialogRef.close('No')">x</button>
+    <button class="miniBtnX" mat-button (click)="dialogRef.close('No')">x</button>
   </div>
 </div>
 <div class="dialog">
@@ -50,17 +50,17 @@
         </div>
       </div>
     </div>
-    <md-form-field class="full-width">
-      <textarea mdInput placeholder="Comments" value="" maxlength="150" class="noResize" (ngModelChange)="countComment(comment=$event)" [ngModel]="comment"></textarea>
-      <md-icon mdSuffix>mode_edit</md-icon>
-      <md-hint>{{characterleft}} character(s) left</md-hint>
-    </md-form-field>
+    <mat-form-field class="full-width">
+      <textarea matInput placeholder="Comments" value="" maxlength="150" class="noResize" (ngModelChange)="countComment(comment=$event)" [ngModel]="comment"></textarea>
+      <mat-icon matSuffix>mode_edit</mat-icon>
+      <mat-hint>{{characterleft}} character(s) left</mat-hint>
+    </mat-form-field>
     <div class="centered email" fxLayout="row">
-      <md-checkbox fxFlex="100" [checked]="isChecked" (change)="toggle()">Email me this</md-checkbox>
+      <mat-checkbox fxFlex="100" [checked]="isChecked" (change)="toggle()">Email me this</mat-checkbox>
     </div>
     <div class="centered" fxLayout="row">
-      <button class="buttons cancel" fxFlex="50" md-raised-button (click)="dialogRef.close('No')" color="accent">Cancel</button>
-      <button class="buttons" fxFlex="50" md-raised-button (click)="dialogRef.close(getEmailCheck())" color="accent">Bon appetit!</button>
+      <button class="buttons cancel" fxFlex="50" mat-raised-button (click)="dialogRef.close('No')" color="accent">Cancel</button>
+      <button class="buttons" fxFlex="50" mat-raised-button (click)="dialogRef.close(getEmailCheck())" color="accent">Bon appetit!</button>
     </div>
   </div>
 </div>

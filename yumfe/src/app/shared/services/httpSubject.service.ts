@@ -3,7 +3,7 @@ import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class HttpSubjectService {
-    //https://github.com/ReactiveX/rxjs/blob/master/doc/subject.md
+    //https://github.com/ReactiveX/rxjs/blob/master/doc/subject.mat
     //In our app.component.ts class we will subscribe to this Subjects
     public notificationSubject = new Subject();
     public http401Subject = new Subject();

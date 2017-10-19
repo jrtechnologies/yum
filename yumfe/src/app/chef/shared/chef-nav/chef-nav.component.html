@@ -1,9 +1,9 @@
 <div class="inline">
-  <button md-raised-button color="accent" routerLink="/chef"   [routerLinkActiveOptions]="{ exact: true }" routerLinkActive  #rlaChef="routerLinkActive" [disabled]='rlaChef.isActive' routerLinkActive="active">Menu</button>
+  <button mat-raised-button color="accent" routerLink="/chef"   [routerLinkActiveOptions]="{ exact: true }" routerLinkActive  #rlaChef="routerLinkActive" [disabled]='rlaChef.isActive' routerLinkActive="active">Menu</button>
 
-  <button md-raised-button color="accent" routerLink="/chef/menus"  routerLinkActive  #rlaChefMenus="routerLinkActive" [disabled]='rlaChefMenus.isActive' routerLinkActive="active">Daily menu</button>
+  <button mat-raised-button color="accent" routerLink="/chef/menus"  routerLinkActive  #rlaChefMenus="routerLinkActive" [disabled]='rlaChefMenus.isActive' routerLinkActive="active">Daily menu</button>
 
-  <button md-raised-button color="accent" routerLink="/chef/orders"
+  <button mat-raised-button color="accent" routerLink="/chef/orders"
       routerLinkActive  #rlaChefOrders="routerLinkActive" [disabled]='rlaChefOrders.isActive' routerLinkActive="active" >
      View orders</button>
 </div>

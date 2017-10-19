@@ -6,7 +6,7 @@ import { CustomDateFormatter } from './custom-date-formatter.provider';
 import { Observable, BehaviorSubject, Subject } from 'rxjs/Rx';
 import { AdminApi } from '../../remote';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-holidays',
@@ -42,7 +42,7 @@ export class HolidaysComponent implements OnInit {
   constructor(private adminService: AdminApi, private datePipe: DatePipe,
     private route: ActivatedRoute,
     private location: Location,
-    public snackBar: MdSnackBar
+    public snackBar: MatSnackBar
     //private router: Router
   ) { }
 

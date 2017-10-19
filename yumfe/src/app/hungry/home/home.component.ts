@@ -5,7 +5,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import * as remote from '../../remote';
 import { DatePipe } from '@angular/common';
-import { MdTooltip } from '@angular/material';
+import { MatTooltip } from '@angular/material';
 import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.component';
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 import { Observable, Subject } from 'rxjs/Rx';

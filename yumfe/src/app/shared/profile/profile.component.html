@@ -1,69 +1,75 @@
 <form *ngIf="showForm && user" novalidate [formGroup]="profileGroup">
-  <md-grid-list cols="7" rowHeight="100px">
-    <md-grid-tile colspan="2" rowspan="3">
+  <mat-grid-list cols="7" rowHeight="100px">
+    <mat-grid-tile colspan="2" rowspan="3">
       <i *ngIf="!user.hasPicture" class="material-icons face">face</i>
       <img class="profile-image" *ngIf="user.hasPicture" src="{{userPicture}}" />
-    </md-grid-tile>
-    <md-grid-tile colspan="1" rowspan="1" class="left-no-pad">
+    </mat-grid-tile>
+    <mat-grid-tile colspan="1" rowspan="1" class="left-no-pad">
       <div>Change picture</div>
-      <button md-icon-button color="accent" (click)="fileInput.click()"><i class="material-icons">add_circle</i></button>
+      <button mat-icon-button color="accent" (click)="fileInput.click()">
+        <i class="material-icons">add_circle</i>
+      </button>
       <input #fileInput type="file" ng2FileSelect [uploader]="uploader" hidden=true/>
-    </md-grid-tile>
-    <md-grid-tile colspan="4" rowspan="3">
-      <md-progress-bar *ngIf="progress" role="progressbar" mode="indeterminate"></md-progress-bar>
-    </md-grid-tile>
-    <md-grid-tile class="image-rules" colspan="{{admin?'1':'1'}}" rowspan="1">
+    </mat-grid-tile>
+    <mat-grid-tile colspan="4" rowspan="3">
+      <mat-progress-bar *ngIf="progress" role="progressbar" mode="indeterminate"></mat-progress-bar>
+    </mat-grid-tile>
+    <mat-grid-tile class="image-rules" colspan="{{admin?'1':'1'}}" rowspan="1">
       You have to upload an image at least 180px by 180px, jpg, .gif, or .png. Max file size 700K.
-    </md-grid-tile>
-     <md-grid-tile *ngIf="user.hasPicture" colspan="1" rowspan="1" class="left-no-pad">
+    </mat-grid-tile>
+    <mat-grid-tile *ngIf="user.hasPicture" colspan="1" rowspan="1" class="left-no-pad">
       Delete picture
-      <button md-icon-button color="accent" (click)="deletePicture()"><i class="material-icons">delete_forever</i></button>
-    </md-grid-tile>
-  </md-grid-list>
-  <md-grid-list cols="{{admin?'9':'7'}}" rowHeight="80px">
-    <md-grid-tile *ngIf="admin && user.id !==1" [colspan]="2" class="left">
-      <md-select placeholder="User role" formControlName="role" class="bottom-pad">
-        <md-option *ngFor="let role of roles" [value]="role.value">
-          {{ role.viewValue }}
-        </md-option>
-      </md-select>
-    </md-grid-tile>
+      <button mat-icon-button color="accent" (click)="deletePicture()">
+        <i class="material-icons">delete_forever</i>
+      </button>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <mat-grid-list cols="{{admin?'9':'7'}}" rowHeight="80px">
+    <mat-grid-tile *ngIf="admin && user.id !==1" [colspan]="2" class="left">
+      <mat-form-field class="lg-select">
+        <mat-select placeholder="User role" formControlName="role">
+          <mat-option *ngFor="let role of roles" [value]="role.value">
+            {{ role.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
 
 
-    <md-grid-tile [colspan]="2" class="left">
-      <md-form-field class="input-sm-md-width">
-        <input mdInput type="text" placeholder="First name" formControlName="firstName">
+    <mat-grid-tile [colspan]="2" class="left">
+      <mat-form-field class="input-sm-mat-width">
+        <input matInput type="text" placeholder="First name" formControlName="firstName">
 
 
-        <md-error *ngIf="profileGroup.get('firstName').touched && profileGroup.get('firstName').hasError('required')">
+        <mat-error *ngIf="profileGroup.get('firstName').touched && profileGroup.get('firstName').hasError('required')">
           First Name is required
-        </md-error>
-        <md-error *ngIf="profileGroup.get('firstName').touched && profileGroup.get('firstName').hasError('minlength')">
+        </mat-error>
+        <mat-error *ngIf="profileGroup.get('firstName').touched && profileGroup.get('firstName').hasError('minlength')">
           Minimum of 2 characters
-        </md-error>
-      </md-form-field>
-    </md-grid-tile>
-    <md-grid-tile [colspan]="2" class="left">
-      <md-form-field class="input-full-width">
-        <input mdInput type="text" placeholder="Last name" formControlName="lastName">
+        </mat-error>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="2" class="left">
+      <mat-form-field class="input-full-width">
+        <input matInput type="text" placeholder="Last name" formControlName="lastName">
 
-        <md-error *ngIf="profileGroup.get('lastName').touched && profileGroup.get('lastName').hasError('required')">
+        <mat-error *ngIf="profileGroup.get('lastName').touched && profileGroup.get('lastName').hasError('required')">
           Last Name is required
-        </md-error>
-        <md-error *ngIf="profileGroup.get('lastName').touched && profileGroup.get('lastName').hasError('minlength')">
+        </mat-error>
+        <mat-error *ngIf="profileGroup.get('lastName').touched && profileGroup.get('lastName').hasError('minlength')">
           Minimum of 2 characters
-        </md-error>
-      </md-form-field>
-    </md-grid-tile>
-    <md-grid-tile [colspan]="3" class="right">
-      <md-form-field class="input-sm-md-width">
-        <input mdInput type="email" placeholder="Email address" formControlName="email">
+        </mat-error>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="3" class="right">
+      <mat-form-field class="input-sm-mat-width">
+        <input matInput type="email" placeholder="Email address" formControlName="email">
 
-        <md-error *ngIf="profileGroup.get('email').hasError('required') && profileGroup.get('email').touched">
+        <mat-error *ngIf="profileGroup.get('email').hasError('required') && profileGroup.get('email').touched">
           Email is required
-        </md-error>
-      </md-form-field>
-    </md-grid-tile>
+        </mat-error>
+      </mat-form-field>
+    </mat-grid-tile>
 
-  </md-grid-list>
+  </mat-grid-list>
 </form>

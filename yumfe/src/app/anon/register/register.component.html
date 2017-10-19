@@ -3,58 +3,58 @@
     <form [formGroup]="registerForm" autocomplete="off" class="oVasilisHrthe">
       <img src="/assets/img/Yum-logo-small.png">
       <h2>Register</h2>
-      <md-form-field>
-        <input mdInput type="text" placeholder="First name" formControlName="firstName">
-        <md-error class="error" *ngIf="registerForm.get('firstName').touched && registerForm.get('firstName').hasError('required')">
+      <mat-form-field>
+        <input matInput type="text" placeholder="First name" formControlName="firstName">
+        <mat-error class="error" *ngIf="registerForm.get('firstName').touched && registerForm.get('firstName').hasError('required')">
             First name is required.
-        </md-error>
-        <md-error *ngIf="registerForm.get('firstName').touched && registerForm.get('firstName').hasError('minlength')">
+        </mat-error>
+        <mat-error *ngIf="registerForm.get('firstName').touched && registerForm.get('firstName').hasError('minlength')">
             Minimum of 2 characters
-        </md-error>
-      </md-form-field>
-      <md-form-field>
-        <input mdInput type="text" placeholder="Last name" formControlName="lastName">
-        <md-error class="error" *ngIf="registerForm.get('lastName').touched && registerForm.get('lastName').hasError('required')">
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Last name" formControlName="lastName">
+        <mat-error class="error" *ngIf="registerForm.get('lastName').touched && registerForm.get('lastName').hasError('required')">
             Last name is required.
-        </md-error>
-        <md-error *ngIf="registerForm.get('lastName').touched && registerForm.get('lastName').hasError('minlength')">
+        </mat-error>
+        <mat-error *ngIf="registerForm.get('lastName').touched && registerForm.get('lastName').hasError('minlength')">
             Minimum of 2 characters
-        </md-error>
-      </md-form-field>
-      <md-form-field>
-        <input mdInput  type="email" placeholder="email" formControlName="email">
-        <md-error class="error" *ngIf="registerForm.get('email').touched && registerForm.get('email').hasError('required')">
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput  type="email" placeholder="email" formControlName="email">
+        <mat-error class="error" *ngIf="registerForm.get('email').touched && registerForm.get('email').hasError('required')">
           Email is required.
-        </md-error>
-        <md-error class="error" *ngIf="registerForm.get('email').touched && registerForm.get('email').hasError('pattern')">
+        </mat-error>
+        <mat-error class="error" *ngIf="registerForm.get('email').touched && registerForm.get('email').hasError('pattern')">
           Wrong email address
-        </md-error>
-         <md-error class="error" *ngIf="registerForm.get('email').touched && registerForm.get('email').hasError('maxlength')">
+        </mat-error>
+         <mat-error class="error" *ngIf="registerForm.get('email').touched && registerForm.get('email').hasError('maxlength')">
           Too long email address (150 characters max)
-        </md-error>
-      </md-form-field>
-      <md-form-field>
-        <input mdInput autocomplete="off" nofill type="password" placeholder="password" formControlName="password" (keyup)= "onPasswordChange()">
-        <md-error class="error" *ngIf="registerForm.get('password').touched && registerForm.get('password').hasError('required')">
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput autocomplete="off" nofill type="password" placeholder="password" formControlName="password" (keyup)= "onPasswordChange()">
+        <mat-error class="error" *ngIf="registerForm.get('password').touched && registerForm.get('password').hasError('required')">
           Password is required.
-        </md-error>
-        <md-error class="error" *ngIf="registerForm.get('password').touched && registerForm.get('password').hasError('pattern')">
+        </mat-error>
+        <mat-error class="error" *ngIf="registerForm.get('password').touched && registerForm.get('password').hasError('pattern')">
           Password min 6 characters.
-        </md-error>
-      </md-form-field>
-      <md-form-field>
-        <input mdInput autocomplete="off" nofill type="password" placeholder="password verification" formControlName="confirm">
-        <md-error *ngIf="registerForm.get('confirm').hasError('required') && registerForm.get('confirm').touched">
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput autocomplete="off" nofill type="password" placeholder="password verification" formControlName="confirm">
+        <mat-error *ngIf="registerForm.get('confirm').hasError('required') && registerForm.get('confirm').touched">
           Password Confirming is required.
-        </md-error>
-        <md-error *ngIf="registerForm.get('confirm').hasError('pattern') && registerForm.get('confirm').touched">
+        </mat-error>
+        <mat-error *ngIf="registerForm.get('confirm').hasError('pattern') && registerForm.get('confirm').touched">
           Password min 6 characters.
-        </md-error>
-        <md-error *ngIf="registerForm.get('confirm').hasError('confirmError') && registerForm.get('confirm').touched">
+        </mat-error>
+        <mat-error *ngIf="registerForm.get('confirm').hasError('confirmError') && registerForm.get('confirm').touched">
           Password and confirm do not match.
-        </md-error>
-      </md-form-field>
-      <button class="submitBtn" md-raised-button type="button" (click)="register()" [disabled]="registerForm.invalid || disableBtn === true" color="accent">Create account</button>
+        </mat-error>
+      </mat-form-field>
+      <button class="submitBtn" mat-raised-button type="button" (click)="register()" [disabled]="registerForm.invalid || disableBtn === true" color="accent">Create account</button>
       <img *ngIf="showSpinner" class="spinner" src="../../assets/img/spinner.gif">
     </form>
     <div class="signIn">

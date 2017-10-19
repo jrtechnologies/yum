@@ -22,15 +22,15 @@
     <!--Standard -->
     <div fxFlex="12" class="is-flex-column flex-centered">
       <div class="header">Standard</div>
-      <md-slide-toggle class="example-margin" [color]="accent" [checked]="food.foodItem.standard" (click)="setFoodAsStandard($event)">
-      </md-slide-toggle>
+      <mat-slide-toggle class="example-margin" [color]="accent" [checked]="food.foodItem.standard" (click)="setFoodAsStandard($event)">
+      </mat-slide-toggle>
     </div>
 
 
     <!--Edit icon-->
     <div fxFlex="15">
       <div class="align-center">
-        <button md-fab color='accent' (click)="edit()" title="Edit food!">
+        <button mat-fab color='accent' (click)="edit()" title="Edit food!">
       <i class="material-icons">edit</i>
     </button>
       </div>
@@ -39,7 +39,7 @@
     <!--Delete icon-->
     <div fxFlex="12" class="is-flex-centered">
       <div *ngIf="!food.foodItem.archived" class="align-center">
-        <button md-icon-button type='butoon' color='accent' (click)='delete()' title="Delete food!">
+        <button mat-icon-button type='butoon' color='accent' (click)='delete()' title="Delete food!">
       <i class="material-icons bigger-button">delete_forever</i>
       </button>
       </div>
@@ -49,8 +49,8 @@
   <!--Statistic about foods-->
   <span *ngIf="food.stats['currentWeek'].quantity !== null || lastWeek !== 0 || secondLastWeek !== 0">
     <div class="footer-style">
-      <md-card-footer>
-        <md-grid-tile-footer>
+      <mat-card-footer>
+        <mat-grid-tile-footer>
           <span *ngIf="food.stats['currentWeek'].quantity === null"> 0 </span>
   <span *ngIf="food.stats['currentWeek'].quantity !== null" class="number-style">
             {{food.stats['currentWeek'].quantity}} </span> / this week | prev. week:
@@ -65,8 +65,8 @@
   <span *ngIf="percentage < 0">
             <i class="material-icons arrow-down-color">arrow_drop_down</i>
           </span>
-  </md-grid-tile-footer>
-  </md-card-footer>
+  </mat-grid-tile-footer>
+  </mat-card-footer>
 </div>
 </span>
 </div>

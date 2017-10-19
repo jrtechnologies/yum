@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as remote from '../../remote';
-import { MdButtonModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material';
 import { AuthenticationService } from '../../shared/authentication.service';
 import { routerTransition } from './router.animations';
 @Component({

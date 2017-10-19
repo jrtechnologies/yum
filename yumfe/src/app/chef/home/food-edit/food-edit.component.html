@@ -1,78 +1,81 @@
 <!--The form where chef can create new Food items-->
-<md-card>
+<mat-card>
   <form createNewFoodItemForm [formGroup]="food" autocomplete="off">
-    <md-grid-list cols="4" rowHeight="104px">
-      <md-grid-tile [colspan]="3" [rowspan]="1">
-        <md-form-field class="full-width">
-          <input mdInput placeholder="Food Name" type="text" formControlName="foodName" (blur)="uniqueName($event.target.value)">
-          <md-error *ngIf="food.get('foodName').touched && food.get('foodName').hasError('required')">
+    <mat-grid-list cols="4" rowHeight="104px">
+      <mat-grid-tile [colspan]="3" [rowspan]="1">
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Food Name" type="text" formControlName="foodName" (blur)="uniqueName($event.target.value)">
+          <mat-error *ngIf="food.get('foodName').touched && food.get('foodName').hasError('required')">
             Food Name is required
-          </md-error>
-          <md-error *ngIf="food.get('foodName').touched && food.get('foodName').hasError('minlength')">
+          </mat-error>
+          <mat-error *ngIf="food.get('foodName').touched && food.get('foodName').hasError('minlength')">
             Minimum of 2 characters
-          </md-error>
-          <md-error *ngIf="food.get('foodName').touched && food.get('foodName').hasError('maxlength')">
+          </mat-error>
+          <mat-error *ngIf="food.get('foodName').touched && food.get('foodName').hasError('maxlength')">
             Maximum of 100 characters
-          </md-error>
-          <md-error *ngIf="food.get('foodName').touched && food.get('foodName').hasError('pattern')">
+          </mat-error>
+          <mat-error *ngIf="food.get('foodName').touched && food.get('foodName').hasError('pattern')">
             Invalid food name
-          </md-error>
+          </mat-error>
           <div *ngIf="!isNameUnique">
-            <md-error>
+            <mat-error>
               This name already exists
-            </md-error>
+            </mat-error>
           </div>
-        </md-form-field>
-      </md-grid-tile>
-      <md-grid-tile [colspan]="1" [rowspan]="1">
-          <div class="is-flex-centered-col">
-             <div class="padBottom"> Standard menu</div>
-              <md-slide-toggle class="example-margin" [color]="'accent'" (change)="setAsStandardFood($event)">
-              </md-slide-toggle>
-          </div>
-      </md-grid-tile>
-      <md-grid-tile [colspan]="1" [rowspan]="1" class="alignBottom">
-        <md-select placeholder="Food Type" formControlName="foodType" class="left-position margin-bottom">
-          <md-option *ngFor="let foodType of this.foodTypesForm" [value]='foodType'>
-            {{ foodType }}
-          </md-option>
-        </md-select>
-      </md-grid-tile>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="1" [rowspan]="1">
+        <div class="is-flex-centered-col">
+          <div class="padBottom"> Standard menu</div>
+          <mat-slide-toggle class="example-margin" [color]="'accent'" (change)="setAsStandardFood($event)">
+          </mat-slide-toggle>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="1" [rowspan]="1" class="alignBottom">
+        <mat-form-field class="left-position">
+          <mat-select placeholder="Food Type" formControlName="foodType" >
+            <mat-option *ngFor="let foodType of this.foodTypesForm" [value]='foodType'>
+              {{ foodType }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
 
-      <md-grid-tile [colspan]="2" [rowspan]="1" class="smallPaddingBottom">
-        <md-form-field class="full-width">
-          <textarea mdInput placeholder="Description" type="text" formControlName="description" cols="50" rows="3" class="noResize" (keyup)="count(tweetmsg)"  [(ngModel)]="tweetmsg"></textarea>
-          <md-hint>{{characterleft}} character(s) left</md-hint>
-          <md-error *ngIf="food.get('description').touched && food.get('description').hasError('maxlength')">
+      <mat-grid-tile [colspan]="2" [rowspan]="1" class="smallPaddingBottom">
+        <mat-form-field class="full-width">
+          <textarea matInput placeholder="Description" type="text" formControlName="description" cols="50" rows="3" class="noResize"
+            (keyup)="count(tweetmsg)" [(ngModel)]="tweetmsg"></textarea>
+          <mat-hint>{{characterleft}} character(s) left</mat-hint>
+          <mat-error *ngIf="food.get('description').touched && food.get('description').hasError('maxlength')">
             Maximum of 250 characters
-          </md-error>
-        </md-form-field>
-      </md-grid-tile>
-      <md-grid-tile [colspan]="1" [rowspan]="1" class="alignBottom">
-        <md-form-field class="noMarginInput">
-          <input mdInput placeholder='Price' formControlName="price" />
-          <md-error *ngIf="food.get('price').touched && food.get('price').hasError('required')">
+          </mat-error>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="1" [rowspan]="1" class="alignBottom">
+        <mat-form-field class="noMarginInput">
+          <input matInput placeholder='Price' formControlName="price" />
+          <mat-error *ngIf="food.get('price').touched && food.get('price').hasError('required')">
             Price is required
-          </md-error>
-          <md-error *ngIf="food.get('price').touched && food.get('price').hasError('maxlength')">
+          </mat-error>
+          <mat-error *ngIf="food.get('price').touched && food.get('price').hasError('maxlength')">
             Invalid price
-          </md-error>
-          <md-error *ngIf="food.get('price').touched && food.get('price').hasError('pattern')">
+          </mat-error>
+          <mat-error *ngIf="food.get('price').touched && food.get('price').hasError('pattern')">
             Invalid price
-          </md-error>
-        </md-form-field>
-      </md-grid-tile>
-      <md-grid-tile [colspan]="3" [rowspan]="1">
-      </md-grid-tile>
-      <md-grid-tile [colspan]="1" [rowspan]="1">
+          </mat-error>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="3" [rowspan]="1">
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="1" [rowspan]="1">
         <!--The create food button-->
-        <md-card-actions>
-          <button md-raised-button type="button" (click)="createFood()" color='accent' [disabled]="!(!food.invalid && (isNameUnique && (food.get('foodName').value !== '')))">Create food</button>
+        <mat-card-actions>
+          <button mat-raised-button type="button" (click)="createFood()" color='accent' [disabled]="!(!food.invalid && (isNameUnique && (food.get('foodName').value !== '')))">Create food</button>
           <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
-        </md-card-actions>
+        </mat-card-actions>
         <!---->
-      </md-grid-tile>
-    </md-grid-list>
+      </mat-grid-tile>
+    </mat-grid-list>
   </form>
-</md-card>
+</mat-card>
 <!---->

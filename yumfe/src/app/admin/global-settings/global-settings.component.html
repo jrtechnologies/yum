@@ -1,72 +1,78 @@
-<md-grid-list cols="8" rowHeight="100px">
-  <md-grid-tile class="left-no-pad" colspan="4" rowspan="1">
+<mat-grid-list cols="8" rowHeight="100px">
+  <mat-grid-tile class="left-no-pad" colspan="4" rowspan="1">
     <h2>Global Settings</h2>
-  </md-grid-tile>
-  <md-grid-tile class="right-no-pad" colspan="4" rowspan="1">
+  </mat-grid-tile>
+  <mat-grid-tile class="right-no-pad" colspan="4" rowspan="1">
     <app-admin-nav></app-admin-nav>
-  </md-grid-tile>
-</md-grid-list>
-<md-grid-list *ngIf="showLoadSpinner" cols="1" rowHeight="200px">
-  <md-grid-tile>
-    <md-spinner class="centered" color="accent"></md-spinner>
-  </md-grid-tile>
-</md-grid-list>
+  </mat-grid-tile>
+</mat-grid-list>
+<mat-grid-list *ngIf="showLoadSpinner" cols="1" rowHeight="200px">
+  <mat-grid-tile>
+    <mat-spinner class="centered" color="accent"></mat-spinner>
+  </mat-grid-tile>
+</mat-grid-list>
 <div *ngIf='gss' class="globalSettings">
   <form #gssForm="ngForm" (ngSubmit)="save(gssForm)" class="form" autocomplete="off">
     <h3>Set global settings</h3>
-    <span layout="row"><hr flex/></span>
-    <md-grid-list cols="1" rowHeight="50">
-      <md-grid-tile class="right" colspan="1" rowspan="1">
-        <button md-raised-button type="submit" color='accent' [disabled]="showSpinner">Save Changes</button>
-        <button md-raised-button class="cancel" (click)="cancel()" color='accent' [disabled]="showSpinner">Cancel</button>
+    <span layout="row">
+      <hr flex/>
+    </span>
+    <mat-grid-list cols="1" rowHeight="50">
+      <mat-grid-tile class="right" colspan="1" rowspan="1">
+        <button mat-raised-button type="submit" color='accent' [disabled]="showSpinner">Save Changes</button>
+        <button mat-raised-button class="cancel" (click)="cancel()" color='accent' [disabled]="showSpinner">Cancel</button>
         <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
-      </md-grid-tile>
-    </md-grid-list>
+      </mat-grid-tile>
+    </mat-grid-list>
     <div class="textareas">
-      <md-grid-list cols="11" rowHeight="40px">
-        <md-grid-tile class="left-no-pad" colspan="2" rowspan="1">
+      <mat-grid-list cols="11" rowHeight="40px">
+        <mat-grid-tile class="left-no-pad" colspan="2" rowspan="1">
           <label for="deadline">Time of last order</label>
-        </md-grid-tile>
-        <md-grid-tile class="left-no-pad" colspan="3" rowspan="1">
+        </mat-grid-tile>
+        <mat-grid-tile class="left-no-pad" colspan="3" rowspan="1">
           <label for="deadlineDays">Days before Daily Menu</label>
-        </md-grid-tile>
-        <md-grid-tile class="left-no-pad" colspan="3" rowspan="1">
+        </mat-grid-tile>
+        <mat-grid-tile class="left-no-pad" colspan="3" rowspan="1">
           <label for="reportEmail">Order summary email report</label>
-        </md-grid-tile>
-        <md-grid-tile class="right-no-pad" colspan="3" rowspan="1">
+        </mat-grid-tile>
+        <mat-grid-tile class="right-no-pad" colspan="3" rowspan="1">
           <label for="currency">Active currency</label>
-        </md-grid-tile>
-      </md-grid-list>
-      <md-grid-list cols="11" rowHeight="25px">
-        <md-grid-tile class="left-no-pad" colspan="2" rowspan="2">
+        </mat-grid-tile>
+      </mat-grid-list>
+      <mat-grid-list cols="11" rowHeight="25px">
+        <mat-grid-tile class="left-no-pad" colspan="2" rowspan="2">
           <input class="deadlineTime" type="time" name="deadline" [(ngModel)]="gss.deadline">
-        </md-grid-tile>
-        <md-grid-tile class="left-no-pad" colspan="3" rowspan="2">
+        </mat-grid-tile>
+        <mat-grid-tile class="left-no-pad" colspan="3" rowspan="2">
           <input class="deadlineDays" type="number" min="0" name="deadlineDays" [(ngModel)]="gss.deadlineDays">
-        </md-grid-tile>
-        <md-grid-tile class="left-no-pad" colspan="3" rowspan="2">
+        </mat-grid-tile>
+        <mat-grid-tile class="left-no-pad" colspan="3" rowspan="2">
           <input class="reportEmail" type="text" name="reportEmail" [(ngModel)]="gss.reportEmail">
-        </md-grid-tile>
-        <md-grid-tile class="right-no-pad" colspan="3" rowspan="2">
-          <md-select class="deadlineCurrency" [(ngModel)]="gss.currency" name="currency">
-            <md-option *ngFor="let currency of currencyList" [value]='currency.symbol' [innerHtml]="currency.name"> </md-option>
-          </md-select>
-        </md-grid-tile>
-      </md-grid-list>
+        </mat-grid-tile>
+        <mat-grid-tile class="right-no-pad" colspan="3" rowspan="2">
+          <mat-form-field class="deadlineCurrency">
+            <mat-select class="" [(ngModel)]="gss.currency" name="currency">
+              <mat-option *ngFor="let currency of currencyList" [value]='currency.symbol' [innerHtml]="currency.name"> </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
 
       <div>
         <div class="headerText">Holidays</div>
-        <button md-raised-button color="accent" routerLink="holidays"  [routerLinkActiveOptions]="{ exact: true }" routerLinkActive  routerLinkActive="active">Set bank Holidays</button>
+        <button mat-raised-button color="accent" routerLink="holidays" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive
+          routerLinkActive="active">Set bank Holidays</button>
       </div>
 
       <div>
         <div class="headerText">Working days</div>
-        <md-button-toggle-group name="checkbox" #mdButtongroup="mdButtonToggleGroup" multiple  >
-          <md-button-toggle *ngFor="let wDay of availableWorkingDays;" [value]="wDay.value" [checked]="workingDays.includes(wDay.value)" (change)="wDaysChanged($event)"   >
+        <mat-button-toggle-group name="checkbox" #matButtongroup="matButtonToggleGroup" multiple>
+          <mat-button-toggle *ngFor="let wDay of availableWorkingDays;" [value]="wDay.value" [checked]="workingDays.includes(wDay.value)"
+            (change)="wDaysChanged($event)">
             <span>{{wDay.name}}</span>
-          </md-button-toggle>
-        </md-button-toggle-group>
-        <!-- <div class="example-selected-value">Selected value: {{mdButtongroup.value}}</div> -->
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+        <!-- <div class="example-selected-value">Selected value: {{matButtongroup.value}}</div> -->
       </div>
 
       <div class="area">
@@ -82,12 +88,12 @@
         <textarea htmlEditor [(ngModel)]="gss.policy" rows="20" cols="100" name="policy"></textarea>
       </div>
     </div>
-    <md-grid-list cols="1" rowHeight="50">
-      <md-grid-tile class="right" colspan="1" rowspan="1">
-        <button md-raised-button type="submit" color='accent' [disabled]="showSpinner">Save Changes</button>
-        <button md-raised-button class="cancel" (click)="cancel()" color='accent' [disabled]="showSpinner">Cancel</button>
+    <mat-grid-list cols="1" rowHeight="50">
+      <mat-grid-tile class="right" colspan="1" rowspan="1">
+        <button mat-raised-button type="submit" color='accent' [disabled]="showSpinner">Save Changes</button>
+        <button mat-raised-button class="cancel" (click)="cancel()" color='accent' [disabled]="showSpinner">Cancel</button>
         <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
-      </md-grid-tile>
-    </md-grid-list>
+      </mat-grid-tile>
+    </mat-grid-list>
   </form>
 </div>

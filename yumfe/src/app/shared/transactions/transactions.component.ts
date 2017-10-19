@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
-import { MdPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material';
 
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 
@@ -22,7 +22,7 @@ export class TransactionsComponent implements OnInit {
   public displayedColumns = ['datetime', 'transactionType', 'menuDate', 'amount', 'balance', 'name'];
   public dataSource;
 
-  @ViewChild(MdPaginator) paginator: MdPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private globalSettingsService: GlobalSettingsService,
@@ -55,8 +55,8 @@ export class TransactionsDataSource extends DataSource<any> {
 
 //  private transactions;
 
-  // constructor (private transactions: Array<remote.Transaction>, private paginator: MdPaginator) {
-    constructor (private transactions: any, private paginator: MdPaginator) {
+  // constructor (private transactions: Array<remote.Transaction>, private paginator: MatPaginator) {
+    constructor (private transactions: any, private paginator: MatPaginator) {
     super();
     this.paginator.length = transactions.length;
   //  this.transactions = transactions;

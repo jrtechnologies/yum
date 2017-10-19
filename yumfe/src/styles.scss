@@ -4,7 +4,7 @@
 @import '~@angular/material/theming';
 @import url(https://fonts.googleapis.com/icon?family=Material+Icons);
 @import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+//@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import '~angular-calendar/dist/css/angular-calendar.css';
 @import './assets/style.css';
 
@@ -32,26 +32,26 @@ $primary: #ff5b57;
 .fixedWidth{     min-width: 145px; display: inline-block; }
 
  /* Rules for sizing the icon. */
-.material-icons.md-18 { font-size: 18px; }
-.material-icons.md-24 { font-size: 24px; }
-.material-icons.md-36 { font-size: 36px; }
-.material-icons.md-48 { font-size: 48px; }
+.material-icons.mat-18 { font-size: 18px; }
+.material-icons.mat-24 { font-size: 24px; }
+.material-icons.mat-36 { font-size: 36px; }
+.material-icons.mat-48 { font-size: 48px; }
 
-.material-icons.md-48 {
+.material-icons.mat-48 {
     left: -4px;
     top: 11px;
     position: absolute;
 }
 
 /* Rules for using icons as black on a light background. */
-.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
-.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+.material-icons.mat-dark { color: rgba(0, 0, 0, 0.54); }
+.material-icons.mat-dark.mat-inactive { color: rgba(0, 0, 0, 0.26); }
 
-.material-icons.md-dark.md-invert { color: $white; background-color: $black;}
+.material-icons.mat-dark.mat-invert { color: $white; background-color: $black;}
 
 /* Rules for using icons as white on a dark background. */
-.material-icons.md-light { color: $white; }
-.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+.material-icons.mat-light { color: $white; }
+.material-icons.mat-light.mat-inactive { color: rgba(255, 255, 255, 0.3); }
 
 .is-flex {display: flex; align-items: center; justify-content: space-between; }
 .is-flex-space {display: flex; align-items: center; justify-content:space-around;}
@@ -235,9 +235,22 @@ button.mat-raised-button.active {
 
 .largerSelect .mat-select-trigger { min-width: 150px; }
 
-.mediumSelect .mat-select-trigger { min-width: 140px; }
+// .mediumSelect .mat-select-trigger { min-width: 140px; }
 
-.smallerSelect .mat-select-trigger { min-width: 60px; }
+// .smallerSelect .mat-select-trigger { min-width: 60px; }
+.sm-select  { max-width: 60px; }
+
+.sm-med-select  { max-width: 80px; }
+
+.med-select  { max-width: 135px; }
+
+.lg-select { max-width: 150px; }
+
+
+
+.select-padding {
+  padding-top: 20px;
+}
 
 //terms & policy css
 .tabContent{ padding:10px;     max-height: 430px;}
@@ -255,7 +268,7 @@ button.mat-raised-button.active {
   width: 80%;
 }
 
-.input-sm-md-width {
+.input-sm-mat-width {
   width: 75% !important;
 }
 
@@ -283,3 +296,18 @@ button.mat-raised-button.active {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.deadlineCurrency .mat-form-field-infix{
+  background-color: white;
+  border: 2px solid #CECECE;
+  padding: 5px;
+}
+
+.deadlineCurrency .mat-form-field-underline{
+  height: 0;
+}
+
+.deadlineCurrency .mat-input-wrapper{
+  margin: 20px 0 0 10px;
+}
+
