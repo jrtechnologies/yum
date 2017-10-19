@@ -86,6 +86,16 @@ export class FoodsService {
       if (this.sortFoodTypes.get(n1.foodType) < this.sortFoodTypes.get(n2.foodType)) {
         return -1;
       }
+      
+       
+      if (n1.foodName > n2.foodName ) {
+        return 1;
+      }
+      if ( n1.foodName < n2.foodName) {
+        return -1;
+      }
+
+     
       return 0;
     });
     return foods;

@@ -161,9 +161,9 @@ html, body{margin:0; padding:0;  font-family:'Roboto Slab', serif;}
 .flexGrow{flex: 1;}
 .flexEnd{  align-self: flex-end;}
 .borderTop { border-top: 2px solid $primary;}
-.smallInputContainer{ width:100%;}
+.fullWithInputContainer{ width:100%!important;}
 
-.smallInputContainer > .mat-input-wrapper {
+.fullWithInputContainer > .mat-input-wrapper {
     margin: 0px 0 0 0 !important;
 }
 

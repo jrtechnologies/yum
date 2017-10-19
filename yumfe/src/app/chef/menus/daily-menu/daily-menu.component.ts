@@ -66,21 +66,23 @@ export class DailyMenuComponent implements OnInit, OnChanges {
     this.myForm = new FormGroup({
         dropList: this.selectCtrl
     });
-
  
-    if(getMonth(this.day)!==getMonth(this.viewdate)){
-      this.showSpinner=false;
-      return;
-    }
  
   }
 
    ngOnChanges(changes: SimpleChanges) { 
+
+      if(getMonth(this.day)!==getMonth(this.viewdate)){
+        this.showSpinner=false;
+        return;
+      }
+
       if( changes.menu || changes.foods){
         this.setAvailableFoods();
         this.setup();
       }
    }
+
   setAvailableFoods(){
     this.foodsAvailable=[];
     this.quantityOfStandards = 0;
@@ -92,6 +94,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
           }
         }
     }
+    this.foodsAvailable = this.foodsService.sortArrayOfFoods(this.foodsAvailable );
   }
 
   setup() {
@@ -235,14 +238,7 @@ export class DailyMenuComponent implements OnInit, OnChanges {
       this.foodsSelected.push(food);
     });
 
-    this.foodsSelected = this.foodsSelected.sort((n1,n2) => {
-    if (n1.foodType > n2.foodType) {
-            return -1;
-        }else if (n1.foodType < n2.foodType) {
-            return 1;
-        }
-        return 0;
-    });
+    this.foodsSelected =  this.foodsService.sortArrayOfFoods(this.foodsSelected );
 
     this.checkChanges();
   }
