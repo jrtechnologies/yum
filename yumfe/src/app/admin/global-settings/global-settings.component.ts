@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MdSnackBar, MdButtonToggleGroup, MdButtonToggleGroupMultiple, MdButtonToggleChange } from '@angular/material';
+import { MatSnackBar, MatButtonToggleGroup, MatButtonToggleGroupMultiple, MatButtonToggleChange } from '@angular/material';
 import * as remote from '../../remote';
 
 
@@ -14,8 +14,8 @@ export class GlobalSettingsComponent implements OnInit {
 
   public showLoadSpinner = false;
 
-  @ViewChild('mdButtongroup')
-  public groupButtonWorkingDays: MdButtonToggleGroupMultiple; //
+  @ViewChild('matButtongroup')
+  public groupButtonWorkingDays: MatButtonToggleGroupMultiple; //
 
   // spinner for button 'save changes'
   public showSpinner = false;
@@ -46,7 +46,7 @@ export class GlobalSettingsComponent implements OnInit {
 
   gss: remote.GlobalSettings;
 
-  constructor(private adminService: remote.AdminApi, public snackBar: MdSnackBar, private router: Router) { }
+  constructor(private adminService: remote.AdminApi, public snackBar: MatSnackBar, private router: Router) { }
 
   ngOnInit() {
     this.showLoadSpinner = true;

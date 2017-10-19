@@ -1,17 +1,17 @@
-<h1 md-dialog-title  class="centered">Disapprove user</h1>
-<md-dialog-content class="centered" >
+<h1 matDialogTitle  class="centered">Disapprove user</h1>
+<mat-dialog-content class="centered" >
   <div>User has non final orders. </div>
   <div>Do you want to delete the  non final orders and disapprove the user?</div>
-</md-dialog-content>
-<md-grid-list cols="4" rowHeight="50px">
-  <md-grid-tile>
-  </md-grid-tile>
-  <md-grid-tile>
-    <button md-raised-button color="accent" (click)="dialogRef.close('Yes')">Yes</button>
-  </md-grid-tile>
-  <md-grid-tile>
-    <button md-raised-button color="accent" (click)="dialogRef.close('No')">No</button>
-  </md-grid-tile>
-  <md-grid-tile>
-  </md-grid-tile>
-</md-grid-list>
+</mat-dialog-content>
+<mat-grid-list cols="4" rowHeight="50px">
+  <mat-grid-tile>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-raised-button color="accent" (click)="dialogRef.close('Yes')">Yes</button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-raised-button color="accent" (click)="dialogRef.close('No')">No</button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+  </mat-grid-tile>
+</mat-grid-list>

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MdGridListModule, MdButtonModule, MdInputModule, MdCardModule } from '@angular/material';
+import { MatGridListModule, MatButtonModule, MatInputModule, MatCardModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { BalanceComponent, BalanceDialog } from './balance.component'
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -9,12 +9,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 @NgModule({
   imports: [
     CommonModule,
-    MdGridListModule,
+    MatGridListModule,
     FormsModule,
     ReactiveFormsModule,
-    MdButtonModule,
-    MdInputModule,
-    MdCardModule,
+    MatButtonModule,
+    MatInputModule,
+    MatCardModule,
     FlexLayoutModule
   ],
   declarations: [ BalanceComponent, BalanceDialog],

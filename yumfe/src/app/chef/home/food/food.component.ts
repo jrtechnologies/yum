@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as remote from '../../../remote';
-import { MdDialog, MdDialogRef } from '@angular/material';
-import { MdDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialogConfig } from '@angular/material';
 import { Observable } from 'rxjs/Rx';
 import { GlobalSettingsService } from './../../../shared/services/global-settings-service.service';
 import { DecimalPipe } from '@angular/common';
-import { MdSnackBar, MdSlideToggle } from '@angular/material';
+import { MatSnackBar, MatSlideToggle } from '@angular/material';
 
 @Component({
   selector: 'app-food',
@@ -22,7 +22,7 @@ export class FoodComponent implements OnInit {
   public clone = false;
   public editing = false;
   public ready: boolean;
-  public config = new MdDialogConfig();
+  public config = new MatDialogConfig();
   public currency: Observable<string>;
   public flagClone = false;
   public percentage: number;
@@ -32,10 +32,10 @@ export class FoodComponent implements OnInit {
   
   constructor(
     public chefService: remote.ChefApi,
-    public dialog: MdDialog,
+    public dialog: MatDialog,
     public globalSettingsService: GlobalSettingsService,
     public decpipe: DecimalPipe,
-    public snackBar: MdSnackBar
+    public snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -210,7 +210,7 @@ export class FoodComponent implements OnInit {
   templateUrl: './food-dialog.component.html',
 })
 export class EditCloneDialogComponent {
-  constructor(public dialogRef: MdDialogRef<EditCloneDialogComponent>) { }
+  constructor(public dialogRef: MatDialogRef<EditCloneDialogComponent>) { }
 
 }
 
@@ -219,7 +219,7 @@ export class EditCloneDialogComponent {
   templateUrl: './food-delete-ask-dialog.component.html',
 })
 export class DeleteAskDialogComponent {
-  constructor(public deleteAskRef: MdDialogRef<DeleteAskDialogComponent>) { }
+  constructor(public deleteAskRef: MatDialogRef<DeleteAskDialogComponent>) { }
 
 }
 
@@ -228,7 +228,7 @@ export class DeleteAskDialogComponent {
   templateUrl: './food-delete-dialog.component.html',
 })
 export class DeleteDialogComponent {
-  constructor(public deleteRef: MdDialogRef<DeleteDialogComponent>) { }
+  constructor(public deleteRef: MatDialogRef<DeleteDialogComponent>) { }
 }
 
 

@@ -1,5 +1,5 @@
   <div class="fullLayer" *ngIf="!orderItems || foods.length==0">
-      <md-spinner class="centered" color="accent"></md-spinner>
+      <mat-spinner class="centered" color="accent"></mat-spinner>
   </div>
 
 <div id="container-to-print">
@@ -11,10 +11,10 @@
     </div>
     <div fxFlex="50"  class="up-buttons no-print style-page-buttons">
       <div class="inline">
-        <button md-raised-button color="accent" routerLink="/chef/orders" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive
+        <button mat-raised-button color="accent" routerLink="/chef/orders" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive
           #rla1="routerLinkActive" [disabled]='rla1.isActive || showSpinner' routerLinkActive="active">Back to orders</button>
-        <button md-raised-button color="accent" (click)="sendEmail()" [disabled]="showSpinner">Send email</button>
-        <button md-raised-button color="accent" (click)="print()" [disabled]="showSpinner">Print page</button>
+        <button mat-raised-button color="accent" (click)="sendEmail()" [disabled]="showSpinner">Send email</button>
+        <button mat-raised-button color="accent" (click)="print()" [disabled]="showSpinner">Print page</button>
         <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
       </div>
     </div>
@@ -23,12 +23,12 @@
   <div fxLayout="row">
     <div fxFlex>
       <div *ngIf="orderItems && foods.length>0">
-        <md-card class="ordersday-card">
+        <mat-card class="ordersday-card">
           <app-food-item [orderItems]='orderItems'></app-food-item>
-        </md-card>
-        <md-card class="ordersday-card">
+        </mat-card>
+        <mat-card class="ordersday-card">
           <app-user-order [userOrders]='userOrders'></app-user-order>
-        </md-card>
+        </mat-card>
       </div>
     </div>
   </div>
@@ -38,10 +38,10 @@
     </div>
     <div fxFlex="50" class="bottom-buttons no-print style-page-buttons">
       <div class="inline">
-        <button md-raised-button color="accent" routerLink="/chef/orders" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive
+        <button mat-raised-button color="accent" routerLink="/chef/orders" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive
           #rla1="routerLinkActive" [disabled]='rla1.isActive || showSpinner' routerLinkActive="active">Back to orders</button>
-        <button md-raised-button color="accent" (click)="sendEmail()" [disabled]="showSpinner">Send email</button>
-        <button md-raised-button color="accent" (click)="print()" [disabled]="showSpinner">Print page</button>
+        <button mat-raised-button color="accent" (click)="sendEmail()" [disabled]="showSpinner">Send email</button>
+        <button mat-raised-button color="accent" (click)="print()" [disabled]="showSpinner">Print page</button>
         <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
       </div>
     </div>

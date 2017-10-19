@@ -1,10 +1,10 @@
-<md-tab-group class="tabGroup" [selectedIndex]="selectedTab">
-  <md-tab label="Terms and  Conditions">
+<mat-tab-group class="tabGroup" [selectedIndex]="selectedTab">
+  <mat-tab label="Terms and  Conditions">
     <!--<h1>Terms and  Conditions</h1>-->
     <div [innerHTML]="terms | async" class="tabContent"></div>
-  </md-tab>
-  <md-tab label="Privacy policy">
+  </mat-tab>
+  <mat-tab label="Privacy policy">
     <!--<h1>Privacy Policy</h1>-->
     <div [innerHTML]="policy | async" class="tabContent"></div>
-  </md-tab>
-</md-tab-group>
+  </mat-tab>
+</mat-tab-group>

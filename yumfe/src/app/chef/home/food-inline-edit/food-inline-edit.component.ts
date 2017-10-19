@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as remote from '../../../remote';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-food-inline-edit',
@@ -36,7 +36,7 @@ export class FoodInlineEditComponent implements OnInit {
 
   constructor(
     public chefService: remote.ChefApi,
-    public snackBar: MdSnackBar,
+    public snackBar: MatSnackBar,
     public fb: FormBuilder) { }
 
   ngOnInit() {

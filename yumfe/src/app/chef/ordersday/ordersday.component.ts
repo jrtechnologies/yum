@@ -5,7 +5,7 @@ import * as remote from '../../remote';
 import { FoodsService } from '../services/foods.service';
 import { subDays, addDays, startOfMonth, endOfMonth, getMonth, getYear, isToday, isValid } from 'date-fns';
 import { DecimalPipe } from '@angular/common';
-import { MdSnackBar, MdDialog, MdDialogRef, } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDialogRef, } from '@angular/material';
 
 @Component({
   selector: 'app-ordersday',
@@ -29,8 +29,8 @@ export class OrdersdayComponent implements OnInit {
     public foodsService: FoodsService,
     public route: ActivatedRoute,
     public decpipe: DecimalPipe,
-    public dialog: MdDialog,
-    public snackBar: MdSnackBar,
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
@@ -153,5 +153,5 @@ export class OrdersdayComponent implements OnInit {
   templateUrl: './ordersday-email-dialog.html',
 })
 export class ReportEmailDialog {
-  constructor(public dialogRef: MdDialogRef<ReportEmailDialog>) { }
+  constructor(public dialogRef: MatDialogRef<ReportEmailDialog>) { }
 }

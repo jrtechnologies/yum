@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import * as remote from '../../remote';
-import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
 import { AdminNavComponent } from './../shared/admin-nav/admin-nav.component';
 import { AuthenticationService } from '../../shared/authentication.service';
 
@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit {
   pagedItems: any[];
 
   constructor(private adminService: remote.AdminApi, private fb: FormBuilder,
-    public snackBar: MdSnackBar, public dialog: MdDialog,
+    public snackBar: MatSnackBar, public dialog: MatDialog,
     private authService: AuthenticationService) {
     //this.someExpression = null;
   }

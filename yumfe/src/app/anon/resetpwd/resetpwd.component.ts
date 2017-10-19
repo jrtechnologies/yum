@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, Params, ActivatedRoute } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import * as remote from '../../remote';
 import {URLSearchParams} from "@angular/http";
@@ -23,7 +23,7 @@ export class ResetpwdComponent implements OnInit {
     private authService: remote.AuthApi,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    public snackBar: MdSnackBar
+    public snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {

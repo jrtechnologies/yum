@@ -4,45 +4,45 @@
 
     <div class="cal-cell-top is-flex">
       <span class="cal-day-number flexItemLeft">{{ day | date:"d" }}</span>
-      <span class="alone" *ngIf="menuCanBeDeletedWithOrders"> <button md-icon-button color="accent" title="Delete menu & Orders" (click)="deleteMenuAndOrders()" ><i class="material-icons"><i class="material-icons">delete_forever</i></i></button></span>
+      <span class="alone" *ngIf="menuCanBeDeletedWithOrders"> <button mat-icon-button color="accent" title="Delete menu & Orders" (click)="deleteMenuAndOrders()" ><i class="material-icons"><i class="material-icons">delete_forever</i></i></button></span>
       <ng-container *ngIf="menuCanBeEdited">
-          <button md-icon-button color="accent" title="Add standard menu foods" (click)="addAllStandards()" [disabled]="menuHasAllStandards"><i class="material-icons">system_update_alt</i></button><!-- system_update_alt is bad!!-->
-        <button md-icon-button color="accent" title="Discard changes" (click)="discardChanges()" [disabled]="!menuCanBeDiscarded"><i class="material-icons">cancel</i></button>
-        <button md-icon-button color="accent"  title="Save"(click)="updateMenu()" [disabled]="!menuCanBeUpdated"><i class="material-icons">check</i></button>
+          <button mat-icon-button color="accent" title="Add standard menu foods" (click)="addAllStandards()" [disabled]="menuHasAllStandards"><i class="material-icons">system_update_alt</i></button><!-- system_update_alt is bad!!-->
+        <button mat-icon-button color="accent" title="Discard changes" (click)="discardChanges()" [disabled]="!menuCanBeDiscarded"><i class="material-icons">cancel</i></button>
+        <button mat-icon-button color="accent"  title="Save"(click)="updateMenu()" [disabled]="!menuCanBeUpdated"><i class="material-icons">check</i></button>
       </ng-container>
    </div>
 
 
-  <md-form-field *ngIf="menuCanBeEdited" class="smallInputContainer">
-   <input #blurMe class="dropList" type="text" mdInput  [formControl]="selectCtrl" [mdAutocomplete]="auto" placeholder="select food"  >
-   </md-form-field>
+  <mat-form-field *ngIf="menuCanBeEdited" class="smallInputContainer">
+   <input #blurMe class="dropList" type="text" matInput  [formControl]="selectCtrl" [matAutocomplete]="auto" placeholder="select food"  >
+   </mat-form-field>
 
-  <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn" >
-    <md-option *ngFor="let food of filteredFoods | async" [value]="food"  >
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" >
+    <mat-option *ngFor="let food of filteredFoods | async" [value]="food"  >
       <div class="is-flex"><span [ngClass]="{'icon-Meal': food.foodType==='Main', 'icon-Salad': food.foodType==='Salad', 'icon-Drink': food.foodType==='Drink'}" > </span>
         <span>{{ food.foodName }}</span>
         </div>
-    </md-option>
-  </md-autocomplete>
+    </mat-option>
+  </mat-autocomplete>
 
 
-  <!--<md-select [(ngModel)]="food" #selectCtrl="ngModel" class="responsive"  *ngIf="menuCanBeEdited">
-    <md-option *ngFor="let food of foodsAvailable" [value]='food' placeholder="select food" (click)="addMenuFood()">
+  <!--<mat-select [(ngModel)]="food" #selectCtrl="ngModel" class="responsive"  *ngIf="menuCanBeEdited">
+    <mat-option *ngFor="let food of foodsAvailable" [value]='food' placeholder="select food" (click)="addMenuFood()">
       {{ food.foodName }}
-    </md-option>
-  </md-select>-->
+    </mat-option>
+  </mat-select>-->
 
 
   <div class="foodsList">
      <div *ngFor="let food of foodsSelected" class="is-flex foodsListItem">
-        <button md-icon-button color="accent"  title="Delete" (click)="removeMenuFood(food)" [disabled]="false"  *ngIf="menuCanBeEdited"><i class="material-icons">cancel</i></button>
+        <button mat-icon-button color="accent"  title="Delete" (click)="removeMenuFood(food)" [disabled]="false"  *ngIf="menuCanBeEdited"><i class="material-icons">cancel</i></button>
         <span [ngClass]="{'icon-Meal': food.foodType==='Main', 'icon-Salad': food.foodType==='Salad', 'icon-Drink': food.foodType==='Drink'}" > </span>
         <span class="list-text">{{food.foodName}}</span>
     </div>
   </div>
 
   <div class="fullLayer" *ngIf="showSpinner">
-    <md-spinner class="centered" color="accent"></md-spinner>
+    <mat-spinner class="centered" color="accent"></mat-spinner>
     <!--<img  src="../../../assets/img/spinner.gif" />-->
   </div>
 

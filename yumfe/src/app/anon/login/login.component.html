@@ -3,29 +3,29 @@
     <form (ngSubmit)="login()" [formGroup]="loginForm">
       <img src="/assets/img/Yum-logo-small.png">
       <h2>Sign in</h2>
-      <md-form-field *ngIf=!externalAuth>
-        <input mdInput type="text" placeholder="user email" formControlName="email" />
-        <md-error class="error" *ngIf="loginForm.get('email').touched && (loginForm.get('email').hasError('required'))">
+      <mat-form-field *ngIf=!externalAuth>
+        <input matInput type="text" placeholder="user email" formControlName="email" />
+        <mat-error class="error" *ngIf="loginForm.get('email').touched && (loginForm.get('email').hasError('required'))">
           Email is required.
-        </md-error>
-        <md-error class="error" *ngIf="loginForm.get('email').touched && loginForm.get('email').hasError('pattern')">
+        </mat-error>
+        <mat-error class="error" *ngIf="loginForm.get('email').touched && loginForm.get('email').hasError('pattern')">
           Wrong email address
-        </md-error>
-      </md-form-field>
-      <md-form-field *ngIf=externalAuth>
-        <input mdInput type="username" placeholder="user name" type="text" formControlName="username" />
-        <md-error class="error" *ngIf="loginForm.get('username').touched && (loginForm.get('username').hasError('required'))">
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf=externalAuth>
+        <input matInput type="username" placeholder="user name" type="text" formControlName="username" />
+        <mat-error class="error" *ngIf="loginForm.get('username').touched && (loginForm.get('username').hasError('required'))">
           User name is required.
-        </md-error>
-      </md-form-field>
-      <md-form-field>
-        <input mdInput type="password" placeholder="password" formControlName="password" />
-        <md-error class="error" *ngIf="loginForm.get('password').touched && loginForm.get('password').hasError('required')">
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="password" placeholder="password" formControlName="password" />
+        <mat-error class="error" *ngIf="loginForm.get('password').touched && loginForm.get('password').hasError('required')">
           Password is required.
-        </md-error>
-      </md-form-field>
+        </mat-error>
+      </mat-form-field>
       <div class="relative">
-        <button class="loginButton" md-raised-button type="submit" color="accent" [disabled]="disableBtn || loginForm.invalid">Login</button>
+        <button class="loginButton" mat-raised-button type="submit" color="accent" [disabled]="disableBtn || loginForm.invalid">Login</button>
 
         <img class="spinner" *ngIf="showSpinner" src="../../assets/img/spinner.gif">
       </div>

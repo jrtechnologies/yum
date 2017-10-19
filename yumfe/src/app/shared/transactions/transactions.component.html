@@ -1,67 +1,67 @@
-<md-card>
+<mat-card>
 
   <div class="heading">
     Transactions
   </div>
 
-  <!-- <md-paginator  #paginator *ngIf="transactions != null"
+  <!-- <mat-paginator  #paginator *ngIf="transactions != null"
               [length]="transactions.length"
               [pageIndex]="0"
               [pageSize]="5"
               [pageSizeOptions]="[5, 10, 25, 100]">
-  </md-paginator> -->
+  </mat-paginator> -->
 
-   <md-paginator  #paginator
+   <mat-paginator  #paginator
               [pageIndex]="0"
               [pageSize]="10"
               [pageSizeOptions]="[5, 10, 25, 100]">
-  </md-paginator>
+  </mat-paginator>
 
 
-  <md-table *ngIf="transactions != null" #table [dataSource]="dataSource" class= "centered">
+  <mat-table *ngIf="transactions != null" #table [dataSource]="dataSource" class= "centered">
 
-     <ng-container mdColumnDef="datetime">
-      <md-header-cell *mdHeaderCellDef> Date/Time </md-header-cell>
-      <md-cell *mdCellDef="let element">{{element.datetime | date: 'dd-MM-yyyy HH:mm:ss'}}</md-cell>
+     <ng-container matColumnDef="datetime">
+      <mat-header-cell *matHeaderCellDef> Date/Time </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.datetime | date: 'dd-MM-yyyy HH:mm:ss'}}</mat-cell>
     </ng-container>
 
-    <ng-container mdColumnDef="transactionType">
-      <md-header-cell *mdHeaderCellDef> Transaction Type </md-header-cell>
-      <md-cell *mdCellDef="let element">{{element.orderType}}</md-cell>
+    <ng-container matColumnDef="transactionType">
+      <mat-header-cell *matHeaderCellDef> Transaction Type </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.orderType}}</mat-cell>
     </ng-container>
 
-    <ng-container mdColumnDef="menuDate">
-      <md-header-cell *mdHeaderCellDef> Menu Date </md-header-cell>
-      <md-cell *mdCellDef="let element">{{element.menuDate}}</md-cell>
+    <ng-container matColumnDef="menuDate">
+      <mat-header-cell *matHeaderCellDef> Menu Date </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.menuDate}}</mat-cell>
     </ng-container>
 
-    <ng-container mdColumnDef="amount">
-      <md-header-cell *mdHeaderCellDef>Amount </md-header-cell>
-      <md-cell *mdCellDef="let element">{{element.amount | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></md-cell>
-    </ng-container>
-
-
-    <ng-container mdColumnDef="balance">
-      <md-header-cell *mdHeaderCellDef> Balance </md-header-cell>
-      <md-cell *mdCellDef="let element">{{element.balance | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></md-cell>
+    <ng-container matColumnDef="amount">
+      <mat-header-cell *matHeaderCellDef>Amount </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.amount | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></mat-cell>
     </ng-container>
 
 
-
-    <ng-container mdColumnDef="name">
-      <md-header-cell *mdHeaderCellDef> Created By </md-header-cell>
-      <md-cell *mdCellDef="let element">{{element.lastName}} {{element.firstName}}</md-cell>
+    <ng-container matColumnDef="balance">
+      <mat-header-cell *matHeaderCellDef> Balance </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.balance | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></mat-cell>
     </ng-container>
 
 
 
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Created By </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.lastName}} {{element.firstName}}</mat-cell>
+    </ng-container>
 
 
 
 
 
 
-    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-    <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
-  </md-table>
-</md-card>
+
+
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</mat-card>

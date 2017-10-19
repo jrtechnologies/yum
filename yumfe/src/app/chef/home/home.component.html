@@ -15,40 +15,40 @@
   </div>
   <h3>Start preparing your menu...</h3>
 
-  <md-grid-list cols="1" rowHeight="6:1">
+  <mat-grid-list cols="1" rowHeight="6:1">
     <!--The Form for the new Food Items-->
     <app-food-edit novalidate (foodCreated)="handleFoodRefresh()"></app-food-edit>
-  </md-grid-list>
+  </mat-grid-list>
 
   <!--The area of sorting-->
   <div fxLayout="row" class="margin-bar">
 
     <div fxFlex="9">
-      <md-select [ngModel]="nbrOfItem" (ngModelChange)="changePageSize($event)" placeholder="Show" class="smallerSelect">
-        <md-option *ngFor="let nbrOfItem of this.numberOfItems" [value]='nbrOfItem'>
+      <mat-select [ngModel]="nbrOfItem" (ngModelChange)="changePageSize($event)" placeholder="Show" class="smallerSelect">
+        <mat-option *ngFor="let nbrOfItem of this.numberOfItems" [value]='nbrOfItem'>
           {{ nbrOfItem }}
-        </md-option>
-      </md-select>
+        </mat-option>
+      </mat-select>
     </div>
 
     <div fxFlex="12">
-      <md-select placeholder="Food type" [(ngModel)]="foodType" (ngModelChange)="showByFoodType()" class="smallerSelect">
-        <md-option *ngFor="let foodType of this.foodTypes" [value]='foodType'>
+      <mat-select placeholder="Food type" [(ngModel)]="foodType" (ngModelChange)="showByFoodType()" class="smallerSelect">
+        <mat-option *ngFor="let foodType of this.foodTypes" [value]='foodType'>
           {{ foodType }}
-        </md-option>
-      </md-select>
+        </mat-option>
+      </mat-select>
     </div>
 
     <div fxFlex="15">
-      <md-select [ngModel]="sort" placeholder="Order by" (ngModelChange)="showByOrderType($event)">
-        <md-option *ngFor="let sort of this.sortBy" [value]='sort'>
+      <mat-select [ngModel]="sort" placeholder="Order by" (ngModelChange)="showByOrderType($event)">
+        <mat-option *ngFor="let sort of this.sortBy" [value]='sort'>
           {{ sort }}
-        </md-option>
-      </md-select>
+        </mat-option>
+      </mat-select>
     </div>
 
     <div fxFlex="17" class="is-flex">
-      <md-checkbox color='accent' [(ngModel)]="checked" (ngModelChange)="viewArchived()">View archived items</md-checkbox>
+      <mat-checkbox color='accent' [(ngModel)]="checked" (ngModelChange)="viewArchived()">View archived items</mat-checkbox>
     </div>
 
     <div fxFlex="47">
@@ -63,16 +63,16 @@
     <h1 *ngIf="foods.length <= 0" class="display-message">No food to display</h1>
   </div>
 
-  <md-card class="food-card" *ngFor="let food of foods">
+  <mat-card class="food-card" *ngFor="let food of foods">
     <app-food [food]='food' (foodRefresh)='handleFoodRefresh()'></app-food>
-  </md-card>
+  </mat-card>
 
   <!---->
-  <md-grid-list *ngIf="showLoadSpinner" cols="1" rowHeight="200px">
-    <md-grid-tile>
-      <md-spinner class="centered" color="accent"></md-spinner>
-    </md-grid-tile>
-  </md-grid-list>
+  <mat-grid-list *ngIf="showLoadSpinner" cols="1" rowHeight="200px">
+    <mat-grid-tile>
+      <mat-spinner class="centered" color="accent"></mat-spinner>
+    </mat-grid-tile>
+  </mat-grid-list>
 
 
   <div class="padding-footer">

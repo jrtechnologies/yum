@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
-import { MdSnackBar, MdProgressBar, MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatSnackBar, MatProgressBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { subDays, addDays, startOfMonth, endOfMonth, getMonth, getYear, isToday, isValid } from 'date-fns';
 
@@ -51,11 +51,11 @@ export class MenusComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private router: Router,
-    public snackBar: MdSnackBar,
+    public snackBar: MatSnackBar,
     public globalSettingsService: GlobalSettingsService,
     private adminService: AdminApi,
     private authService: AuthenticationService,
-    public dialog: MdDialog
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -272,8 +272,8 @@ export class DialogDeleteMenuWithOrders {
   public menuDate: string;
 
   constructor(
-    public dialogRef: MdDialogRef<DialogDeleteMenuWithOrders>, private datePipe: DatePipe,
-    @Inject(MD_DIALOG_DATA) public menu: remote.DailyMenuChef) { }
+    public dialogRef: MatDialogRef<DialogDeleteMenuWithOrders>, private datePipe: DatePipe,
+    @Inject(MAT_DIALOG_DATA) public menu: remote.DailyMenuChef) { }
 
   ngOnInit() {
     this.menuDate = this.datePipe.transform(this.menu.date, 'dd/MM/yyyy');

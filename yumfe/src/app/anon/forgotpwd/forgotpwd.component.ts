@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as remote from '../../remote';
 
@@ -21,7 +21,7 @@ export class ForgotpwdComponent implements OnInit {
     private fb: FormBuilder,
     private authService: remote.AuthApi,
     private router: Router,
-    public snackBar: MdSnackBar
+    public snackBar: MatSnackBar
     ) {}
 
   ngOnInit() {

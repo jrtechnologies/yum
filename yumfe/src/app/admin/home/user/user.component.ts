@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import * as remote from '../../../remote';
 import { BASE_PATH } from '../../../remote/variables';
-import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
 import { AuthenticationService } from '../../../shared/authentication.service';
 import { GlobalSettingsService } from '../../../shared/services/global-settings-service.service';
 import { Observable } from 'rxjs/Rx';
@@ -24,8 +24,8 @@ export class UserComponent implements OnInit {
   public balance: number;
 
   constructor(private adminService: remote.AdminApi,
-              public snackBar: MdSnackBar,
-              public dialog: MdDialog,
+              public snackBar: MatSnackBar,
+              public dialog: MatDialog,
               private authService: AuthenticationService,
               public globalSettingsService: GlobalSettingsService,
               @Inject(BASE_PATH) private baseUrl: string
@@ -202,7 +202,7 @@ export class UserComponent implements OnInit {
   templateUrl: './user-disapprove-dialog.html',
 })
 export class UserListDisapproveDialog {
-  constructor(public dialogRef: MdDialogRef<UserListDisapproveDialog>) { }
+  constructor(public dialogRef: MatDialogRef<UserListDisapproveDialog>) { }
 }
 
 
@@ -211,7 +211,7 @@ export class UserListDisapproveDialog {
   templateUrl: './user-delete-confirm-dialog.html',
 })
 export class UserDeleteConfirmDialog {
-  constructor(public dialogRef: MdDialogRef<UserDeleteConfirmDialog>) { }
+  constructor(public dialogRef: MatDialogRef<UserDeleteConfirmDialog>) { }
 }
 
 @Component({
@@ -219,7 +219,7 @@ export class UserDeleteConfirmDialog {
   templateUrl: './user-delete-402-dialog.html',
 })
 export class UserDelete402Dialog {
-  constructor(public dialogRef: MdDialogRef<UserDelete402Dialog>) { }
+  constructor(public dialogRef: MatDialogRef<UserDelete402Dialog>) { }
 }
 
 @Component({
@@ -227,7 +227,7 @@ export class UserDelete402Dialog {
   templateUrl: './user-delete-409-dialog.html',
 })
 export class UserDelete409Dialog {
-  constructor(public dialogRef: MdDialogRef<UserDelete409Dialog>) { }
+  constructor(public dialogRef: MatDialogRef<UserDelete409Dialog>) { }
 }
 
 @Component({
@@ -235,7 +235,7 @@ export class UserDelete409Dialog {
   templateUrl: './user-delete-412-dialog.html',
 })
 export class UserDelete412Dialog {
-  constructor(public dialogRef: MdDialogRef<UserDelete412Dialog>) { }
+  constructor(public dialogRef: MatDialogRef<UserDelete412Dialog>) { }
 }
 
 @Component({
@@ -243,5 +243,5 @@ export class UserDelete412Dialog {
   templateUrl: './user-delete-412-disapproved-dialog.html',
 })
 export class UserDelete412DisapprovedDialog {
-  constructor(public dialogRef: MdDialogRef<UserDelete412DisapprovedDialog>) { }
+  constructor(public dialogRef: MatDialogRef<UserDelete412DisapprovedDialog>) { }
 }
