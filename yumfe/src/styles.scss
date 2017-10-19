@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 // Import theming functions
-@import '~@angular/material/theming';
+//@import '~@angular/material/theming';
 @import url(https://fonts.googleapis.com/icon?family=Material+Icons);
 @import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
 //@import '~@angular/material/prebuilt-themes/indigo-pink.css';
@@ -282,4 +282,11 @@ button.mat-raised-button.active {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+
+//TEMP FIX button flickering from white bg
+
+.mat-fab, .mat-mini-fab, .mat-raised-button{
+  transition: background 0s!important;
 }
