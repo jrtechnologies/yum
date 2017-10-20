@@ -12,7 +12,7 @@
 }
 .user{
   background-color: #F2F2F2;
-  padding: 10px;
+  
   margin-bottom: 10px;
 }
 .bottom-border{
@@ -31,3 +31,6 @@
   // word-break: break-word; 
   word-break: break-all;
 }
+
+.smallPad{ padding: 10px;}
+.smallpadTopBottom { padding: 10px 0;}

@@ -32,49 +32,52 @@
   <div fxLayout="row">
 
     <div fxFlex="15">
-      <div fxLayout="column">
+      <div fxLayout="column" class="smallPad">
         <div class="bold-chars">{{user.userOrder.lastName}}</div>
         <div class="bold-chars">{{user.userOrder.firstName}}</div>
       </div>
     </div>
 
     <div fxFlex="25">
-      <div fxLayout="column">
+      <div fxLayout="column"  >
         <div *ngFor="let foodOrder of user.mainFoodOrders">
           <div fxLayout="row">
-            <div fxFlex="20" class="align-left bold-chars">{{foodOrder.quantity}}</div>
-            <div fxFlex="80">{{foodOrder.food.foodName}}</div>
+            <div fxFlex="20" class="align-left bold-chars smallPad">{{foodOrder.quantity}}</div>
+            <div fxFlex="80" class="smallpadTopBottom">{{foodOrder.food.foodName}}</div>
           </div>
         </div>
       </div>
     </div>
 
     <div fxFlex="25">
-      <div fxLayout="column">
+      <div fxLayout="column"  >
         <div *ngFor="let foodOrder of user.saladFoodOrders">
           <div fxLayout="row">
-            <div fxFlex="20" class="align-left bold-chars">{{foodOrder.quantity}}</div>
-            <div fxFlex="80">{{foodOrder.food.foodName}}</div>
+            <div fxFlex="20" class="align-left bold-chars smallPad">{{foodOrder.quantity}}</div>
+            <div fxFlex="80" class="smallpadTopBottom">{{foodOrder.food.foodName}}</div>
           </div>
         </div>
       </div>
     </div>
 
     <div fxFlex="25">
-      <div fxLayout="column">
+      <div fxLayout="column"  >
         <div *ngFor="let foodOrder of user.drinkFoodOrders">
           <div fxLayout="row">
-            <div fxFlex="20" class="align-left bold-chars">{{foodOrder.quantity}}</div>
-            <div fxFlex="80">{{foodOrder.food.foodName}}</div>
+            <div fxFlex="20" class="align-left bold-chars smallPad">{{foodOrder.quantity}}</div>
+            <div fxFlex="80" class="smallpadTopBottom">{{foodOrder.food.foodName}}</div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div fxFlex="10" class="align-right"> 
     </div>
 
   </div>
 
   <div fxLayout="row" class="is-flex ">
-      <div  class="comment" > <div *ngIf="user.userOrder.comment">Order comment: {{user.userOrder.comment}}</div></div>
+      <div  class="comment smallPad" > <div *ngIf="user.userOrder.comment">Order comment: {{user.userOrder.comment}}</div></div>
     <div  class="totalPrice print-row-border-total">
       {{user.userOrder.total  | number : '1.2-2'}} <span [innerHTML]="currency | async"></span>
     </div>
