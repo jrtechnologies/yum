@@ -6,6 +6,8 @@ import { GlobalSettingsService } from '../../shared/services/global-settings-ser
 
 import * as remote from '../../remote';
 import { Observable } from 'rxjs/Rx';
+import * as moment from 'moment';
+
 
 @Component({
   selector: 'app-transactions',
@@ -29,7 +31,7 @@ export class TransactionsComponent implements OnInit {
     private hungryService: remote.HungryApi,
   ) { }
 
-   ngOnInit() {
+  ngOnInit() {
     this.currency = this.globalSettingsService.getCurrency();
     this.getTransactions();
   }
@@ -48,18 +50,21 @@ export class TransactionsComponent implements OnInit {
 
   }
 
+  public formattedDateTime(dateTime: Date): string {
+    return moment(dateTime).format('DD-MM-YYYY HH:mm:ss');
+  }
 
 }
 
 export class TransactionsDataSource extends DataSource<any> {
 
-//  private transactions;
+  //  private transactions;
 
   // constructor (private transactions: Array<remote.Transaction>, private paginator: MatPaginator) {
-    constructor (private transactions: any, private paginator: MatPaginator) {
+  constructor(private transactions: any, private paginator: MatPaginator) {
     super();
     this.paginator.length = transactions.length;
-  //  this.transactions = transactions;
+    //  this.transactions = transactions;
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
@@ -79,5 +84,6 @@ export class TransactionsDataSource extends DataSource<any> {
 
   }
 
-  disconnect() {}
+  disconnect() { }
+
 }

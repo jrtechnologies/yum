@@ -60,29 +60,21 @@
       <div class="total-title">Total</div>
       <div class="total-price">{{ getTotalPrice() | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
     </div>
-    <div *ngIf="!isFinalised()">
-      <div *ngIf="isOrderBoolean">
-        <div class="placed">
+    <div *ngIf="!isFinalised()" >
+      <div *ngIf="isOrderBoolean" class="placed">
           Order placed
-        </div>
       </div>
-      <div *ngIf="orderNoFinal() && !modifyChecked">
-        <div class="space-btn">
+      <div *ngIf="orderNoFinal() && !modifyChecked"  class="space-btn">
           <button mat-raised-button (click)="modify()" color="accent" [disabled]="disableBtn">Modify</button>
           <button mat-raised-button class="cancel" (click)="cancelOrder()" color="accent" [disabled]="disableBtn">Cancel Order</button>
-        </div>
       </div>
-      <div *ngIf="modifyChecked">
-        <div class="space-btn">
+      <div *ngIf="modifyChecked"  class="space-btn">
           <button mat-raised-button class="saveBtn" (click)="order()" color="accent" [disabled]="getTotalPrice() === 0">Save</button>
           <button mat-raised-button class="cancel" (click)="cancelModify()" color="accent">Cancel Modify</button>
-        </div>
       </div>
-      <div *ngIf="!isOrderBoolean">
-        <div class="space-btn">
+      <div *ngIf="!isOrderBoolean"  class="space-btn">
           <button mat-raised-button (click)="order()" color="accent" [disabled]="getTotalPrice() === 0">Order</button>
           <button *ngIf="getTotalPrice() !== 0" (click)="removeFoodMapQuantity()" mat-raised-button class="cancel reset-btn" color="accent">Reset</button>
-        </div>
       </div>
       <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
     </div>

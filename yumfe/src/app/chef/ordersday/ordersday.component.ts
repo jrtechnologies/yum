@@ -85,6 +85,8 @@ export class OrdersdayComponent implements OnInit {
             word-break: break-all;
           }
           .user{ margin-bottom:20px;}
+          .smallPad{ padding: 10px;}
+          .smallpadTopBottom { padding: 10px 0;}
           </style>
         </head>
         <body onload="window.print();window.close()">${printContents}</body>

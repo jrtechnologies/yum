@@ -52,10 +52,11 @@
 .placed {
   background-color: #00CC99;
   color: white;
-  padding: 5px 15px 5px 15px;
+  padding: 5px 0;
   font-size: 14px;
-  max-width: 210px;
-  width: 85%;
+  max-width: 208px;
+  margin: 0 auto;
+  width: 100%;
   margin-bottom: 2px;
   border-radius: 4px;
   text-align: center;
@@ -63,13 +64,19 @@
 
 .total {
   text-align: center;
-  margin:0 auto;
   padding-left: 20px;
 }
 
 .space-btn button {
   margin-bottom: 2px;
 }
+
+@media screen and (max-width: 1675px) {
+  .space-btn button {
+    width:100%
+  }
+}
+
 .price{
   text-align: right;
 }
