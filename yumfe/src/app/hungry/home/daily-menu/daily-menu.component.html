@@ -15,7 +15,7 @@
             <button (click)="removeFoodQuantity(food.food.id)" mat-raised-button color="accent" [disabled]="statusButton() || getFoodQuantity(food.food.id) === 0">-</button>
           </div>
         </div>
-        <div fxFlex="25" class="price">x{{getFoodPrice(food.food.id)| number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
+        <div fxFlex="25" class="price">x&nbsp;{{getFoodPrice(food.food.id)| number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
       </div>
     </ng-container>
   </div>
@@ -33,7 +33,7 @@
             <button (click)="removeFoodQuantity(food.food.id)" mat-raised-button color="accent" [disabled]="statusButton() || getFoodQuantity(food.food.id) === 0">-</button>
           </div>
         </div>
-        <div fxFlex="25" class="price">x{{getFoodPrice(food.food.id)| number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
+        <div fxFlex="25" class="price">x&nbsp;{{getFoodPrice(food.food.id)| number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
       </div>
     </ng-container>
   </div>
@@ -51,7 +51,7 @@
           <button (click)="removeFoodQuantity(food.food.id)" mat-raised-button color="accent" [disabled]="statusButton() || getFoodQuantity(food.food.id) === 0">-</button>
            </div>
         </div>
-        <div fxFlex="25" class="price">x{{getFoodPrice(food.food.id)| number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
+        <div fxFlex="25" class="price">x&nbsp;{{getFoodPrice(food.food.id)| number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
       </div>
     </ng-container>
   </div>
