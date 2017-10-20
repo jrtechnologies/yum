@@ -22,7 +22,7 @@
 
      <ng-container matColumnDef="datetime">
       <mat-header-cell *matHeaderCellDef> Date/Time </mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.datetime | date: 'dd-MM-yyyy HH:mm:ss'}}</mat-cell>
+      <mat-cell *matCellDef="let element">{{formattedDateTime(element.datetime)}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="transactionType">
