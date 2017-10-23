@@ -15,6 +15,9 @@ export class FoodsService {
     this.sortFoodTypes.set("Main", 10);
     this.sortFoodTypes.set("Salad", 20);
     this.sortFoodTypes.set("Drink", 30);
+    this.sortFoodTypes.set("MAIN", 10);
+    this.sortFoodTypes.set("SALAD", 20);
+    this.sortFoodTypes.set("DRINK", 30);
   }
 
 
@@ -100,4 +103,26 @@ export class FoodsService {
     return foods;
   }
 
+  public sortArrayOfFoodWithQtys(foods): remote.FoodWithQuantity[]  {
+
+    foods.sort((n1, n2) => {
+      if (this.sortFoodTypes.get(n1.food.foodType) > this.sortFoodTypes.get(n2.food.foodType)) {
+        return 1;
+      }
+      if (this.sortFoodTypes.get(n1.food.foodType) < this.sortFoodTypes.get(n2.food.foodType)) {
+        return -1;
+      }
+       
+      if (n1.food.foodName > n2.food.foodName ) {
+        return 1;
+      }
+      if ( n1.food.foodName < n2.food.foodName) {
+        return -1;
+      }
+
+     
+      return 0;
+    });
+    return foods;
+  }
 }

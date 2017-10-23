@@ -1,7 +1,8 @@
 <div fxLayout="row" fxLayoutAlign="space-around start" class="mainDivs">
   <div fxFlex="27" class="food-type">
-    <div fxLayout="row" fxLayoutAlign="start start">
-      <div class="type-title"><span class='biggerSize' [ngClass]="'icon-Meal'"> </span>Main dishes</div>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div class='biggerSize' [ngClass]="'icon-Meal'"> </div>
+      <div class="type-title">Main dishes</div>
     </div>
     <ng-container *ngFor="let food of foodsList">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="food-line" *ngIf='food.food.foodType === "MAIN"'>
@@ -15,12 +16,16 @@
             <button (click)="removeFoodQuantity(food.food.id)" mat-raised-button color="accent" [disabled]="statusButton() || getFoodQuantity(food.food.id) === 0">-</button>
           </div>
         </div>
-        <div fxFlex="25" class="price">x&nbsp;{{getFoodPrice(food.food.id)| number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
+        <div fxFlex="25" class="price">x&nbsp;{{getFoodPrice(food.food.id)| number : '1.2-2'}}<span [innerHTML]="currency | async"></span>
+        </div>
       </div>
     </ng-container>
   </div>
   <div fxFlex="27" class="food-type">
-    <div class="type-title"><span class='biggerSize' [ngClass]="'icon-Salad'"> </span>Salads</div>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div class='biggerSize' [ngClass]="'icon-Salad'"></div>
+      <div class="type-title "> Salads</div>
+    </div>
     <ng-container *ngFor="let food of foodsList">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="food-line" *ngIf='food.food.foodType === "SALAD"'>
         <div fxFlex class="food-name" title="{{getFoodDescription(food.food.id)}}">{{getFoodName(food.food.id)}}</div>
@@ -33,48 +38,55 @@
             <button (click)="removeFoodQuantity(food.food.id)" mat-raised-button color="accent" [disabled]="statusButton() || getFoodQuantity(food.food.id) === 0">-</button>
           </div>
         </div>
-        <div fxFlex="25" class="price">x&nbsp;{{getFoodPrice(food.food.id)| number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
+        <div fxFlex="25" class="price">x&nbsp;{{getFoodPrice(food.food.id)| number : '1.2-2'}}<span [innerHTML]="currency | async"></span>
+        </div>
       </div>
     </ng-container>
   </div>
   <div fxFlex="27" class="drink-type">
-    <div class="type-title"><span class='biggerSize' [ngClass]="'icon-Drink'"> </span>Drinks</div>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div class='biggerSize' [ngClass]="'icon-Drink'"> </div>
+      <div class="type-title">
+        Drinks</div>
+    </div>
     <ng-container *ngFor="let food of foodsList">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="food-line" *ngIf='food.food.foodType === "DRINK"'>
         <div fxFlex class="food-name" title="{{getFoodDescription(food.food.id)}}">{{getFoodName(food.food.id)}}</div>
         <div fxFlex="10">{{getFoodQuantity(food.food.id)}}</div>
         <div fxFlex="10" fxLayout="column" class="quant-buttons">
-           <div *ngIf="!isFinalised()">
-          <button (click)="addFoodQuantity(food.food.id)" mat-raised-button color="accent" [disabled]="statusButton()">+</button>
-           </div>
-           <div *ngIf="!isFinalised()">
-          <button (click)="removeFoodQuantity(food.food.id)" mat-raised-button color="accent" [disabled]="statusButton() || getFoodQuantity(food.food.id) === 0">-</button>
-           </div>
+          <div *ngIf="!isFinalised()">
+            <button (click)="addFoodQuantity(food.food.id)" mat-raised-button color="accent" [disabled]="statusButton()">+</button>
+          </div>
+          <div *ngIf="!isFinalised()">
+            <button (click)="removeFoodQuantity(food.food.id)" mat-raised-button color="accent" [disabled]="statusButton() || getFoodQuantity(food.food.id) === 0">-</button>
+          </div>
         </div>
-        <div fxFlex="25" class="price">x&nbsp;{{getFoodPrice(food.food.id)| number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
+        <div fxFlex="25" class="price">x&nbsp;{{getFoodPrice(food.food.id)| number : '1.2-2'}}<span [innerHTML]="currency | async"></span>
+        </div>
       </div>
     </ng-container>
   </div>
   <div fxFlex="19" class="total">
     <div>
       <div class="total-title">Total</div>
-      <div class="total-price">{{ getTotalPrice() | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></div>
+      <div class="total-price">{{ getTotalPrice() | number : '1.2-2'}}<span [innerHTML]="currency | async"></span>
+      </div>
     </div>
-    <div *ngIf="!isFinalised()" >
+    <div *ngIf="!isFinalised()">
       <div *ngIf="isOrderBoolean" class="placed">
-          Order placed
+        Order placed
       </div>
-      <div *ngIf="orderNoFinal() && !modifyChecked"  class="space-btn">
-          <button mat-raised-button (click)="modify()" color="accent" [disabled]="disableBtn">Modify</button>
-          <button mat-raised-button class="cancel" (click)="cancelOrder()" color="accent" [disabled]="disableBtn">Cancel Order</button>
+      <div *ngIf="orderNoFinal() && !modifyChecked" class="space-btn">
+        <button mat-raised-button class="cancel" (click)="cancelOrder()" color="accent" [disabled]="disableBtn">Cancel Order</button>
+        <button mat-raised-button (click)="modify()" color="accent" [disabled]="disableBtn">Modify</button>
       </div>
-      <div *ngIf="modifyChecked"  class="space-btn">
-          <button mat-raised-button class="saveBtn" (click)="order()" color="accent" [disabled]="getTotalPrice() === 0">Save</button>
-          <button mat-raised-button class="cancel" (click)="cancelModify()" color="accent">Cancel Modify</button>
+      <div *ngIf="modifyChecked" class="space-btn">
+        <button mat-raised-button class="cancel" (click)="cancelModify()" color="accent">Cancel Modify</button>
+        <button mat-raised-button class="saveBtn" (click)="order()" color="accent" [disabled]="getTotalPrice() === 0">Save</button>
       </div>
-      <div *ngIf="!isOrderBoolean"  class="space-btn">
-          <button mat-raised-button (click)="order()" color="accent" [disabled]="getTotalPrice() === 0">Order</button>
-          <button *ngIf="getTotalPrice() !== 0" (click)="removeFoodMapQuantity()" mat-raised-button class="cancel reset-btn" color="accent">Reset</button>
+      <div *ngIf="!isOrderBoolean" class="space-btn">
+        <button *ngIf="getTotalPrice() !== 0" (click)="removeFoodMapQuantity()" mat-raised-button class="cancel reset-btn" color="accent">Reset</button>
+        <button mat-raised-button (click)="order()" color="accent" [disabled]="getTotalPrice() === 0">Order</button>
       </div>
       <img *ngIf="showSpinner" src="../../../assets/img/spinner.gif">
     </div>

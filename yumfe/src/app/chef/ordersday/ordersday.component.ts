@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChefNavComponent } from '../shared/chef-nav/chef-nav.component';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import * as remote from '../../remote';
-import { FoodsService } from '../services/foods.service';
+import { FoodsService } from '../../shared/services/foods.service';
 import { subDays, addDays, startOfMonth, endOfMonth, getMonth, getYear, isToday, isValid } from 'date-fns';
 import { DecimalPipe } from '@angular/common';
 import { MatSnackBar, MatDialog, MatDialogRef, } from '@angular/material';

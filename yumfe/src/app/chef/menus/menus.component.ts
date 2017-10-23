@@ -11,7 +11,7 @@ import { subDays, addDays, startOfMonth, endOfMonth, getMonth, getYear, isToday,
 import * as models from './../../shared/models';
 import * as remote from '../../remote';
 import { DailyMenuComponent } from './daily-menu/daily-menu.component';
-import { FoodsService } from '../services/foods.service';
+import { FoodsService } from '../../shared/services/foods.service';
 import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.component';
 import { ChefNavComponent } from '../shared/chef-nav/chef-nav.component';
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';

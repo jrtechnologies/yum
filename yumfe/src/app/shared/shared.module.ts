@@ -17,6 +17,7 @@ import { ControlUserService } from './services/control-user.service';
 import { BalanceService } from './services/balance.service';
 import { DeletePictureDialog } from './profile/profile.component';
 import { ProfileModule } from '../shared/profile/profile.module';
+import { FoodsService } from './services/foods.service';
 
 @NgModule({
   imports: [
@@ -55,7 +56,8 @@ import { ProfileModule } from '../shared/profile/profile.module';
     GlobalSettingsService,
     LowerCasePipe,
     ControlUserService,
-    BalanceService
+    BalanceService,
+    FoodsService
   ],
   entryComponents: [DeletePictureDialog]
 })

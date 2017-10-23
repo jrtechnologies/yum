@@ -5,6 +5,7 @@ import { isToday, isAfter } from 'date-fns';
 import { GlobalSettingsService } from './../../../shared/services/global-settings-service.service';
 import { AuthenticationService } from './../../../shared/authentication.service';
 import { BalanceService } from './../../../shared/services/balance.service';
+import { FoodsService } from './../../../shared/services/foods.service';
 import * as remote from '../../../remote';
 
 interface outData{ price?: number, comment?: string};
@@ -37,7 +38,8 @@ export class DailyMenuComponent implements OnInit {
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public globalSettingsService: GlobalSettingsService,
-    private balanceService: BalanceService
+    private balanceService: BalanceService,
+    private foodService: FoodsService
   ) { }
 
   ngOnInit() {
@@ -46,6 +48,8 @@ export class DailyMenuComponent implements OnInit {
   }
 
   setup() {
+
+    this.dailyMenu.foods = this.foodService.sortArrayOfFoodWithQtys(this.dailyMenu.foods);
 
     this.createFoodMap();
 
@@ -205,6 +209,7 @@ export class DailyMenuComponent implements OnInit {
     instance.comment = this.dailyMenu.comment;
     instance.countComment(this.dailyMenu.comment);
 
+    this.foodsList= this.foodService.sortArrayOfFoodWithQtys(this.foodsList);
     for (const food of this.foodsList) {
       if (food.quantity > 0) {
         instance.orderedFoods.push(food);
@@ -499,8 +504,6 @@ export class DailyMenuOrderDialog implements OnInit {
     this.fullName = user.firstName + ' ' + user.lastName;
   }
 
- 
-
   // check email check box.
   public toggle() {
     this.isChecked = !this.isChecked;
@@ -514,7 +517,7 @@ export class DailyMenuOrderDialog implements OnInit {
     }
   }
 
-  // method for count how many chars is remaning for the description
+  // count how many chars remain to comment
   countComment(comment) {  
       this.characterleft = (this.maxlength) - (comment? comment.length: 0);      
       this.comment = comment;

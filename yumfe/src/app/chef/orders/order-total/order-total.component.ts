@@ -3,7 +3,7 @@ import * as remote from '../../../remote';
 import { Validators, FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { getISOWeek, getYear } from 'date-fns';
 import { Router } from '@angular/router';
-import { FoodsService } from '../../services/foods.service';
+import { FoodsService } from '../../../shared/services/foods.service';
 import { Observable } from 'rxjs/Rx';
 import { GlobalSettingsService } from './../../../shared/services/global-settings-service.service';
 
