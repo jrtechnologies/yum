@@ -202,6 +202,12 @@ export class SettingsComponent implements OnInit {
     userSettings.adminOrderModifyNtf = this.profileGroup.controls.adminOrderModifyNtf.value;
     userSettings.balanceNtf = this.profileGroup.controls.balanceNtf.value;
 
+    this.user.orderNtf = this.profileGroup.controls.orderNtf.value;
+    this.user.orderModifyNtf = this.profileGroup.controls.orderModifyNtf.value;
+    this.user.adminOrderNtf = this.profileGroup.controls.adminOrderNtf.value;
+    this.user.adminOrderModifyNtf = this.profileGroup.controls.adminOrderModifyNtf.value;
+    this.user.balanceNtf = this.profileGroup.controls.balanceNtf.value;
+
     this.showSpinner = true;
     this.hungryService.settingsPut(userSettings)
       .subscribe(

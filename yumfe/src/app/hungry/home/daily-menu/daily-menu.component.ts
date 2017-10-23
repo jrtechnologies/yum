@@ -50,7 +50,7 @@ export class DailyMenuComponent implements OnInit {
     this.createFoodMap();
 
     if (this.dailyMenu.orderId != null) {
-      this.isOrderBoolean = true; 
+      this.isOrderBoolean = true;
       this.emitData();
       if (!this.isFinalised()) {
         this.getOrderLastEdit(); // Set order lastEdit.
@@ -95,7 +95,7 @@ export class DailyMenuComponent implements OnInit {
     });
   }
   public isFinalised() {
-    // if(this.controlledUser && isToday(this.dailyMenu.date)) { 
+    // if(this.controlledUser && isToday(this.dailyMenu.date)) {
     if (this.controlledUser && (isToday(this.dailyMenu.date) || isAfter(this.dailyMenu.date, new Date()))) {
       return false;
     }
@@ -192,7 +192,7 @@ export class DailyMenuComponent implements OnInit {
   }
   // Call Order Dialog.
   public order() {
-    
+
     const dialogRef = this.dialog.open(DailyMenuOrderDialog);
     const instance = dialogRef.componentInstance; // This instance pass data to dialog.
     const orderFoods: Array<remote.FoodWithQuantity> = [];
@@ -204,6 +204,7 @@ export class DailyMenuComponent implements OnInit {
     instance.controlledUserFullName = this.controlledUser ? this.controlledUser.firstName + " " + this.controlledUser.lastName : null;
     instance.comment = this.dailyMenu.comment;
     instance.countComment(this.dailyMenu.comment);
+    instance.modify = this.modifyChecked;
 
     for (const food of this.foodsList) {
       if (food.quantity > 0) {
@@ -235,7 +236,7 @@ export class DailyMenuComponent implements OnInit {
           updateOrderItem.dailyMenuDate = this.dailyMenu.date;
           updateOrderItem.dailyMenuVersion = this.dailyMenu.lastEdit.version;
           updateOrderItem.comment = this.dailyMenu.comment;
-          
+
           if (result === 'YesWithEmail') {
             updateOrderItem.emailRequest = true;
           } else {
@@ -259,7 +260,7 @@ export class DailyMenuComponent implements OnInit {
               this.lastEditDailyOrder = lastEdit;
               this.isOrderBoolean = true;
               this.modifyChecked = false;
-              this.showSpinner = false;             
+              this.showSpinner = false;
               // this.dailyTotalPrice.emit(this.getTotalPrice());
               this.disableBtn = false;
               this.emitData();
@@ -335,8 +336,8 @@ export class DailyMenuComponent implements OnInit {
               this.getOrderLastEdit(); // Update order last edit.
               this.isOrderBoolean = true;
               this.showSpinner = false;
-              this.disableBtn = false; 
-              this.emitData(); 
+              this.disableBtn = false;
+              this.emitData();
               this.balanceService.updateBalance(orderedDailyMenu.balance);
               console.log('Order placed');
               this.openSnackBar('Order placed successfully!', 'ok', 1);
@@ -490,6 +491,7 @@ export class DailyMenuOrderDialog implements OnInit {
   public comment: string;
   public maxlength = 150;
   public characterleft = this.maxlength;
+  public modify: boolean;
 
   constructor(public dialogRef: MatDialogRef<DailyMenuOrderDialog>, private authenticationService: AuthenticationService) { }
 
@@ -497,9 +499,18 @@ export class DailyMenuOrderDialog implements OnInit {
     // Get user details.
     const user = this.authenticationService.getLoggedInUser();
     this.fullName = user.firstName + ' ' + user.lastName;
+    if (this.controlledUserFullName !== null) {
+      this.isChecked = false;
+    } else {
+      if (this.modify) {
+        this.isChecked = user.orderModifyNtf;
+      } else {
+        this.isChecked = user.orderNtf;
+      }
+    }
   }
 
- 
+
 
   // check email check box.
   public toggle() {
@@ -515,8 +526,8 @@ export class DailyMenuOrderDialog implements OnInit {
   }
 
   // method for count how many chars is remaning for the description
-  countComment(comment) {  
-      this.characterleft = (this.maxlength) - (comment? comment.length: 0);      
+  countComment(comment) {
+      this.characterleft = (this.maxlength) - (comment? comment.length: 0);
       this.comment = comment;
   }
 

@@ -300,6 +300,11 @@ public class AuthService {
         userModel.setLastEdit(new LastEdit(user.getLastEdit(), user.getVersion()));
         userModel.setHasPicture(user.hasPicture());
         userModel.setBalance(user.getBalance());
+        userModel.setOrderNtf(user.isOrderNtf());
+        userModel.setOrderModifyNtf(user.isOrderModifyNtf());
+        userModel.setAdminOrderNtf(user.isAdminOrderNtf());
+        userModel.setAdminOrderModifyNtf(user.isAdminOrderModifyNtf());
+        userModel.setBalanceNtf(user.isBalanceNtf());
         token.setUser(userModel);
 
         return token;
