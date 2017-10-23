@@ -1,11 +1,12 @@
 {
-  "name": "YUM",
-  "version": "1.0.0",
+  "name": "@yum/yum",
+  "version": "1.0.1",
   "license": "GPL-3.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "npm build",
+    "build-version": "npm version patch && node ./replace.build.js && ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -55,6 +56,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "node-sass": "^4.5.3",
     "protractor": "~5.2.0",
+    "replace-in-file": "^3.0.0-beta.2",
     "ts-node": "^3.3.0",
     "tslint": "^5.7.0",
     "typescript": "^2.5.3"

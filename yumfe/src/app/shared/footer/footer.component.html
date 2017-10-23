@@ -1,14 +1,15 @@
 <mat-grid-list cols="10" rowHeight="50px">
-  <mat-grid-tile colspan="3" class="left-no-pad">
+  <mat-grid-tile colspan="3" class="left-no-pad smallText">
 
-    <p><span (click)="openDialog(0)">Terms and  Conditions</span> | <span (click)="openDialog(1)">Privacy Policy</span></p>
+     <div><span (click)="openDialog(0)">Terms and  Conditions</span> | <span (click)="openDialog(1)">Privacy Policy</span></div>
+     <div class="version">{{version}}</div>
 
   </mat-grid-tile>
 
   <mat-grid-tile colspan="7" class="right-no-pad">
-    <p class="right">
-      &copy;<a href="http://www.jrtechnologies.com/" target="_blank" class="footerLink">JR Technologies</a> 2017 - <a href="https://github.com/jrtdev/yum"
+    <div class="right smallText">
+      &copy;<a href="http://www.jrtechnologies.com/" target="_blank" class="footerLink">JR Technologies</a> 2017 - <a href="https://github.com/jrtechnologies/yum"
         target="_blank" class="footerLink">Open source GPLv3 on GitHub</a> - Developed by JRT Training Bootcamp 2017
-    </p>
+    </div>
   </mat-grid-tile>
 </mat-grid-list>

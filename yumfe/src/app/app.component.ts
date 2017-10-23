@@ -8,14 +8,14 @@ import { MatSnackBar } from '@angular/material';
 import * as remote from './remote';
 
 import { LoginComponent } from './anon/login/login.component';
+import { environment } from '../environments/environment';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-
+export class AppComponent { 
     public dialogOpen: Boolean = false;
 
     constructor(
@@ -27,8 +27,12 @@ export class AppComponent {
     ) { }
 
     ngOnInit(): void {
+
+        console.log("YUM, version: "+environment.version);
+
         this.authService.bootstrapUser();
 
+        //Listen for auth expired errors
         this.httpSubjectService.http401Subject.subscribe({
             next: (error: any) => {
                 console.log(error);
@@ -51,6 +55,7 @@ export class AppComponent {
         });
 
 
+        //Refresh token after every call
         this.httpSubjectService.httpCallSubject.subscribe(
             (url: string) => {
                 if (this.authService.isLogged()) {
@@ -71,6 +76,7 @@ export class AppComponent {
             }
         );
 
+        //Handle http errors
         this.httpSubjectService.httpErrorSubject.subscribe(
             (result: string) => {
                   this.snackBar.open("Server or network error, please try again later", "OK", {
@@ -91,10 +97,10 @@ export class DialogLogin {
     disableRoute: Boolean = true;
     constructor(public dialogRef: MatDialogRef<DialogLogin>) {
         this.disableRoute = true;
-        console.log("login started");
+        //console.log("login started");
     }
     public loginOk(event) {
-        console.log("login closed");
+        //console.log("login closed");
         this.dialogRef.close();
     }
 }
