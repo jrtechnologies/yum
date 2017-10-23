@@ -7,7 +7,9 @@
       Account settings
     </mat-grid-tile>
     <mat-grid-tile colspan="4" class="right-no-pad">
-      <button mat-raised-button color="accent" type="button" (click)="cancelEditing()"><i class="material-icons">home</i></button>
+      <button mat-raised-button color="accent" type="button" (click)="cancelEditing()">
+        <i class="material-icons">home</i>
+      </button>
     </mat-grid-tile>
   </mat-grid-list>
   <mat-card>
@@ -19,7 +21,9 @@
       </mat-grid-tile>
       <mat-grid-tile colspan="3" class="right-no-pad">
         <div class="heading">
-          You are <span *ngIf="user!=null && user.role==='ADMIN'">an </span><span *ngIf="user!=null && user.role!=='ADMIN'">a</span>
+          You are
+          <span *ngIf="user!=null && user.role==='ADMIN'">an </span>
+          <span *ngIf="user!=null && user.role!=='ADMIN'">a</span>
           <span *ngIf="user!=null">{{displayRole()}}</span>
         </div>
       </mat-grid-tile>
@@ -28,10 +32,36 @@
     <app-profile *ngIf="user" [(user)]="user" [change]="change" [admin]="false" (invalidProfileForm)="handleInvalidProfileForm($event)"
       (updateVersion)="handleUpdateVersion($event)">
     </app-profile>
-    <div class="divider heading sec">
-      <div *ngIf="!externalAuth || (user && user.id == 1)" class="heading">Change Password <small>(Leave it empty if you don't want to change your password)</small></div>
-    </div>
+
     <form [formGroup]="profileGroup" autocomplete="off">
+      <div class="divider heading sec">
+        <div class="heading">Email Notifications</div>
+      </div>
+      <div  class="checkboxes is-flex">
+        <div>
+          <mat-checkbox formControlName="orderNtf">New order</mat-checkbox>
+        </div>
+        <div >
+          <mat-checkbox formControlName="orderModifyNtf">Order modify</mat-checkbox>
+        </div>
+        <div>
+          <mat-checkbox formControlName="adminOrderNtf">New order by admin</mat-checkbox>
+        </div>
+        <div>
+          <mat-checkbox formControlName="adminOrderModifyNtf">Order modify by admin</mat-checkbox>
+        </div>
+        <div>
+          <mat-checkbox formControlName="balanceNtf">Balance</mat-checkbox>
+        </div>
+
+      </div>
+
+      <div class="divider heading sec">
+        <div *ngIf="!externalAuth || (user && user.id == 1)" class="heading">Change Password
+          <small>(Leave it empty if you don't want to change your password)</small>
+        </div>
+      </div>
+
       <mat-grid-list cols="6" rowHeight="160px">
 
         <div *ngIf="externalAuth && user && user.id !== 1; then thenBlock else elseBlock"> </div>
