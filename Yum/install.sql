@@ -21,6 +21,11 @@ CREATE TABLE user(
 	picture MEDIUMBLOB NULL DEFAULT NULL,
 	ldap_id TINYBLOB NULL DEFAULT NULL,
 	balance DECIMAL(20,2) NOT NULL DEFAULT 0,
+	order_ntf bit DEFAULT true,
+	order_modify_ntf bit DEFAULT true,
+	admin_order_ntf bit DEFAULT true,
+	admin_order_modify_ntf bit DEFAULT true,
+	balance_ntf bit DEFAULT true,
     PRIMARY KEY ( id )
 );
 
@@ -122,7 +127,7 @@ CREATE TABLE holidays (
 
 
 
-INSERT INTO `user` VALUES (1,'admin','admin','admin@yum.com','admin@yum.com','admin','$2a$10$94RawXgiAdX76VORM7MkRevNSYa8NzlVcQVPZJqaNNBdmrq62y3aa','2017-03-28','','2017-05-22 15:22:09',0,NULL,NULL,NULL,NULL,0);
+INSERT INTO `user` VALUES (1,'admin','admin','admin@yum.com','admin@yum.com','admin','$2a$10$94RawXgiAdX76VORM7MkRevNSYa8NzlVcQVPZJqaNNBdmrq62y3aa','2017-03-28','','2017-05-22 15:22:09',0,NULL,NULL,NULL,NULL,0,false,false,false,false,false);
 
 
 
