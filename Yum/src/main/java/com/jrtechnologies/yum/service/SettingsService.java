@@ -62,6 +62,11 @@ public class SettingsService {
         userDTO.setRole(userDAO.getUserRole().toString());
         userDTO.setHasPicture(userDAO.hasPicture());
         userDTO.setBalance(userDAO.getBalance());
+        userDTO.setOrderNtf(userDAO.isOrderNtf());
+        userDTO.setOrderModifyNtf(userDAO.isOrderModifyNtf());
+        userDTO.setAdminOrderNtf(userDAO.isAdminOrderNtf());
+        userDTO.setAdminOrderModifyNtf(userDAO.isAdminOrderModifyNtf());
+        userDTO.setBalanceNtf(userDAO.isBalanceNtf());
 
         return userDTO;
     }
@@ -79,6 +84,11 @@ public class SettingsService {
             userSettingsDTO.setEmail(userDAO.getEmail());
             userSettingsDTO.setRole(userDAO.getUserRole().toString());
             userSettingsDTO.setLastEdit(new LastEdit(userDAO.getLastEdit(), userDAO.getVersion()));
+            userSettingsDTO.setOrderNtf(userDAO.isOrderNtf());
+            userSettingsDTO.setOrderModifyNtf(userDAO.isOrderModifyNtf());
+            userSettingsDTO.setAdminOrderNtf(userDAO.isAdminOrderNtf());
+            userSettingsDTO.setAdminOrderModifyNtf(userDAO.isAdminOrderModifyNtf());
+            userSettingsDTO.setBalanceNtf(userDAO.isBalanceNtf());
             throw new ConcurrentModificationException(409, "Concurrent modification error.", userSettingsDTO);
         } else {
             
@@ -128,6 +138,11 @@ public class SettingsService {
                     }
                 userDAO.setEmail(upUser.getEmail());
             }
+            userDAO.setOrderNtf(upUser.getOrderNtf());
+            userDAO.setOrderModifyNtf(upUser.getOrderModifyNtf());
+            userDAO.setAdminOrderNtf(upUser.getAdminOrderNtf());
+            userDAO.setAdminOrderModifyNtf(upUser.getAdminOrderModifyNtf());
+            userDAO.setBalanceNtf(upUser.getBalanceNtf());
         }
     }
     

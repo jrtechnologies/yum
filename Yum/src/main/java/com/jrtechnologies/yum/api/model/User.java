@@ -31,7 +31,7 @@ import javax.validation.constraints.*;
  * User DTO
  */
 @ApiModel(description = "User DTO")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-09-14T16:29:23.687+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-10-23T10:05:36.363+03:00")
 
 public class User   {
   @JsonProperty("id")
@@ -63,6 +63,21 @@ public class User   {
 
   @JsonProperty("balance")
   private BigDecimal balance = null;
+
+  @JsonProperty("orderNtf")
+  private Boolean orderNtf = null;
+
+  @JsonProperty("orderModifyNtf")
+  private Boolean orderModifyNtf = null;
+
+  @JsonProperty("adminOrderNtf")
+  private Boolean adminOrderNtf = null;
+
+  @JsonProperty("adminOrderModifyNtf")
+  private Boolean adminOrderModifyNtf = null;
+
+  @JsonProperty("balanceNtf")
+  private Boolean balanceNtf = null;
 
   @JsonProperty("lastEdit")
   private LastEdit lastEdit = null;
@@ -269,6 +284,106 @@ public class User   {
     this.balance = balance;
   }
 
+  public User orderNtf(Boolean orderNtf) {
+    this.orderNtf = orderNtf;
+    return this;
+  }
+
+   /**
+   * Get orderNtf
+   * @return orderNtf
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Boolean getOrderNtf() {
+    return orderNtf;
+  }
+
+  public void setOrderNtf(Boolean orderNtf) {
+    this.orderNtf = orderNtf;
+  }
+
+  public User orderModifyNtf(Boolean orderModifyNtf) {
+    this.orderModifyNtf = orderModifyNtf;
+    return this;
+  }
+
+   /**
+   * Get orderModifyNtf
+   * @return orderModifyNtf
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Boolean getOrderModifyNtf() {
+    return orderModifyNtf;
+  }
+
+  public void setOrderModifyNtf(Boolean orderModifyNtf) {
+    this.orderModifyNtf = orderModifyNtf;
+  }
+
+  public User adminOrderNtf(Boolean adminOrderNtf) {
+    this.adminOrderNtf = adminOrderNtf;
+    return this;
+  }
+
+   /**
+   * Get adminOrderNtf
+   * @return adminOrderNtf
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Boolean getAdminOrderNtf() {
+    return adminOrderNtf;
+  }
+
+  public void setAdminOrderNtf(Boolean adminOrderNtf) {
+    this.adminOrderNtf = adminOrderNtf;
+  }
+
+  public User adminOrderModifyNtf(Boolean adminOrderModifyNtf) {
+    this.adminOrderModifyNtf = adminOrderModifyNtf;
+    return this;
+  }
+
+   /**
+   * Get adminOrderModifyNtf
+   * @return adminOrderModifyNtf
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Boolean getAdminOrderModifyNtf() {
+    return adminOrderModifyNtf;
+  }
+
+  public void setAdminOrderModifyNtf(Boolean adminOrderModifyNtf) {
+    this.adminOrderModifyNtf = adminOrderModifyNtf;
+  }
+
+  public User balanceNtf(Boolean balanceNtf) {
+    this.balanceNtf = balanceNtf;
+    return this;
+  }
+
+   /**
+   * Get balanceNtf
+   * @return balanceNtf
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Boolean getBalanceNtf() {
+    return balanceNtf;
+  }
+
+  public void setBalanceNtf(Boolean balanceNtf) {
+    this.balanceNtf = balanceNtf;
+  }
+
   public User lastEdit(LastEdit lastEdit) {
     this.lastEdit = lastEdit;
     return this;
@@ -310,12 +425,17 @@ public class User   {
         Objects.equals(this.approved, user.approved) &&
         Objects.equals(this.hasPicture, user.hasPicture) &&
         Objects.equals(this.balance, user.balance) &&
+        Objects.equals(this.orderNtf, user.orderNtf) &&
+        Objects.equals(this.orderModifyNtf, user.orderModifyNtf) &&
+        Objects.equals(this.adminOrderNtf, user.adminOrderNtf) &&
+        Objects.equals(this.adminOrderModifyNtf, user.adminOrderModifyNtf) &&
+        Objects.equals(this.balanceNtf, user.balanceNtf) &&
         Objects.equals(this.lastEdit, user.lastEdit);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, lastName, firstName, email, userName, role, registrationDate, approved, hasPicture, balance, lastEdit);
+    return Objects.hash(id, lastName, firstName, email, userName, role, registrationDate, approved, hasPicture, balance, orderNtf, orderModifyNtf, adminOrderNtf, adminOrderModifyNtf, balanceNtf, lastEdit);
   }
 
   @Override
@@ -333,6 +453,11 @@ public class User   {
     sb.append("    approved: ").append(toIndentedString(approved)).append("\n");
     sb.append("    hasPicture: ").append(toIndentedString(hasPicture)).append("\n");
     sb.append("    balance: ").append(toIndentedString(balance)).append("\n");
+    sb.append("    orderNtf: ").append(toIndentedString(orderNtf)).append("\n");
+    sb.append("    orderModifyNtf: ").append(toIndentedString(orderModifyNtf)).append("\n");
+    sb.append("    adminOrderNtf: ").append(toIndentedString(adminOrderNtf)).append("\n");
+    sb.append("    adminOrderModifyNtf: ").append(toIndentedString(adminOrderModifyNtf)).append("\n");
+    sb.append("    balanceNtf: ").append(toIndentedString(balanceNtf)).append("\n");
     sb.append("    lastEdit: ").append(toIndentedString(lastEdit)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -349,6 +474,4 @@ public class User   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-
-
 
