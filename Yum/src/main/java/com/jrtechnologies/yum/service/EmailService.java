@@ -238,6 +238,22 @@ public class EmailService {
         sendHtmlTemplateEmail(user.getEmail(), "[Yum] Account activated", model, "user-approval.ftlh");
 
     }
+    
+    
+    public void sendUpdateBalanceEmail(User user, BigDecimal amount) {
+
+        // create hashmap for the placeholders of the template
+        Map<String, Object> model = new HashMap<>();
+        model.put("firstName", user.getFirstName());
+        model.put("lastName", user.getLastName());
+        model.put("amount", amount);
+        model.put("balance",user.getBalance());
+        String currency = settingsRep.findById(1).getCurrency();
+        model.put("currency", currency);
+        
+        sendHtmlTemplateEmail(user.getEmail(), "[Yum] Deposit", model, "deposit.ftlh");
+
+    }
 
     @Transactional
     public void sendOrderSummary(LocalDate date) {
