@@ -23,6 +23,8 @@ html, body{margin:0; padding:0;  font-family: Arial,   sans-serif;}
 .heading {
   font-family: 'Roboto Slab', serif;
 }
+::-moz-selection { background: #ffef63; }
+::selection { background: #ffef63; }
 
 .mat-button-toggle, .mat-card,.mat-button, .mat-raised-button, .mat-icon-button, .mat-fab, .mat-mini-fab {
   font-family: Arial,   sans-serif!important;
