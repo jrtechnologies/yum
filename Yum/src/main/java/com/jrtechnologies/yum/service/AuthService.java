@@ -94,6 +94,11 @@ public class AuthService {
             user.setLastEdit(DateTime.now());
             user.setRegistrationDate(LocalDate.now());
             user.setBalance(BigDecimal.ZERO);
+            user.setOrderNtf(true);
+            user.setOrderModifyNtf(true);
+            user.setAdminOrderNtf(true);
+            user.setAdminOrderModifyNtf(true);
+            user.setBalanceNtf(true);
             userRep.save(user);
             // The email service is injected and sends emails to all admins 
 
@@ -235,6 +240,11 @@ public class AuthService {
                     user.setLdapId(ldapId);
                     user.setPassword(BCrypt.hashpw("123456", BCrypt.gensalt()));
                     user.setBalance(BigDecimal.ZERO);
+                    user.setOrderNtf(true);
+                    user.setOrderModifyNtf(true);
+                    user.setAdminOrderNtf(true);
+                    user.setAdminOrderModifyNtf(true);
+                    user.setBalanceNtf(true);
                     userRep.save(user);
                 }
                 
@@ -300,6 +310,11 @@ public class AuthService {
         userModel.setLastEdit(new LastEdit(user.getLastEdit(), user.getVersion()));
         userModel.setHasPicture(user.hasPicture());
         userModel.setBalance(user.getBalance());
+        userModel.setOrderNtf(user.isOrderNtf());
+        userModel.setOrderModifyNtf(user.isOrderModifyNtf());
+        userModel.setAdminOrderNtf(user.isAdminOrderNtf());
+        userModel.setAdminOrderModifyNtf(user.isAdminOrderModifyNtf());
+        userModel.setBalanceNtf(user.isBalanceNtf());
         token.setUser(userModel);
 
         return token;

@@ -204,7 +204,7 @@ paths:
           description: User data
           required: true
           schema:
-            $ref: '#/definitions/UserSettings'
+            $ref: '#/definitions/Settings'
       responses:
         '200':
           description: User data changed successfully
@@ -215,7 +215,7 @@ paths:
         '409':
           description: Concurrent modification error
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/UserSettings'
         '500':
           $ref: '#/responses/Error'
   /settings/picture:
@@ -1518,6 +1518,16 @@ definitions:
       balance:
         type: number
         format: int64
+      orderNtf:
+        type: boolean
+      orderModifyNtf:
+        type: boolean
+      adminOrderNtf:
+        type: boolean
+      adminOrderModifyNtf:
+        type: boolean
+      balanceNtf:
+        type: boolean
       lastEdit:
         $ref: '#/definitions/LastEdit'
   UsersPage:
@@ -1533,6 +1543,30 @@ definitions:
       totalPages:
         type: integer
         format: int64
+  Settings:
+    type: object
+    description: User DTO
+    properties:
+      lastName:
+        type: string
+      firstName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      orderNtf:
+        type: boolean
+      orderModifyNtf:
+        type: boolean
+      adminOrderNtf:
+        type: boolean
+      adminOrderModifyNtf:
+        type: boolean
+      balanceNtf:
+        type: boolean
+      lastEdit:
+        $ref: '#/definitions/LastEdit'
   UserSettings:
     type: object
     description: User DTO
@@ -1545,6 +1579,16 @@ definitions:
         type: string
       role:
         type: string
+      orderNtf:
+        type: boolean
+      orderModifyNtf:
+        type: boolean
+      adminOrderNtf:
+        type: boolean
+      adminOrderModifyNtf:
+        type: boolean
+      balanceNtf:
+        type: boolean
       lastEdit:
         $ref: '#/definitions/LastEdit'
   UserReg:

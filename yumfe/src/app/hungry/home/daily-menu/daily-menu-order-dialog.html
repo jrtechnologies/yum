@@ -57,8 +57,8 @@
       <mat-icon matSuffix>mode_edit</mat-icon>
       <mat-hint>{{characterleft}} character(s) left</mat-hint>
     </mat-form-field>
-    <div class="centered email" fxLayout="row">
-      <mat-checkbox fxFlex="100" [checked]="isChecked" (change)="toggle()">Email me this</mat-checkbox>
+    <div class="centered email" fxLayout="row" >
+      <mat-checkbox *ngIf="controlledUserFullName === null" fxFlex="100" [checked]="isChecked" (change)="toggle()">Email me this</mat-checkbox>
     </div>
     <div class="centered" fxLayout="row">
       <button class="buttons cancel" fxFlex="50" mat-raised-button (click)="dialogRef.close('No')" color="accent">Cancel</button>

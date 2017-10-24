@@ -65,7 +65,6 @@ export class ProfileComponent implements OnInit {
       this.URLadmin = this.URLadmin + this.user.id + '/picture';
       this.uploader = new FileUploader({ url: this.URLadmin, autoUpload: true, removeAfterUpload: true, authToken: 'Bearer ' + this.auth.getToken() });
       this.userPicture = this.baseUrl + '/users/' + this.user.id + '/picture/token?token=' + this.auth.getToken() + '&random=';
-      console.log('this.userPicture: ', this.userPicture);
     } else {
       this.uploader = new FileUploader({ url: this.URL, autoUpload: true, removeAfterUpload: true, authToken: 'Bearer ' + this.auth.getToken() });
       this.userPicture = this.baseUrl + '/settings/picture/token?token=' + this.auth.getToken() + '&random=';
@@ -91,7 +90,6 @@ export class ProfileComponent implements OnInit {
       this.user.email = controlsData.email;
       this.user.role = controlsData.role;
       if (this.profileGroup.invalid) {
-        console.log('invalid1' , this.profileGroup.invalid );
         this.invalidProfileForm.emit('invalid');
       } else {
         this.invalidProfileForm.emit('valid');
@@ -169,7 +167,6 @@ export class ProfileComponent implements OnInit {
 
               },
               error => {
-                console.log(error);
                 this.openSnackBar('Picture cannot be deleted', 'ok', 3);
               }
 
@@ -187,7 +184,6 @@ export class ProfileComponent implements OnInit {
               this.auth.updateUserDetailsHasPicture(this.user.hasPicture );
             },
             error => {
-              console.log(error);
               this.openSnackBar('Picture cannot be deleted', 'ok', 3);
             }
             );
@@ -201,7 +197,6 @@ export class ProfileComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.profileGroup != null) {
-      //console.log('onChanges1', this.profileGroup);
       this.profileGroup.patchValue({ role: this.user.role, firstName: this.user.firstName, lastName: this.user.lastName, email: this.user.email });
     }
   }

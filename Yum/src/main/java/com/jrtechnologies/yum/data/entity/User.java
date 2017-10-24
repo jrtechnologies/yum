@@ -104,6 +104,21 @@ public class User {
     @Column(name = "balance")
     private BigDecimal balance;
     
+    @Column(name = "order_ntf")
+    private boolean orderNtf;
+    
+    @Column(name = "order_modify_ntf")
+    private boolean orderModifyNtf;
+    
+    @Column(name = "admin_order_ntf")
+    private boolean adminOrderNtf;
+    
+    @Column(name = "admin_order_modify_ntf")
+    private boolean adminOrderModifyNtf;
+    
+    @Column(name = "balance_ntf")
+    private boolean balanceNtf;
+    
     public User() {
     }
 
@@ -329,6 +344,46 @@ public class User {
         this.balance = balance;
     }
 
+    public boolean isOrderNtf() {
+        return orderNtf;
+    }
+
+    public void setOrderNtf(boolean orderNtf) {
+        this.orderNtf = orderNtf;
+    }
+
+    public boolean isOrderModifyNtf() {
+        return orderModifyNtf;
+    }
+
+    public void setOrderModifyNtf(boolean orderModifyNtf) {
+        this.orderModifyNtf = orderModifyNtf;
+    }
+
+    public boolean isAdminOrderNtf() {
+        return adminOrderNtf;
+    }
+
+    public void setAdminOrderNtf(boolean adminOrderNtf) {
+        this.adminOrderNtf = adminOrderNtf;
+    }
+
+    public boolean isAdminOrderModifyNtf() {
+        return adminOrderModifyNtf;
+    }
+
+    public void setAdminOrderModifyNtf(boolean adminOrderModifyNtf) {
+        this.adminOrderModifyNtf = adminOrderModifyNtf;
+    }
+
+    public boolean isBalanceNtf() {
+        return balanceNtf;
+    }
+
+    public void setBalanceNtf(boolean balanceNtf) {
+        this.balanceNtf = balanceNtf;
+    }
+    
     public List<Transaction> getTransactions() {
         return transactions;
     }
