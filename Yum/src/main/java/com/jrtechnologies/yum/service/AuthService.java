@@ -94,6 +94,11 @@ public class AuthService {
             user.setLastEdit(DateTime.now());
             user.setRegistrationDate(LocalDate.now());
             user.setBalance(BigDecimal.ZERO);
+            user.setOrderNtf(true);
+            user.setOrderModifyNtf(true);
+            user.setAdminOrderNtf(true);
+            user.setAdminOrderModifyNtf(true);
+            user.setBalanceNtf(true);
             userRep.save(user);
             // The email service is injected and sends emails to all admins 
 
@@ -235,6 +240,11 @@ public class AuthService {
                     user.setLdapId(ldapId);
                     user.setPassword(BCrypt.hashpw("123456", BCrypt.gensalt()));
                     user.setBalance(BigDecimal.ZERO);
+                    user.setOrderNtf(true);
+                    user.setOrderModifyNtf(true);
+                    user.setAdminOrderNtf(true);
+                    user.setAdminOrderModifyNtf(true);
+                    user.setBalanceNtf(true);
                     userRep.save(user);
                 }
                 
