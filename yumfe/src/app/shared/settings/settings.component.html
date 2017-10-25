@@ -20,7 +20,7 @@
         </div>
       </mat-grid-tile>
       <mat-grid-tile colspan="3" class="right-no-pad">
-        <div class="heading">
+        <div class="heading heading-right">
           You are
           <span *ngIf="user!=null && user.role==='ADMIN'">an </span>
           <span *ngIf="user!=null && user.role!=='ADMIN'">a</span>
@@ -34,8 +34,8 @@
     </app-profile>
 
     <form [formGroup]="profileGroup" autocomplete="off">
-      <div class="divider heading sec">
-        <div class="heading">Email Notifications</div>
+      <div class="divider sec">
+        <div class="heading">Email notifications</div>
       </div>
       <div  class="checkboxes is-flex">
         <div>
@@ -56,8 +56,8 @@
 
       </div>
 
-      <div class="divider heading sec">
-        <div *ngIf="!externalAuth || (user && user.id == 1)" class="heading">Change Password
+      <div class="divider sec">
+        <div *ngIf="!externalAuth || (user && user.id == 1)" class="heading">Change password
           <small>(Leave it empty if you don't want to change your password)</small>
         </div>
       </div>

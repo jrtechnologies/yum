@@ -11,19 +11,23 @@
       </div>
       <button mat-raised-button color="accent" type="button" (click)="exitControlUser()">Exit</button>
     </div>
-    <div *ngIf="user">
-      <div *ngIf="!user.hasPicture">
-        <i class="material-icons face link" (click)="goToSettings()">face</i>
+    <div class="is-flex link gearShow paddRight" (click)="goToSettings()" title="Account Settings">
+      <div *ngIf="user" >
+        <div *ngIf="!user.hasPicture">
+          <i class="material-icons face">face</i>
+        </div>
+        <img *ngIf="user.hasPicture" class="img-circle smallImage" src="{{userPicture}}" />
       </div>
-      <img *ngIf="user.hasPicture" class="img-circle smallImage link" (click)="goToSettings()" src="{{userPicture}}" />
-    </div>
-    <div class="red minWidth link" (click)="goToSettings()">
-      <div>{{getUser().firstName}}</div>
-      <div>{{getUser().lastName}}</div>
-      <div class="balance">Balance
-        <span [innerHTML]="balance | async | number : '1.2-2'"></span>
-        <span [innerHTML]="currency | async"></span>
+      <!-- <div class="gear"> <i class="material-icons">settings</i> </div> -->
+      <div class="red minWidth"  >
+        <div>{{getUser().firstName}}</div>
+        <div>{{getUser().lastName}}</div>
+        <div class="balance">Balance
+          <span [innerHTML]="balance | async | number : '1.2-2'"></span>
+          <span [innerHTML]="currency | async"></span>
+        </div>
       </div>
+
     </div>
     <div class="is-flex">
 
@@ -53,9 +57,9 @@
       </div>
 
       <!-- With drop down button -->
-       <button mat-icon-button mat-raised-button class="removed" [ngClass]="{'isOpen': trigger.menuOpen}" (click)="triggerMenu()">
+      <button mat-icon-button mat-raised-button class="removed" [ngClass]="{'isOpen': trigger.menuOpen}" (click)="triggerMenu()">
         <i class="material-icons mat-32 rotaded">keyboard_arrow_down</i>
-      </button> 
+      </button>
 
     </div>
     <div class="menuDrawerButton">
@@ -63,7 +67,7 @@
       <button mat-icon-button class="hidden" mat-raised-button [matMenuTriggerFor]="menu">
         <i class="material-icons mat-32">keyboard_arrow_down</i>
       </button>
- 
+
       <mat-menu #menu="matMenu" xPosition="before" class="menuDrawer" aria-label="Open settings menu">
         <div>
           <div class="is-flex menuDrawerContent">
@@ -102,7 +106,7 @@
 
           </div>
         </div>
-      </mat-menu> 
+      </mat-menu>
 
     </div>
 

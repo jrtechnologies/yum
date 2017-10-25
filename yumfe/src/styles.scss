@@ -23,11 +23,13 @@ html, body{margin:0; padding:0;  font-family: Arial,   sans-serif;}
 .heading {
   font-family: 'Roboto Slab', serif;
 }
+::-moz-selection { background: #ffef63; }
+::selection { background: #ffef63; }
 
 .mat-button-toggle, .mat-card,.mat-button, .mat-raised-button, .mat-icon-button, .mat-fab, .mat-mini-fab {
   font-family: Arial,   sans-serif!important;
 }
-  
+
 .main {
   font-family: Arial,   sans-serif;;
   padding: 0 200px;
@@ -119,9 +121,19 @@ h1,h2,h3, .headerText, .cal-month-view .cal-header .cal-cell {  font-family: 'Ro
     padding-left: 30px !important;
 }
 
+.left-10 > figure {
+  justify-content: flex-start !important;
+  padding-left: 10px !important;
+}
+
 .right > figure {
     justify-content: flex-end !important;
     padding-right: 30px !important;
+}
+
+.right-10 > figure {
+  justify-content: flex-end !important;
+  padding-right: 10px !important;
 }
 
 .left-no-pad > figure {

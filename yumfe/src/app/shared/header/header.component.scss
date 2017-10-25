@@ -12,7 +12,7 @@
   max-height: 100%;
   width:auto;
 }
-.topHeader> div >  div{ padding: 12px; }
+.topHeader> div >  div, .topHeader> div > div > div{ padding: 12px; }
 
 
 
@@ -69,7 +69,34 @@
   font-style: italic;
   padding-top: 10px;
 }
-.minWidth { min-width:94px;}
+.minWidth { min-width:94px; }
+//.paddRight { padding-right:20px !important; }
 .link { cursor: pointer; }
 .removed{ display: none;}
 .padRight { padding-right:25px; }
+
+//.gearShow{ position: relative;}
+
+// .gearShow:hover > .gear{
+//   opacity: 1;
+// }
+
+// .gear{
+//   transition: all 0.5s ease;
+//   opacity: 0;
+//   position: absolute;
+//   right:12px;
+//   padding:4px 0px 0px 0px!important;
+//   color:#f44336;
+//   animation: rotating 3s linear infinite;
+
+// }
+
+// @keyframes rotating {
+//   from {
+//     transform: rotate(0deg);
+//   }
+//   to {
+//     transform: rotate(360deg);
+//   }
+// }
