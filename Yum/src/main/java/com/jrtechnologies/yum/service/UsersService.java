@@ -74,7 +74,7 @@ public class UsersService {
     private ApplicationProperties applicationProperties;
     @Autowired
     HolidaysRepository holidaysRepo;
-    
+
     private static final Logger LOGGER = Logger.getLogger(UsersService.class.getName());
 
     private void deleteDailyOrders(com.jrtechnologies.yum.data.entity.User user) {
@@ -85,7 +85,7 @@ public class UsersService {
         for (DailyOrder dailyOrder : dailyOrders) {
             DailyMenu dailyMenu = dailyOrder.getDailyMenu();
             if (!deadlinePassed(dailyMenu.getDate())) {
-            //if (!settings.deadlinePassed(dailyOrder.getDailyMenu().getDate())) {
+                //if (!settings.deadlinePassed(dailyOrder.getDailyMenu().getDate())) {
 
                 // Calculate order amount, add to user's balance and insert a transaction to the db
                 BigDecimal orderAmount = new BigDecimal(0);
@@ -133,6 +133,11 @@ public class UsersService {
         userEntity.setRegistrationDate(LocalDate.now());
         userEntity.setLastEdit(DateTime.now());
         userEntity.setBalance(BigDecimal.ZERO);
+        userEntity.setOrderNtf(true);
+        userEntity.setOrderModifyNtf(true);
+        userEntity.setAdminOrderNtf(true);
+        userEntity.setAdminOrderModifyNtf(true);
+        userEntity.setBalanceNtf(true);
         userRepo.save(userEntity); // Save user in database
         return userEntity;
     }
@@ -271,12 +276,12 @@ public class UsersService {
         }
 
         Page<com.jrtechnologies.yum.data.entity.User> usersPageable;
-        if (lastName == null){
+        if (lastName == null) {
             usersPageable = userRepo.findAll(pr);
         } else {
-            usersPageable = userRepo.findByLastNameStartingWith(pr,lastName);
+            usersPageable = userRepo.findByLastNameStartingWith(pr, lastName);
         }
-       
+
         totalPages = usersPageable.getTotalPages();
         totalElements = usersPageable.getTotalElements();
 
@@ -406,19 +411,19 @@ public class UsersService {
                 throw new IllegalArgumentException("Unknown value:" + role);
         }
     }
+
     public boolean deadlinePassed(LocalDate date) {
         Settings settings = settingsRepo.findOne(1);
         int deadlineDays = settings.getDeadlineDays();
         LocalTime deadlineTime = settings.getDeadline();
-         
+
         date = date.minusDays(deadlineDays);
-        
+
         while (this.holidaysRepo.findByIdHoliday(date) != null) {
-             date = date.minusDays(1);
-        }        
-        
+            date = date.minusDays(1);
+        }
+
         // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
         return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
     }
 }
- 

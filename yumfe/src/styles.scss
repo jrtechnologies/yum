@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 // Import theming functions
-@import '~@angular/material/theming';
+//@import '~@angular/material/theming';
 @import url(https://fonts.googleapis.com/icon?family=Material+Icons);
 @import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
 //@import '~@angular/material/prebuilt-themes/indigo-pink.css';
@@ -18,17 +18,35 @@ $white: #fff;
 
 $primary: #ff5b57;
 
-.min-sizes{
-  min-width: 900px;
-  min-height: 700px;
+html { overflow-y: scroll; }
+html, body{margin:0; padding:0;  font-family: Arial,   sans-serif;}
+.heading {
+  font-family: 'Roboto Slab', serif;
 }
+
+.mat-button-toggle, .mat-card,.mat-button, .mat-raised-button, .mat-icon-button, .mat-fab, .mat-mini-fab {
+  font-family: Arial,   sans-serif!important;
+}
+  
+.main {
+  font-family: Arial,   sans-serif;;
+  padding: 0 200px;
+  min-width: 890px;
+}
+h1,h2,h3, .headerText, .cal-month-view .cal-header .cal-cell {  font-family: 'Roboto Slab Bold', 'Roboto Slab Regular', 'Roboto Slab', serif; }
 .navMonth{
-  font-family: 'Roboto Slab Bold', 'Roboto Slab Regular', 'Roboto Slab';
+  font-family: 'Roboto Slab Bold', 'Roboto Slab Regular', 'Roboto Slab', serif;
   font-weight: 700;
   font-style: normal;
   font-size: 28px;
   color: $semiBlack;
 }
+
+.min-sizes{
+  min-width: 900px;
+  min-height: 700px;
+}
+
 .fixedWidth{     min-width: 145px; display: inline-block; }
 
  /* Rules for sizing the icon. */
@@ -69,8 +87,7 @@ $primary: #ff5b57;
 
 .noMarginInput  .mat-input-wrapper { margin: 20px 0 20px 0 !important; }
 
-html { overflow-y: scroll; }
-html, body{margin:0; padding:0;  font-family:'Roboto Slab', serif;}
+
 
 .success-snack-bar {
   background-color: #4CAF50 !important;
@@ -161,9 +178,9 @@ html, body{margin:0; padding:0;  font-family:'Roboto Slab', serif;}
 .flexGrow{flex: 1;}
 .flexEnd{  align-self: flex-end;}
 .borderTop { border-top: 2px solid $primary;}
-.smallInputContainer{ width:100%;}
+.fullWithInputContainer{ width:100%!important;}
 
-.smallInputContainer > .mat-input-wrapper {
+.fullWithInputContainer > .mat-input-wrapper {
     margin: 0px 0 0 0 !important;
 }
 
@@ -175,11 +192,6 @@ html, body{margin:0; padding:0;  font-family:'Roboto Slab', serif;}
   background-color: #f3f3f3;
 }
 
-.main {
-  font-family:'Roboto Slab', serif;
-  padding: 0 200px;
-  min-width: 890px;
-}
 
 @media screen and (max-width: 1400px) {
   .main {
@@ -297,6 +309,12 @@ button.mat-raised-button.active {
   100% { transform: rotate(360deg); }
 }
 
+
+//TEMP FIX button flickering from white bg
+
+.mat-fab, .mat-mini-fab, .mat-raised-button{
+  transition: background 0s!important;
+}
 .deadlineCurrency .mat-form-field-infix{
   background-color: white;
   border: 2px solid #CECECE;

@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 /**
  * User DTO
@@ -29,12 +30,12 @@ import javax.validation.constraints.*;
 public class UserSettings   {
   
   @NotNull
-  @Size(min=1, max=25)  
+  @Size(min=1, max=50)  
   @JsonProperty("lastName")
   private String lastName = null;
 
   @NotNull
-  @Size(min=1, max=25)
+  @Size(min=1, max=50)
   @JsonProperty("firstName")
   private String firstName = null;
 
@@ -45,6 +46,21 @@ public class UserSettings   {
   @NotNull
   @JsonProperty("role")
   private String role = null;
+  
+  @JsonProperty("orderNtf")
+  private Boolean orderNtf = null;
+
+  @JsonProperty("orderModifyNtf")
+  private Boolean orderModifyNtf = null;
+
+  @JsonProperty("adminOrderNtf")
+  private Boolean adminOrderNtf = null;
+
+  @JsonProperty("adminOrderModifyNtf")
+  private Boolean adminOrderModifyNtf = null;
+
+  @JsonProperty("balanceNtf")
+  private Boolean balanceNtf = null;
 
   @NotNull
   @JsonProperty("lastEdit")
@@ -60,6 +76,8 @@ public class UserSettings   {
    * @return lastName
   **/
   @ApiModelProperty(value = "")
+
+
   public String getLastName() {
     return lastName;
   }
@@ -78,6 +96,8 @@ public class UserSettings   {
    * @return firstName
   **/
   @ApiModelProperty(value = "")
+
+
   public String getFirstName() {
     return firstName;
   }
@@ -96,6 +116,8 @@ public class UserSettings   {
    * @return email
   **/
   @ApiModelProperty(value = "")
+
+
   public String getEmail() {
     return email;
   }
@@ -114,12 +136,114 @@ public class UserSettings   {
    * @return role
   **/
   @ApiModelProperty(value = "")
+
+
   public String getRole() {
     return role;
   }
 
   public void setRole(String role) {
     this.role = role;
+  }
+
+  public UserSettings orderNtf(Boolean orderNtf) {
+    this.orderNtf = orderNtf;
+    return this;
+  }
+
+   /**
+   * Get orderNtf
+   * @return orderNtf
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Boolean getOrderNtf() {
+    return orderNtf;
+  }
+
+  public void setOrderNtf(Boolean orderNtf) {
+    this.orderNtf = orderNtf;
+  }
+
+  public UserSettings orderModifyNtf(Boolean orderModifyNtf) {
+    this.orderModifyNtf = orderModifyNtf;
+    return this;
+  }
+
+   /**
+   * Get orderModifyNtf
+   * @return orderModifyNtf
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Boolean getOrderModifyNtf() {
+    return orderModifyNtf;
+  }
+
+  public void setOrderModifyNtf(Boolean orderModifyNtf) {
+    this.orderModifyNtf = orderModifyNtf;
+  }
+
+  public UserSettings adminOrderNtf(Boolean adminOrderNtf) {
+    this.adminOrderNtf = adminOrderNtf;
+    return this;
+  }
+
+   /**
+   * Get adminOrderNtf
+   * @return adminOrderNtf
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Boolean getAdminOrderNtf() {
+    return adminOrderNtf;
+  }
+
+  public void setAdminOrderNtf(Boolean adminOrderNtf) {
+    this.adminOrderNtf = adminOrderNtf;
+  }
+
+  public UserSettings adminOrderModifyNtf(Boolean adminOrderModifyNtf) {
+    this.adminOrderModifyNtf = adminOrderModifyNtf;
+    return this;
+  }
+
+   /**
+   * Get adminOrderModifyNtf
+   * @return adminOrderModifyNtf
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Boolean getAdminOrderModifyNtf() {
+    return adminOrderModifyNtf;
+  }
+
+  public void setAdminOrderModifyNtf(Boolean adminOrderModifyNtf) {
+    this.adminOrderModifyNtf = adminOrderModifyNtf;
+  }
+
+  public UserSettings balanceNtf(Boolean balanceNtf) {
+    this.balanceNtf = balanceNtf;
+    return this;
+  }
+
+   /**
+   * Get balanceNtf
+   * @return balanceNtf
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Boolean getBalanceNtf() {
+    return balanceNtf;
+  }
+
+  public void setBalanceNtf(Boolean balanceNtf) {
+    this.balanceNtf = balanceNtf;
   }
 
   public UserSettings lastEdit(LastEdit lastEdit) {
@@ -132,6 +256,9 @@ public class UserSettings   {
    * @return lastEdit
   **/
   @ApiModelProperty(value = "")
+
+  @Valid
+
   public LastEdit getLastEdit() {
     return lastEdit;
   }
@@ -154,12 +281,17 @@ public class UserSettings   {
         Objects.equals(this.firstName, userSettings.firstName) &&
         Objects.equals(this.email, userSettings.email) &&
         Objects.equals(this.role, userSettings.role) &&
+        Objects.equals(this.orderNtf, userSettings.orderNtf) &&
+        Objects.equals(this.orderModifyNtf, userSettings.orderModifyNtf) &&
+        Objects.equals(this.adminOrderNtf, userSettings.adminOrderNtf) &&
+        Objects.equals(this.adminOrderModifyNtf, userSettings.adminOrderModifyNtf) &&
+        Objects.equals(this.balanceNtf, userSettings.balanceNtf) &&
         Objects.equals(this.lastEdit, userSettings.lastEdit);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(lastName, firstName, email, role, lastEdit);
+    return Objects.hash(lastName, firstName, email, role, orderNtf, orderModifyNtf, adminOrderNtf, adminOrderModifyNtf, balanceNtf, lastEdit);
   }
 
   @Override
@@ -171,6 +303,11 @@ public class UserSettings   {
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");
+    sb.append("    orderNtf: ").append(toIndentedString(orderNtf)).append("\n");
+    sb.append("    orderModifyNtf: ").append(toIndentedString(orderModifyNtf)).append("\n");
+    sb.append("    adminOrderNtf: ").append(toIndentedString(adminOrderNtf)).append("\n");
+    sb.append("    adminOrderModifyNtf: ").append(toIndentedString(adminOrderModifyNtf)).append("\n");
+    sb.append("    balanceNtf: ").append(toIndentedString(balanceNtf)).append("\n");
     sb.append("    lastEdit: ").append(toIndentedString(lastEdit)).append("\n");
     sb.append("}");
     return sb.toString();

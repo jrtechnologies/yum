@@ -25,7 +25,7 @@
       </mat-grid-tile>
     </mat-grid-list>
     <div class="textareas">
-      <mat-grid-list cols="11" rowHeight="40px">
+      <mat-grid-list cols="11" rowHeight="40px" class="heading">
         <mat-grid-tile class="left-no-pad" colspan="2" rowspan="1">
           <label for="deadline">Time of last order</label>
         </mat-grid-tile>
@@ -75,16 +75,16 @@
         <!-- <div class="example-selected-value">Selected value: {{matButtongroup.value}}</div> -->
       </div>
 
-      <div class="area">
-        <label for="notes">Notes</label>
+      <div class="area  heading">
+        <label for="notes" class="heading">Notes</label>
         <textarea htmlEditor [(ngModel)]="gss.notes" rows="20" cols="100" name="notes"></textarea>
       </div>
       <div class="area">
-        <label for="tos">Terms of service</label>
+        <label for="tos" class="heading">Terms of service</label>
         <textarea htmlEditor [(ngModel)]="gss.tos" rows="20" cols="100" name="tos"></textarea>
       </div>
-      <div class="area">
-        <label for="policy">Privacy Policy</label>
+      <div class="area ">
+        <label for="policy" class="heading">Privacy Policy</label>
         <textarea htmlEditor [(ngModel)]="gss.policy" rows="20" cols="100" name="policy"></textarea>
       </div>
     </div>

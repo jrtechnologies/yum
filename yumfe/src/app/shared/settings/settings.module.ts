@@ -1,6 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatGridListModule, MatSelectModule, MatButtonModule, MatInputModule, MatCardModule  } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatGridListModule,
+         MatSelectModule,
+         MatButtonModule,
+         MatInputModule,
+         MatCardModule,
+         MatCheckboxModule
+        } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 //import { RouterModule } from '@angular/router';
 import { SettingsComponent }   from './settings.component';
@@ -16,7 +23,24 @@ import {  DeletePictureDialog } from '../profile/profile.component';
 //import { AuthenticationService } from '../authentication.service';
 
 @NgModule({
-  imports: [CommonModule, routing, HeaderModule, FooterModule, MatGridListModule, MatSelectModule, FormsModule, ReactiveFormsModule, ProfileModule, MatButtonModule, MatInputModule, MatCardModule, BalanceModule, TransactionsModule ],
+  imports: [
+            CommonModule,
+            routing,
+            HeaderModule,
+            FooterModule,
+            MatGridListModule,
+            MatSelectModule,
+            FormsModule,
+            ReactiveFormsModule,
+            ProfileModule,
+            MatButtonModule,
+            MatInputModule,
+            MatCardModule,
+            MatCheckboxModule,
+            BalanceModule,
+            TransactionsModule,
+            FlexLayoutModule
+          ],
   declarations: [SettingsComponent],
   providers:  [ SettingsRouteGuard],
   exports: [MatButtonModule, MatInputModule],

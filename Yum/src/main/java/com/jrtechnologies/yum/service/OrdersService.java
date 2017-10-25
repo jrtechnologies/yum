@@ -156,7 +156,7 @@ public class OrdersService {
         List<OrderItem> orderItems = order.getOrderItems();
         BigDecimal orderAmount = new BigDecimal(0);
 
-        if (orderItems==null || orderItems.isEmpty()) {
+        if (orderItems == null || orderItems.isEmpty()) {
             throw new ApiException(400, "Bad request");
         }
         for (OrderItem orderItem : orderItems) {
@@ -229,8 +229,14 @@ public class OrdersService {
         dailyMenu.setLastEdit(lastEdit);
         dailyMenu.setIsFinal(false);
         dailyMenu.setBalance(balance);
+        Boolean emailRequest;
+        if (user != sourceUser) {
+            emailRequest = user.isAdminOrderNtf();
+        } else {
+            emailRequest = order.getEmailRequest();
+        }
         // If user requested email confirmation the email service is injected  
-        if (order.getEmailRequest() && (emailService != null)) {
+        if (emailRequest && (emailService != null)) {
             emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
         }
 
@@ -464,8 +470,16 @@ public class OrdersService {
                         dailyOrderEntity.getDailyOrderId(), dailyMenuEntity.getId(), 2);
                 transactionRep.save(transaction);
 
+                
+                Boolean emailRequest;
+                if (user != sourceUser) {
+                    emailRequest = user.isAdminOrderNtf();
+                } else {
+                    emailRequest = updateOrderItems.getEmailRequest();
+                }
+                
                 // If user requested email confirmation the email service is injected  
-                if (updateOrderItems.getEmailRequest() && (emailService != null)) {
+                if (emailRequest && (emailService != null)) {
                     emailService.sendConfirmOrderEmailToHungry(dailyOrderEntity, dailyMenuEntity);
                 }
 

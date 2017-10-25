@@ -38,4 +38,14 @@ export interface User {
 
     balance?: number;
 
+    orderNtf?: boolean;
+
+    orderModifyNtf?: boolean;
+
+    adminOrderNtf?: boolean;
+
+    adminOrderModifyNtf?: boolean;
+
+    balanceNtf?: boolean;
+
 }
