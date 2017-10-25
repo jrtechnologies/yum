@@ -18,8 +18,8 @@
         </div>
         <img *ngIf="user.hasPicture" class="img-circle smallImage" src="{{userPicture}}" />
       </div>
-      <div class="gear"> <i class="material-icons">settings</i> </div>
-      <div class="red minWidth paddRight "  >
+      <!-- <div class="gear"> <i class="material-icons">settings</i> </div> -->
+      <div class="red minWidth"  >
         <div>{{getUser().firstName}}</div>
         <div>{{getUser().lastName}}</div>
         <div class="balance">Balance
@@ -27,7 +27,7 @@
           <span [innerHTML]="currency | async"></span>
         </div>
       </div>
-      
+
     </div>
     <div class="is-flex">
 
