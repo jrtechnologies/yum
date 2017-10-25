@@ -6,7 +6,7 @@ import { subDays,  isValid , getHours, getMinutes, getSeconds, addDays, getMonth
 import * as remote from '../../../remote';
 import * as models from './../../../shared/models';
 
-import { FoodsService } from '../../services/foods.service';
+import { FoodsService } from '../../../shared/services/foods.service';
 import { GlobalSettingsService } from '../../../shared/services/global-settings-service.service';
 import { Observable } from 'rxjs/Rx';
 

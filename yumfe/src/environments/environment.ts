@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  base_path: 'http://localhost:8080/api' 
+  base_path: 'http://localhost:8080/api',
+  version: 'DEV'
 };

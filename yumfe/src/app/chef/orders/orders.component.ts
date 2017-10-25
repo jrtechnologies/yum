@@ -12,7 +12,7 @@ import 'rxjs/add/operator/switchMap';
 
 import { OrderTotalComponent } from './order-total/order-total.component';
 import { MonthNavComponent } from '../../shared/header/month-nav/month-nav.component';
-import { FoodsService } from '../services/foods.service';
+import { FoodsService } from '../../shared/services/foods.service';
 import { GlobalSettingsService } from '../../shared/services/global-settings-service.service';
 
 @Component({

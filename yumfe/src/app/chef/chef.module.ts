@@ -7,7 +7,6 @@ import { SharedModule } from '../shared/shared.module';
 import { FoodComponent, EditCloneDialogComponent, DeleteDialogComponent, DeleteAskDialogComponent } from './home/food/food.component';
 import { FoodEditComponent } from './home/food-edit/food-edit.component';
 import { FoodInlineEditComponent } from './home/food-inline-edit/food-inline-edit.component';
-import { FoodsService } from './services/foods.service';
 import { ChefNavComponent } from './shared/chef-nav/chef-nav.component';
 import { MenusComponent } from './menus/menus.component';
 import { OrdersComponent } from './orders/orders.component';
@@ -44,7 +43,7 @@ import { DialogDeleteMenuWithOrders } from './menus/menus.component';
      UserOrderComponent],
 
 
-  providers: [ChefApi, FoodsService, ChefRouteGuard],
+  providers: [ChefApi, ChefRouteGuard],
   entryComponents: [EditCloneDialogComponent, DeleteDialogComponent, DeleteAskDialogComponent, ReportEmailDialog, DialogDeleteMenuWithOrders]
 })
 export class ChefModule { }

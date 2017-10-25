@@ -74,11 +74,7 @@ export class HeaderComponent implements OnInit {
       }
 
     });
-
-
-
-
-
+ 
     this.userPicture = this.baseUrl + '/settings/picture/token?token=' + this.authenticationService.getToken();
 
     this.authenticationService.getObservableChange().subscribe(
@@ -140,6 +136,10 @@ export class HeaderComponent implements OnInit {
           break;
       }
     }
+  }
+
+  public goToSettings(){
+    this.router.navigate(['/settings']);
   }
 
   exitControlUser(){

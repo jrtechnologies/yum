@@ -1,32 +1,69 @@
 <div class="is-flex topHeader ">
-  <div id="logo"> <a href="/"><img src="/assets/img/Yum-logo.png" alt="logo"></a></div>
+  <div id="logo">
+    <a href="/">
+      <img src="/assets/img/Yum-logo.png" alt="logo">
+    </a>
+  </div>
   <div class="is-flex relative sticky right-pos">
-    <div *ngIf="controlUser"  class="is-flex">
+    <div *ngIf="controlUser" class="is-flex">
       <div class="controlledUserName">
         {{controlUser.firstName+" "+controlUser.lastName}}
       </div>
       <button mat-raised-button color="accent" type="button" (click)="exitControlUser()">Exit</button>
     </div>
-    <div>
+    <div *ngIf="user">
       <div *ngIf="!user.hasPicture">
-        <i class="material-icons face">face</i>
+        <i class="material-icons face link" (click)="goToSettings()">face</i>
       </div>
-      <img *ngIf="user.hasPicture" class="img-circle smallImage " src="{{userPicture}}" />
+      <img *ngIf="user.hasPicture" class="img-circle smallImage link" (click)="goToSettings()" src="{{userPicture}}" />
     </div>
-    <div class="red minWidth">
+    <div class="red minWidth link" (click)="goToSettings()">
       <div>{{getUser().firstName}}</div>
       <div>{{getUser().lastName}}</div>
-      <div class= "balance">Balance <span [innerHTML]="balance | async | number : '1.2-2'"></span><span [innerHTML]="currency | async"></span></div>
+      <div class="balance">Balance
+        <span [innerHTML]="balance | async | number : '1.2-2'"></span>
+        <span [innerHTML]="currency | async"></span>
+      </div>
     </div>
-    <div class="">
-      <button mat-icon-button mat-raised-button [ngClass]="{'isOpen': trigger.menuOpen}" (click)="triggerMenu()"><i class="material-icons mat-32 rotaded">keyboard_arrow_down</i></button>
+    <div class="is-flex">
+
+      <!-- Without drop down button -->
+      <div class="is-flex">
+
+        <div class="inline smallPad padRight" *ngIf="role=='admin' || role=='chef'">
+          <button mat-raised-button color="accent" routerLink="/hungry" routerLinkActive #rlaHungryHome="routerLinkActive" [disabled]='rlaHungryHome.isActive'
+            routerLinkActive="active">Hungry</button>
+
+          <button *ngIf="role=='admin' || role=='chef'" mat-raised-button color="accent" routerLink="/chef" routerLinkActive #rlaChefHome="routerLinkActive"
+            [disabled]='rlaChefHome.isActive' routerLinkActive="active">Chef</button>
+
+          <button *ngIf="role=='admin'" mat-raised-button color="accent" routerLink="/admin" routerLinkActive #rlaAdminHome="routerLinkActive"
+            [disabled]='rlaAdminHome.isActive' routerLinkActive="active">Admin</button>
+        </div>
+
+
+        <div class="inline smallPad">
+          <button (click)="logOff()" title="Sign out" mat-icon-button mat-raised-button>
+            <i class="material-icons mat-32">
+              <i class="material-icons">power_settings_new</i>
+            </i>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- With drop down button -->
+       <button mat-icon-button mat-raised-button class="removed" [ngClass]="{'isOpen': trigger.menuOpen}" (click)="triggerMenu()">
+        <i class="material-icons mat-32 rotaded">keyboard_arrow_down</i>
+      </button> 
 
     </div>
     <div class="menuDrawerButton">
 
-      <button mat-icon-button class="hidden" mat-raised-button [matMenuTriggerFor]="menu"><i class="material-icons mat-32">keyboard_arrow_down</i></button>
-
-      <!-- <mat-menu #menu="matMenu" [classList]="testClass" xPosition="before" class="menuDrawer"  aria-label="Open settings menu"> -->
+      <button mat-icon-button class="hidden" mat-raised-button [matMenuTriggerFor]="menu">
+        <i class="material-icons mat-32">keyboard_arrow_down</i>
+      </button>
+ 
       <mat-menu #menu="matMenu" xPosition="before" class="menuDrawer" aria-label="Open settings menu">
         <div>
           <div class="is-flex menuDrawerContent">
@@ -39,7 +76,11 @@
             </div>
 
             <div class="inline smallPad">
-              <button (click)="logOff()" title="Sign out" mat-icon-button mat-raised-button><i class="material-icons mat-32"><i class="material-icons">power_settings_new</i></i></button>
+              <button (click)="logOff()" title="Sign out" mat-icon-button mat-raised-button>
+                <i class="material-icons mat-32">
+                  <i class="material-icons">power_settings_new</i>
+                </i>
+              </button>
             </div>
 
 
@@ -61,8 +102,7 @@
 
           </div>
         </div>
-      </mat-menu>
-      <!-- <button mat-icon-button    mat-raised-button [matMenuTriggerFor]="menu" ><i class="material-icons mat-32">keyboard_arrow_down</i></button> -->
+      </mat-menu> 
 
     </div>
 

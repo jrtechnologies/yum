@@ -20,16 +20,18 @@
     <div>
       <div class="foodList">
         <div *ngFor="let food of orderedFoods">
-          <div class="food" fxLayout="row">
-            <div fxFlex="70">
+          <div class="food" fxLayout="row" fxLayoutAlign="space-between center">
+            <div fxFlex="10" [ngClass]="{'icon-Meal': food.food.foodType==='MAIN', 'icon-Salad': food.food.foodType==='SALAD', 'icon-Drink': food.food.foodType==='DRINK'}"
+              class="cell"> </div>
+            <div fxFlex="55">
               {{food.food.foodName}}
             </div>
-            <div fxFlex="30">
-              <div fxLayout="row">
-                <div fxFlex="40">
+            <div fxFlex="35">
+              <div fxLayout="row"  fxLayoutAlign="space-between center">
+                <div fxFlex="30">
                   {{food.quantity}}
                 </div>
-                <div fxFlex="60" class="right-align paddRight">
+                <div fxFlex="70" class="right-align">
                   <b>x {{food.food.price | number : '1.2-2'}}<span [innerHTML]="currency | async"></span></b>
                 </div>
               </div>
