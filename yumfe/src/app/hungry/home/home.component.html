@@ -85,13 +85,7 @@
               </div>
             </div>
           </div>
-          <div>
-            <div fxLayout="row">
-              <div fxFlex="63" fxFlexOffset="2">
-                <span [innerHTML]="notes | async"></span>
-              </div>
-            </div>
-          </div>
+          <div class="notes" [innerHTML]="notes | async"></div>
         </div>
       </mat-card>
     </div>
