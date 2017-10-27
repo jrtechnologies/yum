@@ -21,7 +21,7 @@ info:
       
     ------------------------------------
 
-        Last edit: 10/10/2017 10:00
+        Last edit: 27/10/2017 11:00
 
     -------------------------------------
 basePath: /api
@@ -1755,6 +1755,9 @@ definitions:
         format: int64
       isFinal:
         type: boolean
+      lastOrderDateTime:
+        type: string
+        format: date-time
       comment:
         type: string
         maxLength: 150

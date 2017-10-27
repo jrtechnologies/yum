@@ -24,6 +24,8 @@ export interface DailyMenu {
 
     isFinal?: boolean;
 
+    lastOrderDateTime?: Date;
+
     comment?: string;
 
     foods?: Array<models.FoodWithQuantity>;
