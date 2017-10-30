@@ -16,6 +16,7 @@
   font-family: 'Roboto Slab', Arial;
   font-weight: bold;
   font-size: 26px;
+  padding-left: 10px;
 }
 
 .heading small {
@@ -23,6 +24,10 @@
   // font-weight: bold;
   //font-style: italic;
   font-size: 14px;
+}
+
+.heading-right{
+  padding-right: 10px;
 }
 
 mat-card {

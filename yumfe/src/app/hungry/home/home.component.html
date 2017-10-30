@@ -46,6 +46,18 @@
     </div>
 
     <div class="hideUntilEndOfAnimation">
+        <mat-card class="weekly-total">
+          <div fxLayout="row" fxLayoutAlign="space-around center">
+            <div fxFlexOffset="2" fxFlex="91">
+              <h2>Your weekly total</h2>
+            </div>
+            <div fxFlex="7">
+              <h3>{{getTotalPrice() | number : '1.2-2'}}
+                <span [innerHTML]="currency | async"></span>
+              </h3>
+            </div>
+          </div>
+        </mat-card>
       <mat-grid-list cols="1" rowHeight="70px">
         <mat-grid-tile colspan="1" class="right-no-pad">
           <button mat-raised-button color="accent" (click)="previousWeek()">Previous Week</button>
@@ -54,23 +66,6 @@
       </mat-grid-list>
       <mat-card>
         <div fxLayout="column" fxLayoutAlign="space-between none" class="hungryFooter">
-          <div >
-            <div fxLayout="row">
-              <div fxFlexOffset="2" fxFlex="91">
-                <h2>Your weekly total</h2>
-              </div>
-              <div fxFlex="7">
-                <h3>{{getTotalPrice() | number : '1.2-2'}}
-                  <span [innerHTML]="currency | async"></span>
-                </h3>
-              </div>
-            </div>
-            <div fxLayout="row">
-              <span fxFlexOffset="2" fxFlex="97">
-                <hr flex/>
-              </span>
-            </div>
-          </div>
           <div>
             <div fxLayout="row">
               <div fxFlexOffset="2">
@@ -85,13 +80,7 @@
               </div>
             </div>
           </div>
-          <div>
-            <div fxLayout="row">
-              <div fxFlex="63" fxFlexOffset="2">
-                <span [innerHTML]="notes | async"></span>
-              </div>
-            </div>
-          </div>
+          <div class="notes" [innerHTML]="notes | async"></div>
         </div>
       </mat-card>
     </div>

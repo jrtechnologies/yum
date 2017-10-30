@@ -7,16 +7,16 @@
   </mat-grid-tile>
 </mat-grid-list>
 <mat-card>
-  <mat-grid-list cols="8" rowHeight="100px" class="divider">
-    <mat-grid-tile colspan="4" class="left">
+  <mat-grid-list cols="8" rowHeight="60px" class="divider">
+    <mat-grid-tile colspan="4" class="left-10">
       <div class="heading">
         <div>Profile details</div>
       </div>
     </mat-grid-tile>
-    <mat-grid-tile colspan="2" class="right">
+    <mat-grid-tile colspan="2" class="right-10">
       <button mat-raised-button color="accent" type="button" (click)="viewUserMenu()" >Edit user orders</button>
     </mat-grid-tile>
-    <mat-grid-tile colspan="2" class="right">
+    <mat-grid-tile colspan="2" class="right-10">
       <app-slide-toggle-component *ngIf="user" [user]="user" [externalAuth]=externalAuth (updateVersion)="handleUpdateVersion($event)"></app-slide-toggle-component>
     </mat-grid-tile>
   </mat-grid-list>
