@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayoutAlign="space-around start" class="mainDivs">
+<div fxLayout="row" fxLayoutAlign="space-around start" class="mainDivs" *ngIf="dailyMenu">
   <div fxFlex="27" class="food-type">
     <div fxLayout="row" fxLayoutAlign="start center">
       <div class='biggerSize' [ngClass]="'icon-Meal'"> </div>
@@ -92,3 +92,6 @@
     </div>
   </div>
 </div>
+
+
+<div *ngIf="lastOrder" class="deadline"> <div> Last order time: {{lastOrder}}</div> </div>

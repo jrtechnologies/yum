@@ -7,6 +7,7 @@ import { AuthenticationService } from './../../../shared/authentication.service'
 import { BalanceService } from './../../../shared/services/balance.service';
 import { FoodsService } from './../../../shared/services/foods.service';
 import * as remote from '../../../remote';
+import * as moment from 'moment';
 
 interface outData{ price?: number, comment?: string};
 
@@ -32,6 +33,7 @@ export class DailyMenuComponent implements OnInit {
   public showSpinner = false;
   public disableBtn = false;
   private outData: outData={};
+  public lastOrder;
 
   constructor(
     private hungryService: remote.HungryApi,
@@ -48,6 +50,13 @@ export class DailyMenuComponent implements OnInit {
   }
 
   setup() {
+
+    if(!this.dailyMenu){ return; } 
+    
+    //Display last time a user can order
+    if (!this.isFinalised()){
+      this.lastOrder = moment.utc(this.dailyMenu.lastOrderDateTime).local().format('DD/MM/YYYY HH:mm');
+    }
 
     this.dailyMenu.foods = this.foodService.sortArrayOfFoodWithQtys(this.dailyMenu.foods);
 

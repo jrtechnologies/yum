@@ -32,8 +32,11 @@ import com.jrtechnologies.yum.data.repository.HolidaysRepository;
 import com.jrtechnologies.yum.data.repository.OrderItemRepository;
 import com.jrtechnologies.yum.data.repository.SettingsRepository;
 import com.jrtechnologies.yum.data.repository.UserRepository;
+
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -168,6 +171,10 @@ public class MenusService {
             return dailyMenu;
         }
         com.jrtechnologies.yum.data.entity.DailyOrder dailyOrderEntity = dailyOrderRepo.findByUserIdAndDailyMenuId(user.getId(), dailyMenuEntity.getId());
+
+        DateTime  deadline = getDeadline(currentDay);
+        dailyMenu.setLastOrderDateTime(deadline);
+
         if (dailyOrderEntity != null) {
             dailyMenu.setId(dailyMenuEntity.getId());
             dailyMenu.setDate(dailyMenuEntity.getDate());
@@ -175,9 +182,11 @@ public class MenusService {
             LastEdit lastEdit = new LastEdit();
             lastEdit.setTimeStamp(dailyMenuEntity.getLastEdit());
             lastEdit.setVersion(dailyMenuEntity.getVersion());
-            dailyMenu.setLastEdit(lastEdit);
-            //Boolean finalisedDailyOrder = settingsRepo.findOne(1).deadlinePassed(currentDay);
-            Boolean finalisedDailyOrder = deadlinePassed(currentDay);
+            dailyMenu.setLastEdit(lastEdit);  
+            
+            //Boolean finalisedDailyOrder = deadline.compareTo(LocalDateTime.now())<0;
+            Boolean finalisedDailyOrder = deadline.compareTo(DateTime.now(DateTimeZone.UTC))<0;
+            
             dailyOrderEntity.setFinalised(finalisedDailyOrder);
             dailyMenu.setIsFinal(finalisedDailyOrder);
             
@@ -195,8 +204,8 @@ public class MenusService {
                 }
                 dailyMenu.addFoodsItem(foodWithQuantity); //Add the food in daily menu.
             }
-        //} else if (!settingsRepo.findOne(1).deadlinePassed(currentDay)) {
-        } else if (!deadlinePassed(currentDay)) {
+         
+        } else if (deadline.compareTo(DateTime.now(DateTimeZone.UTC))>0) {
             dailyMenuEntity.setFinalised(false);
             dailyMenu.setDate(dailyMenuEntity.getDate());
             dailyMenu.setIsFinal(false);
@@ -219,7 +228,11 @@ public class MenusService {
             dailyMenu.setDate(dailyMenuEntity.getDate());
             //Take current user. 
             com.jrtechnologies.yum.data.entity.DailyOrder dailyOrderEntity = dailyOrderRepo.findByUserIdAndDailyMenuId(user.getId(), dailyMenuEntity.getId());
-            //Check if this daily menu is ordered from user.
+
+            DateTime  deadline = getDeadline(currentDay);
+            dailyMenu.setLastOrderDateTime(deadline);
+
+            //Check if this daily menu is ordered from user.            
             if (dailyOrderEntity != null) {
                 dailyMenu.setOrderId(dailyOrderEntity.getDailyOrderId());
                 dailyMenu.setComment(dailyOrderEntity.getComment());
@@ -227,8 +240,7 @@ public class MenusService {
                 lastEdit.setTimeStamp(dailyMenuEntity.getLastEdit());
                 lastEdit.setVersion(dailyMenuEntity.getVersion());
                 dailyMenu.setLastEdit(lastEdit);
-                //Boolean deadlinePassed = settingsRepo.findOne(1).deadlinePassed(currentDay);
-                Boolean deadlinePassed = deadlinePassed(currentDay);
+                Boolean deadlinePassed = deadline.compareTo(DateTime.now(DateTimeZone.UTC))<0;
                 dailyOrderEntity.setFinalised(deadlinePassed);
                 dailyMenu.setIsFinal(deadlinePassed);
                 for (com.jrtechnologies.yum.data.entity.Food foodEntity : dailyMenuEntity.getFoods()) {
@@ -246,10 +258,9 @@ public class MenusService {
                     dailyMenu.addFoodsItem(foodWithQuantity); //Add the food in daily menu.
                 }
             } else {//If daily menu isn't ordered from user, not set order stats.  
-                //Boolean deadlinePassed = settingsRepo.findOne(1).deadlinePassed(currentDay);
-                Boolean deadlinePassed = deadlinePassed(currentDay);
+                Boolean deadlinePassed = deadline.compareTo(DateTime.now(DateTimeZone.UTC))<0;
                 dailyMenuEntity.setFinalised(deadlinePassed);
-                dailyMenu.setIsFinal(deadlinePassed);
+                dailyMenu.setIsFinal(deadlinePassed); 
                 LastEdit lastEdit = new LastEdit();
                 lastEdit.setTimeStamp(dailyMenuEntity.getLastEdit());
                 lastEdit.setVersion(dailyMenuEntity.getVersion());
@@ -285,7 +296,7 @@ public class MenusService {
         return weeks;
     }
     
-    public boolean deadlinePassed(LocalDate date) {
+    private DateTime getDeadline(LocalDate date) {
         Settings settings = settingsRepo.findById(1);
         int deadlineDays = settings.getDeadlineDays();
         LocalTime deadlineTime = settings.getDeadline();
@@ -297,7 +308,15 @@ public class MenusService {
         }        
         
         // Check if order deadline passed based on given date, deadlineDays and deadlineTime (deadline)
-        return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
+        //return (date.toLocalDateTime(deadlineTime).compareTo(LocalDateTime.now()) < 0);
+
+        // When we ll change deadline time to utc, use this: 
+        //return date.toLocalDateTime(deadlineTime).toDateTime(DateTimeZone.UTC);
+        return date.toLocalDateTime(deadlineTime).toDateTime(); // To default zone
+    }
+
+    public Boolean deadlinePassed(LocalDate date){
+        return this.getDeadline(date).compareTo(DateTime.now(DateTimeZone.UTC))<0;
     }
     
     private com.jrtechnologies.yum.data.entity.User getUserOfDailyOrder(Long userId) throws ApiException{

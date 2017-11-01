@@ -3,13 +3,14 @@ package com.jrtechnologies.yum.api.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.jrtechnologies.yum.api.model.FoodWithQuantity;
+import com.jrtechnologies.yum.api.model.LastEdit;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import com.jrtechnologies.yum.api.model.FoodWithQuantity;
-import com.jrtechnologies.yum.api.model.LastEdit;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -18,7 +19,7 @@ import javax.validation.constraints.*;
  * A daily Menu,  has order checked DTO
  */
 @ApiModel(description = "A daily Menu,  has order checked DTO")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-10-06T15:19:56.604+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-10-27T12:14:22.847+03:00")
 
 public class DailyMenu   {
   @JsonProperty("id")
@@ -32,6 +33,9 @@ public class DailyMenu   {
 
   @JsonProperty("isFinal")
   private Boolean isFinal = null;
+
+  @JsonProperty("lastOrderDateTime")
+  private DateTime lastOrderDateTime = null;
 
   @JsonProperty("comment")
   private String comment = null;
@@ -124,6 +128,27 @@ public class DailyMenu   {
 
   public void setIsFinal(Boolean isFinal) {
     this.isFinal = isFinal;
+  }
+
+  public DailyMenu lastOrderDateTime(DateTime lastOrderDateTime) {
+    this.lastOrderDateTime = lastOrderDateTime;
+    return this;
+  }
+
+   /**
+   * Get lastOrderDateTime
+   * @return lastOrderDateTime
+  **/
+  @ApiModelProperty(value = "")
+
+  @Valid
+
+  public DateTime getLastOrderDateTime() {
+    return lastOrderDateTime;
+  }
+
+  public void setLastOrderDateTime(DateTime lastOrderDateTime) {
+    this.lastOrderDateTime = lastOrderDateTime;
   }
 
   public DailyMenu comment(String comment) {
@@ -231,6 +256,7 @@ public class DailyMenu   {
         Objects.equals(this.date, dailyMenu.date) &&
         Objects.equals(this.orderId, dailyMenu.orderId) &&
         Objects.equals(this.isFinal, dailyMenu.isFinal) &&
+        Objects.equals(this.lastOrderDateTime, dailyMenu.lastOrderDateTime) &&
         Objects.equals(this.comment, dailyMenu.comment) &&
         Objects.equals(this.foods, dailyMenu.foods) &&
         Objects.equals(this.lastEdit, dailyMenu.lastEdit) &&
@@ -239,7 +265,7 @@ public class DailyMenu   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, date, orderId, isFinal, comment, foods, lastEdit, balance); 
+    return Objects.hash(id, date, orderId, isFinal, lastOrderDateTime, comment, foods, lastEdit, balance);
   }
 
   @Override
@@ -251,6 +277,7 @@ public class DailyMenu   {
     sb.append("    date: ").append(toIndentedString(date)).append("\n");
     sb.append("    orderId: ").append(toIndentedString(orderId)).append("\n");
     sb.append("    isFinal: ").append(toIndentedString(isFinal)).append("\n");
+    sb.append("    lastOrderDateTime: ").append(toIndentedString(lastOrderDateTime)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("    foods: ").append(toIndentedString(foods)).append("\n");
     sb.append("    lastEdit: ").append(toIndentedString(lastEdit)).append("\n");
