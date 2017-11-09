@@ -87,7 +87,8 @@ export class HomeComponent implements OnInit {
 
 
   showByFoodType() {
-    this.loadFoods(this.page);
+    //this.loadFoods(this.page);
+    this.loadFoods(1);
   }
 
   showByOrderType(value) {
@@ -110,7 +111,8 @@ export class HomeComponent implements OnInit {
       this.direction = 'ASC';
     }
 
-    this.loadFoods(this.page);
+    //this.loadFoods(this.page);
+    this.loadFoods(1);
   }
 
   viewArchived() {
@@ -118,11 +120,13 @@ export class HomeComponent implements OnInit {
     if (this.checked === true) {
       this.showLoadSpinner = true;
       this.archived = 'true';
-      this.loadFoods(this.page);
+      // this.loadFoods(this.page);
+      this.loadFoods(1);
     } else {
       this.showLoadSpinner = true;
       this.archived = 'false';
-      this.loadFoods(this.page);
+      // this.loadFoods(this.page);
+      this.loadFoods(1);
     }
   }
 
